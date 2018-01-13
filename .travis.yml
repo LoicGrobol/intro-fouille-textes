@@ -4,7 +4,6 @@ addons:
       - xzdec
       - curl
       - tar
-      - fonts-linuxlibertine
 
 cache:
   directories:
