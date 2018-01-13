@@ -30,5 +30,5 @@ deploy:
       - "${RELEASE_FILES}"
   skip_cleanup: true
   on:
-    repo: Evpok/trivialities
+    repo: LoicGrobol/intro-fouille-textes
     tags: true

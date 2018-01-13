@@ -1,4 +1,4 @@
-SUBDIRS := trivialities
+SUBDIRS := syllabus
 CLEANSUBDIRS = $(addprefix clean_,$(SUBDIRS))
 
 all: $(SUBDIRS)
