@@ -1,2 +1,2 @@
-  - [Site du cours](https://loicgrobol.github.io/intro-fouille-textes/)
+  - [Site du master Plurital](http://plurital.org)
   - [Dépôt GitHub](https://github.com/LoicGrobol/intro-fouille-textes)
