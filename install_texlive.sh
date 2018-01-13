@@ -64,7 +64,6 @@ tlmgr install ifluatex lm lualibs luaotfload ifxetex luatexbase ctablestack file
 tlmgr install $(cat **/*.tex | sed -n 's/^[^%]*\\usepackage[^{]*{\([^}]*\)}.*$/\1/p' | sed 's/,\s*/ /p' | paste -sd ' ' -)
 
 tlmgr install \
-    fcprefix \
     fmtcount \
     hyphen-english \
     hyphen-french
