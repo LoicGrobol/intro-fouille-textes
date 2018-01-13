@@ -35,10 +35,12 @@
     }
 }
 
+\usepackage[iso]{datetime}
+
 \usepackage{titleps}
 	\newpagestyle{main}[\small]{
 		\sethead{}{}{}
-		\setfoot{}{}{}
+		\setfoot{}{}{\footnotesize{Version {\yyyymmdddate\today}T\currenttime}}
 	}
 	\pagestyle{main}
 
