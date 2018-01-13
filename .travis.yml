@@ -1,0 +1,35 @@
+addons:
+  apt:
+    packages:
+      - xzdec
+      - curl
+      - tar
+      - fonts-linuxlibertine
+
+cache:
+  directories:
+    - "/tmp/texlive"
+    - "$HOME/.texlive"
+    - "$HOME/texmf"
+
+install:
+  - source ./install_texlive.sh
+
+script:
+  - make all
+
+before_deploy:
+  - export RELEASE_FILES=$(ls topics/*/*.pdf)
+  - echo "Deploying $RELEASE_FILES to GitHub releases"
+
+deploy:
+  provider: releases
+  api_key:
+    secure: d6v2G3+ZuM7nfE6t2ZN6SkgNrP9G5WRARfaOLJDZelO8jkOyKh932D2tyBv7LnhvZ2hV/UDiCdZ7JOkBcQhDET9Ecn6XPKkweyzmCMkpieRRJBuSbWVXIGpxQBxZk6Excj4f+aTC9PX53NI0yaNdbn3jOAEsBbqnIu0kuSsqWhHlUKSPr3IySWJY/rulCcN4zFwuRMtyCELgRsSA06lqhjvO0RdtMYrObnyTmzwkvJp+2EKDNhUgYKrNYQr6boq7HSu/NKOWwzkTR138PySGxDKlCwgQDVEOGe7kSMsyTXuHGl3vHWuhuxRtBHL2o/NPtGwrV9dinGecHdCFWKPsuros11CBQIxyZCWp5fAzJYVk5CI/2pTnKq23WoV2xGbN7nJEs9bOsf/d6ny5LXnxeb4HE38eVs42yv7v5yoaWWtIP95NYpyIFkQG8UqZrmEPvI2rIuucJ7eDt9yEcByK4qb//wJk3xSUpHOYOFUYpp57XJecoh/fa85VIhaeEdbIruBBUnMdtEGDyil9+YJtIkDrdAgQlQOD3NzncY9PHTEaVkGjtApQtCKpy22poPoXGHXwBgQS4I9DoWx6Z+fWju8TAAQ7yTiqVuJeBlcwDO89efZaWU17zryq2u5uqD+2gzBfgiDp+6igXstPxvhdL+3Ir87DTl+QifGyVkTNZXc=
+  file_glob: true
+  file:
+      - "${RELEASE_FILES}"
+  skip_cleanup: true
+  on:
+    repo: Evpok/trivialities
+    tags: true
