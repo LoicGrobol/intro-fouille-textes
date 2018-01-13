@@ -1,0 +1,97 @@
+\documentclass[a4, 11pt]{article}
+\usepackage[hmargin=2cm]{geometry}
+\usepackage{savetrees}
+\setlength\parindent{0pt}
+\setlength\parskip{.2em}
+
+\usepackage{polyglossia}
+    \setmainlanguage{french}
+    \setotherlanguage{english}
+
+    % PATCH: fix spacing in monospaced text
+    \usepackage{xpatch}
+    \makeatletter
+        \xapptocmd\ttfamily{\nofrench@punctuation}{}{}
+    \makeatother
+
+\usepackage{csquotes}
+
+\usepackage{fontspec}
+    \setmainfont{Libertinus Serif}
+
+\usepackage{xurl}
+\usepackage{hyperref}
+
+\usepackage[style=authoryear]{biblatex}
+\AtEveryBibitem{
+    \ifentrytype{online}
+    {} {
+        \iffieldequalstr{howpublished}{online}
+        {
+            \clearfield{howpublished}
+        } {
+            \clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}
+        }
+    }
+}
+
+\usepackage{titleps}
+	\newpagestyle{main}[\small]{
+		\sethead{}{}{}
+		\setfoot{}{}{}
+	}
+	\pagestyle{main}
+
+\title{Introduction à la fouille de textes\\M1 Plurital S2}
+\author{Loïc Grobol}
+\date{2017–2018}
+
+\addbibresource{biblio.bib}
+\nocite{*}
+
+\begin{document}
+
+\vspace*{-7em}
+{\let\newpage\relax\maketitle}
+\thispagestyle{main}
+
+\begin{description}
+    \item[Où] Salle Benveniste, ILPGA, 9 Rue des Bernardins, 75005 Paris
+    \item[Quand] Le lundi de 14h à 16h (voir le calendrier de Paris 3 pour les dates)
+    \item[Email] \href{mailto:loic.grobol@gmail.com}{\texttt{loic.grobol@gmail.com}}
+    \item[Web] \url{http://example.com}
+\end{description}
+
+\section*{Contenu}
+Ce cours propose une introduction aux grandes tâches d'ingénierie linguistique qui constituent aujourd'hui ce que l'on désigne par le terme de \emph{fouille de textes}.
+Dans un premier temps nous présenterons ainsi la recherche d'information, la classification, l'annotation et l'extraction d'information.
+Le  cours se  concentrera ensuite plus particulièrement sur la tâche de classification de textes et sur les différentes techniques actuelles de classification de textes par apprentissage artificiel supervisé (\emph{Naive Bayes}, arbres de décision, SVM, réseaux de neurones).
+Cette deuxième partie sera concrétisée par la construction pratique d'un système de classification de textes.
+
+\section*{Objectifs}
+
+\begin{itemize}
+    \item Expliciter dans le contexte de la fouille de texte la notion théorique de \emph{tâche}
+    \item Identifier les différentes tâches composant la fouille de texte et leurs champs d'application
+    \item Décrire le fonctionnement général et les mesures usuelles de qualité d'un système de classification de textes
+    \item Décrire quelques algorithmes usuels de classification et leurs applications à la classification de textes
+    \item Construire un système de classification de textes par apprentissage artificiel
+\end{itemize}
+
+\section*{Évaluation}
+En contrôle continu :
+
+\begin{description}
+    \item[Projet] Développement d'un système de classification de texte par apprentissage artificiel (50\%)
+    \item[Examen final] Examen écrit de deux heures en semaine 13 (50\%)
+\end{description}
+
+\section*{Bibliographie}
+\printbibliography[heading=none]
+
+\section*{Liens utiles}
+\begin{itemize}
+    \item La page web des années précédentes : \url{http://www.lattice.cnrs.fr/sites/itellier/fouille_textes.html}
+    \item Le polycopié du cours (indispensable) :  \url{http://www.lattice.cnrs.fr/sites/itellier/poly_fouille_textes/fouille-textes.pdf}
+\end{itemize}
+\end{document}
