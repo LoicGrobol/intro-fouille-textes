@@ -1,5 +1,4 @@
   - [Site du master Plurital](http://plurital.org)
-  - [Dépôt GitHub](https://github.com/LoicGrobol/intro-fouille-textes)
 
 ## Documents
 
