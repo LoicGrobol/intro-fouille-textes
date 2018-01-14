@@ -1,4 +1,4 @@
-  - **Où** Salle Benveniste, [ILPGA](www.ilpga.univ-paris3.f), [9 Rue des Bernardins, 75005 Paris](https://www.openstreetmap.org/way/55894044)
+  - **Où** Salle Benveniste, [ILPGA](http://www.ilpga.univ-paris3.f), [9 Rue des Bernardins, 75005 Paris](https://www.openstreetmap.org/way/55894044)
   - **Quand** [Le lundi de 14h à 16h](https://calendar.google.com/calendar?cid=aGdsODY4a3F2YXVxMXBpOHU2MXUwZTNsZGdAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ) (voir aussi [le calendrier de Paris 3 pour les dates](http://www.univ-paris3.fr/le-calendrier-universitaire-116398.kjsp))
   - **Contact** Loïc Grobol [<loic.grobol@gmail.com>](mailto:loic.grobol@gmail.com)
 
