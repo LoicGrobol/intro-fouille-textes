@@ -1,5 +1,5 @@
-  - **Où** Salle Benveniste, ILPGA, 9 Rue des Bernardins, 75005 Paris
-  - **Quand** Le lundi de 14h à 16h (voir [le calendrier de Paris 3 pour les dates](http://www.univ-paris3.fr/le-calendrier-universitaire-116398.kjsp))
+  - **Où** Salle Benveniste, [ILPGA](www.ilpga.univ-paris3.f), [9 Rue des Bernardins, 75005 Paris](https://www.openstreetmap.org/way/55894044)
+  - **Quand** [Le lundi de 14h à 16h](https://calendar.google.com/calendar?cid=aGdsODY4a3F2YXVxMXBpOHU2MXUwZTNsZGdAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ) (voir aussi [le calendrier de Paris 3 pour les dates](http://www.univ-paris3.fr/le-calendrier-universitaire-116398.kjsp))
   - **Contact** Loïc Grobol [<loic.grobol@gmail.com>](mailto:loic.grobol@gmail.com)
 
 ## Documents
@@ -9,5 +9,6 @@
 
 ## Liens utiles
 
+  - [Le site du projet Weka](https://www.cs.waikato.ac.nz/ml/weka/)
   - [La page du cours des années précédentes](http://www.lattice.cnrs.fr/sites/itellier/fouille_textes.html)
   - [Site du master Plurital](http://plurital.org)
