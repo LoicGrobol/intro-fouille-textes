@@ -64,42 +64,44 @@ tlmgr install ifluatex lm lualibs luaotfload ifxetex luatexbase ctablestack file
 tlmgr install $(cat **/*.tex | sed -n 's/^[^%]*\\usepackage[^{]*{\([^}]*\)}.*$/\1/p' | sed 's/,\s*/ /p' | paste -sd ' ' -)
 
 tlmgr install \
+    amscls \
+    amsmath \
+    bbm-macros \
+    beamer \
+    biber \
+    caption \
+    carlisle \
+    cm-super \
+    etextools \
+    etex-pkg \
+    etoolbox \
     fira \
+    doclicense \
+    ec \
     fmtcount \
+    hyph-utf8 \
     hyphen-english \
     hyphen-french
+    ifmtarg \
     latexmk \
-    amsmath \
-    tools \
-    titlesec \
-    caption \
-    pgf \
-    hyph-utf8 \
-    amscls \
-    bbm-macros \
-    varwidth \
-    ms \
-    ucharcat \
-    xits \
     libertine \
     libertinus \
-    url \
-    doclicense \
-    xifthen \
-    ifmtarg \
-    carlisle \
-    shadethm \
-    biber \
     logreq \
-    xstring \
-    etextools \
-    etoolbox \
-    etex-pkg \
-    ec \
-    cm-super \
-    textpos \
+    metropolis \
     microtype \
+    ms \
+    pgf \
+    shadethm \
+    textpos \
+    tools \
+    titlesec \
+    ucharcat \
+    url \
+    varwidth \
+    xits \
+    xifthen \
     xkeyval \
+    xstring \
     xunicode
 
 # Keep no backups (not required, simply makes cache bigger)
