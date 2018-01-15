@@ -1,0 +1,159 @@
+% Copyright © 2018, Loïc Grobol <loic.grobol@gmail.com>
+% This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (https://creativecommons.org/licenses/by/4.0/)
+
+\RequirePackage{xparse}
+% Settings
+\NewDocumentCommand\myname{}{Loïc Grobol}
+\NewDocumentCommand\mylab{}{Lattice, ALMAnaCH}
+\NewDocumentCommand\pdftitle{}{Introduction à la fouille de textes}
+\NewDocumentCommand\mymail{}{loic.grobol@gmail.com}
+\NewDocumentCommand\titlepagetitle{}{\pdftitle}
+\NewDocumentCommand\docdate{}{2018}
+\NewDocumentCommand\conference{}{M1 Plurital}
+
+\documentclass[hyperref={unicode}, xcolor={svgnames}]{beamer}
+\usetheme[sectionpage=progressbar,
+          subsectionpage=progressbar,
+          progressbar=frametitle]{metropolis}
+    \setbeamercolor{alerted text}{fg=BlueViolet}
+    \makeatletter
+        \setlength{\metropolis@progressinheadfoot@linewidth}{1pt}
+    \makeatother
+\usepackage{appendixnumberbeamer}
+
+% Use non-standard fonts
+\usefonttheme{professionalfonts}
+\setsansfont[BoldFont={Fira Sans SemiBold}, ItalicFont={Fira Sans Book Italic}]{Fira Sans Book}
+
+% Notes on left screen
+% \usepackage{pgfpages}
+% \setbeameroption{show notes on second screen=left}
+
+
+\usepackage{polyglossia}
+	\setmainlanguage{french}
+    \setotherlanguage{english}
+
+\usepackage[math-style=french]{unicode-math}
+
+\usepackage{tabu}
+	\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{multicol}
+\usepackage{ccicons}
+
+\usepackage{csquotes}
+\usepackage{tikz}
+	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep = 0pt]{\node[#1] (#2) {#3};}}
+	\tikzset{
+		invisible/.style={opacity=0},
+		visible on/.style={alt={#1{}{invisible}}},
+		alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+		},
+	}
+	\usepackage{tikz-qtree}
+    \usepackage{tkz-graph}
+	\usetikzlibrary{positioning, calc, shapes.multipart, fit}
+
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Example}
+
+    \makeatletter
+    	\lstset{
+    		basicstyle=\ttfamily\lst@ifdisplaystyle\tiny\fi,
+    		columns=fullflexible,
+    		showstringspaces=false,
+    		commentstyle=\color{gray}\upshape
+    	}
+    \makeatother
+
+	\lstdefinelanguage{XML}{
+	    morestring=[s]{"}{"},
+	    morecomment=[s]{?}{?},
+	    morecomment=[s]{!--}{--},
+	    moredelim=[s][\color{black}]{>}{<},
+	    moredelim=[s][\color{red}]{\ }{=},
+	    stringstyle=\color{DarkBlue},
+	    identifierstyle=\color{Maroon}
+	}
+
+\usepackage[backend=biber, style=authoryear, block=ragged, doi=false, isbn=false, url=false]{biblatex}
+	\addbibresource{biblio.bib}
+
+% Compact bibliography style
+\setbeamertemplate{bibliography item}[text]
+
+\AtEveryBibitem{
+    \clearfield{series}
+    \clearfield{pages}
+    \clearlist{publisher}
+    \clearname{editor}
+    \clearlist{location}
+}
+\renewcommand*{\bibfont}{\tiny}
+
+\usepackage{hyperxmp}	% XMP metadata
+
+\usepackage[type={CC},modifier={by},version={4.0}]{doclicense}
+
+\usepackage{todonotes}
+\let\todox\todo
+\renewcommand\todo[1]{\todox[inline]{#1}}
+
+\title{\titlepagetitle}
+\author{\textbf{\myname}}
+\institute{}
+\date{\conference\\\docdate}
+
+% \titlegraphic{}
+
+
+% ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████
+% ██   ██ ██    ██ ██      ██    ██ ████  ████ ██      ████   ██    ██
+% ██   ██ ██    ██ ██      ██    ██ ██ ████ ██ █████   ██ ██  ██    ██
+% ██   ██ ██    ██ ██      ██    ██ ██  ██  ██ ██      ██  ██ ██    ██
+% ██████   ██████   ██████  ██████  ██      ██ ███████ ██   ████    ██
+
+
+\begin{document}
+\pdfbookmark[2]{Title}{title}
+
+\begin{frame}[plain]
+	\titlepage
+\end{frame}
+
+%  ██████  ██████  ███    ██ ████████ ███████ ██   ██ ████████
+% ██      ██    ██ ████   ██    ██    ██       ██ ██     ██
+% ██      ██    ██ ██ ██  ██    ██    █████     ███      ██
+% ██      ██    ██ ██  ██ ██    ██    ██       ██ ██     ██
+%  ██████  ██████  ██   ████    ██    ███████ ██   ██    ██
+
+
+
+%  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
+% ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
+% ███████ ██████  ██████  █████   ██ ██  ██ ██   ██ ██   ███
+% ██   ██ ██      ██      ██      ██  ██ ██ ██   ██ ██  ██ ██
+% ██   ██ ██      ██      ███████ ██   ████ ██████  ██ ██   ██
+
+\appendix
+\pdfbookmark[2]{References}{references}
+\begin{frame}[allowframebreaks]{References}
+    \printbibliography[heading=none]
+\end{frame}
+
+\pdfbookmark[2]{Licence}{licence}
+\begin{frame}{Licence}
+  \begin{center}
+	  {\huge \ccby}
+	  \vfill
+	  This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\url{https://creativecommons.org/licenses/by/4.0/})
+	  \vfill
+	  Loïc Grobol
+
+	  \url{http://lattice.cnrs.fr/Grobol-Loic}, \href{mailto:loic.grobol@gmail.com}{\texttt{loic.grobol@gmail.com}}
+  \end{center}
+\end{frame}
+
+\end{document}
