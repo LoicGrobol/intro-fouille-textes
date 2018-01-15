@@ -1,4 +1,5 @@
 env:
+    - BUILD_FILES="syllabus/syllabus. slides/slides_introfdt."
     - RELEASE_FILES="syllabus/syllabus.pdf slides/slides_introfdt.pdf"
 
 addons:
@@ -19,6 +20,7 @@ install:
   - source ./install_texlive.sh
 
 script:
+  - for f in $RELEASE_FILES; do texliveonfly -c lualatex "$f"; done;
   - make all
 
 before_deploy:

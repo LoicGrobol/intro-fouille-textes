@@ -84,7 +84,7 @@ tlmgr install \
     fmtcount \
     hyph-utf8 \
     hyphen-english \
-    hyphen-french
+    hyphen-french \
     ifmtarg \
     latexmk \
     libertine \
