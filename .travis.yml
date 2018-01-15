@@ -21,7 +21,7 @@ install:
   - source ./install_texlive.sh
 
 script:
-  - for f in $RELEASE_FILES; do texliveonfly -c lualatex "$f"; done;
+  - for f in $BUILD_FILES; do texliveonfly -c lualatex "$f"; done;
   - make all
 
 before_deploy:
