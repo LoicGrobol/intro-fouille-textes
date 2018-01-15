@@ -96,6 +96,7 @@ tlmgr install \
     textpos \
     tools \
     titlesec \
+    translator \
     ucharcat \
     url \
     varwidth \
