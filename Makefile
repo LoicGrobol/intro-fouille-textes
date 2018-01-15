@@ -1,4 +1,4 @@
-SUBDIRS := syllabus
+SUBDIRS := syllabus slides
 CLEANSUBDIRS = $(addprefix clean_,$(SUBDIRS))
 
 all: $(SUBDIRS)

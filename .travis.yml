@@ -18,7 +18,7 @@ script:
   - make all
 
 before_deploy:
-  - export RELEASE_FILES=syllabus/syllabus.pdf
+  - export RELEASE_FILES=syllabus/syllabus.pdf slides/slides_introfdt.pdf
   - echo "Deploying $RELEASE_FILES to GitHub releases"
 
 deploy:
