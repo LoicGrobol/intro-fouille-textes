@@ -51,6 +51,7 @@ tlmgr install graphics graphics-cfg graphics-def oberdiek
 tlmgr install fontspec
 tlmgr install ifluatex lm lualibs luaotfload ifxetex luatexbase ctablestack filehook
 
+
 # Try to detect and install the packages used by the documents in the repository
 # Plus some superpackages that are not (yet) automatically detected, packages
 # whose texlive name doesn't match the file name and dependencies that tlmgr
@@ -61,6 +62,7 @@ tlmgr install ifluatex lm lualibs luaotfload ifxetex luatexbase ctablestack file
 # Or Travis could, y'know, have an up-to-date texlive distribution using a ppa
 # And Ubuntu maintainers could actually care.
 # Eh, daydreaming, back to your programs.
+tlmgr install texliveonfly
 tlmgr install $(cat **/*.tex | sed -n 's/^[^%]*\\usepackage[^{]*{\([^}]*\)}.*$/\1/p' | sed 's/,\s*/ /p' | paste -sd ' ' -)
 
 tlmgr install \

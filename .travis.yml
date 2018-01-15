@@ -4,6 +4,7 @@ addons:
       - xzdec
       - curl
       - tar
+      - python
 
 cache:
   directories:
@@ -15,10 +16,11 @@ install:
   - source ./install_texlive.sh
 
 script:
+  - export RELEASE_FILES=syllabus/syllabus.pdf slides/slides_introfdt.pdf
+  - for f in $RELEASE_FILES; do; texliveonfly $f; done;
   - make all
 
 before_deploy:
-  - export RELEASE_FILES=syllabus/syllabus.pdf slides/slides_introfdt.pdf
   - echo "Deploying $RELEASE_FILES to GitHub releases"
 
 deploy:
