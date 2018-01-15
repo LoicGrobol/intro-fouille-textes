@@ -1,6 +1,7 @@
 env:
-    - BUILD_FILES="syllabus/syllabus. slides/slides_introfdt."
-    - RELEASE_FILES="syllabus/syllabus.pdf slides/slides_introfdt.pdf"
+    global:
+        - BUILD_FILES="syllabus/syllabus slides/slides_introfdt"
+        - RELEASE_FILES="syllabus/syllabus.pdf slides/slides_introfdt.pdf"
 
 addons:
   apt:
