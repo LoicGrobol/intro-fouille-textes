@@ -65,8 +65,8 @@ tlmgr install $(cat **/*.tex | sed -n 's/^[^%]*\\usepackage[^{]*{\([^}]*\)}.*$/\
 
 tlmgr install \
     amscls \
+    amsfonts \
     amsmath \
-    amssymb \
     bbm-macros \
     beamer \
     biber \
