@@ -60,7 +60,7 @@
 	}
 	\usepackage{tikz-qtree}
     \usepackage{tkz-graph}
-	\usetikzlibrary{positioning, calc, shapes, shapes.multipart, fit}
+	\usetikzlibrary{positioning, calc, shapes, shapes.geometric}
 
 \usepackage{listings}
 \renewcommand{\lstlistingname}{Example}
@@ -125,6 +125,13 @@
 \date{\conference\\\docdate}
 
 \titlegraphic{\ccby}
+
+% Tikz styles
+
+\tikzset{
+    data/.style={draw, ellipse},
+    program/.style={draw, rectangle}
+}
 
 
 % ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████
@@ -296,9 +303,17 @@
     \end{itemize}
     On peut considérer chaque tâche comme une boîte noire
 
-    % \begin{tikzpicture}
-    %     \draw[->] (0,0) node[draw, circle] (in) {Entrée} -- node[draw, right=2cm of in, text width=10ex] (prog) {Programme réalisant la tâche} -- node[circle, draw, right=2cm of prog] {Résultat};
-    % \end{tikzpicture}
+    \begin{figure}
+    \begin{tikzpicture}[>=stealth]
+        \node[data] (in) {Entrée};
+        \node[program, right=1cm of in, text width=10ex] (prog) {Programme réalisant la tâche};
+        \node[data, right=1.5cm of prog] (out) {Résultat};
+        \node[data, below=1cm of prog] (res) {Ressources};
+        \draw[->] (in) -- (prog);
+        \draw[->] (prog) -- (out);
+        \draw[->] (res) -- (prog);
+    \end{tikzpicture}
+    \end{figure}
 \end{frame}
 \begin{frame}{Ce que la fouille de texte n'est pas}
     Ou plutôt « ce qui n'est pas de la fouille de textes »
