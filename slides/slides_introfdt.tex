@@ -12,14 +12,14 @@
 \NewDocumentCommand\conference{}{M1 Plurital}
 
 \documentclass[hyperref={unicode}, xcolor={svgnames}]{beamer}
-\usetheme[sectionpage=progressbar,
+\usetheme[sectionpage=none,
           subsectionpage=progressbar,
           progressbar=frametitle]{metropolis}
     \setbeamercolor{alerted text}{fg=BlueViolet}
     \makeatletter
         \setlength{\metropolis@progressinheadfoot@linewidth}{1pt}
     \makeatother
-\usepackage{appendixnumberbeamer}
+% \usepackage{appendixnumberbeamer}
 
 % Use non-standard fonts
 \usefonttheme{professionalfonts}
@@ -47,6 +47,7 @@
 \usepackage{siunitx}
 \usepackage{multicol}
 \usepackage{ccicons}
+\usepackage{bookmark}
 
 \usepackage{csquotes}
 \usepackage{tikz}
@@ -335,7 +336,7 @@
 % ██   ██ ██      ██      ██      ██  ██ ██ ██   ██ ██  ██ ██
 % ██   ██ ██      ██      ███████ ██   ████ ██████  ██ ██   ██
 
-\appendix
+% \appendix
 \section{Annexes}
 \pdfbookmark[2]{References}{references}
 \begin{frame}[allowframebreaks]{References}

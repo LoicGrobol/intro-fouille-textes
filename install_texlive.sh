@@ -90,7 +90,7 @@ tlmgr install \
     libertine \
     libertinus \
     logreq \
-    beamertheme-metropolis \
+    "beamertheme-metropolis" \
     microtype \
     ms \
     pgf \
