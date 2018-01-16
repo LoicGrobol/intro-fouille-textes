@@ -11,3 +11,10 @@ Contenus pour le cours « Introduction à la fouille de textes » du master 
 ## Documents
 
   - [Syllabus](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/syllabus.pdf)
+  - [Polycopié du cours](http://www.lattice.cnrs.fr/sites/itellier/poly_fouille_textes/fouille-textes.pdf)
+
+## Liens utiles
+
+  - [Le site du projet Weka](https://www.cs.waikato.ac.nz/ml/weka/)
+  - [La page du cours des années précédentes](http://www.lattice.cnrs.fr/sites/itellier/fouille_textes.html)
+  - [Site du master Plurital](http://plurital.org)
