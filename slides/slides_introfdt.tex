@@ -34,6 +34,12 @@
 	\setmainlanguage{french}
     \setotherlanguage{english}
 
+    % PATCH: fix spacing in monospaced text
+    \usepackage{xpatch}
+    \makeatletter
+        \xapptocmd\ttfamily{\nofrench@punctuation}{}{}
+    \makeatother
+
 \usepackage[math-style=french]{unicode-math}
 
 \usepackage{tabu}
@@ -54,7 +60,7 @@
 	}
 	\usepackage{tikz-qtree}
     \usepackage{tkz-graph}
-	\usetikzlibrary{positioning, calc, shapes.multipart, fit}
+	\usetikzlibrary{positioning, calc, shapes, shapes.multipart, fit}
 
 \usepackage{listings}
 \renewcommand{\lstlistingname}{Example}
@@ -78,7 +84,19 @@
 	    identifierstyle=\color{Maroon}
 	}
 
-\usepackage[backend=biber, style=authoryear, block=ragged, doi=false, isbn=false, url=false]{biblatex}
+\usepackage[style=authoryear, block=ragged, doi=false, isbn=false]{biblatex}
+    \AtEveryBibitem{
+        \ifentrytype{online}
+        {} {
+            \iffieldequalstr{howpublished}{online}
+            {
+                \clearfield{howpublished}
+            } {
+                \clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}
+            }
+        }
+    }
+
 	\addbibresource{biblio.bib}
 
 % Compact bibliography style
@@ -106,7 +124,7 @@
 \institute{}
 \date{\conference\\\docdate}
 
-% \titlegraphic{}
+\titlegraphic{\ccby}
 
 
 % ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████
@@ -123,12 +141,177 @@
 	\titlepage
 \end{frame}
 
-%  ██████  ██████  ███    ██ ████████ ███████ ██   ██ ████████
-% ██      ██    ██ ████   ██    ██    ██       ██ ██     ██
-% ██      ██    ██ ██ ██  ██    ██    █████     ███      ██
-% ██      ██    ██ ██  ██ ██    ██    ██       ██ ██     ██
-%  ██████  ██████  ██   ████    ██    ███████ ██   ██    ██
+\begin{frame}{Informations pratiques}
+    \begin{description}
+        \item[Où] Salle Benveniste, ILPGA, 9 Rue des Bernardins, 75005 Paris
+        \item[Quand] Le lundi de 14h à 16h (voir le calendrier de Paris 3 pour les dates)
+        \item[Email] \href{mailto:loic.grobol@gmail.com}{\texttt{loic.grobol@gmail.com}}
+        \item[Web] \url{https://loicgrobol.github.io/intro-fouille-textes/}
+    \end{description}
+\end{frame}
 
+\begin{frame}{Organisation}
+    \begin{description}
+        \item[Poly] À lire d'une fois sur l'autre \url{http://www.lattice.cnrs.fr/sites/itellier/poly_fouille_textes/fouille-textes.pdf}
+        \item[Cours] Exemples, exercices, expérimentations, explications
+        \item[Évaluation] en contrôle continu
+            \begin{description}
+                \item[Partiel] en semaine 13 (2018-04-23) → 50\%
+                \item[Projet] → 50\%
+            \end{description}
+    \end{description}
+\end{frame}
+
+\begin{frame}{Projet final}
+    « Utiliser des programmes d'apprentissage automatique pour un tâche de classification de textes »
+    \begin{itemize}
+        \item Définir le sujet
+        \item Constituer le corpus de travail
+        \item Transformation du texte en données utilisables par Weka
+        \item Expérimentations
+        \item Compte-rendu
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Weka ?}
+    \begin{itemize}
+        \item \url{https://www.cs.waikato.ac.nz/ml/weka}
+        \item À installer dès que possible sur votre machine
+        \item Si possible, venir avec votre PC portable pour pouvoir suivre les expérimentations en cours
+    \end{itemize}
+\end{frame}
+
+% ██ ███    ██ ████████ ██████   ██████  ██████  ██    ██  ██████ ████████ ██  ██████  ███    ██
+% ██ ████   ██    ██    ██   ██ ██    ██ ██   ██ ██    ██ ██         ██    ██ ██    ██ ████   ██
+% ██ ██ ██  ██    ██    ██████  ██    ██ ██   ██ ██    ██ ██         ██    ██ ██    ██ ██ ██  ██
+% ██ ██  ██ ██    ██    ██   ██ ██    ██ ██   ██ ██    ██ ██         ██    ██ ██    ██ ██  ██ ██
+% ██ ██   ████    ██    ██   ██  ██████  ██████   ██████   ██████    ██    ██  ██████  ██   ████
+
+
+\section*{Introduction}
+
+\begin{frame}{La fouille de donnée}
+    Tout commença dans les années 90…
+    \begin{itemize}
+        \item Généralisation des ordinateurs personnels
+        \item Augmentation de leurs capacités de mémorisation et de traitement
+        \item[→] Il devient possible de traiter rapidement de grandes quantités d'informations
+    \end{itemize}
+    Le terme \alert{fouille de données} désigne l'ensemble des techniques permettant de prendre des décisions pertinentes à partir de l'analyse de données massives.
+\end{frame}
+
+\begin{frame}{La fouille de données}
+    Intéressant et rentable
+    \begin{itemize}
+        \item Pour les banques et les assurances
+        \item Pour la médecine
+        \item Pour la vente et le marketing
+        \item …
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Particularités innovantes}
+    Par rapport à l'IA traditionnelle, on privilégie
+    \begin{itemize}
+        \item \alert{La masse de données} plutôt que les compétences expertes
+        \item \alert{Les méthodes numériques} plutôt que symboliques
+        \item Une démarche \alert{inductive} plutôt que déductive
+    \end{itemize}
+    Et cette tendance se généralise depuis à l'ensemble des domaines de l'informatique.
+
+    À lire : \citetitle{church2011pendulum} \parencite{church2011pendulum}
+\end{frame}
+
+\begin{frame}{La fouille de textes}
+    Applications de la fouille de données au TAL et vice-versa pour le traitement des données linguistiques massives.
+
+    \begin{itemize}
+        \item Le web 2.0 se démocratise au même moment
+        \item C'est une formidable source de données linguistiques
+        \item Mais elles sont en général spontanées et potentiellement mal formées
+    \end{itemize}
+
+    Et le TAL traditionnel, et en particulier
+    \begin{itemize}
+        \item Automates
+        \item Grammaires formelles
+        \item Représentations logiques
+    \end{itemize}
+    ne sont pas adapté⋅e⋅s.
+\end{frame}
+
+\begin{frame}{Un changement de paradigme}
+    \begin{itemize}
+        \item On privilégie les analyses de surface
+        \item On s'appuie sur la quantité de données pour compenser leur hétérogénéité
+        \item On réduit les ambitions : il n'est pas question d'accéder au sens profond des textes
+    \end{itemize}
+
+    L'objectif est de traiter efficacement quelques \alert{tâches} précises et limitées.
+\end{frame}
+
+\begin{frame}{Sommaire}
+    La suite de ce cours est articulée en deux parties
+    \begin{itemize}
+        \item Les tâches élémentaires de la fouille de textes
+         \begin{itemize}
+             \item Qu'est-ce qu'une tâche ?
+             \item Quelles sont les tâches élémentaires ?
+             \item Combiner des tâches élémentaires
+         \end{itemize}
+        \item Une tâche particulière : la classification de textes
+    \end{itemize}
+\end{frame}
+
+% ████████  █████   ██████ ██   ██ ███████ ███████
+%    ██    ██   ██ ██      ██   ██ ██      ██
+%    ██    ███████ ██      ███████ █████   ███████
+%    ██    ██   ██ ██      ██   ██ ██           ██
+%    ██    ██   ██  ██████ ██   ██ ███████ ███████
+
+\section{Les tâches élémentaires de la fouille de textes}
+
+\subsection{Notion de tâche élémentaire}
+
+\begin{frame}{Introduction}
+    On traite du concept de \textit{tâche} au sens de l'informatique : spécification d'un programme qui mime une compétence humaine précise.
+
+    \begin{itemize}
+        \item Définition très large
+            \begin{itemize}
+                \item[→] « Tenir une conversation par écrit en se faisant passer pour un être humain » convient
+            \end{itemize}
+        \item En pratique on a des ambitions plus modestes
+        \item Mais on est encore loin de les satisfaire !
+         \begin{itemize}
+             \item Notre mesure du succès est « s'approcher le plus possible d'une solution de référence validée par un humain »
+         \end{itemize}
+    \end{itemize}
+ \end{frame}
+
+\begin{frame}{Caractérisation}
+    \begin{itemize}
+        \item Chaque tâche a une visée applicative précise et autonome
+        \item Elle est caractérisée par ses entrées, ses sorties et les ressources auxquelles elle fait appel
+    \end{itemize}
+    On peut considérer chaque tâche comme une boîte noire
+
+    % \begin{tikzpicture}
+    %     \draw[->] (0,0) node[draw, circle] (in) {Entrée} -- node[draw, right=2cm of in, text width=10ex] (prog) {Programme réalisant la tâche} -- node[circle, draw, right=2cm of prog] {Résultat};
+    % \end{tikzpicture}
+\end{frame}
+\begin{frame}{Ce que la fouille de texte n'est pas}
+    Ou plutôt « ce qui n'est pas de la fouille de textes »
+    \begin{itemize}
+        \item Lexicométrie
+        \item Textométrie
+        \item Et autres applications de la statistique descriptive à la caractérisation de textes
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Tâches élémentaires}
+    On considère que certaines tâches sont élémentaires
+\end{frame}
 
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
@@ -138,6 +321,7 @@
 % ██   ██ ██      ██      ███████ ██   ████ ██████  ██ ██   ██
 
 \appendix
+\section{Annexes}
 \pdfbookmark[2]{References}{references}
 \begin{frame}[allowframebreaks]{References}
     \printbibliography[heading=none]
