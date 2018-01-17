@@ -25,6 +25,7 @@
 % Use non-standard fonts
 \usefonttheme{professionalfonts}
 \setsansfont[BoldFont={Fira Sans SemiBold}, ItalicFont={Fira Sans Book Italic}]{Fira Sans Book}
+\setmonofont[Scale=0.8]{Fira Mono}
 
 % Notes on left screen
 % \usepackage{pgfpages}
@@ -69,7 +70,7 @@
 
     \makeatletter
     	\lstset{
-    		basicstyle=\ttfamily\lst@ifdisplaystyle\tiny\fi,
+    		basicstyle=\ttfamily\lst@ifdisplaystyle\footnotesize\fi,
     		columns=fullflexible,
     		showstringspaces=false,
     		commentstyle=\color{gray}\upshape
@@ -321,6 +322,18 @@
     On peut considérer chaque tâche comme une boîte noire : la façon dont le programme fonctionne ne nous intéresse pas ici.
 \end{frame}
 
+\begin{frame}{Quelques exemples de tâches}
+    \begin{enumerate}
+        \item Détecter les spams dans un ensemble d'emails
+        \item Trouver dans le catalogue d'une bibliothèque de ouvrages qui traitent de l'art macabre au XVème siècle
+        \item Trouver un site internet qui vend des ordinateurs portable sans système d'exploitation
+        \item Déterminer le nom du héros et des principaux protagonistes d'un texte narratif
+        \item Découper la transcription d'un discours en parties thématiques
+        \item Déterminer les symptômes présentés par un patient à partir d'un rapport clinique
+        \item Repérer dans un ensemble de tweets ceux qui sont sarcastiques ou ironiques
+    \end{enumerate}
+\end{frame}
+
 \begin{frame}[fragile]{Schéma général d'une tâche}
     \begin{figure}
     \begin{tikzpicture}[>=stealth]
@@ -338,10 +351,158 @@
     \only<2->{
     Dans ce schéma
         \begin{itemize}
-            \item<2-|alert@2> Les données sont figurées par des ellipses.
-            \item<3-|alert@3> Les programmes sont figurés par des rectangles.
+            \item<2-> Les \alert<2>{données} sont figurées par des ellipses.
+            \item<3-> Le \alert<3>{programme} réalisant la tâche est figuré par un rectangle.
         \end{itemize}
     }
+\end{frame}
+
+\begin{frame}{Entrées ou ressources ?}
+    Le critère qu'on retiendra en pratique est la mutabilité
+    \begin{itemize}
+        \item Une ressource est une donnée stable qui n'est pas modifiée entre deux exécutions du programme
+        \item Une donnée d'entrée change à chaque exécutions du programme
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Exemples}
+    Pour les tâches suivantes, identifier entrées et sorties et proposer des ressources
+    \begin{enumerate}
+        \item Détecter les spams dans un ensemble d'emails
+        \item Déterminer le nom du héros et des principaux protagonistes d'un texte narratif
+        \item Découper la transcription d'un discours en parties thématiques
+        \item Repérer dans un ensemble de tweets ceux qui sont sarcastiques ou ironiques
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Données}
+    On peut regrouper grossièrement les données utilisées en fouille de texte dans trois catégories
+    \begin{itemize}
+        \item Les données tabulaires
+        \item Les textes bruts
+        \item Les documents semi-structurés
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Données tabulaires}
+    \begin{figure}
+        \includegraphics<1>[width=\textwidth, height=0.8\textheight, keepaspectratio]{pics/tab_weka.png}
+        \includegraphics<2>[width=\textwidth, height=0.4\textheight, keepaspectratio]{pics/tab_weka.png}
+        \caption{Données tabulaires dans Weka}
+    \end{figure}
+    \only<2>{
+        C'est le type de données traditionnellement utilisé en fouille de données
+        \begin{itemize}
+            \item L'ordre des lignes est arbitraire
+            \item L'ordre des colonnes est arbitraire, sauf éventuellement pour la dernière
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Textes bruts}
+    \begin{figure}
+        \begin{lstlisting}[gobble=12, basicstyle=\ttfamily\small]
+            et comment est-ce qu'on fait une omelette est-ce que vous
+            pourriez m'expliquer
+            comment on fait une omelette ?
+            ah une omelette oui bien sûr
+            je casse des oeufs
+            oui oui
+            je les mets dans un récipient
+            je mets du sel et du poivre directement
+            je bats bon je prépare ma poêle je mets du beurre hein ?
+        \end{lstlisting}
+        \caption{Exemple de texte brut}
+    \end{figure}
+    \vskip0pt plus 1fill
+    {\tiny Extrait du corpus ANCOR \parencite{muzerelle2013ANCOR}}
+\end{frame}
+
+\begin{frame}{Textes bruts}
+    \alert{Tous} les caractères réprésentables sont susceptibles d'en faire partie
+    \begin{figure}
+        \includegraphics[width=\textwidth, height=0.8\textheight, keepaspectratio]{pics/raw_emoji.png}
+        \caption{Texte brut avec caractères spéciaux}
+    \end{figure}
+    \vskip0pt plus 1fill
+    {\tiny @Biolojical@twitter : \url{https://twitter.com/biolojical/status/949344635310059520}}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Documents semi-structuré}
+    Cas typique : XML et HTML
+    \begin{figure}
+        \begin{lstlisting}[gobble=12, language=XML]
+            <table>
+                <tr><th>produit</th><th>marque</th><th>prix en euros</th></tr>
+                <tr><td>ordinateur portable</td><td>truc</td><td>800</td></tr>
+                <tr><td>tablette</td><td>machin</td><td>200</td></tr>
+            </table>
+        \end{lstlisting}
+        \caption{HTML vu comme texte brut}
+    \end{figure}
+    On peut le considérer comme du texte brut où chaque balise (\lstinline[language=XML]{<td>}, \lstinline[language=XML]{</tr>}…) compte comme un seul caractère.
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Documents semi-structuré}
+    On peut aussi le considérer comme un arbre
+    \begin{figure}
+        \begin{tikzpicture}[font=\tiny]
+            \tikzset{level distance=2em, sibling distance=1ex}
+
+            \Tree[.{\lstinline[language=XML]{<table>}}
+                [.{\lstinline[language=XML]{<tr>}}
+                    [.{\lstinline[language=XML]{<th>}} produit ]
+                    [.{\lstinline[language=XML]{<th>}} marque ]
+                    [.{\lstinline[language=XML]{<th>}} {prix en euros} ]
+                ]
+                [.{\lstinline[language=XML]{<tr>}}
+                    [.{\lstinline[language=XML]{<td>}} {ordinateur portable} ]
+                    [.{\lstinline[language=XML]{<td>}} truc ]
+                    [.{\lstinline[language=XML]{<td>}} 800 ]
+                ]
+                [.{\lstinline[language=XML]{<tr>}}
+                    [.{\lstinline[language=XML]{<td>}} tablette ]
+                    [.{\lstinline[language=XML]{<td>}} machin ]
+                    [.{\lstinline[language=XML]{<td>}} 200 ]
+                ]
+            ]
+        \end{tikzpicture}
+        \caption{HTML vu comme un arbre}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Documents semi-structurés}
+    Et ils admettent dans certains cas des représentations supplémentaires
+    \begin{figure}
+        \includegraphics[width=\textwidth, height=0.8\textheight, keepaspectratio]{pics/html_firefox.png}
+        \caption{Représentation du code précédent dans un navigateur}
+    \end{figure}
+    \vskip0pt plus 1fill
+    {\tiny Représentation standard dans Mozilla Firefox \url{https://www.mozilla.org/firefox/}}
+\end{frame}
+
+\begin{frame}{Les ressources}
+    \begin{quote}
+        {\only<2>{\small}Toute donnée ou programme disponible pendant l'exécution d'un programme peut être qualifiée de \emph{ressource}.}
+    \end{quote}
+        \only<2>{
+            \begin{itemize}
+                \item Listes
+                    \begin{itemize}
+                        \item[→] mots, caractères…
+                    \end{itemize}
+                \item Corpus
+                \item Bases de connaissances
+                    \begin{itemize}
+                        \item[→] bases de données, ontologies, thésaurus, wordnet…
+                    \end{itemize}
+                \item Programmes de pré-traitement
+                    \begin{itemize}
+                        \item[→] segmentation, normalisation…
+                    \end{itemize}
+                \item Programmes réalisant des traitements lingustiques poussés
+            \end{itemize}
+        }
 \end{frame}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
