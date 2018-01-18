@@ -19,9 +19,9 @@ cache:
 
 install:
   - source ./install_texlive.sh
+  - for f in $BUILD_FILES; do texliveonfly -c lualatex "$f"; done;
 
 script:
-  - for f in $BUILD_FILES; do texliveonfly -c lualatex "$f"; done;
   - make all
 
 before_deploy:
