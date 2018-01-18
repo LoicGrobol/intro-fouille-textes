@@ -22,6 +22,17 @@
     \makeatother
 \usepackage{appendixnumberbeamer}
 
+% Highlight colour palette
+\definecolor{highlight0}{RGB}{51, 34, 136}
+\definecolor{highlight1}{RGB}{136, 204, 238}
+\definecolor{highlight2}{RGB}{68, 170, 153}
+\definecolor{highlight3}{RGB}{17, 119, 51}
+\definecolor{highlight4}{RGB}{153, 153, 51}
+\definecolor{highlight5}{RGB}{221, 204, 119}
+\definecolor{highlight6}{RGB}{204, 102, 119}
+\definecolor{highlight7}{RGB}{136, 34, 85}
+\definecolor{highlight8}{RGB}{170, 68, 153}
+
 % Use non-standard fonts
 \usefonttheme{professionalfonts}
 \setsansfont[BoldFont={Fira Sans SemiBold}, ItalicFont={Fira Sans Book Italic}]{Fira Sans Book}
@@ -82,9 +93,9 @@
 	    morecomment=[s]{?}{?},
 	    morecomment=[s]{!--}{--},
 	    moredelim=[s][\color{black}]{>}{<},
-	    moredelim=[s][\color{red}]{\ }{=},
-	    stringstyle=\color{DarkBlue},
-	    identifierstyle=\color{Maroon}
+	    moredelim=[s][\color{highlight0}]{\ }{=},
+	    stringstyle=\color{highlight3},
+	    identifierstyle=\color{highlight7}
 	}
 
 \usepackage[style=authoryear, block=ragged, doi=false, isbn=false]{biblatex}
@@ -131,7 +142,9 @@
 
 % Tikz styles
 
+% Schémas de tâches
 \tikzset{
+    >=stealth,
     data/.style={draw, ellipse},
     program/.style={draw, rectangle}
 }
@@ -157,7 +170,7 @@
         \item[Où] Salle Benveniste, ILPGA, 9 Rue des Bernardins, 75005 Paris
         \item[Quand] Le lundi de 14h à 16h (voir le calendrier de Paris 3 pour les dates)
         \item[Email] \href{mailto:loic.grobol@gmail.com}{\texttt{loic.grobol@gmail.com}}
-        \item[Web] \url{https://loicgrobol.github.io/intro-fouille-textes/}
+        \item[Web] {\small\url{https://loicgrobol.github.io/intro-fouille-textes}}
     \end{description}
 \end{frame}
 
@@ -230,11 +243,11 @@
     \end{itemize}
     Et cette tendance se généralise depuis à l'ensemble des domaines de l'informatique.
 
-    À lire : \citetitle{church2011pendulum} \parencite{church2011pendulum}
+    À lire : \citetitle{church2011pendulum} \parencite{church2011pendulum}
 \end{frame}
 
 \begin{frame}{La fouille de textes}
-    Applications de la fouille de données au TAL et vice-versa pour le traitement des données linguistiques massives.
+    Applications de la fouille de données au TAL et vice-versa pour le traitement des données linguistiques massives.
 
     \begin{itemize}
         \item Le web 2.0 se démocratise au même moment
@@ -248,7 +261,7 @@
         \item Grammaires formelles
         \item Représentations logiques
     \end{itemize}
-    ne sont pas adapté⋅e⋅s.
+    ne sont pas adaptées.
 \end{frame}
 
 \begin{frame}{Un changement de paradigme}
@@ -271,7 +284,7 @@
              \item Quelles sont les tâches élémentaires ?
              \item Combiner des tâches élémentaires
          \end{itemize}
-        \item Une tâche particulière : la classification de textes
+        \item Une tâche particulière : la classification de textes
     \end{itemize}
 \end{frame}
 
@@ -337,7 +350,7 @@
 \begin{frame}[fragile]{Schéma général d'une tâche}
     \begin{figure}
     \begin{tikzpicture}[>=stealth]
-        \tikzset{accent on/.style={alt={#1{draw=accent, text=accent, line width=2pt}{draw}}}}
+        \tikzset{accent on/.style={alt={#1{draw=accent, text=accent, thick}{draw}}}}
         \node[ellipse, accent on=<2>] (in) {Entrée};
         \node[right=1cm of in, text width=10ex, accent on=<3>] (prog) {Programme réalisant la tâche};
         \node[ellipse, accent on=<2>, right=1.5cm of prog] (out) {Résultat};
@@ -425,11 +438,11 @@
         \caption{Texte brut avec caractères spéciaux}
     \end{figure}
     \vskip0pt plus 1fill
-    {\tiny @Biolojical@twitter : \url{https://twitter.com/biolojical/status/949344635310059520}}
+    {\tiny @Biolojical@twitter : \url{https://twitter.com/biolojical/status/949344635310059520}}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Documents semi-structuré}
-    Cas typique : XML et HTML
+    Cas typique : XML et HTML
     \begin{figure}
         \begin{lstlisting}[gobble=12, language=XML]
             <table>
@@ -494,7 +507,7 @@
                 \item Corpus
                 \item Bases de connaissances
                     \begin{itemize}
-                        \item[→] bases de données, ontologies, thésaurus, wordnet…
+                        \item[→] bases de données, ontologies, lexiques, wordnets…
                     \end{itemize}
                 \item Programmes de pré-traitement
                     \begin{itemize}
@@ -508,6 +521,71 @@
         }
 \end{frame}
 
+\begin{frame}{Quelques ressources linguistiques}
+    \begin{itemize}
+        \item Le Lexique Extensionnel des Formes Fléchies du Français (Lefff)
+            \begin{itemize}
+                \item \url{http://almanach.inria.fr/~sagot/lefff.html}
+            \end{itemize}
+        \item La base de connaissances structurée Wikidata
+            \begin{itemize}
+                \item[→] \url{https://www.wikidata.org}
+            \end{itemize}
+        \item Le segmenteur/étiqueteur/parser UDPipe
+            \begin{itemize}
+                \item[→] \url{http://ufal.mff.cuni.cz/udpipe}
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Programmes}
+    Première option : programmes « écrits à la main »
+    \begin{itemize}
+        \item Reposent sur des connaissances expertes
+        \item Adaptés dans des contextes stables et non-adverses
+        \item Peu de robustesse aux changements et à l'hétérogénéité
+        \item Dans un contexte adverse (e.g. spam vs. anti-spam), gare à la course de la reine rouge !
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Programmes}
+    Deuxième option : apprentissage automatique
+    \begin{figure}
+    \begin{tikzpicture}[scale=0.9, every node/.style={transform shape}]
+        \node[data] (in) {Entrée};
+        \node[program, draw=highlight0, text=highlight0, right=.75cm of in, text width=10ex] (prog) {Programme réalisant la tâche};
+        \node[data, right=.75cm of prog] (out) {Résultat};
+        \node[program, draw=highlight6, text=highlight6, above=1cm of prog, text width=13ex] (progapp) {Programme d'apprentissage};
+        \node[data, draw=highlight3, text=highlight3, right=.75cm of progapp] (mod) {Modèle};
+        \node[data, draw=highlight7, text=highlight7, left=.75cm of progapp] (train) {Exemples};
+        \draw[->] (in) -- (prog);
+        \draw[->] (prog) -- (out);
+        \draw[->] (mod) |- ($(prog.north)+(0, 0.5cm)$) -| (prog.north);
+        \draw[->] (train) -- (progapp);
+        \draw[->] (progapp) -- (mod);
+    \end{tikzpicture}
+    \caption{Schéma d'une approche par apprentissage automatique}
+    \end{figure}
+    Ici le \textcolor{highlight0}{programme réalisant la tâche} est générique, mais utilise comme ressource un \textcolor{highlight3}{modèle} généré par un \textcolor{highlight6}{programme d'entraînement} à partir d'\textcolor{highlight7}{exemples} produit par des humains.
+\end{frame}
+
+\begin{frame}{Apprentissage automatique}
+    Avantages
+    \begin{itemize}
+        \item Peut utiliser des données d'apprentissage génériques
+            \begin{itemize}
+                \item[→] Permet de concentrer les besoins en connaissances expertes
+            \end{itemize}
+        \item En général plus robustes aux données irrégulières et à l'hétérogénéité
+        \item Plus facilement transférable (e.g. d'une langue à une autre)
+    \end{itemize}
+    Inconvénients
+    \begin{itemize}
+        \item Parfois trop peu explicite (surtout en \textit{Deep Learning})
+        \item Dépend beaucoup de la qualité des données d'entraînement
+    \end{itemize}
+\end{frame}
+
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
 % ███████ ██████  ██████  █████   ██ ██  ██ ██   ██ ██   ███
@@ -515,7 +593,7 @@
 % ██   ██ ██      ██      ███████ ██   ████ ██████  ██ ██   ██
 
 \appendix
-\pgfkeys{/metropolis/inner/sectionpage=simple}
+\pgfkeys{/metropolis/inner/sectionpage=simple}  % Avoid random errors with section page progressbar
 \section{Annexes}
 \pdfbookmark[2]{Remerciements}{acknowledgements}
 \begin{frame}{Remerciements}
