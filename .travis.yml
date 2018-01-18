@@ -40,3 +40,6 @@ deploy:
   on:
     repo: LoicGrobol/intro-fouille-textes
     tags: true
+
+after_failure:
+    - cat slides/slides_introfdt.log
