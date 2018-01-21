@@ -6,6 +6,7 @@
 
   - [Syllabus](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/syllabus.pdf)
   - [Polycopié du cours](https://loicgrobol.github.io/intro-fouille-textes/poly/poly.pdf)
+  - [Slides du cours](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/slides_introfdt.pdf)
 
 ## Liens utiles
 
