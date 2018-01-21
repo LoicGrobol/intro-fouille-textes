@@ -11,7 +11,7 @@ Contenus pour le cours « Introduction à la fouille de textes » du master 
 ## Documents
 
   - [Syllabus](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/syllabus.pdf)
-  - [Polycopié du cours](http://www.lattice.cnrs.fr/sites/itellier/poly_fouille_textes/fouille-textes.pdf)
+  - [Polycopié du cours](/poly/poly.pdf)
 
 ## Liens utiles
 

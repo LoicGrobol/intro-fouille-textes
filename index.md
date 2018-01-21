@@ -5,7 +5,7 @@
 ## Documents
 
   - [Syllabus](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/syllabus.pdf)
-  - [Polycopié du cours](http://www.lattice.cnrs.fr/sites/itellier/poly_fouille_textes/fouille-textes.pdf)
+  - [Polycopié du cours](https://loicgrobol.github.io/intro-fouille-textes/poly/poly.pdf)
 
 ## Liens utiles
 
