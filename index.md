@@ -14,7 +14,9 @@
   - [La page du cours des années précédentes](http://www.lattice.cnrs.fr/sites/itellier/fouille_textes.html)
   - [Site du master Plurital](http://plurital.org)
 
-## Licences  <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png"/></a>
+## Licences
+
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png"/></a>
 
  Copyright © 2018 Loïc Grobol [<loic.grobol@gmail.com>](mailto:loic.grobol@gmail.com)
 
