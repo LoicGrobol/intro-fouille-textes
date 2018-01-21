@@ -13,3 +13,13 @@
   - [Le site du projet Weka](https://www.cs.waikato.ac.nz/ml/weka/)
   - [La page du cours des années précédentes](http://www.lattice.cnrs.fr/sites/itellier/fouille_textes.html)
   - [Site du master Plurital](http://plurital.org)
+
+## Licences  <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png"/></a>
+
+ Copyright © 2018 Loïc Grobol [<loic.grobol@gmail.com>](mailto:loic.grobol@gmail.com)
+
+ Sauf indication contraire, les fichiers présents dans ce dépôt sont distribués selon les termes de la licence [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/). Voir [le README](README.md#Licences) pour plus de détails.
+
+ Un résumé simplifié de cette licence est disponible à <https://creativecommons.org/licenses/by/4.0/>.
+
+ Le texte intégral de cette licence est disponible à <https://creativecommons.org/licenses/by/4.0/legalcode>
