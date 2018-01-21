@@ -151,6 +151,11 @@
     program/.style={draw, rectangle}
 }
 
+% Commands spécifiques
+\NewDocumentCommand\shorturl{ O{https} O{://} m }{%
+    \href{#1#2#3}{\nolinkurl{#3}}%
+}
+
 
 % ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████
 % ██   ██ ██    ██ ██      ██    ██ ████  ████ ██      ████   ██    ██
@@ -171,15 +176,15 @@
     \begin{description}[Contact]
         \item[Où] Salle Benveniste, ILPGA, 9 Rue des Bernardins, 75005 Paris
         \item[Quand] Le lundi de 14h à 16h (voir le calendrier de Paris 3 pour les dates)
-        \item[Contact] \href{mailto:loic.grobol@gmail.com}{\texttt{loic.grobol@gmail.com}}
-        \item[Web] \href{https://loicgrobol.github.io/intro-fouille-textes}{\small\texttt{loicgrobol.github.io/intro-fouille-textes}}
+        \item[Contact] \shorturl[mailto][:]{loic.grobol@gmail.com}{loic.grobol@gmail.com}
+        \item[Web] {\small\shorturl{loicgrobol.github.io/intro-fouille-textes}}
     \end{description}
 \end{frame}
 
 \begin{frame}{Organisation}
     \begin{description}[Évaluation]
         \item[Poly] À lire d'une fois sur l'autre :
-                    \href{https://loicgrobol.github.io/intro-fouille-textes/poly/poly.pdf}{\footnotesize\texttt{loicgrobol.github.io/intro-fouille-textes/poly/poly.pdf}}
+                    {\footnotesize\shorturl[https]{loicgrobol.github.io/intro-fouille-textes/poly/poly.pdf}}
         \item[Cours] Exemples, exercices, expérimentations, explications
         \item[Évaluation] en contrôle continu
             \begin{description}
@@ -203,7 +208,7 @@
 \begin{frame}{Weka ?}
     Une suite de logiciels pour l'apprentissage automatique avec une interface graphique
     \begin{itemize}
-        \item \url{https://www.cs.waikato.ac.nz/ml/weka}
+        \item \shorturl{www.cs.waikato.ac.nz/ml/weka}
         \item À installer dès que possible sur votre machine
         \item Si possible, venir avec votre PC portable pour pouvoir suivre les expérimentations en cours
     \end{itemize}
@@ -454,7 +459,7 @@
         \caption{Texte brut avec caractères spéciaux}
     \end{figure}
     \vskip0pt plus 1fill
-    {\tiny @Biolojical@twitter : \url{https://twitter.com/biolojical/status/949344635310059520}}
+    {\tiny @Biolojical@twitter : \shorturl{twitter.com/biolojical/status/949344635310059520}}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Documents semi-structuré}
@@ -507,7 +512,7 @@
         \caption{Représentation du code précédent dans un navigateur}
     \end{figure}
     \vskip0pt plus 1fill
-    {\tiny Représentation standard dans Mozilla Firefox \url{https://www.mozilla.org/firefox/}}
+    {\tiny Représentation standard dans Mozilla Firefox \shorturl{www.mozilla.org/firefox/}}
 \end{frame}
 
 \begin{frame}{Les ressources}
@@ -541,23 +546,23 @@
     \begin{itemize}
         \item Le Lexique Extensionnel des Formes Fléchies du Français (Lefff)
             \begin{itemize}
-                \item[→] \url{http://almanach.inria.fr/~sagot/lefff.html}
+                \item[→] \shorturl[http]{almanach.inria.fr/~sagot/lefff.html}
             \end{itemize}
         \item La base de connaissances structurée Wikidata
             \begin{itemize}
-                \item[→] \url{https://www.wikidata.org}
+                \item[→] \shorturl{www.wikidata.org}
             \end{itemize}
         \item Le segmenteur/étiqueteur/parser UDPipe
             \begin{itemize}
-                \item[→] \url{http://ufal.mff.cuni.cz/udpipe}
+                \item[→] \shorturl{ufal.mff.cuni.cz/udpipe}
             \end{itemize}
         \item Le corpus arboré pour le français (French Treebank)
             \begin{itemize}
-                \item[→] \url{http://ftb.linguist.univ-paris-diderot.fr/ }
+                \item[→] \shorturl[http]{ftb.linguist.univ-paris-diderot.fr}
             \end{itemize}
         \item Le réseau lexical JeuxDeMots
             \begin{itemize}
-                \item[→] \url{http://www.jeuxdemots.org/jdm-about.php}
+                \item[→] \shorturl{www.jeuxdemots.org/jdm-about.php}
             \end{itemize}
     \end{itemize}
 \end{frame}
@@ -572,7 +577,7 @@
     \end{itemize}
     Attention : ça ne signifie pas que c'est une impasse !
     \begin{itemize}
-        \item[→] FRMG (\url{http://alpage.inria.fr/frmgwiki/})
+        \item[→] FRMG (\shorturl[http]{alpage.inria.fr/frmgwiki/})
     \end{itemize}
 \end{frame}
 
@@ -614,6 +619,54 @@
     \end{itemize}
 \end{frame}
 
+\lecture{Introduction à la fouille de textes}{2018-01-22}
+\begin{frame}{Quelques exemples}
+    Quelques exemples de programmes issus d'apprentissage automatique
+    \begin{itemize}
+        \item SEM (POS tagging, chunking, détection d'entités nommées)
+            \begin{itemize}
+                \item[→] \shorturl{apps.lattice.cnrs.fr/sem}
+            \end{itemize}
+        \item UDPipe (segmenteur/étiqueteur/parser)
+            \begin{itemize}
+                \item[→] \shorturl{ufal.mff.cuni.cz/udpipe}
+            \end{itemize}
+        \item Google translate (traduction)
+            \begin{itemize}
+                \item[→] \shorturl{translate.google.com}
+            \end{itemize}
+        \item Deep summarization (résumé de review Amazon)
+            \begin{itemize}
+                \item[→] \shorturl{github.com/harpribot/deep-summarization}
+            \end{itemize}
+        \item @picdescbot (description d'images en langage naturel\textsuperscript{1})
+            \begin{itemize}
+                \item[→] \shorturl{twitter.com/picdescbot}
+            \end{itemize}
+    \end{itemize}
+    \vskip0pt plus 1fill
+    {\tiny 1. Encore plus fort : \citetitle{alishahi2017encoding} \parencite{alishahi2017encoding}}
+\end{frame}
+
+\begin{frame}{Évaluation et d'apprentissage}
+    Objectif : comparer \alert{objectivement} des programmes réalisant une même tâche
+    \begin{itemize}
+        \item Doit se faire avec exactement les mêmes données
+            \begin{itemize}
+                \item Ressources et entrées !
+            \end{itemize}
+        \item[→] Établissement de données de référence \alert{\textit{Gold Standard}}
+            \begin{itemize}
+                \item[→] MetaTreebank Universal Dependencies \shorturl[http]{universaldependencies.org}
+                \item[→] OntoNotes \shorturl{catalog.ldc.upenn.edu/LDC2013T19}
+            \end{itemize}
+        \item On met ensuite en concurrence les programmes sur ces données → challenge/shared task
+            \begin{itemize}
+                \item[→] CoNLL 2017 \shorturl[http]{http://universaldependencies.org/conll17}
+                \item[→] \alert{DEFT} \shorturl{deft.limsi.fr}
+            \end{itemize}
+    \end{itemize}
+\end{frame}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
@@ -636,15 +689,15 @@
 
 \pdfbookmark[2]{Licence}{licence}
 \begin{frame}{Licence}
-  \begin{center}
-	  {\huge \ccby}
-	  \vfill
-	  This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\url{https://creativecommons.org/licenses/by/4.0/})
-	  \vfill
-	  Loïc Grobol
+    \begin{center}
+        {\huge \ccby}
+        \vfill
+        This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
+        \vfill
+        Loïc Grobol
 
-	  \url{http://lattice.cnrs.fr/Grobol-Loic}, \href{mailto:loic.grobol@gmail.com}{\texttt{loic.grobol@gmail.com}}
-  \end{center}
+        \shorturl[http]{lattice.cnrs.fr/Grobol-Loic}, \shorturl[mailto][:]{loic.grobol@gmail.com}
+    \end{center}
 \end{frame}
 
 \end{document}
