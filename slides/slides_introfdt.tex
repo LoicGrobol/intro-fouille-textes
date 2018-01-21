@@ -36,7 +36,7 @@
 % Use non-standard fonts
 \usefonttheme{professionalfonts}
 \setsansfont[BoldFont={Fira Sans SemiBold}, ItalicFont={Fira Sans Book Italic}]{Fira Sans Book}
-\setmonofont[Scale=0.8]{Fira Mono}
+\setmonofont[Scale=0.9]{Fira Mono}
 
 % Notes on left screen
 % \usepackage{pgfpages}
@@ -56,11 +56,13 @@
 \usepackage[math-style=french]{unicode-math}
 
 \usepackage{tabu}
-	\usepackage{booktabs}
+\usepackage{booktabs}
 \usepackage{siunitx}
 \usepackage{multicol}
 \usepackage{ccicons}
 \usepackage{bookmark}
+\usepackage{caption}
+    \captionsetup{skip=1ex}
 
 \usepackage{csquotes}
 \usepackage{tikz}
@@ -166,17 +168,18 @@
 
 \lecture{Introduction à la fouille de textes}{2018-01-15}
 \begin{frame}{Informations pratiques}
-    \begin{description}
+    \begin{description}[Contact]
         \item[Où] Salle Benveniste, ILPGA, 9 Rue des Bernardins, 75005 Paris
         \item[Quand] Le lundi de 14h à 16h (voir le calendrier de Paris 3 pour les dates)
-        \item[Email] \href{mailto:loic.grobol@gmail.com}{\texttt{loic.grobol@gmail.com}}
-        \item[Web] {\small\url{https://loicgrobol.github.io/intro-fouille-textes}}
+        \item[Contact] \href{mailto:loic.grobol@gmail.com}{\texttt{loic.grobol@gmail.com}}
+        \item[Web] \href{https://loicgrobol.github.io/intro-fouille-textes}{\small\texttt{loicgrobol.github.io/intro-fouille-textes}}
     \end{description}
 \end{frame}
 
 \begin{frame}{Organisation}
-    \begin{description}
-        \item[Poly] À lire d'une fois sur l'autre \url{http://www.lattice.cnrs.fr/sites/itellier/poly_fouille_textes/fouille-textes.pdf}
+    \begin{description}[Évaluation]
+        \item[Poly] À lire d'une fois sur l'autre :
+                    \href{https://loicgrobol.github.io/intro-fouille-textes/poly/poly.pdf}{\footnotesize\texttt{loicgrobol.github.io/intro-fouille-textes/poly/poly.pdf}}
         \item[Cours] Exemples, exercices, expérimentations, explications
         \item[Évaluation] en contrôle continu
             \begin{description}
@@ -184,6 +187,7 @@
                 \item[Projet] → 50\%
             \end{description}
     \end{description}
+
 \end{frame}
 
 \begin{frame}{Projet final}
@@ -198,6 +202,7 @@
 \end{frame}
 
 \begin{frame}{Weka ?}
+    Une suite de logiciels pour l'apprentissage automatique avec une interface graphique
     \begin{itemize}
         \item \url{https://www.cs.waikato.ac.nz/ml/weka}
         \item À installer dès que possible sur votre machine
@@ -399,11 +404,13 @@
 
 \begin{frame}{Données tabulaires}
     \begin{figure}
-        \includegraphics<1>[width=\textwidth, height=0.8\textheight, keepaspectratio]{pics/tab_weka.png}
+        \includegraphics<1>[width=\textwidth, height=0.75\textheight, keepaspectratio]{pics/tab_weka.png}
         \includegraphics<2>[width=\textwidth, height=0.4\textheight, keepaspectratio]{pics/tab_weka.png}
         \caption{Données tabulaires dans Weka}
     \end{figure}
-    \only<2>{
+    \alt<1>{
+        {\tiny Exemple Weka \texttt{weater.numeric} : peut-on jouer au tennis aujourd'hui ?}
+    }{
         C'est le type de données traditionnellement utilisé en fouille de données
         \begin{itemize}
             \item L'ordre des lignes est arbitraire
@@ -432,7 +439,7 @@
 \end{frame}
 
 \begin{frame}{Textes bruts}
-    \alert{Tous} les caractères réprésentables sont susceptibles d'en faire partie
+    \alert{Tous} les caractères représentables sont susceptibles d'en faire partie
     \begin{figure}
         \includegraphics[width=\textwidth, height=0.8\textheight, keepaspectratio]{pics/raw_emoji.png}
         \caption{Texte brut avec caractères spéciaux}
@@ -525,7 +532,7 @@
     \begin{itemize}
         \item Le Lexique Extensionnel des Formes Fléchies du Français (Lefff)
             \begin{itemize}
-                \item \url{http://almanach.inria.fr/~sagot/lefff.html}
+                \item[→] \url{http://almanach.inria.fr/~sagot/lefff.html}
             \end{itemize}
         \item La base de connaissances structurée Wikidata
             \begin{itemize}
@@ -534,6 +541,14 @@
         \item Le segmenteur/étiqueteur/parser UDPipe
             \begin{itemize}
                 \item[→] \url{http://ufal.mff.cuni.cz/udpipe}
+            \end{itemize}
+        \item Le corpus arboré pour le français (French Treebank)
+            \begin{itemize}
+                \item[→] \url{http://ftb.linguist.univ-paris-diderot.fr/ }
+            \end{itemize}
+        \item Le réseau lexical JeuxDeMots
+            \begin{itemize}
+                \item[→] \url{http://www.jeuxdemots.org/jdm-about.php}
             \end{itemize}
     \end{itemize}
 \end{frame}
@@ -545,6 +560,10 @@
         \item Adaptés dans des contextes stables et non-adverses
         \item Peu de robustesse aux changements et à l'hétérogénéité
         \item Dans un contexte adverse (e.g. spam vs. anti-spam), gare à la course de la reine rouge !
+    \end{itemize}
+    Attention : ça ne signifie pas que c'est une impasse !
+    \begin{itemize}
+        \item[→] FRMG (\url{http://alpage.inria.fr/frmgwiki/})
     \end{itemize}
 \end{frame}
 
