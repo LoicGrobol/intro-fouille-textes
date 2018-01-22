@@ -703,7 +703,7 @@
     \begin{center}
         \begin{tikzpicture}[scale=0.7]
             \foreach \x in {2, ..., 11}
-                \draw[alt=<\x>{fill=highlight6}{alt=<1>{}{fill=highlight0}}]
+                \draw[alt=<\x>{fill=highlight6}{{alt=<1,12>{}{fill=highlight0}}}]
                     (\x-2, 0) -- ++(1, 0) -- ++(0, 1) -- ++(-1, 0) -- ++(0, -1) -- cycle;
         \end{tikzpicture}
     \end{center}
@@ -766,18 +766,18 @@
     Note : avoir défini précisément ce que « pertinent » veut dire n'est pas forcément nécessaire ! Il suffit d'avoir défini un \textit{Gold}.
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{Évaluation : préliminaires}
+\begin{frame}[fragile]{Évaluation : préliminaires}
     \begin{figure}
         \begin{tikzpicture}[fill opacity=0.5, scale=0.75, every node/.style={transform shape}]]
             \draw (-6,-2) rectangle (6,2)
                 node [above left] {$D$ : ensemble de tous les documents};
             \fill[white] (1,0) circle (1);
-            \filldraw[fill=highlight3]
+            \draw[alt={<1,6>{fill=highlight3}{}}]
                 (-1, 0) circle [x radius=2, y radius=1, rotate=30]
-                node[below left=1.3 and .15, text=highlight3] {$P$ : documents pertinents};
-            \filldraw[fill=highlight8]
+                node[below left=1.3 and .15, alt={<1,6>{text=highlight3}{}}] {$P$ : documents pertinents};
+            \draw[alt={<1,6>{fill=highlight8}{}}]
                 (1, 0) circle [x radius=2, y radius=1.5]
-                node[above right=1.5 and 0.1, text=highlight8] {$R$ : documents retournés};
+                node[above right=1.5 and 0.1, alt={<1,6>{text=highlight8}{}}] {$R$ : documents retournés};
         \end{tikzpicture}
         \caption{Représentation de l'ensemble des documents}
     \end{figure}
