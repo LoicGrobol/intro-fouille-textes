@@ -725,6 +725,91 @@
         \end{itemize}
 \end{frame}
 
+\subsection{Recherche d'information}
+
+\begin{frame}[fragile=singleslide]{Recherche d'information}
+    La RI est la tâche consistant à trouver dans un corpus des documents \alert{pertinents} étant donnée une requête
+    \begin{itemize}
+        \item « Trouver dans le catalogue d'une bibliothèque de ouvrages qui traitent de l'art macabre au XVème siècle »
+        \item « Trouver un site internet qui vend des ordinateurs portable sans système d'exploitation »
+    \end{itemize}
+    \begin{figure}
+    \begin{tikzpicture}[>=stealth]
+            \node[data, draw=highlight4, text=highlight4] (in) {Requête};
+            \node[program, right=1cm of in, text width=10ex] (prog) {Programme de RI};
+            \node[data, right=1.5cm of prog] (out) {documents};
+            \node[data, below=.7cm of prog, draw=highlight1, text=highlight1] (res) {Corpus};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (res) -- (prog);
+        \end{tikzpicture}
+    \end{figure}
+    \begin{itemize}
+        \item Le \textcolor{highlight1}{corpus} est une ressource obligatoire
+        \item La \textcolor{highlight4}{requête} n'est \emph{pas} faite en langage fortement structuré (type SPARQL)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Domaines d'application}
+    Globalement tous les moteurs de recherche
+    \begin{itemize}
+        \item Web : Qwant, Duckduckgo, Framabee, Google…
+        \item Site : tous les sites avec une fonction de recherche (e.g. sites marchands)
+        \item Documentaires : en bibliothèques, archives…
+        \item …
+    \end{itemize}
+    Mais aussi les détecteurs de similarité
+    \begin{itemize}
+        \item Détection de plagiat e.g. Compilatio (\shorturl{compilatio.net})
+        \item Détection de doublons e.g. sur le réseau StackExchange
+    \end{itemize}
+    Note : avoir défini précisément ce que « pertinent » veut dire n'est pas forcément nécessaire ! Il suffit d'avoir défini un \textit{Gold}.
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Évaluation : préliminaires}
+    \begin{figure}
+        \begin{tikzpicture}[fill opacity=0.5, scale=0.75, every node/.style={transform shape}]]
+            \draw (-6,-2) rectangle (6,2)
+                node [above left] {$D$ : ensemble de tous les documents};
+            \fill[white] (1,0) circle (1);
+            \filldraw[fill=highlight3]
+                (-1, 0) circle [x radius=2, y radius=1, rotate=30]
+                node[below left=1.3 and .15, text=highlight3] {$P$ : documents pertinents};
+            \filldraw[fill=highlight8]
+                (1, 0) circle [x radius=2, y radius=1.5]
+                node[above right=1.5 and 0.1, text=highlight8] {$R$ : documents retournés};
+        \end{tikzpicture}
+        \caption{Représentation de l'ensemble des documents}
+    \end{figure}
+    On définit les indicateurs suivants
+    \begin{tabu}{|*{3}{X[m,c]|}}
+        \hline
+            & Retournés   & Non-retournés\\
+        \hline
+        Pertinents    & Vrais positifs $P∩R$    & Faux négatifs $P\smallsetminus R$\\
+        \hline
+        Non-pertinents    & Faux positifs $R\smallsetminus P$ & Vrais négatifs $D\smallsetminus(P∪R)$\\
+        \hline
+    \end{tabu}
+\end{frame}
+
+\begin{frame}{Évaluation}
+    Les mesures d'évaluations du système visent à rendre compte de façon synthétique du tableau suivant pour une expérience de RI
+    \begin{description}
+        \item[La précision] $P=\frac{VP}{VP+FP}$ « combien de dcouments retournés sont réellement pertinents ? »
+        \item[Le rappel] $R=\frac{VP}{VP+FN}$ « parmi les documents pertinents, combien ont été trouvés ? »
+        \item[La F-mesure] $F=\frac{2⋅PR}{P+R}$ est la moyenne harmonique des deux précédentes
+    \end{description}
+\end{frame}
+
+\begin{frame}{Questions}
+    \begin{enumerate}
+        \item Ces mesures dépendent-elles de la taille de $D$ ?
+        \item Donner une méthode pour avoir à coup sûr $R=1$
+        \item Donner une méthode pour avoir à coup sûr $P=1$
+        \item Dans ces cas, que faut $F$ ? Et que vaudrait la moyenne arithmétique de $P$ et $R$.
+    \end{enumerate}
+\end{frame}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
