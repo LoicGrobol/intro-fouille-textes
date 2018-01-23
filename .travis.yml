@@ -20,7 +20,7 @@ cache:
 
 install:
   - source ./install_texlive.sh
-  - for f in $BUILD_FILES; do texliveonfly -c lualatex "$f" | true; done;
+  - for f in $BUILD_FILES; do texliveonfly -c lualatex "$f" || true; done;
 
 script:
   - make all
