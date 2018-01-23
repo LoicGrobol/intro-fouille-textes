@@ -40,5 +40,5 @@ Les fichiers suivants sont des adaptations d'autres projets, mais sont toutefois
 Les fichiers suivants ne sont pas distribués selon les termes de la licence Creative Commons Attribution 4.0 International
 
   - [`poly/poly.pdf`](poly/poly.pdf) © Isabelle Tellier distribué avec l'autorisation de l'autrice
-  - [`slides/pics/raw_emoji.png`](slides/pics/raw_emoji.png) © [\@Biolojical](https://twitter.com/biolojical/status/949344635310059520)
+  - [`slides/pics/raw_emoji.png`](slides/pics/raw_emoji.png) © [\@Biolojical](https://twitter.com/biolojical/status/949344635310059520) distribué avec l'autorisation de l'auteur
   - [`texlive.profile`](texlive.profile) © LaTeX3 Project distribué comme [l'original](https://github.com/latex3/latex3/blob/master/support/texlive.profile) au titre de la [LaTeX Project Public Licence](https://github.com/latex3/latex3/blob/master/LICENSE)
