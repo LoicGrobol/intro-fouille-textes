@@ -147,7 +147,6 @@
                     }{}
                 }
             },
-            external/optimize=false,
             every picture/.style={beamer externalizing}
         }
         \let\orig@tikzsetnextfilename=\tikzsetnextfilename
@@ -928,49 +927,68 @@
 \end{frame}
 
 \begin{frame}[fragile]{Aparté : moyennes}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}
-            \begin{axis}[meanheatmap]
-                \addplot3[surf, shader=interp]
-                    {2*(x*y)/(x+y)};
-            \end{axis}
-        \end{tikzpicture}
-    \caption{Moyenne harmonique de $P$ et $R$ : $2×\frac{P×R}{P+R}$}
-    \end{figure}
+    \begin{onlyenv}<1>
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}
+                \begin{axis}[meanheatmap]
+                    \addplot3[surf, shader=interp]
+                        {2*(x*y)/(x+y)};
+                \end{axis}
+            \end{tikzpicture}
+        \caption{Moyenne harmonique de $P$ et $R$ : $2×\frac{P×R}{P+R}$}
+        \end{figure}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}
+                \begin{axis}[meanheatmap]
+                    \addplot3[surf, shader=interp]
+                        {(x+y)/2};
+                \end{axis}
+            \end{tikzpicture}
+            \caption{Moyenne arithmétique de $P$ et $R$ : $\frac{P+R}{2}$}
+        \end{figure}
+    \end{onlyenv}
+    \begin{onlyenv}<3>
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}
+                \begin{axis}[colorbar, colormap name=SRON,
+                             view={0}{90},
+                             samples=100,
+                             domain=0:1,
+                             xlabel={$P$},
+                             ylabel={$R$},
+                             min=0, max=1]
+                    \addplot3[surf, shader=interp]
+                        {sqrt(x*y)};
+                \end{axis}
+            \end{tikzpicture}
+        \caption{Moyenne géométrique de $P$ et $R$ : $√{P×R}$}
+        \end{figure}
+    \end{onlyenv}
+    \begin{onlyenv}<4>
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}
+                \begin{axis}[colorbar, colormap name=SRON,
+                             view={0}{90},
+                             samples=100,
+                             domain=0:1,
+                             xlabel={$P$},
+                             ylabel={$R$},
+                             min=0, max=1]
+                    \addplot3[surf, shader=interp]
+                        {sqrt(x*x+y*y)};
+                \end{axis}
+            \end{tikzpicture}
+        \caption{Moyenne quadratique de $P$ et $R$ : $√{P²+R²}$}
+        \end{figure}
+    \end{onlyenv}
 \end{frame}
 
-\begin{frame}[fragile]{Aparté : moyennes}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}
-            \begin{axis}[meanheatmap]
-                \addplot3[surf, shader=interp]
-                    {(x+y)/2};
-            \end{axis}
-        \end{tikzpicture}
-    \caption{Moyenne arithmétique de $P$ et $R$ : $\frac{P+R}{2}$}
-    \end{figure}
-\end{frame}
-
-\begin{frame}[fragile]{Aparté : moyennes}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}
-            \begin{axis}[colorbar, colormap name=SRON,
-                         view={0}{90},
-                         samples=100,
-                         domain=0:1,
-                         xlabel={$P$},
-                         ylabel={$R$},
-                         min=0, max=1]
-                \addplot3[surf, shader=interp]
-                    {sqrt(x*y)};
-            \end{axis}
-        \end{tikzpicture}
-    \caption{Moyenne géométrique de $P$ et $R$ : $√{P×R}$}
-    \end{figure}
-\end{frame}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
