@@ -17,6 +17,7 @@ cache:
     - "/tmp/texlive"
     - "$HOME/.texlive"
     - "$HOME/texmf"
+    - "slides/tikzpics/"
 
 install:
   - source ./install_texlive.sh
