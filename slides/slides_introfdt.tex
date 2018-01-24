@@ -917,9 +917,17 @@
     {\tiny Exactement $F=\frac{2}{\frac{1}{P}+\frac{1}{R}}=2×\frac{P×R}{P+R}$}
 \end{frame}
 
+\begin{frame}{Exemples}
+    Déterminer $P$, $R$ et $F$ dans les cas suivants
+    \begin{itemize}
+        \item $VP=1$, $VN=0$, $FP=1$, $FN=1$
+        \item $VP=100$, $VN=50$, $FP=20$, $FN=15$
+    \end{itemize}
+\end{frame}
+
 \begin{frame}{Questions}
     \begin{enumerate}
-        \item Ces mesures dépendent-elles de la taille de $D$ ?
+        \item $P$, $R$ et $F$ dépendent-elles de la taille de $D$ ?
         \item Donner une méthode pour avoir à coup sûr $R=1$
         \item Donner une méthode pour avoir à coup sûr $P=1$
         \item Dans ces cas, que faut $F$ ? Et que vaudrait la moyenne arithmétique de $P$ et $R$.
@@ -981,10 +989,10 @@
                              ylabel={$R$},
                              min=0, max=1]
                     \addplot3[surf, shader=interp]
-                        {sqrt(x*x+y*y)};
+                        {sqrt((x*x+y*y)/2)};
                 \end{axis}
             \end{tikzpicture}
-        \caption{Moyenne quadratique de $P$ et $R$ : $√{P²+R²}$}
+        \caption{Moyenne quadratique de $P$ et $R$ : $√{\frac{P²+R²}{2}}$}
         \end{figure}
     \end{onlyenv}
 \end{frame}
