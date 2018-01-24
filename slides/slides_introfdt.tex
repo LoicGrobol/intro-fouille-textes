@@ -148,7 +148,6 @@
                 }
             },
             external/optimize=false,
-            external/export=false,
             every picture/.style={beamer externalizing}
         }
         \let\orig@tikzsetnextfilename=\tikzsetnextfilename
@@ -156,6 +155,7 @@
     \makeatother
     % Create the `tikzpics/` folder if it does not exist
     \ShellEscape{mkdir tikzpics}
+    % Only externalise pictures on demand (to avoid messing up with metropolis theme)
     \tikzset{
         external/export=false,
         external/prefix=tikzpics/
@@ -233,7 +233,7 @@
     >=stealth,
     data/.style={draw, ellipse},
     program/.style={draw, rectangle},
-    true scale/.style={scale=#1, every node/.style={transform shape}]}
+    true scale/.style={scale=#1, every node/.style={transform shape}}
 }
 
 % Styles des heatmap pour les moyennes
@@ -436,16 +436,16 @@
     \end{itemize}
 
     \begin{figure}
-    \tikzset{external/export=true}
-    \begin{tikzpicture}[>=stealth]
-        \node[data] (in) {Entrée};
-        \node[program, right=1cm of in, text width=10ex] (prog) {Programme réalisant la tâche};
-        \node[data, right=1.5cm of prog] (out) {Résultat};
-        \node[data, below=1cm of prog] (res) {Ressources};
-        \draw[->] (in) -- (prog);
-        \draw[->] (prog) -- (out);
-        \draw[->] (res) -- (prog);
-    \end{tikzpicture}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[>=stealth]
+            \node[data] (in) {Entrée};
+            \node[program, right=1cm of in, text width=10ex] (prog) {Programme réalisant la tâche};
+            \node[data, right=1.5cm of prog] (out) {Résultat};
+            \node[data, below=1cm of prog] (res) {Ressources};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (res) -- (prog);
+        \end{tikzpicture}
     \end{figure}
 
     On peut considérer chaque tâche comme une boîte noire : la façon dont le programme fonctionne ne nous intéresse pas ici.
@@ -465,17 +465,18 @@
 
 \begin{frame}[fragile]{Schéma général d'une tâche}
     \begin{figure}
-    \begin{tikzpicture}[>=stealth]
-        \tikzset{accent on/.style={alt={#1{draw=accent, text=accent, thick}{draw}}}}
-        \node[ellipse, accent on=<2>] (in) {Entrée};
-        \node[right=1cm of in, text width=10ex, accent on=<3>] (prog) {Programme réalisant la tâche};
-        \node[ellipse, accent on=<2>, right=1.5cm of prog] (out) {Résultat};
-        \node[ellipse, accent on=<2>, below=1cm of prog] (res) {Ressources};
-        \draw[->] (in) -- (prog);
-        \draw[->] (prog) -- (out);
-        \draw[->] (res) -- (prog);
-    \end{tikzpicture}
-    \caption{Schéma général d'une tâche}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[>=stealth]
+            \tikzset{accent on/.style={alt={#1{draw=accent, text=accent, thick}{draw}}}}
+            \node[ellipse, accent on=<2>] (in) {Entrée};
+            \node[right=1cm of in, text width=10ex, accent on=<3>] (prog) {Programme réalisant la tâche};
+            \node[ellipse, accent on=<2>, right=1.5cm of prog] (out) {Résultat};
+            \node[ellipse, accent on=<2>, below=1cm of prog] (res) {Ressources};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (res) -- (prog);
+        \end{tikzpicture}
+        \caption{Schéma général d'une tâche}
     \end{figure}
     \only<2->{
     Dans ce schéma
@@ -578,6 +579,7 @@
 \begin{frame}[fragile=singleslide]{Documents semi-structuré}
     On peut aussi le considérer comme un arbre
     \begin{figure}
+        \tikzset{external/export=true}
         \begin{tikzpicture}[font=\tiny]
             \tikzset{level distance=2em, sibling distance=1ex}
 
@@ -682,20 +684,21 @@
 \begin{frame}[fragile=singleslide]{Programmes}
     Deuxième option : apprentissage automatique
     \begin{figure}
-    \begin{tikzpicture}[scale=0.9, every node/.style={transform shape}]
-        \node[data] (in) {Entrée};
-        \node[program, draw=highlight0, text=highlight0, right=.75cm of in, text width=10ex] (prog) {Programme réalisant la tâche};
-        \node[data, right=.75cm of prog] (out) {Résultat};
-        \node[program, draw=highlight6, text=highlight6, above=1cm of prog, text width=13ex] (progapp) {Programme d'apprentissage};
-        \node[data, draw=highlight3, text=highlight3, right=.75cm of progapp] (mod) {Modèle};
-        \node[data, draw=highlight7, text=highlight7, left=.75cm of progapp] (train) {Exemples};
-        \draw[->] (in) -- (prog);
-        \draw[->] (prog) -- (out);
-        \draw[->] (mod) |- ($(prog.north)+(0, 0.5cm)$) -| (prog.north);
-        \draw[->] (train) -- (progapp);
-        \draw[->] (progapp) -- (mod);
-    \end{tikzpicture}
-    \caption{Schéma d'une approche par apprentissage automatique}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[scale=0.9, every node/.style={transform shape}]
+            \node[data] (in) {Entrée};
+            \node[program, draw=highlight0, text=highlight0, right=.75cm of in, text width=10ex] (prog) {Programme réalisant la tâche};
+            \node[data, right=.75cm of prog] (out) {Résultat};
+            \node[program, draw=highlight6, text=highlight6, above=1cm of prog, text width=13ex] (progapp) {Programme d'apprentissage};
+            \node[data, draw=highlight3, text=highlight3, right=.75cm of progapp] (mod) {Modèle};
+            \node[data, draw=highlight7, text=highlight7, left=.75cm of progapp] (train) {Exemples};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (mod) |- ($(prog.north)+(0, 0.5cm)$) -| (prog.north);
+            \draw[->] (train) -- (progapp);
+            \draw[->] (progapp) -- (mod);
+        \end{tikzpicture}
+        \caption{Schéma d'une approche par apprentissage automatique}
     \end{figure}
     Ici le \textcolor{highlight0}{programme réalisant la tâche} est générique, mais utilise comme ressource un \textcolor{highlight3}{modèle} généré par un \textcolor{highlight6}{programme d'entraînement} à partir d'\textcolor{highlight7}{exemples} produit par des humains.
 \end{frame}
@@ -796,6 +799,7 @@
         \item<12-> On retient comme évaluation globale une moyenne des résultats
     \end{itemize}
     \begin{center}
+        \tikzset{external/export=true}
         \begin{tikzpicture}[scale=0.7]
             \foreach \x in {2, ..., 11}
                 \draw[alt=<\x>{fill=highlight6}{{alt=<1,12>{}{fill=highlight0}}}]
@@ -829,7 +833,8 @@
         \item « Trouver un site internet qui vend des ordinateurs portable sans système d'exploitation »
     \end{itemize}
     \begin{figure}
-    \begin{tikzpicture}[>=stealth, scale=0.9, every node/.style={transform shape}]
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[>=stealth, true scale=0.9]
             \node[data, draw=highlight4, text=highlight4] (in) {Requête};
             \node[program, right=1cm of in, text width=10ex] (prog) {Programme de RI};
             \node[data, right=1.5cm of prog] (out) {documents};
@@ -864,6 +869,7 @@
 % WARNING: Here be dragons
 \begin{frame}[fragile]{Évaluation : préliminaires}
     \begin{figure}
+        \tikzset{external/export=true}
         \begin{tikzpicture}[fill opacity=0.5,
                             alt=<1>{scale=0.9}{scale=0.75}, every node/.style={transform shape}]
             \draw[name path=D]
@@ -923,6 +929,7 @@
 
 \begin{frame}[fragile]{Aparté : moyennes}
     \begin{figure}
+        \tikzset{external/export=true}
         \begin{tikzpicture}
             \begin{axis}[meanheatmap]
                 \addplot3[surf, shader=interp]
@@ -935,6 +942,7 @@
 
 \begin{frame}[fragile]{Aparté : moyennes}
     \begin{figure}
+        \tikzset{external/export=true}
         \begin{tikzpicture}
             \begin{axis}[meanheatmap]
                 \addplot3[surf, shader=interp]
@@ -947,6 +955,7 @@
 
 \begin{frame}[fragile]{Aparté : moyennes}
     \begin{figure}
+        \tikzset{external/export=true}
         \begin{tikzpicture}
             \begin{axis}[colorbar, colormap name=SRON,
                          view={0}{90},
