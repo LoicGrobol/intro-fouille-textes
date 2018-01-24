@@ -1,5 +1,5 @@
 NAME = slides_introfdt
-LATEX = latexmk -lualatex -halt-on-error -file-line-error -interaction=nonstopmode
+LATEX = latexmk -lualatex -halt-on-error -file-line-error -shell-escape -interaction=nonstopmode
 CLEAN = latexmk -C
 
 .DEFAULT_GOAL := $(NAME).pdf

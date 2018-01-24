@@ -2,6 +2,7 @@
 % This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (https://creativecommons.org/licenses/by/4.0/)
 
 \RequirePackage{xparse}
+\RequirePackage{shellesc}
 % Settings
 \NewDocumentCommand\myname{}{Loïc Grobol}
 \NewDocumentCommand\mylab{}{Lattice, ALMAnaCH}
@@ -69,7 +70,7 @@
 
 \usepackage{csquotes}
 \usepackage{tikz}
-	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep = 0pt]{\node[#1] (#2) {#3};}}
+	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}}
 	\tikzset{
 		invisible/.style={opacity=0},
 		visible on/.style=,
@@ -79,7 +80,87 @@
 	}
 	\usepackage{tikz-qtree}
     \usepackage{tkz-graph}
-	\usetikzlibrary{positioning, calc, shapes, shapes.geometric}
+    \usepackage{pgfplots}
+        \pgfplotsset{compat=1.15}
+        \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}}
+
+
+	\usetikzlibrary{positioning, calc, shapes, shapes.geometric, intersections}
+
+    % Do evil things with soft path
+    % From <https://tex.stackexchange.com/a/301364/8547>
+    \makeatletter
+        \def\@appendnamedsoftpath#1{%
+            \pgfsyssoftpath@getcurrentpath\@temppatha
+            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
+            \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb}%
+            \pgfsyssoftpath@setcurrentpath\@temppatha
+        }
+        \def\@appendnamedpathforactions#1{%
+            \pgfsyssoftpath@getcurrentpath\@temppatha
+            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
+            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb}%
+            \let\tikz@actions@path\@temppatha
+        }
+
+        \tikzset{
+            use path for main/.code={%
+                \tikz@addmode{%
+                    \expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname
+                }%
+            },
+            append path for main/.code={%
+                \tikz@addmode{%
+                    \@appendnamedsoftpath{#1}%
+                }%
+            },
+            use path for actions/.code={%
+                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}%
+            },
+            append path for actions/.code={%
+                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions
+                \@appendnamedpathforactions{#1}}%
+            },
+            use path/.style={%
+                use path for main=#1,
+                use path for actions=#1,
+            },
+            append path/.style={%
+                append path for main=#1,
+                append path for actions=#1
+            }
+        }
+    \makeatother
+
+    % TikZ externalisation
+    \usetikzlibrary{external}
+    % Make externalization work with overlays, stolen from <https://tex.stackexchange.com/a/119440/8547>
+    \makeatletter
+        \newcommand*{\overlaynumber}{\number\beamer@slideinframe}
+        \tikzset{
+            beamer externalizing/.style={
+                execute at end picture={%
+                    \tikzifexternalizing{%
+                        \ifbeamer@anotherslide
+                            \pgfexternalstorecommand{\string\global\string\beamer@anotherslidetrue}
+                        \fi
+                    }{}
+                }
+            },
+            external/optimize=false,
+            external/export=false,
+            every picture/.style={beamer externalizing}
+        }
+        \let\orig@tikzsetnextfilename=\tikzsetnextfilename
+        \renewcommand\tikzsetnextfilename[1]{\orig@tikzsetnextfilename{#1-\overlaynumber}}
+    \makeatother
+    % Create the `tikzpics/` folder if it does not exist
+    \ShellEscape{mkdir tikzpics}
+    \tikzset{
+        external/export=false,
+        external/prefix=tikzpics/
+    }
+    \tikzexternalize
 
 \usepackage{listings}
 \renewcommand{\lstlistingname}{Example}
@@ -151,8 +232,21 @@
 \tikzset{
     >=stealth,
     data/.style={draw, ellipse},
-    program/.style={draw, rectangle}
+    program/.style={draw, rectangle},
+    true scale/.style={scale=#1, every node/.style={transform shape}]}
 }
+
+% Styles des heatmap pour les moyennes
+\pgfplotsset{
+    meanheatmap/.style={
+        colorbar, colormap name=SRON,
+        view={0}{90},
+        samples=100,
+        domain=0:1,
+        min=0, max=1
+    }
+}
+
 
 % Commands spécifiques
 \NewDocumentCommand\shorturl{ O{https} O{://} m }{%
@@ -342,6 +436,7 @@
     \end{itemize}
 
     \begin{figure}
+    \tikzset{external/export=true}
     \begin{tikzpicture}[>=stealth]
         \node[data] (in) {Entrée};
         \node[program, right=1cm of in, text width=10ex] (prog) {Programme réalisant la tâche};
@@ -687,13 +782,13 @@
 \end{frame}
 
 \begin{frame}[fragile]{Validation croisée}
-    Le découpage train/dev/test ajoute de l'objectivité et est facile à mettre e nœuvre mais
+    Le découpage train/dev/test ajoute de l'objectivité et est facile à mettre en œuvre mais
     \begin{itemize}
         \item Il prive d'une partie des données → sous-performance
         \item Il induit un biais lié au découpage si celui-ci est fixe
     \end{itemize}
 
-    Pour y remédier, on utilise parfois la méthode de validation croisée
+    Pour y limiter cet effet, on utilise parfois la méthode de validation croisée
     \begin{itemize}
         \item<1-> On découpe le corpus en $n$ parties de taille égales
         \item<2-> On utilise $n-1$ parties comme \textcolor{highlight0}{\textit{train}} et la dernière comme \textcolor{highlight6}{\textit{test}}
@@ -734,7 +829,7 @@
         \item « Trouver un site internet qui vend des ordinateurs portable sans système d'exploitation »
     \end{itemize}
     \begin{figure}
-    \begin{tikzpicture}[>=stealth]
+    \begin{tikzpicture}[>=stealth, scale=0.9, every node/.style={transform shape}]
             \node[data, draw=highlight4, text=highlight4] (in) {Requête};
             \node[program, right=1cm of in, text width=10ex] (prog) {Programme de RI};
             \node[data, right=1.5cm of prog] (out) {documents};
@@ -766,40 +861,55 @@
     Note : avoir défini précisément ce que « pertinent » veut dire n'est pas forcément nécessaire ! Il suffit d'avoir défini un \textit{Gold}.
 \end{frame}
 
+% WARNING: Here be dragons
 \begin{frame}[fragile]{Évaluation : préliminaires}
     \begin{figure}
-        \begin{tikzpicture}[fill opacity=0.5, scale=0.75, every node/.style={transform shape}]]
-            \draw (-6,-2) rectangle (6,2)
+        \begin{tikzpicture}[fill opacity=0.5,
+                            alt=<1>{scale=0.9}{scale=0.75}, every node/.style={transform shape}]
+            \draw[name path=D]
+                (-6,-2) rectangle (6,2)
                 node [above left] {$D$ : ensemble de tous les documents};
-            \fill[white] (1,0) circle (1);
-            \draw[alt={<1,6>{fill=highlight3}{}}]
+            \draw[alt={<1,6>{fill=highlight2, text=highlight2}{}}, name path=P]
                 (-1, 0) circle [x radius=2, y radius=1, rotate=30]
-                node[below left=1.3 and .15, alt={<1,6>{text=highlight3}{}}] {$P$ : documents pertinents};
-            \draw[alt={<1,6>{fill=highlight8}{}}]
+                node[below left=1.3 and .15] {$P$ : documents pertinents};
+            \draw[alt={<1,6>{fill=highlight4, text=highlight4}{}}, name path=R]
                 (1, 0) circle [x radius=2, y radius=1.5]
-                node[above right=1.5 and 0.1, alt={<1,6>{text=highlight8}{}}] {$R$ : documents retournés};
+                node[above right=1.5 and 0.1] {$R$ : documents retournés};
+            \begin{scope}[alt=<2-4>{even odd rule}{}]
+                \clip[alt=<2-3>{use path=P}{use path=R},
+                      alt=<3-5>{append path=D}{}];
+                \only<5>{\clip[use path=P, append path=D];}
+                \path[alt={<2,5>{fill=highlight3}{}},
+                      alt={<3,4>{fill=highlight6}{}},
+                      alt=<2-3>{use path=R}{use path=P},
+                      alt=<5>{use path=D}];
+            \end{scope}
         \end{tikzpicture}
         \caption{Représentation de l'ensemble des documents}
     \end{figure}
-    On définit les indicateurs suivants
-    \begin{tabu}{|*{3}{X[m,c]|}}
-        \hline
-            & Retournés   & Non-retournés\\
-        \hline
-        Pertinents    & Vrais positifs $P∩R$    & Faux négatifs $P\smallsetminus R$\\
-        \hline
-        Non-pertinents    & Faux positifs $R\smallsetminus P$ & Vrais négatifs $D\smallsetminus(P∪R)$\\
-        \hline
-    \end{tabu}
+    \only<2->{
+        On définit les indicateurs suivants
+        \begin{tabu}{|*{3}{X[m,c]|}}
+            \hline
+                & \uncover<2,3,6>{\textcolor{highlight4}{Retournés}}   & \uncover<4,5,6>{Non-retournés}\\
+            \hline
+            \uncover<2,4,6>{\textcolor{highlight2}{Pertinents}}    & \uncover<2,6>{\textcolor{highlight3}{Vrais positifs $P∩R$}}    & \uncover<4,6>{\textcolor{highlight6}{Faux négatifs $P\smallsetminus R$}}\\
+            \hline
+            \uncover<3,5,6>{Non-pertinents}    & \uncover<3,6>{\textcolor{highlight6}{Faux positifs $R\smallsetminus P$}} & \uncover<5,6>{\textcolor{highlight3}{Vrais négatifs $D\smallsetminus(P∪R)$}}\\
+            \hline
+        \end{tabu}
+    }
 \end{frame}
 
 \begin{frame}{Évaluation}
-    Les mesures d'évaluations du système visent à rendre compte de façon synthétique du tableau suivant pour une expérience de RI
+    Les mesures d'évaluations usuelles rendent compte de façon synthétique du tableau précédent pour une expérience de RI
     \begin{description}
         \item[La précision] $P=\frac{VP}{VP+FP}$ « combien de dcouments retournés sont réellement pertinents ? »
         \item[Le rappel] $R=\frac{VP}{VP+FN}$ « parmi les documents pertinents, combien ont été trouvés ? »
-        \item[La F-mesure] $F=\frac{2⋅PR}{P+R}$ est la moyenne harmonique des deux précédentes
+        \item[La F-mesure] $F=2×\frac{P×R}{P+R}$ est la moyenne harmonique\textsuperscript{1} des deux précédentes
     \end{description}
+    \vskip0pt plus 1fill
+    {\tiny Exactement $F=\frac{2}{\frac{1}{P}+\frac{1}{R}}=2×\frac{P×R}{P+R}$}
 \end{frame}
 
 \begin{frame}{Questions}
@@ -809,6 +919,48 @@
         \item Donner une méthode pour avoir à coup sûr $P=1$
         \item Dans ces cas, que faut $F$ ? Et que vaudrait la moyenne arithmétique de $P$ et $R$.
     \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Aparté : moyennes}
+    \begin{figure}
+        \begin{tikzpicture}
+            \begin{axis}[meanheatmap]
+                \addplot3[surf, shader=interp]
+                    {2*(x*y)/(x+y)};
+            \end{axis}
+        \end{tikzpicture}
+    \caption{Moyenne harmonique de $P$ et $R$ : $2×\frac{P×R}{P+R}$}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Aparté : moyennes}
+    \begin{figure}
+        \begin{tikzpicture}
+            \begin{axis}[meanheatmap]
+                \addplot3[surf, shader=interp]
+                    {(x+y)/2};
+            \end{axis}
+        \end{tikzpicture}
+    \caption{Moyenne arithmétique de $P$ et $R$ : $\frac{P+R}{2}$}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Aparté : moyennes}
+    \begin{figure}
+        \begin{tikzpicture}
+            \begin{axis}[colorbar, colormap name=SRON,
+                         view={0}{90},
+                         samples=100,
+                         domain=0:1,
+                         xlabel={$P$},
+                         ylabel={$R$},
+                         min=0, max=1]
+                \addplot3[surf, shader=interp]
+                    {sqrt(x*y)};
+            \end{axis}
+        \end{tikzpicture}
+    \caption{Moyenne géométrique de $P$ et $R$ : $√{P×R}$}
+    \end{figure}
 \end{frame}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
