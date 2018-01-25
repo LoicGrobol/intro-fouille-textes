@@ -134,24 +134,6 @@
 
     % TikZ externalisation
     \usetikzlibrary{external}
-    % Make externalization work with overlays, stolen from <https://tex.stackexchange.com/a/119440/8547>
-    \makeatletter
-        \newcommand*{\overlaynumber}{\number\beamer@slideinframe}
-        \tikzset{
-            beamer externalizing/.style={
-                execute at end picture={%
-                    \tikzifexternalizing{%
-                        \ifbeamer@anotherslide
-                            \pgfexternalstorecommand{\string\global\string\beamer@anotherslidetrue}
-                        \fi
-                    }{}
-                }
-            },
-            every picture/.style={beamer externalizing}
-        }
-        \let\orig@tikzsetnextfilename=\tikzsetnextfilename
-        \renewcommand\tikzsetnextfilename[1]{\orig@tikzsetnextfilename{#1-\overlaynumber}}
-    \makeatother
     % Create the `tikzpics/` folder if it does not exist
     \ShellEscape{mkdir tikzpics}
     % Only externalise pictures on demand (to avoid messing up with metropolis theme)
@@ -869,8 +851,8 @@
 \begin{frame}[fragile]{Évaluation : préliminaires}
     \begin{figure}
         \tikzset{external/export=true}
-        \begin{tikzpicture}[fill opacity=0.5,
-                            alt=<1>{scale=0.9}{scale=0.75}, every node/.style={transform shape}]
+        \begin{tikzpicture}[fill opacity=0.5, text opacity=1,
+                            alt=<1>{true scale=0.9}{true scale=0.75}]
             \draw[name path=D]
                 (-6,-2) rectangle (6,2)
                 node [above left] {$D$ : ensemble de tous les documents};
@@ -917,11 +899,26 @@
     {\tiny Exactement $F=\frac{2}{\frac{1}{P}+\frac{1}{R}}=2×\frac{P×R}{P+R}$}
 \end{frame}
 
-\begin{frame}{Exemples}
+\begin{frame}[fragile=singleslide]{Exemples}
     Déterminer $P$, $R$ et $F$ dans les cas suivants
     \begin{itemize}
         \item $VP=1$, $VN=0$, $FP=1$, $FN=1$
         \item $VP=100$, $VN=50$, $FP=20$, $FN=15$
+        \item
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[fill opacity=0.5, true scale=0.5, text opacity=1]
+                \draw[name path=D]
+                    (-6,-2) rectangle (6,2)
+                    node [above left] {$D$};
+                \draw[alt={<1,6>{fill=highlight2, text=highlight2}{}}]
+                    (-1, -0.25) circle [x radius=2, y radius=1, rotate=20]
+                    node[below left=1.3 and .15] {$P$ };
+                \draw[alt={<1,6>{fill=highlight4, text=highlight4}{}}]
+                    (1, 0) circle [x radius=2, y radius=1.7]
+                    node[above right=1.5 and 0.1] {$R$};
+            \end{tikzpicture}
+        \end{figure}
     \end{itemize}
 \end{frame}
 
@@ -933,6 +930,8 @@
         \item Dans ces cas, que faut $F$ ? Et que vaudrait la moyenne arithmétique de $P$ et $R$.
     \end{enumerate}
 \end{frame}
+
+\lecture{Introduction à la fouille de textes}{2018-01-15}
 
 \begin{frame}[fragile]{Aparté : moyennes}
     \begin{onlyenv}<1>
