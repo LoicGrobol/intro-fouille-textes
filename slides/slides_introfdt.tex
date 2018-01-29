@@ -54,6 +54,14 @@
         \xapptocmd\ttfamily{\nofrench@punctuation}{}{}
     \makeatother
 
+\usepackage{amsfonts,amssymb}
+\usepackage{amsmath,amsthm}
+\usepackage{mathtools}	% AMS Maths service pack
+	\newtagform{brackets}{[}{]}	% Pour des lignes d'équation numérotées entre crochets
+	\mathtoolsset{showonlyrefs, showmanualtags, mathic}	% affiche les tags manuels (\tag et \tag*) et corrige le kerning des maths inline dans un bloc italique voir la doc de mathtools
+	\usetagform{brackets}	% Utilise le style de tags défini plus haut
+\usepackage{lualatex-math}
+
 \usepackage[math-style=french]{unicode-math}
 	\setmathfont{XITS Math}
 \usepackage{newunicodechar}
@@ -202,7 +210,7 @@
 
 \title{\titlepagetitle}
 \author{\textbf{\myname}}
-\institute{}
+\institute{Lattice / ALMAnaCH}
 \date{\conference\\\docdate}
 
 \titlegraphic{\ccby}
@@ -227,7 +235,6 @@
         min=0, max=1
     }
 }
-
 
 % Commands spécifiques
 \NewDocumentCommand\shorturl{ O{https} O{://} m }{%
@@ -421,11 +428,9 @@
         \begin{tikzpicture}[>=stealth]
             \node[data] (in) {Entrée};
             \node[program, right=1cm of in, text width=10ex] (prog) {Programme réalisant la tâche};
-            \node[data, right=1.5cm of prog] (out) {Résultat};
-            \node[data, below=1cm of prog] (res) {Ressources};
+            \node[data, right=1cm of prog] (out) {Résultat};
             \draw[->] (in) -- (prog);
             \draw[->] (prog) -- (out);
-            \draw[->] (res) -- (prog);
         \end{tikzpicture}
     \end{figure}
 
@@ -451,7 +456,7 @@
             \tikzset{accent on/.style={alt={#1{draw=accent, text=accent, thick}{draw}}}}
             \node[ellipse, accent on=<2>] (in) {Entrée};
             \node[right=1cm of in, text width=10ex, accent on=<3>] (prog) {Programme réalisant la tâche};
-            \node[ellipse, accent on=<2>, right=1.5cm of prog] (out) {Résultat};
+            \node[ellipse, accent on=<2>, right=1cm of prog] (out) {Résultat};
             \node[ellipse, accent on=<2>, below=1cm of prog] (res) {Ressources};
             \draw[->] (in) -- (prog);
             \draw[->] (prog) -- (out);
@@ -815,11 +820,11 @@
     \end{itemize}
     \begin{figure}
         \tikzset{external/export=true}
-        \begin{tikzpicture}[>=stealth, true scale=0.9]
+        \begin{tikzpicture}[>=stealth, true scale=0.80]
             \node[data, draw=highlight4, text=highlight4] (in) {Requête};
             \node[program, right=1cm of in, text width=10ex] (prog) {Programme de RI};
-            \node[data, right=1.5cm of prog] (out) {documents};
-            \node[data, below=.7cm of prog, draw=highlight1, text=highlight1] (res) {Corpus};
+            \node[data, right=1cm of prog] (out) {documents};
+            \node[data, below=.6cm of prog, draw=highlight1, text=highlight1] (res) {Corpus};
             \draw[->] (in) -- (prog);
             \draw[->] (prog) -- (out);
             \draw[->] (res) -- (prog);
@@ -904,21 +909,23 @@
     \begin{itemize}
         \item $VP=1$, $VN=0$, $FP=1$, $FN=1$
         \item $VP=100$, $VN=50$, $FP=20$, $FN=15$
-        \item
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}[fill opacity=0.5, true scale=0.5, text opacity=1]
-                \draw[name path=D]
-                    (-6,-2) rectangle (6,2)
-                    node [above left] {$D$};
-                \draw[alt={<1,6>{fill=highlight2, text=highlight2}{}}]
-                    (-1, -0.25) circle [x radius=2, y radius=1, rotate=20]
-                    node[below left=1.3 and .15] {$P$ };
-                \draw[alt={<1,6>{fill=highlight4, text=highlight4}{}}]
-                    (1, 0) circle [x radius=2, y radius=1.7]
-                    node[above right=1.5 and 0.1] {$R$};
-            \end{tikzpicture}
-        \end{figure}
+        \item \mbox{}\\
+            {
+                \tikzset{external/export=true}
+                \begin{tikzpicture}[fill opacity=0.5, true scale=0.7, text opacity=1]
+                    \draw[name path=D]
+                        (-6,-2) rectangle (6,2)
+                        node [above left] {$D$};
+                    \draw[fill=highlight2, text=highlight2]
+                        (-1.5, -0.25) node[text=black] {$15$} circle [x radius=2.5, y radius=1, rotate=20]
+                        node[below left=1.1 and .15] {$P$ };
+                    \draw[fill=highlight4, text=highlight4]
+                        (1.5, 0) node[text=black] {$10$ }circle [x radius=2.5, y radius=1.7]
+                        node[above right=1.5 and 0.5] {$R$};
+                    \node at (0, 0) {$40$};
+                    \node at (5.5, 1.5) {$2713$};
+                \end{tikzpicture}
+            }
     \end{itemize}
 \end{frame}
 
@@ -970,7 +977,7 @@
                              ylabel={$R$},
                              min=0, max=1]
                     \addplot3[surf, shader=interp]
-                        {sqrt(x*y)};
+                        {(sqrt(x*y))};
                 \end{axis}
             \end{tikzpicture}
         \caption{Moyenne géométrique de $P$ et $R$ : $√{P×R}$}
@@ -994,6 +1001,39 @@
         \caption{Moyenne quadratique de $P$ et $R$ : $√{\frac{P²+R²}{2}}$}
         \end{figure}
     \end{onlyenv}
+\end{frame}
+
+\begin{frame}[fragile]{F-scores généralisés}
+    \begin{columns}
+    \alt<1>{\column{\textwidth}}{\column{0.45\textwidth}}
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[alt=<2>{true scale=0.5}{}]
+                \begin{axis}[colorbar, colormap name=SRON,
+                             view={0}{90},
+                             samples=100,
+                             domain=0:1,
+                             xlabel={$P$},
+                             ylabel={$R$},
+                             min=0, max=1]
+                    \addplot3[surf, shader=interp]
+                        {(x*y*(1+0.5^2))/(y+x*0.5^2)};
+                \end{axis}
+            \end{tikzpicture}
+        \caption{$F_β$ ($β=0.5$)}
+        \end{figure}
+    \only<2>{
+        \column{0.45\textwidth}
+        L'idée est de pondérer la moyenne harmonique
+        \begin{align}
+            F_{λ, μ}(P, R)
+                &= \frac{λ+μ}{\frac{λ}{P}+\frac{μ}{R}}\\
+                & (λ+μ) \frac{P×R}{λP + μR}\\
+                &= \frac{λ+μ}{μ} \frac{P×R}{\underbrace{\frac{λ}{μ}}_{β²}P + R}\\
+                &= (1+β²)\frac{P×R}{β²P + R}
+        \end{align}
+    }
+    \end{columns}
 \end{frame}
 
 
