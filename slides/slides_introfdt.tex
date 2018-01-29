@@ -5,7 +5,7 @@
 \RequirePackage{shellesc}
 % Settings
 \NewDocumentCommand\myname{}{Loïc Grobol}
-\NewDocumentCommand\mylab{}{Lattice, ALMAnaCH}
+\NewDocumentCommand\mylab{}{Lattice / ALMAnaCH}
 \NewDocumentCommand\pdftitle{}{Introduction à la fouille de textes}
 \NewDocumentCommand\mymail{}{loic.grobol@gmail.com}
 \NewDocumentCommand\titlepagetitle{}{\pdftitle}
@@ -92,8 +92,10 @@
         \pgfplotsset{compat=1.15}
         \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}}
 
-
-	\usetikzlibrary{positioning, calc, shapes, shapes.geometric, intersections}
+    \usetikzlibrary{matrix}
+    \usetikzlibrary{shapes, shapes.geometric}
+    \usetikzlibrary{decorations.pathreplacing}
+	\usetikzlibrary{positioning, calc, intersections}
 
     % Do evil things with soft path
     % From <https://tex.stackexchange.com/a/301364/8547>
@@ -209,8 +211,8 @@
 \renewcommand\todo[1]{\todox[inline]{#1}}
 
 \title{\titlepagetitle}
-\author{\textbf{\myname}}
-\institute{Lattice / ALMAnaCH}
+\author{\textbf{\myname} (\mylab)}
+\institute{}
 \date{\conference\\\docdate}
 
 \titlegraphic{\ccby}
@@ -1079,6 +1081,115 @@
 
 
 \subsection{La classification}
+
+\begin{frame}[fragile=singleslide]{Classification}
+    La classification est la tâche consistant à \alert{répartir} des données dans un ensemble de classes.
+    \begin{itemize}
+        \item « Détecter les spams dans un ensemble d'emails »
+        \item « Repérer dans un ensemble de tweets ceux qui sont sarcastiques ou ironique »
+        \item « Classer un ensemble de texte par genre littéraire »
+    \end{itemize}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[>=stealth, true scale=0.80]
+            \node[data, draw=highlight4, text=highlight4] (in) {Donnée};
+            \node[program, right=1cm of in, text width=10ex] (prog) {Programme de Classification};
+            \node[data, right=1cm of prog] (out) {documents};
+            \node[data, below=.6cm of prog, draw=highlight8, text=highlight8] (res) {Classes};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (res) -- (prog);
+        \end{tikzpicture}
+    \end{figure}
+    \begin{itemize}
+        \item Les \textcolor{highlight8}{classes} sont connus à l'avance
+        \item Chaque \textcolor{highlight4}{donnée} appartient à une unique classe.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Domaines d'application}
+    \begin{itemize}
+        \item Classification par type de document
+            \begin{itemize}
+                \item[→] DEFT 2018 tâche 1 (\shorturl{deft.limsi.fr/2018})
+            \end{itemize}
+        \item Classification par opinion/sentiment
+            \begin{itemize}
+                \item[→] DEFT 2018 tâche 2
+            \end{itemize}
+        \item Classification par qualité
+            \begin{itemize}
+                \item[→] \shorturl{www.youtube.com/watch?v=anwy2MPT5RE}
+            \end{itemize}
+        \item[…]
+    \end{itemize}
+    Ne s'applique pas qu'aux textes, mais de façon générale à tous les types de données !
+    \begin{itemize}
+        \item[→] Le temps permet-il de faire un tennis ? (Weka \texttt{weater.numeric})
+        \item[→] Cet empan de texte est-il un groupe nominal ?
+        \item[…]
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Évaluation}
+    \colorlet{VP}{highlight3}
+    \colorlet{VN}{highlight2}
+    \colorlet{FN}{highlight4}
+    \colorlet{FP}{highlight8}
+    \begin{figure}
+        \begin{tikzpicture}[
+            table/.style={
+                matrix of nodes,
+                row sep=-\pgflinewidth,
+                column sep=-\pgflinewidth,
+                nodes={draw, text width=3ex, align=center},
+                text depth=0.25ex,
+                text height=1em,
+                nodes in empty cells
+            },
+            aa/.style={alt=<3>{fill=VP}{}, alt={<4,5>{fill=VN}{}}},
+            bb/.style={alt=<4>{fill=VP}{}, alt={<3,5>{fill=VN}{}}},
+            cc/.style={alt=<5>{fill=VP}{}, alt={<3,4>{fill=VN}{}}},
+            ab/.style={alt=<3>{fill=FN}{}, alt=<4>{fill=FP}{}, alt=<5>{fill=VN}{}},
+            ac/.style={alt=<3>{fill=FN}{}, alt=<4>{fill=VN}{}, alt=<5>{fill=FP}{}},
+            ba/.style={alt=<3>{fill=FP}{}, alt=<4>{fill=FN}{}, alt=<5>{fill=VN}{}},
+            bc/.style={alt=<3>{fill=VN}{}, alt=<4>{fill=FN}{}, alt=<5>{fill=FP}{}},
+            ca/.style={alt=<3>{fill=FP}{}, alt=<4>{fill=VN}{}, alt=<5>{fill=FN}{}},
+            cb/.style={alt=<3>{fill=VN}{}, alt=<4>{fill=FP}{}, alt=<5>{fill=FN}{}},
+        ]
+            \matrix[table]{
+                    & |(apred)| A   & |(bpred)| B   & |(cpred)| C\\
+                |(atrue)| A   & |[aa]| $16$  & |[ab]| $0$   & |[ac]| $0$\\
+                |(btrue)| B   & |[ba]| $0$   & |[bb]| $19$  & |[bc]| $1$\\
+                |(ctrue)| C   & |[ca]| $0$   & |[cb]| $2$   & |[cc]| $15$\\
+            };
+
+            \draw [decorate, decoration={brace, amplitude=1em}, yshift=-0.5ex] (apred.north west) -- (cpred.north east) node [midway, above=1.25ex] {Classes prédites};
+            \draw [decorate, decoration={brace, amplitude=1em, mirror}, xshift=-0.5ex] (atrue.north west) -- (ctrue.south west) node [midway, left=1.25ex, rotate=90, anchor=south] {Vraies classes};
+        \end{tikzpicture}
+        \caption{Matrice de confusion pour un problème à trois classes}
+    \end{figure}
+    \vspace{-1em}
+    \only<2>{On calcule pour les mêmes indicateurs que pour la RI}
+    \only<2-5>{
+        \begin{itemize}
+            \item \textcolor{VP}{Vrais Positifs}
+            \item \textcolor{VN}{Vrais Négatifs}
+            \item \textcolor{FN}{Faux Négatifs}
+            \item \textcolor{FP}{Faux Positifs}
+        \end{itemize}
+    }
+    \only<3>{Pour A}\only<4>{Pour B}\only<5>{Pour C}
+    \only<6>{Puis pour chaque classe, $P$, $R$ et $F$ et la moyenne sur l'ensemble
+        \begin{description}
+            \item[macro-average] Sans pondération
+            \item[micro-average] Pondérée par la taille des classes
+        \end{description}
+    }
+\end{frame}
+
+
+
 
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
