@@ -1087,14 +1087,14 @@
     \begin{itemize}
         \item « Détecter les spams dans un ensemble d'emails »
         \item « Repérer dans un ensemble de tweets ceux qui sont sarcastiques ou ironique »
-        \item « Classer un ensemble de texte par genre littéraire »
+        \item « Classer un ensemble de textes par genre littéraire »
     \end{itemize}
     \begin{figure}
         \tikzset{external/export=true}
         \begin{tikzpicture}[>=stealth, true scale=0.80]
             \node[data, draw=highlight4, text=highlight4] (in) {Donnée};
             \node[program, right=1cm of in, text width=10ex] (prog) {Programme de Classification};
-            \node[data, right=1cm of prog] (out) {documents};
+            \node[data, right=1cm of prog] (out) {Classe};
             \node[data, below=.6cm of prog, draw=highlight8, text=highlight8] (res) {Classes};
             \draw[->] (in) -- (prog);
             \draw[->] (prog) -- (out);
