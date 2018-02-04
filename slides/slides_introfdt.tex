@@ -1170,16 +1170,22 @@
     \end{figure}
     \vspace{-1em}
     \only<2>{On calcule pour les mêmes indicateurs que pour la RI}
+    \only<3>{Pour A}\only<4>{Pour B}\only<5>{Pour C}
     \only<2-5>{
         \begin{itemize}
             % TODO: dans la liste suivante ajouter les totaux pour chaque classe à chaque slide
             \item \textcolor{VP}{Vrais Positifs}
+                \only<3>{$16$}\only<4>{$19$}\only<5>{$15$}
             \item \textcolor{VN}{Vrais Négatifs}
+                \only<3>{$19+2+1+15=37$}
+                \only<4>{$16+0+0+15=31$}
+                \only<5>{$16+0+0+19=35$}
             \item \textcolor{FN}{Faux Négatifs}
+                \only<3>{$0+0=0$}\only<4>{$0+1=1$}\only<5>{$0+2=2$}
             \item \textcolor{FP}{Faux Positifs}
+                \only<3>{$0+0=0$}\only<4>{$0+2=2$}\only<5>{$0+1=1$}
         \end{itemize}
     }
-    \only<3>{Pour A}\only<4>{Pour B}\only<5>{Pour C}
     \only<6>{Puis pour chaque classe, $P$, $R$ et $F$ et la moyenne sur l'ensemble
         \begin{description}
             \item[macro-average] Sans pondération
@@ -1188,6 +1194,10 @@
     }
 \end{frame}
 
+
+\begin{frame}{Exercice}
+    Étant donnée la matrice de confusion précédente, déterminer précision, rappel et F-mesure pour chacune des classes, ainsi que la micro- et macro-average.
+\end{frame}
 
 
 
@@ -1217,10 +1227,12 @@
         {\huge \ccby}
         \vfill
         This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
-        \vfill
-        Loïc Grobol
 
-        \shorturl[http]{lattice.cnrs.fr/Grobol-Loic}, \shorturl[mailto][:]{loic.grobol@gmail.com}
+        Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licenses}}
+        \vfill
+        © 2018, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
+
+        \shorturl[http]{lattice.cnrs.fr/Grobol-Loic}
     \end{center}
 \end{frame}
 
