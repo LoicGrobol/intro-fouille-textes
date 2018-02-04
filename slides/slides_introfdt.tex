@@ -849,7 +849,7 @@
 \subsection{La recherche d'information}
 
 \begin{frame}[fragile=singleslide]{Recherche d'information}
-    La RI est la tâche consistant à trouver dans un corpus des documents \alert{pertinents} étant donnée une requête
+    La \emph{Recherche d'Information} est la tâche consistant à trouver dans un corpus des documents \alert{pertinents} étant donnée une requête
     \begin{itemize}
         \item « Trouver dans le catalogue d'une bibliothèque de ouvrages qui traitent de l'art macabre au XVème siècle »
         \item « Trouver un site internet qui vend des ordinateurs portable sans système d'exploitation »
@@ -858,7 +858,7 @@
         \tikzset{external/export=true}
         \begin{tikzpicture}[>=stealth, true scale=0.80]
             \node[data, draw=highlight4, text=highlight4] (in) {Requête};
-            \node[program, right=1cm of in, text width=10ex] (prog) {Programme de RI};
+            \node[program, right=1cm of in, text width=15ex] (prog) {Programme de RI};
             \node[data, right=1cm of prog] (out) {documents};
             \node[data, below=.6cm of prog, draw=highlight1, text=highlight1] (res) {Corpus};
             \draw[->] (in) -- (prog);
@@ -866,6 +866,7 @@
             \draw[->] (res) -- (prog);
         \end{tikzpicture}
     \end{figure}
+    \vskip-1ex
     \begin{itemize}
         \item Le \textcolor{highlight1}{corpus} est une ressource obligatoire
         \item La \textcolor{highlight4}{requête} n'est \emph{pas} faite en langage fortement structuré (type SPARQL)
@@ -974,7 +975,7 @@
     \end{enumerate}
 \end{frame}
 
-\lecture{Introduction à la fouille de textes}{2018-01-15}
+\lecture{Introduction à la fouille de textes}{2018-01-29}
 
 \begin{frame}[fragile]{Aparté : moyennes}
     \begin{onlyenv}<1>
@@ -1070,6 +1071,7 @@
         \end{align}
     }
     \end{columns}
+    La F-mesure est simplement le cas $β=1$.
 \end{frame}
 
 %  ██████ ██       █████  ███████ ███████ ██ ███████
@@ -1082,7 +1084,7 @@
 \subsection{La classification}
 
 \begin{frame}[fragile=singleslide]{Classification}
-    La classification est la tâche consistant à \alert{répartir} des données dans un ensemble de classes.
+    La \emph{classification} est la tâche consistant à \alert{répartir} des données dans un ensemble de classes.
     \begin{itemize}
         \item « Détecter les spams dans un ensemble d'emails »
         \item « Repérer dans un ensemble de tweets ceux qui sont sarcastiques ou ironique »
@@ -1092,7 +1094,7 @@
         \tikzset{external/export=true}
         \begin{tikzpicture}[>=stealth, true scale=0.80]
             \node[data, draw=highlight4, text=highlight4] (in) {Donnée};
-            \node[program, right=1cm of in, text width=10ex] (prog) {Programme de Classification};
+            \node[program, right=1cm of in, text width=15ex] (prog) {Programme de classification};
             \node[data, right=1cm of prog] (out) {Classe};
             \node[data, below=.6cm of prog, draw=highlight8, text=highlight8] (res) {Classes};
             \draw[->] (in) -- (prog);
@@ -1102,7 +1104,7 @@
     \end{figure}
     \begin{itemize}
         \item Les \textcolor{highlight8}{classes} sont connus à l'avance
-        \item Chaque \textcolor{highlight4}{donnée} appartient à une unique classe.
+        \item Chaque \textcolor{highlight4}{donnée} appartient à une classe.
     \end{itemize}
 \end{frame}
 
@@ -1200,6 +1202,41 @@
 \end{frame}
 
 
+% ██       █████  ██████  ███████ ██      ██      ██ ███    ██  ██████
+% ██      ██   ██ ██   ██ ██      ██      ██      ██ ████   ██ ██
+% ██      ███████ ██████  █████   ██      ██      ██ ██ ██  ██ ██   ███
+% ██      ██   ██ ██   ██ ██      ██      ██      ██ ██  ██ ██ ██    ██
+% ███████ ██   ██ ██████  ███████ ███████ ███████ ██ ██   ████  ██████
+
+\lecture{Introduction à la fouille de textes}{2018-02-05}
+\subsection{Annotation}
+
+\begin{frame}[fragile=singleslide]{Annotation}
+    L'\emph{annotation} ou \emph{étiqutage de séquences} est la tâche consistant à attribuer une étiquette à chaque élément d'une séquence.
+
+    \begin{itemize}
+        \item Déterminer les catégories grammaticales des mots d'une phrase
+        \item Découper un discours en parties thématiques
+    \end{itemize}
+
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[>=stealth, true scale=0.80]
+            \node[data, draw=highlight4, text=highlight4] (in) {Donnée};
+            \node[program, right=1cm of in, text width=12ex] (prog) {Programme d'annotation};
+            \node[data, right=1cm of prog] (out) {Donnée annotée};
+            \node[data, below=.6cm of prog, draw=highlight8, text=highlight8] (res) {Ensemble des étiquettes};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (res) -- (prog);
+        \end{tikzpicture}
+    \end{figure}
+    \vskip-1em
+    \begin{itemize}
+        \item La \textcolor{highlight4}{donnée} à annoter est composée de plusieurs unités et munie d'une structure d'ordre
+        \item Chacune des unités se voit attribuer une des \textcolor{highlight8}{étiquettes} possibles, qui sont connus à l'avance
+    \end{itemize}
+\end{frame}
 
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
