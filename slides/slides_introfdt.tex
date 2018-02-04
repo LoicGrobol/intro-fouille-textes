@@ -21,7 +21,6 @@
     \makeatletter
         \setlength{\metropolis@progressinheadfoot@linewidth}{1pt}
     \makeatother
-\usepackage{appendixnumberbeamer}
 
 % Highlight colour palette
 \definecolor{highlight0}{RGB}{51, 34, 136}
@@ -933,7 +932,7 @@
 \begin{frame}{Évaluation}
     Les mesures d'évaluations usuelles rendent compte de façon synthétique du tableau précédent pour une expérience de RI
     \begin{description}
-        \item[La précision] $P=\frac{VP}{VP+FP}$ « combien de dcouments retournés sont réellement pertinents ? »
+        \item[La précision] $P=\frac{VP}{VP+FP}$ « combien de documents retournés sont réellement pertinents ? »
         \item[Le rappel] $R=\frac{VP}{VP+FN}$ « parmi les documents pertinents, combien ont été trouvés ? »
         \item[La F-mesure] $F=2×\frac{P×R}{P+R}$ est la moyenne harmonique\textsuperscript{1} des deux précédentes
     \end{description}
@@ -1173,6 +1172,7 @@
     \only<2>{On calcule pour les mêmes indicateurs que pour la RI}
     \only<2-5>{
         \begin{itemize}
+            % TODO: dans la liste suivante ajouter les totaux pour chaque classe à chaque slide
             \item \textcolor{VP}{Vrais Positifs}
             \item \textcolor{VN}{Vrais Négatifs}
             \item \textcolor{FN}{Faux Négatifs}
