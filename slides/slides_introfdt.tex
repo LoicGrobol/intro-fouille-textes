@@ -1212,11 +1212,11 @@
 \subsection{Annotation}
 
 \begin{frame}[fragile=singleslide]{Annotation}
-    L'\emph{annotation} ou \emph{étiqutage de séquences} est la tâche consistant à attribuer une étiquette à chaque élément d'une séquence.
+    L'\emph{annotation} ou \emph{étiquetage} est la tâche consistant à attribuer une étiquette à chaque élément d'un ensemble \alert{structuré}.
 
     \begin{itemize}
-        \item Déterminer les catégories grammaticales des mots d'une phrase
-        \item Découper un discours en parties thématiques
+        \item « Déterminer les catégories grammaticales des mots d'une phrase »
+        \item « Découper un discours en parties thématiques »
     \end{itemize}
 
     \begin{figure}
@@ -1233,11 +1233,135 @@
     \end{figure}
     \vskip-1em
     \begin{itemize}
-        \item La \textcolor{highlight4}{donnée} à annoter est composée de plusieurs unités et munie d'une structure d'ordre
+        \item La \textcolor{highlight4}{donnée} à annoter est composée de plusieurs unités et munie d'une structure d'\alert{ordre}
         \item Chacune des unités se voit attribuer une des \textcolor{highlight8}{étiquettes} possibles, qui sont connus à l'avance
     \end{itemize}
 \end{frame}
 
+\begin{frame}{Structure et ordre}
+    L'annotation se distingue de la classification par la notion de \emph{structure}.
+    \begin{itemize}
+        \item Les unités à annoter sont liées par des relations
+            \begin{itemize}
+                \item Ordre total (séquence)
+                \item Ordre partiel (arbre, DAG)
+                \item Arbitraires (graphe)
+            \end{itemize}
+        \item Les étiquettes qui leur sont attribuées dépendent de ces relations
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Exemples}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[>=stealth]
+            \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+                Le  & petit & chat  & est & mort\\
+                DET & ADJ   & NC    & V   & ADJ\\
+            };
+            \foreach \x in {1, ..., 5}
+                \draw[->] (m-1-\x) -- (m-2-\x);
+        \end{tikzpicture}
+        \caption{\emph{Part Of Speech Tagging}}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Exemples}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[>=stealth]
+            \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+                Le  & petit & chat  & est & mort\\
+                B & I   & I   & B & B\\
+            };
+            \foreach \x in {1, ..., 5}
+                \draw[->] (m-1-\x) -- (m-2-\x);
+
+            \matrix[matrix of nodes, anchor=base, below=2em of m] (s){
+                (   & Le    & petit & chat & )  & ( & est   & ) & (  & mort & )\\
+            };
+            \foreach \x/\y in {4/5, 4/6, 5/8, 5/9}
+                \draw[->] (m-2-\x) -- (s-1-\y);
+        \end{tikzpicture}
+        \caption{\emph{Chunking}}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Exemples}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \tikzset{every tree node/.style={align=center,anchor=north}}
+            \Tree [.S
+                [.NP→\textcolor{highlight0}{sub} [.Det the ] [.N cat ] ]
+                [.VP→\textcolor{highlight0}{pred} [.V sat ]
+                    [.PP→\textcolor{highlight0}{mod} [.P on ]
+                        [.NP [.Det the ] [.N mat ] ]
+                    ]
+                ]
+            ]
+        \end{tikzpicture}
+        \caption{\textcolor{highlight0}{Étiquetage fonctionnel} d'un arbre syntaxique}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Évaluation}
+    Pour évaluer un étiquetage, on choisit en général de le considérer comme un problème de classification à plusieurs classes
+    \begin{itemize}
+        \item On considère chaque unité comme une donnée et chaque étiquette comme une classe
+        \item On calcule comme précédemment $P$, $R$ et $F$
+        \item On privilégie les micro-averages pour les scores globaux
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Aparté : micro-average et exactitude}
+    \begin{theorem}[Théorème]
+        Si chaque unité reçoit une unique étiquette, les micro-average de $P$, $R$ et $F$ sont égales à l'exactitude.
+    \end{theorem}
+    On considère la matrice de confusion suivant
+    \begin{center}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[
+            table/.style={
+                matrix of nodes,
+                row sep=-\pgflinewidth,
+                column sep=-\pgflinewidth,
+                nodes={draw, text width=3ex, align=center},
+                text depth=0.25ex,
+                text height=1em,
+                nodes in empty cells
+            },
+            aa/.style={},
+            bb/.style={},
+            cc/.style={},
+            ab/.style={},
+            ac/.style={},
+            ba/.style={},
+            bc/.style={},
+            ca/.style={},
+            cb/.style={},
+        ]
+            \matrix[table]{
+                    & |(apred)| A   & |(bpred)| B   & |(cpred)| C\\
+                |(atrue)| A   & |[aa]| $aa$  & |[ab]| $ab$   & |[ac]| $ac$\\
+                |(btrue)| B   & |[ba]| $ba$   & |[bb]| $bb$  & |[bc]| $bc$\\
+                |(ctrue)| C   & |[ca]| $ca$   & |[cb]| $cb$   & |[cc]| $cc$\\
+            };
+
+            \draw [decorate, decoration={brace, amplitude=1em}, yshift=-0.5ex] (apred.north west) -- (cpred.north east) node [midway, above=1.25ex] {Classes prédites};
+            \draw [decorate, decoration={brace, amplitude=1em, mirror}, xshift=-0.5ex] (atrue.north west) -- (ctrue.south west) node [midway, left=1.25ex, rotate=90, anchor=south] {Vraies classes};
+        \end{tikzpicture}
+    \end{center}
+    Et on regarde le tableau !
+\end{frame}
+
+% ███████ ██
+% ██      ██
+% █████   ██
+% ██      ██
+% ███████ ██
+
+\subsection{L'extraction d'informations}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
@@ -1265,7 +1389,7 @@
         \vfill
         This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
 
-        Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licenses}}
+        Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
         \vfill
         © 2018, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
 
