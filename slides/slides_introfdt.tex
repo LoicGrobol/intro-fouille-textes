@@ -1362,6 +1362,77 @@
 % ███████ ██
 
 \subsection{L'extraction d'informations}
+\begin{frame}[fragile]{Extraction d'informations}
+    L'\emph{extraction d'informations} est la tâche consistant à trouver dans un document les \alert{réponses} à des questions prédéfinies.
+
+    \only<1>{
+        \begin{itemize}
+            \item « Déterminer le nom du héros et des principaux protagonistes d'un texte narratif »
+            \item « Déterminer les symptômes présentés par un patient à partir d'un rapport clinique »
+        \end{itemize}
+    }
+
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[>=stealth, true scale=0.80]
+            \node[data, draw=highlight4, text=highlight4] (in) {Donnée};
+            \node[program, right=1cm of in, text width=12ex] (prog) {Programme d'EI};
+            \node[data, right=1cm of prog, draw=highlight6, text=highlight6] (out) {Champs remplis};
+            \node[data, below=.6cm of prog, draw=highlight8, text=highlight8] (res) {Champs à remplir};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (res) -- (prog);
+        \end{tikzpicture}
+    \end{figure}
+
+    \only<2>{
+        \begin{itemize}
+            \item La \textcolor{highlight4}{donnée} est un texte brut ou un document semi-structuré
+            \item La \textcolor{highlight6}{sortie} est un tableau qui donne la valeur de chacun des champs
+            \item Les \textcolor{highlight8}{champs} \emph{peuvent} être multivalués et en nombre variable
+        \end{itemize}
+    }
+\end{frame}
+
+% TODO: add cites
+\begin{frame}{Domaines d'application}
+    Ils sont nombreux !
+    \begin{itemize}
+        \item Identification de protagonistes (littérature, militaire)
+        \item Identification d'événement (biomédical, militaire)
+        \item Fouille d'arguments
+            \begin{itemize}
+                \item Aide à la décision (politique)
+                    \begin{itemize}
+                        \item[→] IBM Watson \shorturl{youtube.com/watch?v=sEf0GLvrP9U}
+                    \end{itemize}
+                \item Aide à la lecture (judiciaire, scientifique)
+                    \begin{itemize}
+                        \item[→] « Argument zoning » \shorturl{www.cl.cam.ac.uk/~sht25/az.html}
+                    \end{itemize}
+            \end{itemize}
+        \item …
+    \end{itemize}
+    À l'extrême, la tâche se confond avec la compréhension de document.
+\end{frame}
+
+\begin{frame}{Évaluation}
+    L'idée est toujours de se comparer à une référence humaine.
+    \begin{itemize}
+        \item Basiquement : on compare les contenus des champs et on en déduit $P$, $R$ et $F$
+        \item Plus subtilement : on peut utiliser des mesures d'adéquation entre les réponses
+            \begin{itemize}
+                \item[→] Une réponse peut être partiellement correcte : on pondère !
+            \end{itemize}
+        \item Pour certaines tâches, on utilise des mesures spécifiques
+            \begin{itemize}
+                \item Pour les tâches comprenant une composante de localisation (NER, Argument Zoning), on peut appliquer des pondérations différentes à extraction et localisation
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\subsection{Relations entre tâches}
+\begin{frame}{Relations entre tâches}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
