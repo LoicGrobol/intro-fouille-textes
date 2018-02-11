@@ -224,7 +224,8 @@
     >=stealth,
     data/.style={draw, ellipse},
     program/.style={draw, rectangle},
-    true scale/.style={scale=#1, every node/.style={transform shape}}
+    true scale/.style={scale=#1, every node/.style={transform shape}},
+    highlight/.style={color=highlight#1}
 }
 
 % Styles des heatmap pour les moyennes
@@ -427,7 +428,7 @@
 
     \begin{figure}
         \tikzset{external/export=true}
-        \begin{tikzpicture}[>=stealth]
+        \begin{tikzpicture}
             \node[data] (in) {Entrée};
             \node[program, right=1cm of in, text width=10ex] (prog) {Programme réalisant la tâche};
             \node[data, right=1cm of prog] (out) {Résultat};
@@ -454,7 +455,7 @@
 \begin{frame}[fragile]{Schéma général d'une tâche}
     \begin{figure}
         \tikzset{external/export=true}
-        \begin{tikzpicture}[>=stealth]
+        \begin{tikzpicture}
             \tikzset{accent on/.style={alt={#1{draw=accent, text=accent, thick}{draw}}}}
             \node[ellipse, accent on=<2>] (in) {Entrée};
             \node[right=1cm of in, text width=10ex, accent on=<3>] (prog) {Programme réalisant la tâche};
@@ -696,11 +697,11 @@
         \tikzset{external/export=true}
         \begin{tikzpicture}[scale=0.9, every node/.style={transform shape}]
             \node[data] (in) {Entrée};
-            \node[program, draw=highlight0, text=highlight0, right=.75cm of in, text width=10ex] (prog) {Programme réalisant la tâche};
+            \node[program, highlight=0, right=.75cm of in, text width=10ex] (prog) {Programme réalisant la tâche};
             \node[data, right=.75cm of prog] (out) {Résultat};
-            \node[program, draw=highlight6, text=highlight6, above=1cm of prog, text width=13ex] (progapp) {Programme d'apprentissage};
-            \node[data, draw=highlight3, text=highlight3, right=.75cm of progapp] (mod) {Modèle};
-            \node[data, draw=highlight7, text=highlight7, left=.75cm of progapp] (train) {Exemples};
+            \node[program, highlight=6, above=1cm of prog, text width=13ex] (progapp) {Programme d'apprentissage};
+            \node[data, highlight=3, right=.75cm of progapp] (mod) {Modèle};
+            \node[data, highlight=7, left=.75cm of progapp] (train) {Exemples};
             \draw[->] (in) -- (prog);
             \draw[->] (prog) -- (out);
             \draw[->] (mod) |- ($(prog.north)+(0, 0.5cm)$) -| (prog.north);
@@ -857,11 +858,11 @@
     \end{itemize}
     \begin{figure}
         \tikzset{external/export=true}
-        \begin{tikzpicture}[>=stealth, true scale=0.80]
-            \node[data, draw=highlight4, text=highlight4] (in) {Requête};
+        \begin{tikzpicture}[true scale=0.80]
+            \node[data, highlight=4] (in) {Requête};
             \node[program, right=1cm of in, text width=15ex] (prog) {Programme de RI};
             \node[data, right=1cm of prog] (out) {documents};
-            \node[data, below=.6cm of prog, draw=highlight1, text=highlight1] (res) {Corpus};
+            \node[data, below=.6cm of prog, highlight=1] (res) {Corpus};
             \draw[->] (in) -- (prog);
             \draw[->] (prog) -- (out);
             \draw[->] (res) -- (prog);
@@ -1007,13 +1008,7 @@
         \begin{figure}
             \tikzset{external/export=true}
             \begin{tikzpicture}
-                \begin{axis}[colorbar, colormap name=SRON,
-                             view={0}{90},
-                             samples=100,
-                             domain=0:1,
-                             xlabel={$P$},
-                             ylabel={$R$},
-                             min=0, max=1]
+                \begin{axis}[meanheatmap]
                     \addplot3[surf, shader=interp]
                         {(sqrt(x*y))};
                 \end{axis}
@@ -1025,13 +1020,7 @@
         \begin{figure}
             \tikzset{external/export=true}
             \begin{tikzpicture}
-                \begin{axis}[colorbar, colormap name=SRON,
-                             view={0}{90},
-                             samples=100,
-                             domain=0:1,
-                             xlabel={$P$},
-                             ylabel={$R$},
-                             min=0, max=1]
+                \begin{axis}[meanheatmap]
                     \addplot3[surf, shader=interp]
                         {sqrt((x*x+y*y)/2)};
                 \end{axis}
@@ -1047,13 +1036,7 @@
         \begin{figure}
             \tikzset{external/export=true}
             \begin{tikzpicture}[alt=<2>{true scale=0.5}{}]
-                \begin{axis}[colorbar, colormap name=SRON,
-                             view={0}{90},
-                             samples=100,
-                             domain=0:1,
-                             xlabel={$P$},
-                             ylabel={$R$},
-                             min=0, max=1]
+                \begin{axis}[meanheatmap]
                     \addplot3[surf, shader=interp]
                         {(x*y*(1+0.5^2))/(y+x*0.5^2)};
                 \end{axis}
@@ -1093,11 +1076,11 @@
     \end{itemize}
     \begin{figure}
         \tikzset{external/export=true}
-        \begin{tikzpicture}[>=stealth, true scale=0.80]
-            \node[data, draw=highlight4, text=highlight4] (in) {Donnée};
+        \begin{tikzpicture}[true scale=0.80]
+            \node[data, highlight=4] (in) {Donnée};
             \node[program, right=1cm of in, text width=15ex] (prog) {Programme de classification};
             \node[data, right=1cm of prog] (out) {Classe};
-            \node[data, below=.6cm of prog, draw=highlight8, text=highlight8] (res) {Classes};
+            \node[data, below=.6cm of prog, highlight=8] (res) {Classes};
             \draw[->] (in) -- (prog);
             \draw[->] (prog) -- (out);
             \draw[->] (res) -- (prog);
@@ -1222,11 +1205,11 @@
 
     \begin{figure}
         \tikzset{external/export=true}
-        \begin{tikzpicture}[>=stealth, true scale=0.80]
-            \node[data, draw=highlight4, text=highlight4] (in) {Donnée};
+        \begin{tikzpicture}[true scale=0.80]
+            \node[data, highlight=4] (in) {Donnée};
             \node[program, right=1cm of in, text width=12ex] (prog) {Programme d'annotation};
             \node[data, right=1cm of prog] (out) {Donnée annotée};
-            \node[data, below=.6cm of prog, draw=highlight8, text=highlight8] (res) {Ensemble des étiquettes};
+            \node[data, below=.6cm of prog, highlight=8] (res) {Ensemble des étiquettes};
             \draw[->] (in) -- (prog);
             \draw[->] (prog) -- (out);
             \draw[->] (res) -- (prog);
@@ -1255,7 +1238,7 @@
 \begin{frame}[fragile=singleslide]{Exemples}
     \begin{figure}
         \tikzset{external/export=true}
-        \begin{tikzpicture}[>=stealth]
+        \begin{tikzpicture}
             \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
                 Le  & petit & chat  & est & mort\\
                 DET & ADJ   & NC    & V   & ADJ\\
@@ -1270,7 +1253,7 @@
 \begin{frame}[fragile=singleslide]{Exemples}
     \begin{figure}
         \tikzset{external/export=true}
-        \begin{tikzpicture}[>=stealth]
+        \begin{tikzpicture}
             \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
                 Le  & petit & chat  & est & mort\\
                 B & I   & I   & B & B\\
@@ -1377,11 +1360,11 @@
 
     \begin{figure}
         \tikzset{external/export=true}
-        \begin{tikzpicture}[>=stealth, true scale=0.80]
-            \node[data, draw=highlight4, text=highlight4] (in) {Donnée};
+        \begin{tikzpicture}[true scale=0.80]
+            \node[data, highlight=4] (in) {Donnée};
             \node[program, right=1cm of in, text width=12ex] (prog) {Programme d'EI};
-            \node[data, right=1cm of prog, draw=highlight6, text=highlight6] (out) {Champs remplis};
-            \node[data, below=.6cm of prog, draw=highlight8, text=highlight8] (res) {Champs à remplir};
+            \node[data, right=1cm of prog, highlight=6] (out) {Champs remplis};
+            \node[data, below=.6cm of prog, highlight=8] (res) {Champs à remplir};
             \draw[->] (in) -- (prog);
             \draw[->] (prog) -- (out);
             \draw[->] (res) -- (prog);
@@ -1452,19 +1435,19 @@
     Puisque la RI consiste à déterminer parmi un ensemble de documents lesquels sont pertinents, on peut la voir comme un problème de classification binaire.
 
     \begin{itemize}
-        \item On répartit les documents entre les deux classes «\, pertinent\,» et « non-pertinent »
+        \item On répartit les documents entre les deux classes «\,pertinent\,» et « non-pertinent »
         \item La requête, qui était une donnée, devient une ressource
     \end{itemize}
     \vskip-1em
     \begin{figure}
-        % \tikzset{external/export=true}
-        \begin{tikzpicture}[>=stealth, true scale=0.75]
-            \node[data, draw=highlight4, text=highlight4] (in) {Requête};
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.75]
+            \node[data] (in) {Requête};
             \node[program, right=2cm of in, text width=16ex] (prog) {Programme de classification};
-            \node[data, right=2cm of prog, draw=highlight6, text=highlight6] (out) {Documents pertinents};
+            \node[data, right=1.5cm of prog] (out) {Documents pertinents};
             \node[above left=0.25cm and 0.25cm of prog.north west] (ri) {RI};
-            \draw ($(prog.north west)+(-1.5cm, 0.75cm)$) -- ($(prog.north east)+(1.5cm, 0.75cm)$) -- ($(prog.south east)+(1.5cm, -1.25cm)$) -- ($(prog.south west)+(-1.5cm, -1.25cm)$) -- cycle;
-            \node[data, below=1.5cm of prog, draw=highlight8, text=highlight8] (res) {Corpus};
+            \draw ($(prog.north west)+(-1.5cm, 0.75cm)$) -- ($(prog.north east)+(1cm, 0.75cm)$) -- ($(prog.south east)+(1cm, -1.25cm)$) -- ($(prog.south west)+(-1.5cm, -1.25cm)$) -- cycle;
+            \node[data, below=1.5cm of prog] (res) {Corpus};
             \draw[->] (in.south) |- ($(prog.south)-(0, 0.75cm)$) -- (prog.south);
             \draw[->] (res.west) -| ($(prog.west)-(0.75cm, 0)$) -- (prog.west);
             \draw[->] (prog) -- (out);
@@ -1481,6 +1464,64 @@
         \item Étiqueter par classifications successives en utilisant à chaque étape l'ensemble des étiquettes précédentes comme information pour choisir l'étiquette suivante.
     \end{itemize}
 \end{frame}
+
+% TODO: add slides for EI as tagging
+
+
+% ██████  ███████  ██████  ██████  ███    ███ ██████
+% ██   ██ ██      ██      ██    ██ ████  ████ ██   ██
+% ██   ██ █████   ██      ██    ██ ██ ████ ██ ██████
+% ██   ██ ██      ██      ██    ██ ██  ██  ██ ██
+% ██████  ███████  ██████  ██████  ██      ██ ██
+
+\subsection{Décomposition en tâches élémentaires}
+\begin{frame}[fragile]{Décomposition en tâches élémentaires}
+    Les tâches \emph{élémentaires} le sont parce qu'on peut y réduire des tâches plus complexes.
+
+    \only<1>{
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[true scale=0.5]
+                \node[data] (in1) {Entrée};
+                \node[program, right=2cm of in1, text width=12ex] (prog1) {Programme élémentaire};
+                \node[data, right=1cm of prog1] (out1) {Résultat};
+                \draw[->] (in1) -- (prog1);
+                \draw[->] (prog1) -- (out1);
+
+                \node[program, right=1cm of out1, text width=12ex] (prog2) {Programme élémentaire};
+                \node[data, right=2cm of prog2] (out2) {Résultat};
+                \draw[->] (out1) -- (prog2);
+                \draw[->] (prog2) -- (out2);
+
+                \draw ($(prog1.north west)+(-1cm, 1cm)$) rectangle ($(prog2.south east)+(1cm, -1cm)$);
+            \end{tikzpicture}
+            \caption{Exemple de tâche complexe}
+        \end{figure}
+    }
+
+    \only<2>{
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[true scale=0.5]
+                \node[data] (in1) {Entrée};
+                \node[program, right=2cm of in1, text width=12ex] (prog1) {Programme élémentaire};
+                \node[data, right=1cm of prog1] (out1) {Résultat};
+                \draw[->] (in1) -- (prog1);
+                \draw[->] (prog1) -- (out1);
+
+                \node[program, above=1cm of out1, text width=12ex] (prog2) {Programme élémentaire};
+                \node[data, right=2cm of prog2] (out2) {Résultat};
+                \draw[->] (out1) -- (prog2);
+                \draw[->] (prog2) -- (out2);
+                \draw[->] (in1) -- ($(prog1.west)-(0.75cm, 0)$) |- (prog2.west);
+
+                \draw ($(prog1.south west)+(-1cm, -1cm)$) rectangle ($(prog2.north east)+(1cm, 1cm)$);
+            \end{tikzpicture}
+            \caption{Exemple de tâche complexe}
+        \end{figure}
+    }
+\end{frame}
+
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
