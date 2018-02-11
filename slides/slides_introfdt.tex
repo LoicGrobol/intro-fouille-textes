@@ -12,7 +12,7 @@
 \NewDocumentCommand\docdate{}{2018}
 \NewDocumentCommand\conference{}{M1 Plurital}
 
-\documentclass[hyperref={unicode}, xcolor={svgnames}]{beamer}
+\documentclass[hyperref={unicode}, xcolor={svgnames}, french]{beamer}
 \usetheme[sectionpage=progressbar,
           subsectionpage=progressbar,
           progressbar=frametitle]{metropolis}
@@ -95,6 +95,7 @@
     \usetikzlibrary{shapes, shapes.geometric}
     \usetikzlibrary{decorations.pathreplacing}
 	\usetikzlibrary{positioning, calc, intersections}
+    \usetikzlibrary{fit}
 
     % Do evil things with soft path
     % From <https://tex.stackexchange.com/a/301364/8547>
@@ -259,17 +260,17 @@
 
 \lecture{Introduction à la fouille de textes}{2018-01-15}
 \begin{frame}{Informations pratiques}
-    \begin{description}[Contact]
+    \begin{description}[*]
         \item[Où] Salle Benveniste, ILPGA, 9 Rue des Bernardins, 75005 Paris
         \item[Quand] Le lundi de 14h à 16h (voir le calendrier de Paris 3 pour les dates)
-        \item[Contact] \shorturl[mailto][:]{loic.grobol@gmail.com}{loic.grobol@gmail.com}
-        \item[Web] {\small\shorturl{loicgrobol.github.io/intro-fouille-textes}}
+        \item[Contact] \shorturl[mailto][:]{loic.grobol@gmail.com}
+        \item[Web] {\shorturl{loicgrobol.github.io/intro-fouille-textes}}
     \end{description}
 \end{frame}
 
 \begin{frame}{Organisation}
-    \begin{description}[Évaluation]
-        \item[Poly] À lire d'une fois sur l'autre :
+    \begin{description}[*]
+        \item[Poly] À lire d'une fois sur l'autre :\\
                     {\footnotesize\shorturl[https]{loicgrobol.github.io/intro-fouille-textes/poly/poly.pdf}}
         \item[Cours] Exemples, exercices, expérimentations, explications
         \item[Évaluation] en contrôle continu
@@ -1315,10 +1316,10 @@
 \end{frame}
 
 \begin{frame}[fragile]{Aparté : micro-average et exactitude}
-    \begin{theorem}[Théorème]
+    \begin{theorem}
         Si chaque unité reçoit une unique étiquette, les micro-average de $P$, $R$ et $F$ sont égales à l'exactitude.
     \end{theorem}
-    On considère la matrice de confusion suivant
+    On considère la matrice de confusion suivante
     \begin{center}
         \tikzset{external/export=true}
         \begin{tikzpicture}[
@@ -1354,6 +1355,8 @@
     \end{center}
     Et on regarde le tableau !
 \end{frame}
+
+% TODO: add slides for the proof above
 
 % ███████ ██
 % ██      ██
@@ -1404,11 +1407,11 @@
             \begin{itemize}
                 \item Aide à la décision (politique)
                     \begin{itemize}
-                        \item[→] IBM Watson \shorturl{youtube.com/watch?v=sEf0GLvrP9U}
+                        \item[→] IBM Watson (\textcite{slonim2014claims}, \shorturl{youtube.com/watch?v=sEf0GLvrP9U})
                     \end{itemize}
                 \item Aide à la lecture (judiciaire, scientifique)
                     \begin{itemize}
-                        \item[→] « Argument zoning » \shorturl{www.cl.cam.ac.uk/~sht25/az.html}
+                        \item[→] « Argument zoning » (\textcite{teufel2009argument}, \shorturl{www.cl.cam.ac.uk/~sht25/az.html})
                     \end{itemize}
             \end{itemize}
         \item …
@@ -1422,12 +1425,60 @@
         \item Basiquement : on compare les contenus des champs et on en déduit $P$, $R$ et $F$
         \item Plus subtilement : on peut utiliser des mesures d'adéquation entre les réponses
             \begin{itemize}
-                \item[→] Une réponse peut être partiellement correcte : on pondère !
+                \item[→] Une réponse peut être partiellement correcte : on pondère~!
             \end{itemize}
         \item Pour certaines tâches, on utilise des mesures spécifiques
             \begin{itemize}
                 \item Pour les tâches comprenant une composante de localisation (NER, Argument Zoning), on peut appliquer des pondérations différentes à extraction et localisation
             \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% ██████  ███████ ██       █████  ████████ ██  ██████  ███    ██ ███████
+% ██   ██ ██      ██      ██   ██    ██    ██ ██    ██ ████   ██ ██
+% ██████  █████   ██      ███████    ██    ██ ██    ██ ██ ██  ██ ███████
+% ██   ██ ██      ██      ██   ██    ██    ██ ██    ██ ██  ██ ██      ██
+% ██   ██ ███████ ███████ ██   ██    ██    ██  ██████  ██   ████ ███████
+
+
+\subsection{Relations entre tâches}
+\begin{frame}{Relations entre tâches}
+    Les tâches présentées précédemment sont \emph{élémentaires} au sens où on peut y réduire la plupart des tâches de la fouille de texte.
+
+    Cependant ces tâches ne sont pas complètement indépendantes les unes des autres \emph{via} des reformulations.
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{La RI comme classification}
+    Puisque la RI consiste à déterminer parmi un ensemble de documents lesquels sont pertinents, on peut la voir comme un problème de classification binaire.
+
+    \begin{itemize}
+        \item On répartit les documents entre les deux classes «\, pertinent\,» et « non-pertinent »
+        \item La requête, qui était une donnée, devient une ressource
+    \end{itemize}
+    \vskip-1em
+    \begin{figure}
+        % \tikzset{external/export=true}
+        \begin{tikzpicture}[>=stealth, true scale=0.75]
+            \node[data, draw=highlight4, text=highlight4] (in) {Requête};
+            \node[program, right=2cm of in, text width=16ex] (prog) {Programme de classification};
+            \node[data, right=2cm of prog, draw=highlight6, text=highlight6] (out) {Documents pertinents};
+            \node[above left=0.25cm and 0.25cm of prog.north west] (ri) {RI};
+            \draw ($(prog.north west)+(-1.5cm, 0.75cm)$) -- ($(prog.north east)+(1.5cm, 0.75cm)$) -- ($(prog.south east)+(1.5cm, -1.25cm)$) -- ($(prog.south west)+(-1.5cm, -1.25cm)$) -- cycle;
+            \node[data, below=1.5cm of prog, draw=highlight8, text=highlight8] (res) {Corpus};
+            \draw[->] (in.south) |- ($(prog.south)-(0, 0.75cm)$) -- (prog.south);
+            \draw[->] (res.west) -| ($(prog.west)-(0.75cm, 0)$) -- (prog.west);
+            \draw[->] (prog) -- (out);
+        \end{tikzpicture}
+        \caption{La RI comme une classification}
+    \end{figure}
+\end{frame}
+
+% TODO: add graphics and examples
+\begin{frame}{L'annotation comme classification}
+    Plusieurs stratégies sont envisageables pour conserver l'information de structure
+    \begin{itemize}
+        \item Voir la suite des étiquettes d'une séquence comme une seule classe.
+        \item Étiqueter par classifications successives en utilisant à chaque étape l'ensemble des étiquettes précédentes comme information pour choisir l'étiquette suivante.
     \end{itemize}
 \end{frame}
 
