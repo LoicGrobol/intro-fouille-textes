@@ -224,6 +224,7 @@
     >=stealth,
     data/.style={draw, ellipse},
     program/.style={draw, rectangle},
+    accent on/.style={alt={#1{draw=accent, text=accent, thick}{draw}}},
     true scale/.style={scale=#1, every node/.style={transform shape}},
     highlight/.style={color=highlight#1}
 }
@@ -456,7 +457,6 @@
     \begin{figure}
         \tikzset{external/export=true}
         \begin{tikzpicture}
-            \tikzset{accent on/.style={alt={#1{draw=accent, text=accent, thick}{draw}}}}
             \node[ellipse, accent on=<2>] (in) {Entrée};
             \node[right=1cm of in, text width=10ex, accent on=<3>] (prog) {Programme réalisant la tâche};
             \node[ellipse, accent on=<2>, right=1cm of prog] (out) {Résultat};
@@ -1474,6 +1474,7 @@
 % ██   ██ ██      ██      ██    ██ ██  ██  ██ ██
 % ██████  ███████  ██████  ██████  ██      ██ ██
 
+\lecture{Introduction à la fouille de textes}{2018-02-12}
 \subsection{Décomposition en tâches élémentaires}
 \begin{frame}[fragile]{Décomposition en tâches élémentaires}
     Les tâches \emph{élémentaires} le sont parce qu'on peut y réduire des tâches plus complexes.
@@ -1520,6 +1521,64 @@
             \caption{Exemple de tâche complexe}
         \end{figure}
     }
+\end{frame}
+
+\begin{frame}{Exemple : les systèmes de Question/Réponse}
+    Les systèmes de question/réponse fournissent des réponses factuelles à des requêtes données en langage naturel
+
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.80]
+            \node[data, text width=15ex] (in) {« Quelle est la vitesse d'une hirondelle ? »};
+            \node[program, right=1cm of in, text width=15ex] (prog) {Programme de Q/R};
+            \node[data, right=1cm of prog] (out) {« \SI{60}{km/h} »};
+            \node[data, below=.6cm of prog] (res) {Corpus};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (res) -- (prog);
+        \end{tikzpicture}
+        \caption{Structure d'un système de Q/R}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Q/R via RI}
+    La première reformulation possible utilise un système de \alert{RI}
+
+    \begin{figure}
+        % \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.6]
+            \node[data] (in) {Entrée};
+            \node[coordinate, right=1cm of in] (split) {};
+            \fill (split) circle[radius=2pt];
+            \draw (in) -- (split);
+
+            \node[program, above right=0.5cm and 1cm of split] (term) {Terminologie};
+            \node[data, right=1cm of term] (words) {Mots};
+            \node[program, right=1cm of words, accent on=<1>] (ri) {RI};
+            \node[data, right=1cm of ri] (docs) {Docs};
+            \node[program, right=1cm of docs] (ei) {EI};
+            \node[coordinate, below right=0.5cm and 1cm of ei] (gather) {};
+            \node[data, right=1cm of gather] (answer) {Réponse};
+            \draw[->] (split) |- (term);
+            \draw[->] (term) -- (words);
+            \draw[->] (words) -- (ri);
+            \draw[->] (ri) -- (docs);
+            \draw[->] (docs) -- (ei);
+            \draw[->] (ei) -| (gather) -- (answer);
+
+            \node[program, below right=0.5cm and 1cm of split] (classif) {Classifieur};
+            \node[data, below=1cm of ei] (field) {Champs};
+            \draw[->] (split) |- (classif);
+            \draw[->] (classif) -- (field);
+            \draw[->] (field) -- (ei);
+
+            \draw ($(split)+(-0.5cm, 2cm)$) rectangle ($(field.south east)+(1cm, -0.5cm)$);
+
+            \node[data, below=3cm of ri] (corpus) {Corpus};
+            \draw[->] (corpus) -- (ri);
+        \end{tikzpicture}
+        \caption{Système de Question/Réponse via Recherche d'Informations}
+    \end{figure}
 \end{frame}
 
 
