@@ -21,6 +21,8 @@
     \makeatletter
         \setlength{\metropolis@progressinheadfoot@linewidth}{1pt}
     \makeatother
+    % FIXME: not pretty and footnotes are still too big
+    \let\footnoterule\relax  % No footnote rule, push down footnote
 
 % Highlight colour palette
 \definecolor{highlight0}{RGB}{51, 34, 136}
@@ -236,7 +238,9 @@
         view={0}{90},
         samples=100,
         domain=0:1,
-        min=0, max=1
+        min=0, max=1,
+        xlabel={$P$},
+        ylabel={$R$},
     }
 }
 
@@ -1045,6 +1049,7 @@
         \end{figure}
     \only<2>{
         \column{0.45\textwidth}
+        \vspace{\baselineskip}
         L'idée est de pondérer la moyenne harmonique
         \begin{align}
             F_{λ, μ}(P, R)
@@ -1425,7 +1430,7 @@
 
 
 \subsection{Relations entre tâches}
-\begin{frame}{Relations entre tâches}
+\begin{frame}<1>[label=taskrel]{Relations entre tâches}
     Les tâches présentées précédemment sont \emph{élémentaires} au sens où on peut y réduire la plupart des tâches de la fouille de texte.
 
     Cependant ces tâches ne sont pas complètement indépendantes les unes des autres \emph{via} des reformulations.
@@ -1612,13 +1617,13 @@
 \end{frame}
 
 \begin{frame}<1>[fragile]{Q/R via base de connaissances}
-    % TODO: add furter overlay
+    % TODO: add further overlay
     % TODO: add progressive result feedback on the “Quelle est la vitesse d'une hirondelle sample question”
     % TODO: add arrow colours
     Une autre stratégie consiste à reformuler la question en requête dans une \alert<1>{base de connaissances structurée}
 
     \begin{figure}
-        % \tikzset{external/export=true}
+        \tikzset{external/export=true}
         \begin{tikzpicture}[true scale=0.6]
             \node[data, alt=<2>{highlight=6}{}] (in) {Question};
             \node[coordinate, right=1cm of in] (split) {};
@@ -1653,7 +1658,122 @@
     }
 \end{frame}
 
+\begin{frame}{Conclusion}
+    On a donc vu qu'on pouvait
+    \begin{itemize}
+        \item Réaliser des tâches complexes en se ramenant des tâches élémentaires
+        \item Reformuler les tâches élémentaires en terme de classification
+    \end{itemize}
+
+    En pratique, on peut donc presque toujours ramener n'importe quelle tâche de fouille de texte à de la classification, on parlera donc pour celle-ci de \alert{tâche pivot}.
+    \begin{itemize}
+        \item[→] Attention cependant à ne pas faire cuire les pâtes comme un mathématicien…
+    \end{itemize}
+\end{frame}
+
 \section{Représentation des données}
+
+\begin{frame}{Représentation des données}
+    Étant donné que
+    \begin{itemize}
+        \item La classification joue en fouille de texte le rôle de tâche pivot
+        \item On privilégie pour la classification des données au format tabulaire
+    \end{itemize}
+    Il est naturel de vouloir mettre les données à traiter sous forme tabulaire.
+\end{frame}
+
+\subsection{Spécificités statistiques}
+\begin{frame}{Loi de Zipf}
+    Dans \textit{Ulysse} de James Joyce on\textsuperscript{1} observe\textsuperscript{2} que
+    \begin{itemize}
+        \item Le mot le plus courant apparaît \num{8000} fois
+        \item Le dixième mot le plus courant apparaît \num{800} fois
+        \item Le centième mot le plus courant apparaît \num{80} fois
+        \item Le millième mot le plus courant apparaît \num{8} fois
+    \end{itemize}
+
+    \begin{block}{Hypothèse (Loi de Zipf)}
+        La fréquence $f(n)$ du $n$-ième mot le plus fréquent d'un corpus vérifie
+        \begin{equation}
+            f(n) = \frac{K}{n}
+        \end{equation}
+        où $K$ est une constante ne dépendant que du corpus.
+    \end{block}
+    \vskip0pt plus 1fill
+    {\tiny 1. Georges Zipf (1902-1950)\\2. d'après la légende}
+\end{frame}
+
+% TODO: add Ulysse répartition
+\begin{frame}{Loi de Zipf : observations}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=0, ymin=0, xmax=20, ymax=50,
+                         width=0.9\textwidth,
+                         height=0.8\textheight,
+                         xlabel={Rang},
+                         ylabel={Fréquence d'apparition},
+                         title={Loi de Zipf : $y=\frac{K}{x}$}]
+                \addplot[highlight0, domain=0.1:20, samples=1001] {20/x};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Courbe d'une loi de Zipf}
+    \end{figure}
+\end{frame}
+
+% TODO: add cites
+\begin{frame}{Loi de Zipf : observations}
+    \begin{itemize}
+        \item La loi de Zipf se vérifie plutôt bien expérimentalement
+        \item En pratique, les répartitions observées sont de la forme $f(n)=\frac{k}{x^s}$ avec $s$ proche de $1$
+        \item Ce type de distribution, dites \emph{loi de puissance} est omniprésent en statistiques (en en sciences en général)
+        \item Elles font parties des distributions dites \emph{à longue traîne} (\textit{fat tail})
+        \item Une autre approche due à Mandelbrot présente une généralisation de la loi de Zipf comme le résultat de contraintes d'optimalité d'utilisation d'un canal de communication.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Loi de Heaps}
+    Si la loi de Zipf donne une estimation de la répartition du vocabulaire d'un corpus, la loi de Heaps est une estimation de sa diversité
+    \begin{block}{Hypothèse : loi de Heaps}
+        Le nombre $V$ de mots distincts dans sous-corpus de taille $M$ vérifie
+        \begin{equation}
+            V = K×M^β
+        \end{equation}
+        Où $K$ et $β$ sont des paramètres dépendant du corpus
+    \end{block}
+    \begin{itemize}
+        \item[→] Ce $K$ n'est pas le même que pour la loi de Zipf, et $β$ n'a aucun lien avec la pondération de $F_β$
+        \item[→] On parle souvent de relation \emph{types-tokens}
+        \item[→] Pour l'anglais, on a $K∈[30, 100]$ et $β≈0.5$
+        \item[→] Cette loi peut-elle être valable quelle que soit la taille de la collection ?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Loi de Heaps}
+    \begin{figure}
+        % \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=0, xmax=10000, ymin=0,
+                         width=0.9\textwidth,
+                         height=0.8\textheight,
+                         xlabel={Taille de la collection},
+                         ylabel={Taille du vocabulaire},
+                         title={Loi de Heaps : $y=K×x^β$},
+                         scaled ticks=false,
+                         ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}]
+                \addplot[highlight0, domain=0:10000, samples=1001] {40*x^0.5};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Courbe d'une loi de Heaps}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Lien entre les lois de Zipf et Heaps}
+    Sous des hypothèses assez légères, on peut déduire la loi de Heaps de la loi de Zipf.
+
+    → Voir au tableau
+\end{frame}
+
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
@@ -1681,7 +1801,7 @@
         \vfill
         This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
 
-        Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
+        Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intintro-fouille-textes\#licences}}
         \vfill
         © 2018, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
 
