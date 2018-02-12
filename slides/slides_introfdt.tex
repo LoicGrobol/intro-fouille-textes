@@ -1558,10 +1558,11 @@
 
 \begin{frame}[fragile]{Q/R via RI}
     % TODO: add progressive result feedback on the “Quelle est la vitesse d'une hirondelle sample question”
+    % TODO: add arrow colours
     La première reformulation possible utilise un système de \alert<1>{RI}
 
     \begin{figure}
-        % \tikzset{external/export=true}
+        \tikzset{external/export=true}
         \begin{tikzpicture}[true scale=0.55]
             \node[data, alt=<2>{highlight=6}{}] (in) {Question};
             \node[coordinate, right=1cm of in] (split) {};
@@ -1610,6 +1611,49 @@
     }
 \end{frame}
 
+\begin{frame}<1>[fragile]{Q/R via base de connaissances}
+    % TODO: add furter overlay
+    % TODO: add progressive result feedback on the “Quelle est la vitesse d'une hirondelle sample question”
+    % TODO: add arrow colours
+    Une autre stratégie consiste à reformuler la question en requête dans une \alert<1>{base de connaissances structurée}
+
+    \begin{figure}
+        % \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.6]
+            \node[data, alt=<2>{highlight=6}{}] (in) {Question};
+            \node[coordinate, right=1cm of in] (split) {};
+            \draw[alt=<2>{highlight=6, thick}{}] (in) -- (split);
+
+            \node[program, above right=0.5cm and 1cm of split, alt=<2>{highlight=0}{}] (trad) {Traduction};
+            \node[data, right=1cm of trad, alt=<2-3>{highlight=3}{}] (req) {Requête};
+            \node[program, right=1cm of req, alt=<3>{highlight=3}{}] (int) {Interrogation};
+            \node[coordinate, below right=0.5cm and 1cm of int] (gather) {};
+            \node[data, right=1cm of gather, alt=<4>{highlight=0}{}] (answer) {Réponse};
+            \draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (trad);
+            \draw[->] (trad) -- (req);
+            \draw[->] (req) -- (int);
+            \draw[->] (int) -| (gather) -- (answer);
+
+            \node[program, below=1cm of req, alt=<2>{highlight=3}{}] (ei) {EI};
+            \node[data, accent on=<1>, alt=<4>{highlight=2}{}] at (int|-ei) (base) {Base};
+            \draw[->] (ei) -- (base);
+            \draw[->] (base) -- (int);
+
+            \draw ($(split|-trad.north)+(-0.5cm,0.5cm)$) rectangle ($(int.east|-ei.south)+(1.25cm, -0.5cm)$);
+
+            \node[data, below=1cm of ei, alt=<3>{highlight=2}{}] (corpus) {Corpus};
+            \draw[->] (corpus.west) -- ++ (-0.25cm, 0) |- (ei.west);
+        \end{tikzpicture}
+        \caption{Système de Question/Réponse utilisant une base de connaissances}
+    \end{figure}
+    \only<2->{
+        \begin{itemize}
+            \item<2|only@2> \textcolor{highlight6}{La question en langue naturelle} est \textcolor{highlight0}{traduite} en une \textcolor{highlight3}{requête} dans un langage formel (SQL, SPARQL…)
+        \end{itemize}
+    }
+\end{frame}
+
+\section{Représentation des données}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
