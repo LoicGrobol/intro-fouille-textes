@@ -1658,6 +1658,8 @@
     }
 \end{frame}
 
+% TODO: add links and refs for the two deompositions
+
 \begin{frame}{Conclusion}
     On a donc vu qu'on pouvait
     \begin{itemize}
@@ -1671,6 +1673,13 @@
     \end{itemize}
 \end{frame}
 
+% ██████  ███████ ██████  ██████  ███████ ███████
+% ██   ██ ██      ██   ██ ██   ██ ██      ██
+% ██████  █████   ██████  ██████  █████   ███████
+% ██   ██ ██      ██      ██   ██ ██           ██
+% ██   ██ ███████ ██      ██   ██ ███████ ███████
+
+
 \section{Représentation des données}
 
 \begin{frame}{Représentation des données}
@@ -1681,6 +1690,12 @@
     \end{itemize}
     Il est naturel de vouloir mettre les données à traiter sous forme tabulaire.
 \end{frame}
+
+% ███████ ████████  █████  ████████
+% ██         ██    ██   ██    ██
+% ███████    ██    ███████    ██
+%      ██    ██    ██   ██    ██
+% ███████    ██    ██   ██    ██
 
 \subsection{Spécificités statistiques}
 \begin{frame}{Loi de Zipf}
@@ -1772,6 +1787,67 @@
     Sous des hypothèses assez légères, on peut déduire la loi de Heaps de la loi de Zipf.
 
     → Voir au tableau
+\end{frame}
+
+% ███████ ███████  █████  ████████ ███████
+% ██      ██      ██   ██    ██    ██
+% █████   █████   ███████    ██    ███████
+% ██      ██      ██   ██    ██         ██
+% ██      ███████ ██   ██    ██    ███████
+
+
+\subsection{Choix des attributs}
+\begin{frame}{choix des attributs}
+    % TODO: better format
+    Objectif : transformer les documents à traiter en fichiers tabulaires pour les passer à un classifieur.
+
+    Problème : quel choix d'attributs (colonnes) ?
+    \pause
+
+    Solution : ça dépend des cas !
+    \pause
+
+    Mais on peut identifier plusieurs catégories élémentaires (air connu)
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Caractères}
+    Puisqu'un texte brut est une séquence de caractère : utilisons comme attribut la fréquence de chaque caractère
+
+    \begin{lstlisting}[gobble=8, basicstyle=\ttfamily\small]
+        Texte        a        b        c        ...
+        1        49        75        120        ...
+    \end{lstlisting}
+
+    \begin{itemize}
+        \item Combien d'attributs par texte ?
+        \item Est-ce suffisant ?
+            \begin{itemize}
+                \item Suffisant pour quoi ?
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{$n$-grammes}
+    % TODO: add corrections
+    % TODO: add sources
+    % TODO: add examples
+    Une stratégie un peu plus raffinée est de compter non pas les caractères, mais les séquences de caractères de longueur $n$.
+
+    Exemple : « Le petit chat est mort »
+
+    \begin{itemize}
+        \item Quels sont les $1$-grammes ?
+        \item Quels sont les bigrammes ?
+        \item Quels sont les trigrammes ?
+        \item En général, pour chaque, combien de possibilités ?
+    \end{itemize}
+
+    En pratique, les trigrammes peuvent suffire pour certaines applications !
+    \begin{itemize}
+        \item Détection du plagiat
+    \end{itemize}
+
+    Pour plus de richesse, on peut aussi utiliser des \emph{skip-grams}
 \end{frame}
 
 
