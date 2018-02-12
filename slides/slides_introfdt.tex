@@ -79,11 +79,11 @@
 \usepackage{tikz}
 	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}}
 	\tikzset{
-		invisible/.style={opacity=0},
-		visible on/.style=,
 		alt/.code args={<#1>#2#3}{%
 		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
 		},
+        invisible/.style={opacity=0},
+		visible on/.style={alt=<#1>{}{invisible}}
 	}
 	\usepackage{tikz-qtree}
     \usepackage{tkz-graph}
@@ -1482,28 +1482,43 @@
     \only<1>{
         \begin{figure}
             \tikzset{external/export=true}
-            \begin{tikzpicture}[true scale=0.5]
-                \node[data] (in1) {Entrée};
-                \node[program, right=2cm of in1, text width=12ex] (prog1) {Programme élémentaire};
-                \node[data, right=1cm of prog1] (out1) {Résultat};
-                \draw[->] (in1) -- (prog1);
-                \draw[->] (prog1) -- (out1);
-
-                \node[program, right=1cm of out1, text width=12ex] (prog2) {Programme élémentaire};
-                \node[data, right=2cm of prog2] (out2) {Résultat};
-                \draw[->] (out1) -- (prog2);
-                \draw[->] (prog2) -- (out2);
-
-                \draw ($(prog1.north west)+(-1cm, 1cm)$) rectangle ($(prog2.south east)+(1cm, -1cm)$);
+            \begin{tikzpicture}[true scale=0.75]
+                \node[data] (in) {Entrée};
+                \node[right=1cm of in, text width=10ex, accent on=<1>] (prog) {Programme};
+                \node[data, right=1cm of prog] (out) {Résultat};
+                \draw[->] (in) -- (prog);
+                \draw[->] (prog) -- (out);
             \end{tikzpicture}
-            \caption{Exemple de tâche complexe}
+            \caption{Schéma général d'une tâche}
         \end{figure}
+        Le \alert{programme} réalisant la tâche sera ainsi composé de sous-programmes réalisant des tâches élémentaires.
     }
 
     \only<2>{
         \begin{figure}
             \tikzset{external/export=true}
-            \begin{tikzpicture}[true scale=0.5]
+            \begin{tikzpicture}[true scale=0.75]
+                \node[data] (in1) {Entrée};
+                \node[program, right=1cm of in1, text width=12ex] (prog1) {Programme élémentaire};
+                \node[data, right=0.75cm of prog1] (out1) {Résultat};
+                \draw[->] (in1) -- (prog1);
+                \draw[->] (prog1) -- (out1);
+
+                \node[program, right=0.75cm of out1, text width=12ex] (prog2) {Programme élémentaire};
+                \node[data, right=1cm of prog2] (out2) {Résultat};
+                \draw[->] (out1) -- (prog2);
+                \draw[->] (prog2) -- (out2);
+
+                \draw ($(prog1.north west)+(-0.5cm, 1cm)$) rectangle ($(prog2.south east)+(0.5cm, -1cm)$);
+            \end{tikzpicture}
+            \caption{Décomposition d'une tâche complexe}
+        \end{figure}
+    }
+
+    \only<3>{
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[true scale=0.75]
                 \node[data] (in1) {Entrée};
                 \node[program, right=2cm of in1, text width=12ex] (prog1) {Programme élémentaire};
                 \node[data, right=1cm of prog1] (out1) {Résultat};
@@ -1518,7 +1533,7 @@
 
                 \draw ($(prog1.south west)+(-1cm, -1cm)$) rectangle ($(prog2.north east)+(1cm, 1cm)$);
             \end{tikzpicture}
-            \caption{Exemple de tâche complexe}
+            \caption{Décomposition d'une tâche complexe}
         \end{figure}
     }
 \end{frame}
@@ -1528,7 +1543,7 @@
 
     \begin{figure}
         \tikzset{external/export=true}
-        \begin{tikzpicture}[true scale=0.80]
+        \begin{tikzpicture}[true scale=0.75]
             \node[data, text width=15ex] (in) {« Quelle est la vitesse d'une hirondelle ? »};
             \node[program, right=1cm of in, text width=15ex] (prog) {Programme de Q/R};
             \node[data, right=1cm of prog] (out) {« \SI{60}{km/h} »};
@@ -1541,44 +1556,58 @@
     \end{figure}
 \end{frame}
 
-\begin{frame}{Q/R via RI}
-    La première reformulation possible utilise un système de \alert{RI}
+\begin{frame}[fragile]{Q/R via RI}
+    % TODO: add progressive result feedback on the “Quelle est la vitesse d'une hirondelle sample question”
+    La première reformulation possible utilise un système de \alert<1>{RI}
 
     \begin{figure}
         % \tikzset{external/export=true}
-        \begin{tikzpicture}[true scale=0.6]
-            \node[data] (in) {Entrée};
+        \begin{tikzpicture}[true scale=0.55]
+            \node[data, alt=<2>{highlight=6}{}] (in) {Question};
             \node[coordinate, right=1cm of in] (split) {};
-            \fill (split) circle[radius=2pt];
-            \draw (in) -- (split);
+            \fill[alt=<2>{highlight=6}{}] (split) circle[radius=2pt];
+            \draw[alt=<2>{highlight=6, thick}{}] (in) -- (split);
 
-            \node[program, above right=0.5cm and 1cm of split] (term) {Terminologie};
-            \node[data, right=1cm of term] (words) {Mots};
-            \node[program, right=1cm of words, accent on=<1>] (ri) {RI};
-            \node[data, right=1cm of ri] (docs) {Docs};
-            \node[program, right=1cm of docs] (ei) {EI};
+            \node[program, above right=0.5cm and 1cm of split, alt=<2>{highlight=0}{}] (term) {Terminologie};
+            \node[data, right=1cm of term, alt=<3>{highlight=0}{}] (words) {Mots};
+            \node[program, right=1cm of words, accent on=<1>, alt=<3>{highlight=3}{}] (ri) {RI};
+            \node[data, right=1cm of ri, alt=<3-4>{highlight=8}{}] (docs) {Docs};
+            \node[program, right=1cm of docs, alt=<4>{highlight=3}{}] (ei) {EI};
             \node[coordinate, below right=0.5cm and 1cm of ei] (gather) {};
-            \node[data, right=1cm of gather] (answer) {Réponse};
-            \draw[->] (split) |- (term);
+            \node[data, right=1cm of gather, alt=<4>{highlight=0}{}] (answer) {Réponse};
+            \draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (term);
             \draw[->] (term) -- (words);
             \draw[->] (words) -- (ri);
             \draw[->] (ri) -- (docs);
             \draw[->] (docs) -- (ei);
             \draw[->] (ei) -| (gather) -- (answer);
 
-            \node[program, below right=0.5cm and 1cm of split] (classif) {Classifieur};
-            \node[data, below=1cm of ei] (field) {Champs};
-            \draw[->] (split) |- (classif);
+            \node[program, below right=0.5cm and 1cm of split, alt=<2>{highlight=3}{}] (classif) {Classifieur};
+            \node[data, below=1cm of ei, alt=<4>{highlight=2}{}] (field) {Champs};
+            \draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (classif);
             \draw[->] (classif) -- (field);
             \draw[->] (field) -- (ei);
 
             \draw ($(split)+(-0.5cm, 2cm)$) rectangle ($(field.south east)+(1cm, -0.5cm)$);
 
-            \node[data, below=3cm of ri] (corpus) {Corpus};
+            \node[data, below=3cm of ri, alt=<3>{highlight=2}{}] (corpus) {Corpus};
             \draw[->] (corpus) -- (ri);
         \end{tikzpicture}
         \caption{Système de Question/Réponse via Recherche d'Informations}
     \end{figure}
+    \only<2->{
+        \begin{itemize}
+            \only<2>{
+                \item \textcolor{highlight6}{La question en langage naturel} est envoyée en parallèle à \textcolor{highlight0}{un extracteur de mots-clés} et à un \textcolor{highlight3}{classifieur} qui détermine le type de la réponse attendue
+            }
+            \only<3>{
+                \item \textcolor{highlight0}{Les mots-clés extraits} sont utilisés comme requête pour \textcolor{highlight3}{le programme de RI} qui sélectionne dans \textcolor{highlight2}{le corpus} \textcolor{highlight8}{les documents pertinents} pour répondre à la question
+            }
+            \only<4>{
+                \item<4> \textcolor{highlight3}{Un programme d'EI} extrait des \textcolor{highlight8}{documents pertinents} le contenu des \textcolor{highlight2}{champs}, qui constituent la \textcolor{highlight0}{réponse} à la question posée
+            }
+        \end{itemize}
+    }
 \end{frame}
 
 
