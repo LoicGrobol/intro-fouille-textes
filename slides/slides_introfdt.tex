@@ -45,7 +45,7 @@
 
 % Fix missing glyphs in Fira by delegating to polyglossia/babel
 \usepackage{newunicodechar}
-\newunicodechar{ }{ }   % U+202F NARROW NO-BREAK SPACE
+\newunicodechar{ }{~}   % U+202F NARROW NO-BREAK SPACE
 \newunicodechar{ }{ }  % U+2009 THIN SPACE
 
 % Notes on left screen
@@ -75,6 +75,8 @@
 	\setmathfont{XITS Math}
 \usepackage{newunicodechar}
 	\newunicodechar{√}{\sqrt}
+\usepackage{mleftright}
+
 
 \usepackage{tabu}
 \usepackage{booktabs}
@@ -88,6 +90,7 @@
 \usepackage{csquotes}
 \usepackage{tikz}
 	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}}
+    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep = 0pt]{\node[#1] (#2) {$\displaystyle #3$};}}
 	\tikzset{
 		alt/.code args={<#1>#2#3}{%
 		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
@@ -97,6 +100,7 @@
 	}
 	\usepackage{tikz-qtree}
     \usepackage{tkz-graph}
+    \usepackage[beamer, markings]{hf-tikz}
     \usepackage{pgfplots}
         % Due to pgfplots meddling with pgfkeys, we have to redefine alt here.
         \pgfplotsset{
@@ -262,6 +266,10 @@
 \NewDocumentCommand\shorturl{ O{https} O{://} m }{%
     \href{#1#2#3}{\nolinkurl{#3}}%
 }
+
+\DeclarePairedDelimiterX\compset[2]{\lbrace}{\rbrace}{#1\,\delimsize|\,#2}
+\DeclareMathOperator{\TF}{TF}
+\DeclareMathOperator{\IDF}{IDF}
 
 
 % ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████
@@ -1813,7 +1821,7 @@
     \begin{description}[<+->][*]
         \item[Objectif] Transformer les documents à traiter en fichiers tabulaires pour les passer à un classifieur
         \item[Problème] Quel choix d'attributs (colonnes) ?
-        \item[Solution] ®a dépend des cas !
+        \item[Solution] Ça dépend des cas !
             \begin{itemize}
                 \item[→] Mais on peut identifier plusieurs stratégies élémentaires (air connu)
             \end{itemize}
@@ -1861,6 +1869,8 @@
 
     Pour plus de richesse, on peut aussi utiliser des \emph{skip-grams}
 \end{frame}
+
+\lecture{Introduction à la fouille de textes}{2018-02-19}
 
 \begin{frame}<-2>{Mots}
     Faisons \alt<1>{enfin de la}{un peu de} linguistique : comptons les mots !
@@ -1961,7 +1971,7 @@
 \begin{frame}{Mots}
     Pour réduire encore plus le nombre de colonnes
     \begin{itemize}
-        \item Lemmatiser : \{\emph{est}, \emph{était}, \emph{suis}, \emph{êtes}, \emph{furent}…\}→ \emph{est}
+        \item Lemmatiser : \{\emph{est}, \emph{était}, \emph{suis}, \emph{êtes}, \emph{furent}…\} → \emph{est}
         \item Radicaliser : \{\emph{homme}, \emph{hommes}\} → \emph{homme}
         \item Fixer un lexique \emph{a priori}
             \begin{itemize}
@@ -1972,6 +1982,96 @@
     À l'inverse, pour plus de détails, on peut utiliser des $n$-grammes de mots
     \begin{itemize}
         \item[→] Représentation plus riche, mais amplifie le problème de quantité
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Traits linguistiques avancés}
+    Si les ressource le permettent, on peut envisager d'autres attributs
+    \begin{itemize}
+        \item Avec un étiqueteur morphosyntaxique : POS, $n$-grammes de POS
+        \item Avec un parser : largeur/profondeur/taille moyenne des arbres/constituants, paires gouverneur-gouverné, paires nœud-relation…
+        \item Avec des analyseurs sémantiques : rôles
+        \item Avec des bases de connaissances : présence de certains concepts
+        \item …
+    \end{itemize}
+    Mais on introduit alors des dépendances vis-à-vis des ressources, ce qui multiplie les causes d'erreurs.
+\end{frame}
+
+% ███    ███ ███████  █████  ███████ ██    ██ ██████  ███████
+% ████  ████ ██      ██   ██ ██      ██    ██ ██   ██ ██
+% ██ ████ ██ █████   ███████ ███████ ██    ██ ██████  █████
+% ██  ██  ██ ██      ██   ██      ██ ██    ██ ██   ██ ██
+% ██      ██ ███████ ██   ██ ███████  ██████  ██   ██ ███████
+
+\subsection{Valuation des attributs}
+\begin{frame}[label=attrval]{Valuation des attributs}
+    Avoir choisi les attributs à utiliser pour une classification ne suffit pas : encore faut-il leur donner une valeur
+    \begin{description}[*]
+        \item[Booléenne] Vrai/Faux ($0$/$1$) suivant que l'attribut est ou n'est pas présent dans le document
+        \item[Occurrences] Le nombre $n_{i,j}$ de fois qu'apparaît l'attribut $a_j$ dans le document $t_i$
+        \item[Fréquences normalisées par ligne] (ici pour la norme $1$)
+            \begin{equation}
+                \frac{\mathnode{freqfracnum}{n_{i,j}}}{\mathnode{freqfracden}{\sum_k n_{i,k}}}
+            \end{equation}
+    \end{description}
+    \textbf{Note} : ici et dans la suite, on considère que toutes les colonnes sont de même nature
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Notations}
+    \begin{itemize}
+        \item Les textes sont notés $t_1$, $t_2$, …, $t_m$
+        \item Les attributs sont notés $a_1$, $a_2$, …, $a_n$
+        \item La valeur du $j$-ème attribut pour le $i$-ème texte est notée $a_{i,j}$ (ligne, colonne)
+    \end{itemize}
+
+    \begin{figure}
+        \begin{tabu}{*{5}{X[m, c]}}
+                    & $a_1$     & $a_2$     & $…$ & $a_n$\\
+            $t_1$   & $a_{1,1}$ & $a_{1,2}$ & $…$ & $a_{1,n}$\\
+            $t_2$   & $a_{2,1}$ & $a_{2,2}$ & $…$ & $a_{2,n}$\\
+            $⋮$    & $⋮$      & $⋮$       &     & $⋮$\\
+            $t_m$   & $a_{m,1}$ & $a_{m,2}$ & $…$ & $a_{m,n}$\\
+         \end{tabu}
+    \end{figure}
+\end{frame}
+
+\againframe{attrval}
+
+% TODO: add cites
+\begin{frame}{TF.IDF}
+    On veut pouvoir pondérer l'importance d'un terme (mot, caractère, $n$-gramme…) en fonction de sa spécificité (au sens large) pour un document.
+
+    \begin{itemize}
+        \item \emph{\textbf{T}erm \textbf{F}requency $×$ \textbf{I}nverse \textbf{D}ocument \textbf{F}requency}
+        \item $\TF(i,j) = n_{i,j}$ ou $\TF(i,j) = \frac{n_{i,j}}{\sum_kn_{i,j}}$
+        \item
+            \only<1>{
+                \begin{equation}
+                    \IDF(j) = \log\mleft(\frac{m}{\#\compset{i}{a_{i,j}>0}}\mright)
+                \end{equation}
+            }
+            \only<2>{
+                \begin{equation}
+                    \IDF(j) = \log\frac{\overbrace{m}^{\mathclap{\text{nombre total de documents}}}}{\underbrace{\#\compset{i}{a_{i,j}>0}}_{\mathclap{\text{nombre de documents contenant $a_j$}}}}
+                \end{equation}
+            }
+            \only<3->{$\IDF(j) = \log\frac{m}{\#\compset{i}{a_{i,j}>0}}$}
+        \only<3->{
+            \item Intuitivement $\IDF$ mesure la rareté d'un attribut, donc (on espère !) son informativité
+            \item « Si $a_j$ est présent dans tous les textes, savoir qu'il est présent dans $t_i$ ne donne pas d'information sur $t_i$ »
+            \item \alt<4>{$\log$ donne à $\IDF$ la forme d'une \emph{surprise} au sens de Shannon}{$\log$ est une façon pratique de modérer les effets de cette pondération : on devrait parler de $\log$-$\IDF$}
+        }
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Des sacs de mots aux vecteurs}
+    Dans tout ce qui précède, on ne tient pas compte des positions relatives des termes, mais seulement de leurs nombres d'occurrences.
+    \begin{itemize}
+        \item Approche \emph{bag-of-words} (sac de mots)
+        \item « Siobhan tue Eóghan » vs. « Eóghan tue Shiobhan »…
+        \begin{itemize}
+            \item On compte (comme d'habitude) sur la masse de données pour passer outre ce genre de problèmes
+        \end{itemize}
     \end{itemize}
 \end{frame}
 
