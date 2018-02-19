@@ -24,21 +24,29 @@
     % FIXME: not pretty and footnotes are still too big
     \let\footnoterule\relax  % No footnote rule, push down footnote
 
-% Highlight colour palette
-\definecolor{highlight0}{RGB}{51, 34, 136}
-\definecolor{highlight1}{RGB}{136, 204, 238}
-\definecolor{highlight2}{RGB}{68, 170, 153}
-\definecolor{highlight3}{RGB}{17, 119, 51}
-\definecolor{highlight4}{RGB}{153, 153, 51}
-\definecolor{highlight5}{RGB}{221, 204, 119}
-\definecolor{highlight6}{RGB}{204, 102, 119}
-\definecolor{highlight7}{RGB}{136, 34, 85}
-\definecolor{highlight8}{RGB}{170, 68, 153}
+% 9-Highlights colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/colourschemes.pdf)
+\definecolor{highlight0}{RGB}{51, 34, 136}  % Deep blue
+\definecolor{highlight1}{RGB}{136, 204, 238}  % Clear blue
+\definecolor{highlight2}{RGB}{68, 170, 153}  % Teal
+\definecolor{highlight3}{RGB}{17, 119, 51}  % Forest green
+\definecolor{highlight4}{RGB}{153, 153, 51}  % Khaki
+\definecolor{highlight5}{RGB}{221, 204, 119}  % Beige
+\definecolor{highlight6}{RGB}{204, 102, 119}  % Pink
+\definecolor{highlight7}{RGB}{136, 34, 85}  % Purple
+\definecolor{highlight8}{RGB}{170, 68, 153}  % Violet
+
+% Alternative navy blue for ⩽4 palettes
+\definecolor{highlighta}{RGB}{68, 118, 170}  % Navy blue
 
 % Use non-standard fonts
 \usefonttheme{professionalfonts}
 \setsansfont[BoldFont={Fira Sans SemiBold}, ItalicFont={Fira Sans Book Italic}]{Fira Sans Book}
 \setmonofont[Scale=0.9]{Fira Mono}
+
+% Fix missing glyphs in Fira by delegating to polyglossia/babel
+\usepackage{newunicodechar}
+\newunicodechar{ }{ }   % U+202F NARROW NO-BREAK SPACE
+\newunicodechar{ }{ }  % U+2009 THIN SPACE
 
 % Notes on left screen
 % \usepackage{pgfpages}
@@ -90,6 +98,12 @@
 	\usepackage{tikz-qtree}
     \usepackage{tkz-graph}
     \usepackage{pgfplots}
+        % Due to pgfplots meddling with pgfkeys, we have to redefine alt here.
+        \pgfplotsset{
+    		alt/.code args={<#1>#2#3}{%
+    		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+    		},
+    	}
         \pgfplotsset{compat=1.15}
         \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}}
 
@@ -1715,24 +1729,27 @@
         où $K$ est une constante ne dépendant que du corpus.
     \end{block}
     \vskip0pt plus 1fill
-    {\tiny 1. Georges Zipf (1902-1950)\\2. d'après la légende}
+    {\tiny 1. Georges Zipf (1902-1950) dans \parencite{zipf1949human}\\2. d'après la légende}
 \end{frame}
 
 % TODO: add Ulysse répartition
+% TODO: add visualisation for fat tail
 \begin{frame}{Loi de Zipf : observations}
     \begin{figure}
         \tikzset{external/export=true}
         \begin{tikzpicture}
-            \begin{axis}[xmin=0, ymin=0, xmax=20, ymax=50,
+            \begin{axis}[xmin=0, ymin=0, xmax=20,
                          width=0.9\textwidth,
                          height=0.8\textheight,
                          xlabel={Rang},
                          ylabel={Fréquence d'apparition},
-                         title={Loi de Zipf : $y=\frac{K}{x}$}]
-                \addplot[highlight0, domain=0.1:20, samples=1001] {20/x};
+                         title={Loi de Zipf : $y=\frac{K}{x}$},
+                         scaled ticks=false,
+                         ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}]
+                \addplot[highlighta, domain=1:20, samples=1001] {max(8000/x, 1)};
             \end{axis}
         \end{tikzpicture}
-        \caption{Courbe d'une loi de Zipf}
+        \caption{Courbe d'une loi de Zipf ($K=\num{8000}$)}
     \end{figure}
 \end{frame}
 
@@ -1764,9 +1781,9 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Loi de Heaps}
+\begin{frame}[label=heapslawgraph]{Loi de Heaps}
     \begin{figure}
-        % \tikzset{external/export=true}
+        \tikzset{external/export=true}
         \begin{tikzpicture}
             \begin{axis}[xmin=0, xmax=10000, ymin=0,
                          width=0.9\textwidth,
@@ -1776,7 +1793,7 @@
                          title={Loi de Heaps : $y=K×x^β$},
                          scaled ticks=false,
                          ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}]
-                \addplot[highlight0, domain=0:10000, samples=1001] {40*x^0.5};
+                \addplot[highlighta, domain=0:10000, samples=1001] {40*x^0.5};
             \end{axis}
         \end{tikzpicture}
         \caption{Courbe d'une loi de Heaps}
@@ -1791,26 +1808,27 @@
 
 
 \subsection{Choix des attributs}
-\begin{frame}{choix des attributs}
-    % TODO: better format
-    Objectif : transformer les documents à traiter en fichiers tabulaires pour les passer à un classifieur.
-
-    Problème : quel choix d'attributs (colonnes) ?
-    \pause
-
-    Solution : ça dépend des cas !
-    \pause
-
-    Mais on peut identifier plusieurs catégories élémentaires (air connu)
+\begin{frame}{Choix des attributs}
+    Pour pouvoir faire de la classification, il faut pouvoir mettre les données au bon format
+    \begin{description}[<+->][*]
+        \item[Objectif] Transformer les documents à traiter en fichiers tabulaires pour les passer à un classifieur
+        \item[Problème] Quel choix d'attributs (colonnes) ?
+        \item[Solution] ®a dépend des cas !
+            \begin{itemize}
+                \item[→] Mais on peut identifier plusieurs stratégies élémentaires (air connu)
+            \end{itemize}
+    \end{description}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Caractères}
-    Puisqu'un texte brut est une séquence de caractère : utilisons comme attribut la fréquence de chaque caractère
+    Puisqu'un texte brut est une séquence de caractères : utilisons comme attribut la fréquence de chaque caractère
 
-    \begin{lstlisting}[gobble=8, basicstyle=\ttfamily\small]
-        Texte        a        b        c        ...
-        1        49        75        120        ...
-    \end{lstlisting}
+    \begin{figure}
+        \begin{tabu}{*{5}{>{\ttfamily\small}X[m, c]}}
+            Texte   & a & b & c & …\\
+            Ulysse  & 90578 & 17848 & 27902 & …
+        \end{tabu}
+    \end{figure}
 
     \begin{itemize}
         \item Combien d'attributs par texte ?
@@ -1821,7 +1839,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{$n$-grammes}
+\begin{frame}{$n$-grammes de caractères}
     % TODO: add corrections
     % TODO: add sources
     % TODO: add examples
@@ -1830,10 +1848,10 @@
     Exemple : « Le petit chat est mort »
 
     \begin{itemize}
-        \item Quels sont les $1$-grammes ?
+        \item Quels sont les unigrammes ?
         \item Quels sont les bigrammes ?
         \item Quels sont les trigrammes ?
-        \item En général, pour chaque, combien de possibilités ?
+        \item En général, pour un alphabet à $k$ caractères, combien y a-t-il de $n$-grammes ?
     \end{itemize}
 
     En pratique, les trigrammes peuvent suffire pour certaines applications !
@@ -1844,6 +1862,118 @@
     Pour plus de richesse, on peut aussi utiliser des \emph{skip-grams}
 \end{frame}
 
+\begin{frame}<-2>{Mots}
+    Faisons \alt<1>{enfin de la}{un peu de} linguistique : comptons les mots !
+    \begin{itemize}
+        \item Problème : qu'est-ce qu'un mot ?
+            \begin{itemize}
+                \item \emph{pomme de terre} ?
+                \item \emph{y a-\textbf{t}-il} ?
+                \item …
+            \end{itemize}
+        \item On a plutôt tendance à compter les \alert{tokens}
+            \begin{itemize}
+                \item « Séquences de caractères comprises entre deux séparateurs »
+                \item[→] Problème : qu'est-ce qu'un séparateur ? \begin{itemize}
+                    \item « E-mail » vs. « Alsace–Lorraine »
+                    \item « […] kiwi. Hier […] » vs. « M. Martin »
+                    \item « Yann Le Bourdonnec » vs. « Félix le chat »
+                \end{itemize}
+                \item On délègue à un segmenteur (\emph{tokenizer})
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}<1>[label=wordcols]{Des mots aux colonnes}
+    Objectif : utiliser les fréquences des mots comme attributs (colonnes) dans une représentation tabulaire.
+    \begin{itemize}
+        \item Combien de colonnes faut-il ?
+\only<2->{
+            \begin{itemize}
+                \item[→] $K×M^β$ (loi de Heaps)
+                \item Pour \emph{Ulysse}, environ \num{34000}
+            \end{itemize}
+        \item Il faut donc arriver à filtrer !
+            \begin{itemize}
+                \item Supprimer les mots vides (\emph{stop words}) : \emph{le}, \emph{à}, \emph{mais}…
+                \item Ne conserver certaines catégories spécifiques à la tâche (noms, adjectifs…)
+                \item Supprimer les hapax (mots n'apparaissant qu'un seule fois)
+                \item[→] De façon générale, ne conserver qu'une bande de fréquence
+            \end{itemize}
+}
+    \end{itemize}
+\end{frame}
+
+\againframe{heapslawgraph}
+
+\againframe<2>{wordcols}
+
+\begin{frame}[fragile]{Filtrer les hapax}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=0, ymin=0, xmax=40, ymax=15,
+                         xtick=\empty,
+                         ytick=\empty,
+                         alt=<2>{extra y ticks={1}}{},
+                         width=0.9\textwidth,
+                         height=0.8\textheight,
+                         xlabel={Rang},
+                         ylabel={Fréquence d'apparition},
+                         title={$y=\frac{K}{x}$}]
+                \addplot[highlighta, domain=1:20, samples=501] {20/x};
+                \addplot[highlighta, alt=<2>{dotted}{}, domain=20:40, samples=500] {1};
+                \only<2>{
+                    \draw[highlight6] (axis cs:0,1) -- (current axis.east|-{axis cs:0,1});
+                }
+            \end{axis}
+        \end{tikzpicture}
+        \caption{\alt<2>{Filtrage des hapax sur la c}{C}ourbe de Zipf}
+    \end{figure}
+\end{frame}
+
+\againframe<2>{wordcols}
+
+\begin{frame}[fragile=singleslide]{Filtrer une bande de fréquences}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=0, ymin=0, xmax=40, ymax=20,
+                         xtick=\empty,
+                         ytick={2, 15},
+                         yticklabels={$a$, $b$},
+                         width=0.9\textwidth,
+                         height=0.8\textheight,
+                         xlabel={Rang},
+                         ylabel={Fréquence d'apparition},
+                         title={$y=\frac{K}{x}$}]
+                \addplot[highlighta, dotted, domain=1:1.33, samples=333] {20/x};
+                \addplot[highlighta, domain=1.33:10, samples=333] {20/x};
+                \addplot[highlighta, dotted, domain=10:40, samples=333] {max(20/x,1)};
+                \draw[highlight6] (axis cs:0,15) -- (current axis.east|-{axis cs:0,15});
+                \draw[highlight6] (axis cs:0,2) -- (current axis.east|-{axis cs:0,2});
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Filtrage d'une bande de fréquences sur la courbe de Zipf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Mots}
+    Pour réduire encore plus le nombre de colonnes
+    \begin{itemize}
+        \item Lemmatiser : \{\emph{est}, \emph{était}, \emph{suis}, \emph{êtes}, \emph{furent}…\}→ \emph{est}
+        \item Radicaliser : \{\emph{homme}, \emph{hommes}\} → \emph{homme}
+        \item Fixer un lexique \emph{a priori}
+            \begin{itemize}
+                \item[→] Avec les dangers que ça comporte
+            \end{itemize}
+    \end{itemize}
+
+    À l'inverse, pour plus de détails, on peut utiliser des $n$-grammes de mots
+    \begin{itemize}
+        \item[→] Représentation plus riche, mais amplifie le problème de quantité
+    \end{itemize}
+\end{frame}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
