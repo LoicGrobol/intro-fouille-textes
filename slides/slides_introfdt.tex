@@ -267,9 +267,12 @@
     \href{#1#2#3}{\nolinkurl{#3}}%
 }
 
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
 \DeclarePairedDelimiterX\compset[2]{\lbrace}{\rbrace}{#1\,\delimsize|\,#2}
+\DeclarePairedDelimiterX\innprod[2]{\langle}{\rangle}{#1\,\delimsize|\,#2}
 
-% Easy colum vectors \vcord{a,b,c} ou \vcord[;]{a;b;c}
+% Easy column vectors \vcord{a,b,c} ou \vcord[;]{a;b;c}
 % Here be black magic
 \ExplSyntaxOn
 	\NewDocumentCommand{\vcord}{O{,}m}{\vector_main:nnnn{p}{\\}{#1}{#2}}
@@ -2074,6 +2077,7 @@
         \only<3->{
             \item Intuitivement $\IDF$ mesure la rareté d'un attribut, donc (on espère !) son informativité
             \item « Si $a_j$ est présent dans tous les textes, savoir qu'il est présent dans $t_i$ ne donne pas d'information sur $t_i$ »
+            \item Permet un filtrage moins arbitraire des \emph{stop words}
             \item \alt<4>{$\log$ donne à $\IDF$ la forme d'une \emph{surprise} au sens de Shannon}{$\log$ est une façon pratique de modérer les effets de cette pondération : on devrait parler de $\log$-$\IDF$}
         }
     \end{itemize}
@@ -2163,12 +2167,12 @@
 
                 \draw (0, 0) node[below left] {\footnotesize $0$};
 
-                \draw [->, line width=2pt, alt=<2-3>{invisible}{}] (0,0) -- (3,1) node[midway, above] {$v$};
-                \draw [->, line width=2pt, alt=<2-3>{}{invisible}] (1,2) -- (4,3) node[midway, above] {$v$};
+                \draw [->, highlighta, line width=2pt, alt=<2-3>{invisible}{}] (0,0) -- (3,1) node[midway, above] {$v$};
+                \draw [->, highlighta, line width=2pt, alt=<2-3>{}{invisible}] (1,2) -- (4,3) node[midway, above] {$v$};
 
-                \draw [->, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$u$};
+                \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$u$};
 
-                \draw[->, line width=2pt, alt=<3->{}{invisible}] (0,0) -- (4,3) node[midway, alt=<3>{below right}{above}] {$u+v$};
+                \draw[->, highlight4, line width=2pt, alt=<3->{}{invisible}] (0,0) -- (4,3) node[midway, alt=<3>{below right}{above}] {$u+v$};
             \end{tikzpicture}
             \caption{Somme de deux vecteurs}
         \end{figure}
@@ -2189,9 +2193,9 @@
 
                 \draw (0, 0) node[below left] {\footnotesize $0$};
 
-                \draw [->, line width=2pt, alt=<5>{}{invisible}] (0,0) -- (2,1) node[midway, above] {$v$};
+                \draw [->, highlighta, line width=2pt, alt=<5>{}{invisible}] (0,0) -- (2,1) node[midway, above] {$v$};
 
-                \draw[->, line width=2pt, alt=<6>{}{invisible}] (0,0) -- (4,2) node[midway, above] {$2v$};
+                \draw[->, highlighta, line width=2pt, alt=<6>{}{invisible}] (0,0) -- (4,2) node[midway, above] {$2v$};
             \end{tikzpicture}
             \caption{produit d'un vecteur par un nombre}
         \end{figure}
@@ -2201,18 +2205,174 @@
 \begin{frame}{Interprétation}
     Bien entendu, l'hypothèse d'indépendance est fausse en général
     \begin{itemize}
-        \item[→] Si un texte contient \emph{main}, il est plus probable qu'il emploie également \emph{doigt}
+        \item[→] Si un texte contient \emph{main}, il est plus probable qu'il contienne également \emph{doigt}
     \end{itemize}
     Et représenter les documents par des vecteurs a ses limites
     \begin{itemize}
-        \item[→] Que signifie sommer deux textes ?
+        \item[→] Que signifie le fait des sommer les attributs de deux documents ?
     \end{itemize}
     Mais ces approximations permettent d'utiliser une machinerie mathématique qui marche assez bien en pratique.
 
     On est bien dans la philosophie de la fouille de textes !
 \end{frame}
 
+\begin{frame}{Similarité : exemple de travail}
+    En pratique, les documents considérés auront beaucoup de colonnes
+    \begin{itemize}
+        \item De quelques-unes à plusieurs centaines
+        \item Donc les vecteurs considérés seront de grande dimension
+        \item On va pour se forger un intuition géométrique se restreindre au cas de la dimension $2$
+    \end{itemize}
+\end{frame}
 
+\begin{frame}[standout]
+    \textit{To deal with a $14$-dimensional space, visualize a $3$-D space and say 'fourteen' to yourself very loudly. Everyone does it.}
+
+    Geoffrey Hinton
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Similarités : exemple de travail}
+    On considère deux vecteurs $t_1=(v_{1,1}, … v_{1,n})$ et $t_2=(v_{2,1}, …, v_{2,n})$ représentant des documents
+    \begin{columns}
+    \column{0.2\textwidth}
+        \begin{figure}
+            \begin{tabu} to .8\linewidth {*{3}{X[m, c]}}
+                        & $a_1$ & $a_2$\\
+                $t_1$   & $3$ & $1$\\
+                $t_2$   & $1$ & $2$\\
+             \end{tabu}
+        \end{figure}
+    \column{0.8\textwidth}
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}
+                \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+
+                \draw[->] (-0.5,0) -- (5.25, 0);
+                \foreach \x in {1,...,5}
+                    \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+                \draw[->] (0, -0.5) -- (0, 4.25);
+
+                \foreach \y in {1,...,4}
+                    \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+                \draw (0, 0) node[below left] {\footnotesize $0$};
+
+                \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, above] {$t_1$};
+                \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t_2$};
+            \end{tikzpicture}
+            \caption{Exemple de travail}
+    \end{figure}
+\end{columns}
+\end{frame}
+
+% TODO: overlay equation uncover
+\begin{frame}[fragile]{Distance de Manhattan}
+    \begin{block}{Définition (distance de Manhattan)}
+        On appelle \emph{distance de Manhattan} entre $t_1$ et $t_2$ le nombre
+        \begin{equation}
+            \norm{t_2-t_1}_1 = ∑_{k=1}^n\abs{v_{2,k}-v_{1,k}} \left(=\abs{v_{2,1}-v_{1,1}}+…+\abs{v_{2,n}-v_{1,n}}\right)
+        \end{equation}
+    \end{block}
+
+    \only<1>{
+        On l'appelle aussi \emph{taxicab distance} : c'est la distance du chemin le plus court pour aller d'un point à un autre en se déplaçant sur une grille
+
+        \begin{figure}
+            % \tikzset{external/export=true}
+            \begin{tikzpicture}
+                \draw [xstep=1, ystep=1, line width=5pt] (0, 0) grid (5, 5);
+                \fill[highlight3] (0, 0) circle [radius=2pt];
+                \fill[highlight3] (5, 5) circle [radius=2pt];
+                \draw[highlight0] (0, 0) -| (5, 5);
+                \draw[highlight6] (0, 0) |- (5, 5);
+                \draw[highlight4] (0, 0) |- (2,3) -| (5, 5);
+            \end{tikzpicture}
+            \caption{Exemple de travail}
+        \end{figure}
+    }
+    \only<2>{
+        Pour notre exemple
+        \begin{columns}
+        \column{.4\textwidth}
+            \begin{align}
+                \norm{t_2-t_1}_1
+                    &= ∑_{k=1}^n\abs{v_{2,k}-v_{1,k}}\\
+                    &= \abs{v_{2,1}-v_{1,1}}+\abs{v_{2,2}-v_{1,2}}\\
+                    &= \abs{1-3}+\abs{2-1}\\
+                    &= 2+1\\
+                    &= 3
+            \end{align}
+        \column{.6\textwidth}
+            \begin{figure}
+                % \tikzset{external/export=true}
+                \begin{tikzpicture}
+                    \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+
+                    \draw[->] (-0.5,0) -- (5.25, 0);
+                    \foreach \x in {1,...,5}
+                        \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+                    \draw[->] (0, -0.5) -- (0, 4.25);
+
+                    \foreach \y in {1,...,4}
+                        \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+                    \draw (0, 0) node[below left] {\footnotesize $0$};
+
+                    \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, above] {$t_1$};
+                    \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t_2$};
+                    \draw [<->] (1, 2) --  (3, 2) node [midway, above] {$\abs{1-3}$} -- (3, 1)  node [midway, right] {$\abs{2-1}$};
+                \end{tikzpicture}
+                \caption{Distance de Manhattan}
+            \end{figure}
+        \end{columns}
+    }
+\end{frame}
+
+\begin{frame}{Similarité cosinus}
+    \begin{block}{Définition (similarité cosinus)}
+        On appelle \emph{similarité cosinus} entre $t_1$ et $t_2$ le nombre
+        \begin{equation}
+            \norm{t_2-t_1}_2 = √{∑_{k=1}^n(v_{2,k}-v_{1,k})²}
+        \end{equation}
+    \end{block}
+
+    C'est la distance usuelle dans le plan.
+
+    Pour notre exemple
+    % \begin{columns}
+    % \column{.4\textwidth}
+    %     \begin{align}
+    %         \norm{t_2-t_1}_1
+    %             &= √{∑_{k=1}^n(v_{2,k}-v_{1,k})²}\\
+    %             &= √{(v_{2,1}-v_{1,1})²+(v_{2,2}-v_{1,2})²}\\
+    %             &= √{(1-3)²+(2-1)²}\\
+    %             &= √{2²+1²}\\
+    %             &= √{5}
+    %     \end{align}
+    % \column{.6\textwidth}
+    %     \begin{figure}
+    %         % \tikzset{external/export=true}
+    %         \begin{tikzpicture}
+    %             \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+    %
+    %             \draw[->] (-0.5,0) -- (5.25, 0);
+    %             \foreach \x in {1,...,5}
+    %                 \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+    %             \draw[->] (0, -0.5) -- (0, 4.25);
+    %
+    %             \foreach \y in {1,...,4}
+    %                 \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+    %
+    %             \draw (0, 0) node[below left] {\footnotesize $0$};
+    %
+    %             \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, above] {$t_1$};
+    %             \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t_2$};
+    %             \draw [<->] (1, 2) --  (3, 1)  node [midway, above right] {$√{5}$};
+    %         \end{tikzpicture}
+    %         \caption{Distance Euclidienne}
+    % \end{columns}
+\end{frame}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
