@@ -191,7 +191,7 @@
 	    morecomment=[s]{?}{?},
 	    morecomment=[s]{!--}{--},
 	    moredelim=[s][\color{black}]{>}{<},
-	    moredelim=[s][\color{highlight0}]{\ }{=},
+	    moredelim=[s][\color{highlighta}]{\ }{=},
 	    stringstyle=\color{highlight3},
 	    identifierstyle=\color{highlight7}
 	}
@@ -742,7 +742,7 @@
         \tikzset{external/export=true}
         \begin{tikzpicture}[scale=0.9, every node/.style={transform shape}]
             \node[data] (in) {Entrée};
-            \node[program, highlight=0, right=.75cm of in, text width=10ex] (prog) {Programme réalisant la tâche};
+            \node[program, highlight=a, right=.75cm of in, text width=10ex] (prog) {Programme réalisant la tâche};
             \node[data, right=.75cm of prog] (out) {Résultat};
             \node[program, highlight=6, above=1cm of prog, text width=13ex] (progapp) {Programme d'apprentissage};
             \node[data, highlight=3, right=.75cm of progapp] (mod) {Modèle};
@@ -755,7 +755,7 @@
         \end{tikzpicture}
         \caption{Schéma d'une approche par apprentissage automatique}
     \end{figure}
-    Ici le \textcolor{highlight0}{programme réalisant la tâche} est générique, mais utilise comme ressource un \textcolor{highlight3}{modèle} généré par un \textcolor{highlight6}{programme d'entraînement} à partir d'\textcolor{highlight7}{exemples} produit par des humains.
+    Ici le \textcolor{highlighta}{programme réalisant la tâche} est générique, mais utilise comme ressource un \textcolor{highlight3}{modèle} généré par un \textcolor{highlight6}{programme d'entraînement} à partir d'\textcolor{highlight7}{exemples} produit par des humains.
 \end{frame}
 
 \begin{frame}{Apprentissage automatique}
@@ -856,7 +856,7 @@
     Pour y limiter cet effet, on utilise parfois la méthode de validation croisée
     \begin{itemize}
         \item<1-> On découpe le corpus en $n$ parties de taille égales
-        \item<2-> On utilise $n-1$ parties comme \textcolor{highlight0}{\textit{train}} et la dernière comme \textcolor{highlight6}{\textit{test}}
+        \item<2-> On utilise $n-1$ parties comme \textcolor{highlighta}{\textit{train}} et la dernière comme \textcolor{highlight6}{\textit{test}}
         \item<3-> On répète l'opération pour les $n$ combinaisons possibles
         \item<12-> On retient comme évaluation globale une moyenne des résultats
     \end{itemize}
@@ -864,7 +864,7 @@
         \tikzset{external/export=true}
         \begin{tikzpicture}[scale=0.7]
             \foreach \x in {2, ..., 11}
-                \draw[alt=<\x>{fill=highlight6}{{alt=<1,12>{}{fill=highlight0}}}]
+                \draw[alt=<\x>{fill=highlight6}{{alt=<1,12>{}{fill=highlighta}}}]
                     (\x-2, 0) -- ++(1, 0) -- ++(0, 1) -- ++(-1, 0) -- ++(0, -1) -- cycle;
         \end{tikzpicture}
     \end{center}
@@ -1323,15 +1323,15 @@
         \begin{tikzpicture}
             \tikzset{every tree node/.style={align=center,anchor=north}}
             \Tree [.S
-                [.NP→\textcolor{highlight0}{sub} [.Det the ] [.N cat ] ]
-                [.VP→\textcolor{highlight0}{pred} [.V sat ]
-                    [.PP→\textcolor{highlight0}{mod} [.P on ]
+                [.NP→\textcolor{highlighta}{sub} [.Det the ] [.N cat ] ]
+                [.VP→\textcolor{highlighta}{pred} [.V sat ]
+                    [.PP→\textcolor{highlighta}{mod} [.P on ]
                         [.NP [.Det the ] [.N mat ] ]
                     ]
                 ]
             ]
         \end{tikzpicture}
-        \caption{\textcolor{highlight0}{Étiquetage fonctionnel} d'un arbre syntaxique}
+        \caption{\textcolor{highlighta}{Étiquetage fonctionnel} d'un arbre syntaxique}
     \end{figure}
 \end{frame}
 
@@ -1615,13 +1615,13 @@
             \fill[alt=<2>{highlight=6}{}] (split) circle[radius=2pt];
             \draw[alt=<2>{highlight=6, thick}{}] (in) -- (split);
 
-            \node[program, above right=0.5cm and 1cm of split, alt=<2>{highlight=0}{}] (term) {Terminologie};
-            \node[data, right=1cm of term, alt=<3>{highlight=0}{}] (words) {Mots};
+            \node[program, above right=0.5cm and 1cm of split, alt=<2>{highlight=a}{}] (term) {Terminologie};
+            \node[data, right=1cm of term, alt=<3>{highlight=a}{}] (words) {Mots};
             \node[program, right=1cm of words, accent on=<1>, alt=<3>{highlight=3}{}] (ri) {RI};
             \node[data, right=1cm of ri, alt=<3-4>{highlight=8}{}] (docs) {Docs};
             \node[program, right=1cm of docs, alt=<4>{highlight=3}{}] (ei) {EI};
             \node[coordinate, below right=0.5cm and 1cm of ei] (gather) {};
-            \node[data, right=1cm of gather, alt=<4>{highlight=0}{}] (answer) {Réponse};
+            \node[data, right=1cm of gather, alt=<4>{highlight=a}{}] (answer) {Réponse};
             \draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (term);
             \draw[->] (term) -- (words);
             \draw[->] (words) -- (ri);
@@ -1645,13 +1645,13 @@
     \only<2->{
         \begin{itemize}
             \only<2>{
-                \item \textcolor{highlight6}{La question en langage naturel} est envoyée en parallèle à \textcolor{highlight0}{un extracteur de mots-clés} et à un \textcolor{highlight3}{classifieur} qui détermine le type de la réponse attendue
+                \item \textcolor{highlight6}{La question en langage naturel} est envoyée en parallèle à \textcolor{highlighta}{un extracteur de mots-clés} et à un \textcolor{highlight3}{classifieur} qui détermine le type de la réponse attendue
             }
             \only<3>{
-                \item \textcolor{highlight0}{Les mots-clés extraits} sont utilisés comme requête pour \textcolor{highlight3}{le programme de RI} qui sélectionne dans \textcolor{highlight2}{le corpus} \textcolor{highlight8}{les documents pertinents} pour répondre à la question
+                \item \textcolor{highlighta}{Les mots-clés extraits} sont utilisés comme requête pour \textcolor{highlight3}{le programme de RI} qui sélectionne dans \textcolor{highlight2}{le corpus} \textcolor{highlight8}{les documents pertinents} pour répondre à la question
             }
             \only<4>{
-                \item<4> \textcolor{highlight3}{Un programme d'EI} extrait des \textcolor{highlight8}{documents pertinents} le contenu des \textcolor{highlight2}{champs}, qui constituent la \textcolor{highlight0}{réponse} à la question posée
+                \item<4> \textcolor{highlight3}{Un programme d'EI} extrait des \textcolor{highlight8}{documents pertinents} le contenu des \textcolor{highlight2}{champs}, qui constituent la \textcolor{highlighta}{réponse} à la question posée
             }
         \end{itemize}
     }
@@ -1670,11 +1670,11 @@
             \node[coordinate, right=1cm of in] (split) {};
             \draw[alt=<2>{highlight=6, thick}{}] (in) -- (split);
 
-            \node[program, above right=0.5cm and 1cm of split, alt=<2>{highlight=0}{}] (trad) {Traduction};
+            \node[program, above right=0.5cm and 1cm of split, alt=<2>{highlight=a}{}] (trad) {Traduction};
             \node[data, right=1cm of trad, alt=<2-3>{highlight=3}{}] (req) {Requête};
             \node[program, right=1cm of req, alt=<3>{highlight=3}{}] (int) {Interrogation};
             \node[coordinate, below right=0.5cm and 1cm of int] (gather) {};
-            \node[data, right=1cm of gather, alt=<4>{highlight=0}{}] (answer) {Réponse};
+            \node[data, right=1cm of gather, alt=<4>{highlight=a}{}] (answer) {Réponse};
             \draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (trad);
             \draw[->] (trad) -- (req);
             \draw[->] (req) -- (int);
@@ -1694,7 +1694,7 @@
     \end{figure}
     \only<2->{
         \begin{itemize}
-            \item<2|only@2> \textcolor{highlight6}{La question en langue naturelle} est \textcolor{highlight0}{traduite} en une \textcolor{highlight3}{requête} dans un langage formel (SQL, SPARQL…)
+            \item<2|only@2> \textcolor{highlight6}{La question en langue naturelle} est \textcolor{highlighta}{traduite} en une \textcolor{highlight3}{requête} dans un langage formel (SQL, SPARQL…)
         \end{itemize}
     }
 \end{frame}
@@ -2124,9 +2124,9 @@
 
             \draw (0, 0) node[below left] {\footnotesize $0$};
 
-            \draw [->,line width=2pt] (0,0) -- (2,3);
+            \draw [->, highlighta, line width=2pt] (0,0) -- (2,3);
 
-            \draw (1.5, 1.5) node[anchor=west] {$v=\vcord{2,3}$};
+            \draw (1.5, 1.5) node[anchor=west] {$\textcolor{highlighta}{v}=\vcord{2,3}$};
         \end{tikzpicture}
         \caption{Vecteur en dimension $2$}
     \end{figure}
@@ -2213,7 +2213,7 @@
     \begin{itemize}
         \item[→] Que signifie le fait des sommer les attributs de deux documents ?
     \end{itemize}
-    Mais ces approximations permettent d'utiliser une machinerie mathématique qui marche assez bien en pratique.
+    Mais ces approximations permettent d'utiliser une machinerie mathématique qui marche suffisamment bien en pratique.
 
     On est bien dans la philosophie de la fouille de textes !
 \end{frame}
@@ -2223,7 +2223,7 @@
     \begin{itemize}
         \item De quelques-unes à plusieurs centaines
         \item Donc les vecteurs considérés seront de grande dimension
-        \item On va pour se forger un intuition géométrique se restreindre au cas de la dimension $2$
+        \item On va pour se forger une intuition géométrique se restreindre au cas de la dimension $2$
     \end{itemize}
 \end{frame}
 
@@ -2271,7 +2271,8 @@
 \end{frame}
 
 % TODO: overlay equation uncover
-% TODO: distances comparisons : show distorted diagrams, + x→||u-v||_x curve
+% TODO: distances comparisons (particularly minkovsky) : show distorted diagrams, + x→||u-v||_x curve
+% TODO: for all examples → connect to real-world examples with word frequences
 \begin{frame}[fragile]{Distance de Manhattan}
     \begin{block}{Définition (distance de Manhattan)}
         On appelle \emph{distance de Manhattan} entre $t_1$ et $t_2$ le nombre
@@ -2290,7 +2291,7 @@
             \tikzset{external/export=true}
             \begin{tikzpicture}[background rectangle/.style={fill=gray}, show background rectangle, true scale=0.7]
                 \draw [xstep=1, ystep=1, line width=5pt, white] (0, 0) grid (5.1, 5.1);
-                \draw[highlight0, line width=2pt] (0, 0) -| (5, 5);
+                \draw[highlighta, line width=2pt] (0, 0) -| (5, 5);
                 \draw[highlight6, line width=2pt] (0, 0) |- (5, 5);
                 \draw[highlight2, line width=2pt] (0, 0) -| (1, 1) -| (2, 2) -| (3, 3) -| (4, 4) -| (5, 5);
                 \draw[highlight4, line width=2pt] (0, 0) |- (2, 3) -| (5, 5);
@@ -2308,8 +2309,8 @@
             \begin{align}
                 \norm{t_2-t_1}_1
                     &= ∑_{k=1}^n\abs{v_{2,k}-v_{1,k}}\\
-                    &= \textcolor{highlight0}{\abs{v_{2,1}-v_{1,1}}}+\textcolor{highlight6}{\abs{v_{2,2}-v_{1,2}}}\\
-                    &= \textcolor{highlight0}{\abs{1-3}}+\textcolor{highlight6}{\abs{2-1}}\\
+                    &= \textcolor{highlight2}{\abs{v_{2,1}-v_{1,1}}}+\textcolor{highlight6}{\abs{v_{2,2}-v_{1,2}}}\\
+                    &= \textcolor{highlight2}{\abs{1-3}}+\textcolor{highlight6}{\abs{2-1}}\\
                     &= 2+1\\
                     &= 3
             \end{align}
@@ -2331,7 +2332,7 @@
 
                     \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, below right] {$t_1$};
                     \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, right] {$t_2$};
-                    \draw [<->, highlight0] (1, 2) --  (3, 2) node [midway, above] {$\abs{1-3}$};
+                    \draw [<->, highlight2] (1, 2) --  (3, 2) node [midway, above] {$\abs{1-3}$};
                     \draw[<->, highlight6] (3, 2) -- (3, 1)  node [midway, right] {$\abs{2-1}$};
                 \end{tikzpicture}
                 \caption{Distance de Manhattan}
