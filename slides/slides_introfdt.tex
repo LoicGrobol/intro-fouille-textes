@@ -1812,7 +1812,7 @@
     \begin{figure}
         \tikzset{external/export=true}
         \begin{tikzpicture}
-            \begin{axis}[xmin=0, xmax=10000, ymin=0,
+            \begin{axis}[xmin=0, xmax=800000, ymin=0,
                          width=0.9\textwidth,
                          height=0.8\textheight,
                          xlabel={Taille de la collection},
@@ -1820,7 +1820,7 @@
                          title={Loi de Heaps : $y=K×x^β$},
                          scaled ticks=false,
                          ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}]
-                \addplot[highlighta, domain=0:10000, samples=1001] {40*x^0.5};
+                \addplot[highlighta, domain=0:800000, samples=1001] {40*x^0.5};
             \end{axis}
         \end{tikzpicture}
         \caption{Courbe d'une loi de Heaps}
