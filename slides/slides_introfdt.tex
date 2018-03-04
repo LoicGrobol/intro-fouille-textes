@@ -2235,21 +2235,24 @@
 
 \begin{frame}[fragile=singleslide]{Similarités : exemple de travail}
     On considère deux vecteurs $t_1=(v_{1,1}, … v_{1,n})$ et $t_2=(v_{2,1}, …, v_{2,n})$ représentant des documents
-    \begin{columns}
-    \column{0.2\textwidth}
-        \begin{figure}
-            \begin{tabu} to .8\linewidth {*{3}{X[m, c]}}
-                        & $a_1$ & $a_2$\\
-                $t_1$   & $3$ & $1$\\
-                $t_2$   & $1$ & $2$\\
-             \end{tabu}
 
-             Soit $t_1=\tvcord{3, 1}$ et $t_2=\tvcord{1, 2}$
+    Par exemple, si on utilise comme traits les fréquences de \emph{orange} et \emph{kiwi}, étant donné le fichier tabulaire suivant
+    \begin{columns}
+    \column{0.5\textwidth}
+        \begin{figure}
+            \begin{tabu} to .9\linewidth {*{3}{X[c]}}
+                \texttt{t}  & \texttt{orange} & \texttt{kiwi}\\
+                \hline
+                \texttt{1}  & \texttt{3}      & \texttt{1}\\
+                \texttt{2}  & \texttt{1}      & \texttt{2}\\
+            \end{tabu}
         \end{figure}
-    \column{0.8\textwidth}
+
+        On aura $t_1=\tvcord{3, 1}$ et $t_2=\tvcord{1, 2}$
+    \column{0.5\textwidth}
         \begin{figure}
             \tikzset{external/export=true}
-            \begin{tikzpicture}
+            \begin{tikzpicture}[true scale=0.8]
                 \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
 
                 \draw[->] (-0.5,0) -- (5.25, 0);
@@ -2335,8 +2338,8 @@
 
                     \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, below right] {$t₁$};
                     \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t₂$};
-                    \draw [->, highlight2] (3, 2) -- (1, 2) node [midway, above] {$\abs{1-3}$};
-                    \draw[->, highlight6] (3, 2) -- (3, 1)  node [midway, right] {$\abs{2-1}$};
+                    \draw [<->, highlight2] (3, 2) -- (1, 2) node [midway, above] {$\abs{1-3}$};
+                    \draw[<->, highlight6] (3, 2) -- (3, 1)  node [midway, right] {$\abs{2-1}$};
                     \draw [<->, highlight4] (1, 2) --  (3, 1)  node [midway, below left] {$3$};
                 \end{tikzpicture}
                 \caption{Distance de Manhattan}
@@ -2385,8 +2388,8 @@
 
                 \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, below right] {$t₁$};
                 \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t₂$};
-                \draw [<->, highlight2] (1, 2) --  (3, 2) node [midway, above] {$(1-3)$};
-                \draw[<->, highlight6] (3, 2) -- (3, 1)  node [midway, right] {$(2-1)$};
+                \draw [->, highlight2] (3, 2) -- (1, 2)  node [midway, above] {$(1-3)$};
+                \draw[->, highlight6] (3, 2) -- (3, 1)  node [midway, right] {$(2-1)$};
                 \draw [<->, highlight4] (1, 2) --  (3, 1)  node [midway, below left] {$√{5}$};
             \end{tikzpicture}
             \caption{Distance euclidienne}
