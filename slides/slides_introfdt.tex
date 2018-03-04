@@ -2275,8 +2275,8 @@
 \end{columns}
 \end{frame}
 
-% TODO: overlay equation uncover
-% TODO: distances comparisons (particularly minkovsky) : show distorted diagrams, + x→||u-v||_x curve
+% TODO: overlay equation uncover ?
+% TODO: distances comparisons (particularly minkovsky) : show distorted diagrams ?
 % TODO: for all examples → connect to real-world examples with word frequences
 \begin{frame}[fragile]{Distance de Manhattan}
     \begin{block}{Définition (distance de Manhattan)}
@@ -2326,7 +2326,7 @@
             \begin{figure}
                 \tikzset{external/export=true}
                 \begin{tikzpicture}[true scale=0.8]
-                    \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.4, 4.4);
+                    \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5, 4);
 
                     \draw[->] (-0.5,0) -- (5.25, 0);
                     \foreach \x in {1,...,5}
@@ -2455,7 +2455,7 @@
     \begin{block}{Définition (distance de Minkowski)}
         Pour tout $p⩾1$, on appelle \emph{distance de Minkowski\textsuperscript{1} de paramètre $p$} entre $t_1$ et $t_2$ le nombre
         \begin{equation}
-            \norm{t₂-t₁}_p =\left(∑_{k=1}^n\abs{v_{2,k}-v_{1,k}}^p\right)^{\frac{1}{p}}
+            \norm{t₂-t₁}_p ={\left(∑_{k=1}^n\abs{v_{2,k}-v_{1,k}}^p\right)}^{\frac{1}{p}}
         \end{equation}
     \end{block}
     \vspace{-1\bigskipamount}
@@ -2484,6 +2484,176 @@
         \caption{Distances de Minkowski pour notre exemple}
     \end{figure}
 \end{frame}
+
+\begin{frame}{Les maths en cinq secondes : produit scalaire}
+    \begin{block}{Définition (produit scalaire)}
+        On appelle \emph{produit scalaire de $t₁$ et $t₂$} le nombre
+        \begin{equation}
+            \innprod{t₁}{t₂} = \norm{t₁}₂×\norm{t₂}₂×\cosθ
+        \end{equation}
+        Où $θ$ est l'écart angulaire entre $t₁$ et $t₂$.
+    \end{block}
+    \begin{columns}
+    \column{.5\textwidth}
+        Dans un repère raisonnable, on a de plus
+        \begin{equation}
+            \innprod{t₁}{t₂} = ∑_k v_{1,k}v_{2,k}
+        \end{equation}
+        Soit pour notre exemple
+        \begin{equation}
+            \innprod{t₁}{t₂} = 3×1 + 1×2 = 5
+        \end{equation}
+    \column{.5\textwidth}
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[true scale=0.8]
+                \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (4, 3);
+
+                \draw[->] (-0.5,0) -- (4.25, 0);
+                \foreach \x in {1,...,4}
+                    \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+                \draw[->] (0, -0.5) -- (0, 3.25);
+
+                \foreach \y in {1,...,3}
+                    \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+                \draw (0, 0) node[below left] {\footnotesize $0$};
+
+                \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, below right] {$t₁$};
+                \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t₂$};
+
+                \draw [domain=18.4:60] plot ({cos(\x)}, {sin(\x)}) (0.9, 0.9) node {$θ$};
+            \end{tikzpicture}
+        \end{figure}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Les maths en cinq secondes : produit scalaire}
+    Intuitivement, le produit scalaire mesure la similarité des directions des vecteurs
+    \begin{columns}
+    \column{.5\textwidth}
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[true scale=0.8]
+                \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (4, 3);
+
+                \draw[->] (-0.5,0) -- (4.25, 0);
+                \foreach \x in {1,...,4}
+                    \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+                \draw[->] (0, -0.5) -- (0, 3.25);
+
+                \foreach \y in {1,...,3}
+                    \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+                \draw (0, 0) node[below left] {\footnotesize $0$};
+
+                \draw [->, highlighta, line width=2pt] (0,0) -- (3,0) node[midway, below right] {$t₁$};
+                \draw [->, highlight3, line width=2pt] (0,0) -- (0,2) node[midway, above left] {$t₂$};
+
+                \draw [domain=0:90] plot ({cos(\x)}, {sin(\x)}) (0.9, 0.9) node {$90$};
+            \end{tikzpicture}
+        \end{figure}
+        \vspace{-\bigskipamount}
+        Nul pour des vecteurs orthogonaux
+        \begin{equation}
+            \innprod{t₁}{t₂} =\norm{t₁}₂×\norm{t₂}₂×\underbrace{\cos 90}_{0} = 0
+        \end{equation}
+    \column{.5\textwidth}
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[true scale=0.8]
+                \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (4, 3);
+
+                \draw[->] (-0.5,0) -- (4.25, 0);
+                \foreach \x in {1,...,4}
+                    \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+                \draw[->] (0, -0.5) -- (0, 3.25);
+
+                \foreach \y in {1,...,3}
+                    \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+                \draw (0, 0) node[below left] {\footnotesize $0$};
+
+                \draw [->, highlighta, line width=2pt] (0,0) -- (3,2) node[midway, below right] {$t₁$};
+                \draw [->, highlight3, line width=2pt] (0,0) -- (1.5,1) node[midway, above left] {$t₂$};
+            \end{tikzpicture}
+        \end{figure}
+        \vspace{-\bigskipamount}
+        Maximal pour des vecteurs colinéaires
+        \begin{equation}
+            \innprod{t₁}{t₂} = \norm{t₁}₂×\norm{t₂}₂×\underbrace{\cos 0}_{1} = \norm{t₁}₂×\norm{t}₂
+        \end{equation}
+    \end{columns}
+    Il est négatif pour des vecteurs de sens opposés,  mais ça ne peut pas être le cas avec nos sacs de mots.
+\end{frame}
+
+\begin{frame}{Similarités cosinus}
+    On est tenté d'utiliser le produit scalaire de deux vecteurs comme mesure de similarité
+        \begin{itemize}
+            \item Si deux textes n'ont aucun mot en commun, les sacs de mots correspondants seront des vecteurs orthogonaux → similarité nulle
+        \end{itemize}
+    Mais le terme $\norm{t₁}₂×\norm{t}₂$ induit un bias
+        \begin{itemize}
+            \item Utiliser des fréquences ne garantit pas que la norme euclidienne vale $1$ !
+        \end{itemize}
+    On utilise donc plutôt des normalisations du produit scalaire.
+\end{frame}
+
+\begin{frame}{Similarité cosinus}
+    \begin{block}{Définition (Similarité cosinus)}
+        On appelle \emph{similarité cosinus des vecteur $t₁$ et $t₂$} le cosinus de l'écart angulaire entre $t₁$ et $t₂$.
+    \end{block}
+    Autrement dit $\cos θ$. Ce qui revient à calculer
+    \begin{equation}
+        \cos θ = \frac{\innprod{t₁}{t₂}}{\norm{t₁}₂×\norm{t₂}₂}
+    \end{equation}
+    Soit pour notre exemple
+    \begin{equation}
+        \cos θ = \frac{5}{√{5} + √{10}} = \frac{√2}{2}
+    \end{equation}
+
+    C'est la plus simple des normalisations du produit scalaire, et celle qu'on utilise en général.
+\end{frame}
+
+\begin{frame}{Autres normalisations}
+    \begin{itemize}
+        \item Mesure de Dice
+            \begin{equation}
+                \frac{\innprod{t₁}{t₂}}{\norm{t₁}₂+\norm{t₂}₂}
+            \end{equation}
+        \item Mesure de Jaccard
+            \begin{equation}
+                \frac{\innprod{t₁}{t₂}}{\norm{t₁+t₂}₂}
+            \end{equation}
+        \item Coefficient \emph{overlap}
+            \begin{equation}
+                \frac{\innprod{t₁}{t₂}}{\min\mleft(\norm{t₁}₂, \norm{t₂}₂\mright)}
+            \end{equation}
+    \end{itemize}
+
+Attention : en général, ces mesures ne seront pas nécessairement inférieures à $1$.
+\end{frame}
+
+\begin{frame}{Autres normalisations : versions booléennes}
+    Si les coordonnées des vecteurs indiquent la présence d'un mot plutôt que sa fréquence, on a
+    \begin{itemize}
+        \item Mesure de Dice
+            \begin{equation}
+                \frac{\#(t₁∩t₂)}{\#t₁+\#t₂}
+            \end{equation}
+        \item Mesure de Jaccard
+            \begin{equation}
+                \frac{\#(t₁∩t₂)}{\#(t₁∪t₂)}
+            \end{equation}
+        \item Coefficient \emph{overlap}
+            \begin{equation}
+                \frac{\#(t₁∩t₂)}{\min(\#t₁, \#t₂)}
+            \end{equation}
+    \end{itemize}
+Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
+\end{frame}
+
+
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
