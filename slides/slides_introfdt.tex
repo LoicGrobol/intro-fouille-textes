@@ -728,7 +728,7 @@
         \item Reposent sur des connaissances expertes
         \item Adaptés dans des contextes stables et non-adverses
         \item Peu de robustesse aux changements et à l'hétérogénéité
-        \item Dans un contexte adverse (e.g. spam vs. anti-spam), gare à la course de la reine rouge !
+        \item Dans un contexte adverse (e.g.\ spam vs.\ anti-spam), gare à la course de la reine rouge !
     \end{itemize}
     Attention : ça ne signifie pas que c'est une impasse !
     \begin{itemize}
@@ -766,7 +766,7 @@
                 \item[→] Permet de concentrer les besoins en connaissances expertes
             \end{itemize}
         \item En général plus robustes aux données irrégulières et à l'hétérogénéité
-        \item Plus facilement transférable (e.g. d'une langue à une autre)
+        \item Plus facilement transférable (e.g.\ d'une langue à une autre)
     \end{itemize}
     Inconvénients
     \begin{itemize}
@@ -930,8 +930,8 @@
     \end{itemize}
     Mais aussi les détecteurs de similarité
     \begin{itemize}
-        \item Détection de plagiat e.g. Compilatio (\shorturl{compilatio.net})
-        \item Détection de doublons e.g. sur le réseau StackExchange
+        \item Détection de plagiat e.g.\ Compilatio (\shorturl{compilatio.net})
+        \item Détection de doublons e.g.\ sur le réseau StackExchange
     \end{itemize}
     Note : avoir défini précisément ce que « pertinent » veut dire n'est pas forcément nécessaire ! Il suffit d'avoir défini un \textit{Gold}.
 \end{frame}
@@ -2062,7 +2062,7 @@
 
     \begin{itemize}
         \item \emph{\textbf{T}erm \textbf{F}requency $×$ \textbf{I}nverse \textbf{D}ocument \textbf{F}requency}
-        \item $\TF(i,j) = n_{i,j}$ ou $\TF(i,j) = \frac{n_{i,j}}{\sum_kn_{i,j}}$
+        \item $\TF(i,j) = n_{i,j}$ ou $\TF(i,j) = \frac{n_{i,j}}{\sum_k n_{i,j}}$
         \item
             \only<1>{
                 \begin{equation}
@@ -2223,12 +2223,12 @@
     \begin{itemize}
         \item De quelques-unes à plusieurs centaines
         \item Donc les vecteurs considérés seront de grande dimension
-        \item On va pour se forger une intuition géométrique se restreindre au cas de la dimension $2$
+        \item Mais pour l'intuition on va se retreindre à la dimension $2$ : le plan
     \end{itemize}
 \end{frame}
 
 \begin{frame}[standout]
-    \textit{To deal with a $14$-dimensional space, visualize a $3$-D space and say 'fourteen' to yourself very loudly. Everyone does it.}
+    \textit{To deal with a $14$-dimensional space, visualize a $3$-D space and say `fourteen' to yourself very loudly. Everyone does it.}
 
     Geoffrey Hinton
 \end{frame}
@@ -2303,21 +2303,24 @@
     \end{columns}
     }
     \only<2>{
+        \vspace{-1\bigskipamount}
         Pour notre exemple
+        \vspace{-1\smallskipamount}
         \begin{columns}
-        \column{.5\textwidth}
+        \column{.55\textwidth}
             \begin{align}
-                \norm{t_2-t_1}_1
+                \norm{\textcolor{highlight3}{t₂}-\textcolor{highlighta}{t₁}}₁
                     &= ∑_{k=1}^n\abs{v_{2,k}-v_{1,k}}\\
                     &= \textcolor{highlight2}{\abs{v_{2,1}-v_{1,1}}}+\textcolor{highlight6}{\abs{v_{2,2}-v_{1,2}}}\\
                     &= \textcolor{highlight2}{\abs{1-3}}+\textcolor{highlight6}{\abs{2-1}}\\
                     &= 2+1\\
-                    &= 3
+                    &= \textcolor{highlight4}{3}
             \end{align}
-        \column{.5\textwidth}
+        \column{.45\textwidth}
+            \vspace{-1.5\bigskipamount}
             \begin{figure}
                 \tikzset{external/export=true}
-                \begin{tikzpicture}[true scale=0.7]
+                \begin{tikzpicture}[true scale=0.8]
                     \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.4, 4.4);
 
                     \draw[->] (-0.5,0) -- (5.25, 0);
@@ -2330,10 +2333,11 @@
 
                     \draw (0, 0) node[below left] {\footnotesize $0$};
 
-                    \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, below right] {$t_1$};
-                    \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, right] {$t_2$};
-                    \draw [<->, highlight2] (1, 2) --  (3, 2) node [midway, above] {$\abs{1-3}$};
-                    \draw[<->, highlight6] (3, 2) -- (3, 1)  node [midway, right] {$\abs{2-1}$};
+                    \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, below right] {$t₁$};
+                    \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t₂$};
+                    \draw [->, highlight2] (3, 2) -- (1, 2) node [midway, above] {$\abs{1-3}$};
+                    \draw[->, highlight6] (3, 2) -- (3, 1)  node [midway, right] {$\abs{2-1}$};
+                    \draw [<->, highlight4] (1, 2) --  (3, 1)  node [midway, below left] {$3$};
                 \end{tikzpicture}
                 \caption{Distance de Manhattan}
             \end{figure}
@@ -2341,49 +2345,53 @@
     }
 \end{frame}
 
-\begin{frame}{Distance eulérienne}
-    \begin{block}{Définition (distance eulérienne)}
-        On appelle \emph{distance eulérienne} entre $t_1$ et $t_2$ le nombre
+\begin{frame}{Distance euclidienne}
+    \begin{block}{Définition (distance euclidienne)}
+        On appelle \emph{distance euclidienne} entre $t_1$ et $t_2$ le nombre
         \begin{equation}
-            \norm{t_2-t_1}_2 = √{∑_{k=1}^n(v_{2,k}-v_{1,k})²}
+            \norm{t₂-t₁}₂ = √{∑_{k=1}^n(v_{2,k}-v_{1,k})²}
         \end{equation}
     \end{block}
+    \vspace{-1.5\bigskipamount}
+    C'est la distance usuelle dans le plan. Pour notre exemple :
+    \vspace{-1\smallskipamount}
+    \begin{columns}
+    \column{.55\textwidth}
+        \begin{align}
+            \norm{\textcolor{highlight3}{t₂}-\textcolor{highlighta}{t₁}}₂
+                &= √{∑_{k=1}^n(v_{2,k}-v_{1,k})²}\\
+                &= √{\textcolor{highlight2}{(v_{2,1}-v_{1,1})}² +
+                     \textcolor{highlight6}{(v_{2,2}-v_{1,2})}²}\\
+                &= √{\textcolor{highlight2}{(1-3)}²+\textcolor{highlight6}{(2-1)}²}\\
+                &= √{2²+1²}\\
+                &= \textcolor{highlight4}{√{5}}
+        \end{align}
+    \column{.45\textwidth}
+        \vspace{-1\bigskipamount}
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[true scale=0.8]
+                \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
 
-    C'est la distance usuelle dans le plan.
+                \draw[->] (-0.5,0) -- (5.25, 0);
+                \foreach \x in {1,...,5}
+                    \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+                \draw[->] (0, -0.5) -- (0, 4.25);
 
-    Pour notre exemple
-    % \begin{columns}
-    % \column{.4\textwidth}
-    %     \begin{align}
-    %         \norm{t_2-t_1}_1
-    %             &= √{∑_{k=1}^n(v_{2,k}-v_{1,k})²}\\
-    %             &= √{(v_{2,1}-v_{1,1})²+(v_{2,2}-v_{1,2})²}\\
-    %             &= √{(1-3)²+(2-1)²}\\
-    %             &= √{2²+1²}\\
-    %             &= √{5}
-    %     \end{align}
-    % \column{.6\textwidth}
-    %     \begin{figure}
-    %         % \tikzset{external/export=true}
-    %         \begin{tikzpicture}
-    %             \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
-    %
-    %             \draw[->] (-0.5,0) -- (5.25, 0);
-    %             \foreach \x in {1,...,5}
-    %                 \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
-    %             \draw[->] (0, -0.5) -- (0, 4.25);
-    %
-    %             \foreach \y in {1,...,4}
-    %                 \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
-    %
-    %             \draw (0, 0) node[below left] {\footnotesize $0$};
-    %
-    %             \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, above] {$t_1$};
-    %             \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t_2$};
-    %             \draw [<->] (1, 2) --  (3, 1)  node [midway, above right] {$√{5}$};
-    %         \end{tikzpicture}
-    %         \caption{Distance Euclidienne}
-    % \end{columns}
+                \foreach \y in {1,...,4}
+                    \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+                \draw (0, 0) node[below left] {\footnotesize $0$};
+
+                \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, below right] {$t₁$};
+                \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t₂$};
+                \draw [<->, highlight2] (1, 2) --  (3, 2) node [midway, above] {$(1-3)$};
+                \draw[<->, highlight6] (3, 2) -- (3, 1)  node [midway, right] {$(2-1)$};
+                \draw [<->, highlight4] (1, 2) --  (3, 1)  node [midway, below left] {$√{5}$};
+            \end{tikzpicture}
+            \caption{Distance euclidienne}
+        \end{figure}
+    \end{columns}
 \end{frame}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
