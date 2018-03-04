@@ -243,6 +243,7 @@
 % Schémas de tâches
 \tikzset{
     >=stealth,
+    hair lines/.style={line width = 0.05pt, lightgray},
     data/.style={draw, ellipse},
     program/.style={draw, rectangle},
     accent on/.style={alt={#1{draw=accent, text=accent, thick}{draw}}},
@@ -2311,9 +2312,9 @@
         Pour notre exemple
         \vspace{-1\smallskipamount}
         \begin{columns}
-        \column{.55\textwidth}
+        \column{.6\textwidth}
             \begin{align}
-                \norm{\textcolor{highlight3}{t₂}-\textcolor{highlighta}{t₁}}₁
+                \norm{\textcolor{highlight3}{t₂}-\textcolor{highlighta}{t₁}}
                     &= ∑_{k=1}^n\abs{v_{2,k}-v_{1,k}}\\
                     &= \textcolor{highlight2}{\abs{v_{2,1}-v_{1,1}}}+\textcolor{highlight6}{\abs{v_{2,2}-v_{1,2}}}\\
                     &= \textcolor{highlight2}{\abs{1-3}}+\textcolor{highlight6}{\abs{2-1}}\\
@@ -2351,16 +2352,16 @@
 
 \begin{frame}{Distance euclidienne}
     \begin{block}{Définition (distance euclidienne)}
-        On appelle \emph{distance euclidienne} entre $t_1$ et $t_2$ le nombre
+        On appelle \emph{distance euclidienne\textsuperscript{1}} entre $t_1$ et $t_2$ le nombre
         \begin{equation}
             \norm{t₂-t₁}₂ = √{∑_{k=1}^n(v_{2,k}-v_{1,k})²}
         \end{equation}
     \end{block}
     \vspace{-1.5\bigskipamount}
     C'est la distance usuelle dans le plan. Pour notre exemple :
-    \vspace{-1\smallskipamount}
+    \vspace{-1\bigskipamount}
     \begin{columns}
-    \column{.55\textwidth}
+    \column{.65\textwidth}
         \begin{align}
             \norm{\textcolor{highlight3}{t₂}-\textcolor{highlighta}{t₁}}₂
                 &= √{∑_{k=1}^n(v_{2,k}-v_{1,k})²}\\
@@ -2370,11 +2371,10 @@
                 &= √{2²+1²}\\
                 &= \textcolor{highlight4}{√{5}}
         \end{align}
-    \column{.45\textwidth}
-        \vspace{-1\bigskipamount}
+    \column{.5\textwidth}
         \begin{figure}
             \tikzset{external/export=true}
-            \begin{tikzpicture}[true scale=0.8]
+            \begin{tikzpicture}[true scale=0.85]
                 \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
 
                 \draw[->] (-0.5,0) -- (5.25, 0);
@@ -2396,6 +2396,93 @@
             \caption{Distance euclidienne}
         \end{figure}
     \end{columns}
+    \vspace{-1\bigskipamount}
+    {\tiny 1. Euclide d'Alexandrie, IIIè s AEC}
+\end{frame}
+
+\begin{frame}{Distance de Tchebychev}
+    \begin{block}{Définition (distance de Tchebychev)}
+        On appelle \emph{distance de Tchebychev\textsuperscript{1}} entre $t_1$ et $t_2$ le nombre
+        \begin{equation}
+            \norm{t₂-t₁}_∞ = \max_{1⩽k⩽n}\abs{v_{2,k}-v_{1,k}}
+        \end{equation}
+    \end{block}
+    \vspace{-1\smallskipamount}
+    \begin{columns}
+    \column{.65\textwidth}
+        \begin{align}
+            \norm{\textcolor{highlight3}{t₂}-\textcolor{highlighta}{t₁}}_∞
+                &= \max_{1⩽k⩽n}\abs{v_{2,k}-v_{1,k}}\\
+                &= \max_{1⩽k⩽n}\mleft(
+                    \textcolor{highlight2}{\abs{v_{2,1}-v_{1,1}}},
+                    \textcolor{highlight6}{\abs{v_{2,2}-v_{1,2}}}\mright)\\
+                &= \max_{1⩽k⩽n}\mleft(
+                    \textcolor{highlight2}{\abs{1-3}},
+                    \textcolor{highlight6}{\abs{2-1}}\mright)\\
+                &= \max_{1⩽k⩽n}(2, 1)\\
+                &= \textcolor{highlight4}{2}
+        \end{align}
+    \column{.5\textwidth}
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[true scale=0.85]
+                \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+
+                \draw[->] (-0.5,0) -- (5.25, 0);
+                \foreach \x in {1,...,5}
+                    \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+                \draw[->] (0, -0.5) -- (0, 4.25);
+
+                \foreach \y in {1,...,4}
+                    \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+                \draw (0, 0) node[below left] {\footnotesize $0$};
+
+                \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, below right] {$t₁$};
+                \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t₂$};
+                \draw [->, highlight2] (3, 2) -- (1, 2)  node [midway, above] {$\abs{1-3}$};
+                \draw[->, highlight6] (3, 2) -- (3, 1)  node [midway, right] {$\abs{2-1}$};
+                \draw [<->, highlight4] (1, 2) --  (3, 1)  node [midway, below left] {$2$};
+            \end{tikzpicture}
+            \caption{Distance de Tchebychev}
+        \end{figure}
+    \end{columns}
+    \vspace{-1\smallskipamount}
+    {\tiny 1. Пафну́тий Льво́вич Чебышёв, 1821–1894}
+\end{frame}
+
+\begin{frame}{Distances de Minkowski}
+    \begin{block}{Définition (distance de Minkowski)}
+        Pour tout $p⩾1$, on appelle \emph{distance de Minkowski\textsuperscript{1} de paramètre $p$} entre $t_1$ et $t_2$ le nombre
+        \begin{equation}
+            \norm{t₂-t₁}_p =\left(∑_{k=1}^n\abs{v_{2,k}-v_{1,k}}^p\right)^{\frac{1}{p}}
+        \end{equation}
+    \end{block}
+    \vspace{-1\bigskipamount}
+    Pour $p=1$ on retrouve la distance de Manhattan, pour $p=2$ la distance euclidienne, et pour $p→+∞$, la distance de Minkowski tend vers la distance de Tchebychev.
+
+    Intuitivement, pour $p=1$, elle traite également tous les écarts entre coordonnées, pour $p=∞$, elle ne conserve que le plus grand écart, et les autres $p$ donnent une interpolation entre ces deux extrêmes.
+    \vskip0pt plus 1fill
+    {\tiny 1. Hermann Minkowski, 1864–1909}
+\end{frame}
+
+\begin{frame}{Distances de Minkowski}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=1, xmax=6, ymin=0,
+                         width=0.9\textwidth,
+                         height=0.8\textheight,
+                         xlabel={$p$},
+                         ylabel={$\norm{t₂-t₁}_p$},
+                         title={Distances de Minkowski : $y=(2^x+1^x)^{\frac{1}{x}}$},
+                         scaled ticks=false,
+                         ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}]
+                \addplot[highlighta, domain=1:6, samples=1001] {(2^x+1)^(1/x)};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Distances de Minkowski pour notre exemple}
+    \end{figure}
 \end{frame}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
