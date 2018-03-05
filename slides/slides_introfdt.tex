@@ -291,6 +291,10 @@
 \DeclareMathOperator{\TF}{TF}
 \DeclareMathOperator{\IDF}{IDF}
 
+\ExplSyntaxOn
+    \DeclareExpandableDocumentCommand \eval { m } { \fp_eval:n { #1 } }
+\ExplSyntaxOff
+
 
 % ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████
 % ██   ██ ██    ██ ██      ██    ██ ████  ████ ██      ████   ██    ██
@@ -330,7 +334,7 @@
 \end{frame}
 
 \begin{frame}{Projet final}
-    « Utiliser des programmes d'apprentissage automatique pour un tâche de classification de textes »
+    « Utiliser des programmes d'apprentissage automatique pour un tâche de classification de textes »
     \begin{itemize}
         \item Définir le sujet
         \item Constituer le corpus de travail
@@ -1114,7 +1118,7 @@
 
 \subsection{La classification}
 
-\begin{frame}[fragile=singleslide]{Classification}
+\begin{frame}[label=classif,fragile]{Classification}
     La \emph{classification} est la tâche consistant à \alert{répartir} des données dans un ensemble de classes.
     \begin{itemize}
         \item « Détecter les spams dans un ensemble d'emails »
@@ -1482,7 +1486,7 @@
     Puisque la RI consiste à déterminer parmi un ensemble de documents lesquels sont pertinents, on peut la voir comme un problème de classification binaire.
 
     \begin{itemize}
-        \item On répartit les documents entre les deux classes «\,pertinent\,» et « non-pertinent »
+        \item On répartit les documents entre les deux classes « pertinent » et « non-pertinent »
         \item La requête, qui était une donnée, devient une ressource
     \end{itemize}
     \vskip-1em
@@ -2594,7 +2598,7 @@
         \end{itemize}
     Mais le terme $\norm{t₁}₂×\norm{t}₂$ induit un bias
         \begin{itemize}
-            \item Utiliser des fréquences ne garantit pas que la norme euclidienne vale $1$ !
+            \item Utiliser des fréquences ne garantit pas que la norme euclidienne vaille $1$ !
         \end{itemize}
     On utilise donc plutôt des normalisations du produit scalaire.
 \end{frame}
@@ -2653,7 +2657,207 @@ Attention : en général, ces mesures ne seront pas nécessairement inférieur
 Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
 \end{frame}
 
+%  ██████ ██       █████  ███████ ███████ ██ ███████
+% ██      ██      ██   ██ ██      ██      ██ ██
+% ██      ██      ███████ ███████ ███████ ██ █████
+% ██      ██      ██   ██      ██      ██ ██ ██
+%  ██████ ███████ ██   ██ ███████ ███████ ██ ██
 
+\section{Classification}
+\againframe{classif}
+
+\begin{frame}{Classification par règles expertes}
+    La façon traditionnelle de faire de la classification
+    \begin{itemize}
+        \item Faire écrire par des experts du domaine un ensemble de règles associant un exemple à une classe
+        \item Exemple : classification du sentiment
+            \begin{itemize}
+                \item Établir un lexique affectif mot → $±1$
+                \item Associer à chaque texte la somme des polarités de ses termes
+                \item Un texte est positif si la somme est positive, négatif sinon
+            \end{itemize}
+        \item Qu'en pensez-vous ?
+        \item Pour notre exemple de classification culture/société, comment faire ?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Classification par apprentissage automatique}
+    \begin{block}{Rappel}
+        Un programme d'apprentissage automatique est un programme générant à partir d'\textcolor{highlight7}{exemples} traités par des humains un \textcolor{highlight3}{modèle} qui sert de ressource à un \textcolor{highlighta}{programme} réalisant une tâche.
+    \end{block}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[scale=0.9, every node/.style={transform shape}]
+            \node[data] (in) {Entrée};
+            \node[program, highlight=a, right=.75cm of in, text width=10ex] (prog) {Programme réalisant la tâche};
+            \node[data, right=.75cm of prog] (out) {Résultat};
+            \node[program, highlight=6, above=1cm of prog, text width=13ex] (progapp) {Programme d'apprentissage};
+            \node[data, highlight=3, right=.75cm of progapp] (mod) {Modèle};
+            \node[data, highlight=7, left=.75cm of progapp] (train) {Exemples};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (mod) |- ($(prog.north)+(0, 0.5cm)$) -| (prog.north);
+            \draw[->] (train) -- (progapp);
+            \draw[->] (progapp) -- (mod);
+        \end{tikzpicture}
+        \caption{Schéma d'une approche par apprentissage automatique}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Exemple : régression}
+    « Sachant que ma maison fait $s\si{m\square}$, en fonction du marché, quel prix puis-je en attendre ? »
+    \begin{description}
+        \item[Hypothèse] Il existe une fonction $f$ qui à la surface $x$ d'une maison associe son prix de vente
+        \item[Données] Le prix de vente de $8$ maisons et leurs surfaces respectives
+        \item[Objectif] Déterminer l'expression de $f$ et en déduire $f(s)$, le prix de vente de ma maison
+    \end{description}
+    \begin{itemize}
+        \item[→] Problème : $f$ pourrait avoir n'importe quelle forme !
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Choix d'une famille de fonctions}
+    Problème : $f$ pourrait avoir n'importe quelle forme !
+    \begin{itemize}
+        \item[→] On choisit donc une famille de fonctions et y cherche celle qui semble le mieux correspondre à nos exemples
+        \item Par exemple avec des polynômes :
+            \begin{equation}
+                f(x) = a₀ + a₁x + a₂x²+ … + a_nx^n
+            \end{equation}
+        \item En général « correspondre » au sens des moindres carrés
+    \end{itemize}
+    \textbf{Vocabulaire} Le degré (fixé manuellement) est un \alert{hyperparamètre}, les coefficients $a_i$ appris automatiquement sont des \alert{paramètres}.
+    Déterminer les paramètres qui minimisent le coût (ici la distance entre le modèle est les exemple) est une tâche d'\alert{optimisatio}n.
+
+    Étant donné une surface, on peut alors donner le prix correspondant : on donc a appris à prédire les prix !
+\end{frame}
+
+\begin{frame}{Régression linéaire}
+    \vspace{-1\bigskipamount}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=0, xmax=800, ymin=0, ymax=600000,
+                         width=\textwidth,
+                         height=0.8\textheight,
+                         xlabel={Surface},
+                         ylabel={Prix},
+                         title={Régression linéaire : $y=ax+b$},
+                         scaled ticks=false,
+                         ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}]
+                \addplot[
+                    only marks
+                ] table [x index=0, y index=1, header=false, row sep=crcr]{
+                    150	200000\\
+                    155	210000\\
+                    160	250000\\
+                    170	300000\\
+                    200	310000\\
+                    260	350000\\
+                    300	400000\\
+                    600	405000\\
+                };
+                \addplot[highlighta, domain=0:800, samples=1001] {402.28*x+202807.17};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Polynôme de degré $1$ (linéaire)}
+    \end{figure}
+
+    Voir aussi \shorturl{ggbm.at/TagmZdxN}
+\end{frame}
+
+\begin{frame}{Régression quadratique}
+    \vspace{-1\bigskipamount}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=0, xmax=800, ymin=0, ymax=600000,
+                         width=\textwidth,
+                         height=0.8\textheight,
+                         xlabel={Surface},
+                         ylabel={Prix},
+                         title={Régression quadratique : $y=ax²+bx+c$},
+                         scaled ticks=false,
+                         ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}]
+                \addplot[
+                    only marks
+                ] table [x index=0, y index=1, header=false, row sep=crcr]{
+                    150	200000\\
+                    155	210000\\
+                    160	250000\\
+                    170	300000\\
+                    200	310000\\
+                    260	350000\\
+                    300	400000\\
+                    600	405000\\
+                };
+                \addplot[highlighta, domain=0:800, samples=1001] {-2.56*x^2+2319.29*x-64113.23};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Polynôme de degré $2$ (quadratique)}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Régression polynomiale}
+    \vspace{-1\bigskipamount}
+    \begin{figure}
+        % \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=0, xmax=800, ymin=0, ymax=600000,
+                         restrict y to domain=-1000:700000,
+                         width=\textwidth,
+                         height=0.8\textheight,
+                         xlabel={Surface},
+                         ylabel={Prix},
+                         title={$y=a₀ + a₁x + a₂x²+ … + a₆x⁶$},
+                         scaled ticks=false,
+                         ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}
+                         ]
+                \addplot[
+                    only marks
+                ] table [x index=0, y index=1, header=false, row sep=crcr]{
+                    150	200000\\
+                    155	210000\\
+                    160	250000\\
+                    170	300000\\
+                    200	310000\\
+                    260	350000\\
+                    300	400000\\
+                    600	405000\\
+                };
+                \addplot[highlighta, domain=100:310, samples=1001] {9.133693238227375E-7*x^6-0.0015210072640020665*x^5+0.9901617434548338*x^4-326.9727250825201*x^3+58224.97189714596*x^2-5327933.125949258*x+196687335.202412};
+                \addplot[highlighta, domain=595:605, samples=1001] {9.133693238227375E-7*x^6-0.0015210072640020665*x^5+0.9901617434548338*x^4-326.9727250825201*x^3+58224.97189714596*x^2-5327933.125949258*x+196687335.202412};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Polynôme de degré $6$}\label{fig|overfit}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Surapprentissage}
+    La figure \ref{fig|overfit} est un exemple de cas de \alert{surapprentisage} (\emph{overfitting})
+    \begin{itemize}
+        \item Avoir choisi le degré $6$ permet de passer exactement par tous les points d'entraînement
+        \item Mais le modèle est très mauvais !
+    \end{itemize}
+    Comment trouver un modèle \emph{vraiment} bon ?
+    \begin{itemize}
+        \item En limitant le nombre de paramètres
+        \item En limitant la précision des paramètres
+        \item Par le choix des hyperparamètres
+        \item En utilisant un ensemble de développement
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{« Automatique » ?}
+    Il reste à l'humain à
+    \begin{itemize}
+        \item Choisir une modélisation
+        \item Choisir un espace de recherche
+        \item Fixer les hyperparamètres
+        \item Préparer les données d'apprentissage
+    \end{itemize}
+    « \emph{lThere is no free lunch} »
+\end{frame}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
