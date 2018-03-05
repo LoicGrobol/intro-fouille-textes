@@ -12,7 +12,7 @@ def nettoyage(texte):
     texte = re.sub(r"[&%!?\|\"{\(\[|_\)\]},\.;/:§»«”“‘…–—−]", '', texte)
     texte = re.sub(r'\d', '', texte)
     texte = texte.replace("’", "'")
-    texte = texte.replace("'", r"\' ")
+    texte = texte.replace("'", "' ")
     return texte
 
 
@@ -20,11 +20,11 @@ def lecture(nom_fichier):
     with open(nom_fichier, "r") as fichier:
         text = fichier.read()
     text = nettoyage(text)
-    return re.split(r"[\s\.]+", text)
+    return [w.lower() for w in re.split(r"[\s\.]+", text) if w]
 
 
 def vocabulaire(liste_fichiers, mots_vides):
-    vocab = set(mot.lower()
+    vocab = set(mot
                 for fichier in liste_fichiers
                 for mot in lecture(fichier)
                 if mot not in mots_vides)
@@ -52,7 +52,8 @@ def process(corpus_path, out_path=None, boolean=False, fichier_mots_vides=None):
     v = vocabulaire(pathlib.Path(dossier).glob('*/*.txt'), liste_mots_vides)
     # ecriture des donnees au format .arff dans la variable sortie
     sortie = ['@relation corpus']
-    sortie.append('\n'.join(f"@attribute '{mot}' numeric" for mot in v))
+    sortie.append('\n'.join("@attribute '{m}' numeric".format(m=mot.replace("'", r"\'"))
+                            for mot in v))
     sortie.append(f"@attribute 'classe' {{{','.join(etiquettes)}}}")
     sortie.append("@data")
     for nom in etiquettes:
@@ -94,7 +95,7 @@ def main_entry_point(argv=None):
 
     choix = None
     while choix not in ('1', '2'):
-        choix = input("représentation booléenne (taper 1) ou en nombre d\'occurrences (taper 2) ? ")
+        choix = input("Représentation booléenne (taper 1) ou en nombre d'occurrences (taper 2) ? ")
     process(corpus_path, boolean=choix == 1, fichier_mots_vides=fichier_mots_vides)
 
 
