@@ -90,6 +90,7 @@ def main_entry_point(argv=None):
         return process(args.corpus_path, args.out_path, args.boolean, args.mots_vides)
 
     # Legacy interactive mode
+    print('Mode interactif (legacy). Utiliser `vectorisation.py -h` pour le mode CLI.`')
     corpus_path = input("Nom du dossier contenant le corpus : ")
     fichier_mots_vides = input("Nom du fichier de mots vides (se terminant par .txt) : ")
 
