@@ -8,6 +8,11 @@
   - [Polycopié du cours](https://loicgrobol.github.io/intro-fouille-textes/poly/poly.pdf)
   - [Slides du cours](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/slides_introfdt.pdf)
 
+## Outils et données
+
+  - [Données d'exemple](https://loicgrobol.github.io/intro-fouille-textes/data.zip)
+  - [Script de vectorisation](https://loicgrobol.github.io/intro-fouille-textes/tools/vectorisation.py)
+
 ## Liens utiles
 
   - [Le site du projet Weka](https://www.cs.waikato.ac.nz/ml/weka/)
