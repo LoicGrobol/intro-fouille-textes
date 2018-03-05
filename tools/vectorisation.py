@@ -1,11 +1,11 @@
 #! /usr/bin/env python3
 
-import glob
-import os
+import pathlib
 import re
 import sys
 
 from collections import Counter
+
 
 def nettoyage(texte):
     texte = re.sub(r"[&%!?\|\"{\(\[|_\)\]},\.;/:§»«”“‘…–—−]", '', texte)
@@ -41,48 +41,31 @@ def construire_vecteur(voc_ref, mots_fichier, representation):
 def main_entry_point(argv=sys.argv):
     # programme principal
     # demande de saisie du nom du dossier principal et du fichier de mots vides
-    dossier = input("Nom du dossier contenant le corpus : ")
+    dossier = pathlib.Path(input("Nom du dossier contenant le corpus : "))
     fichier_mots_vides = input("Nom du fichier de mots vides (se terminant par .txt) : ")
     liste_mots_vides = lecture(fichier_mots_vides)
     choix = None
     while (choix not in ('1', '2')):
         choix = input("représentation booléenne (taper 1) ou en nombre d\'occurrences (taper 2) ? ")
     # chaque sous-dossier du dossier principal est une etiquette de classe
-    etiquettes = os.listdir(dossier)
-    if '.DS_Store' in etiquettes:
-        etiquettes.remove('.DS_Store')
-    os.chdir(dossier)
-    les_fichiers = []
-    for nom in etiquettes:
-        os.chdir(nom)
-        liste = glob.glob("*.txt")
-        for fichier in liste:
-            nom_fichier = nom + "/" + fichier
-            les_fichiers.append(nom_fichier)
-        os.chdir("../")
-    # construction de l'espace de representation
-    v = vocabulaire(les_fichiers, liste_mots_vides)
+    etiquettes = [d.name for d in dossier.iterdir() if d.is_dir]
+    v = vocabulaire(pathlib.Path(dossier).glob('*/*.txt'), liste_mots_vides)
     # ecriture des donnees au format .arff dans la variable sortie
-    sortie = '@relation corpus\n'
-    sortie += '\n'.join(f"@attribute '{mot}' numeric" for mot in v)
-    sortie += '\n'
-    sortie += "@attribute 'classe' {"
-    sortie += ','.join(etiquettes)
-    sortie += "}\n"
-    sortie += "@data\n"
+    sortie = ['@relation corpus']
+    sortie.append('\n'.join(f"@attribute '{mot}' numeric" for mot in v))
+    sortie.append(f"@attribute 'classe' {{{','.join(etiquettes)}}}")
+    sortie.append("@data")
     for nom in etiquettes:
-        os.chdir(nom)
-        liste = glob.glob("*.txt")
+        liste = (dossier/nom).glob("*.txt")
         for fichier in liste:
             liste_mots = lecture(fichier)
             vecteur = construire_vecteur(v, liste_mots, choix)
-            sortie += ','.join(map(str, vecteur))
-            sortie += ',' + nom + "\n"
-        os.chdir("../")
-    os.chdir("../")
+            vecteur.append(nom)
+            sortie.append(','.join(map(str, vecteur)))
+
     # ecriture du contenu de la variable dans le fichier de sortie
-    with open('fichier-resultat.arff', 'w') as fichier_sortie:
-        fichier_sortie.write(sortie)
+    with open(dossier.parent/'fichier-resultat.arff', 'w') as fichier_sortie:
+        fichier_sortie.write('\n'.join(sortie))
 
     print('fichier-resultat.arff produit !')
 
