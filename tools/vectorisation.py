@@ -61,8 +61,8 @@ def process(corpus_path, out_path=None, boolean=False, fichier_mots_vides=None):
     classes = [d.name for d in class_dirs]
     sortie.append(f"@attribute 'classe' {{{','.join(classes)}}}")
     sortie.append("@data")
-    for c in class_dirs:
-        documents = c.glob("*.txt")
+    for c in sorted(class_dirs):
+        documents = sorted(c.glob("*.txt"))
         for d in documents:
             voc_d = lecture(d)
             vecteur = construire_vecteur(voc_all, voc_d, boolean)
