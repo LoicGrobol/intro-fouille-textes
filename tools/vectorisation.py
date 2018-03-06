@@ -5,6 +5,8 @@ import pathlib
 import re
 import sys
 
+import itertools as it
+
 from collections import Counter
 
 
@@ -47,21 +49,24 @@ def process(corpus_path, out_path=None, boolean=False, fichier_mots_vides=None):
         liste_mots_vides = []
     else:
         liste_mots_vides = lecture(fichier_mots_vides)
-    # chaque sous-dossier du dossier principal est une etiquette de classe
-    etiquettes = [d.name for d in dossier.iterdir() if d.is_dir]
-    v = vocabulaire(pathlib.Path(dossier).glob('*/*.txt'), liste_mots_vides)
+    class_dirs = [d for d in dossier.iterdir()
+                  if d.is_dir and not d.name.startswith('.')]
+    voc_all = vocabulaire(it.chain.from_iterable(d.glob('*.txt') for d in class_dirs),
+                          liste_mots_vides)
     # ecriture des donnees au format .arff dans la variable sortie
     sortie = ['@relation corpus']
     sortie.append('\n'.join("@attribute '{m}' numeric".format(m=mot.replace("'", r"\'"))
-                            for mot in v))
-    sortie.append(f"@attribute 'classe' {{{','.join(etiquettes)}}}")
+                            for mot in voc_all))
+    # chaque sous-dossier du dossier principal est une etiquette de classe
+    classes = [d.name for d in class_dirs]
+    sortie.append(f"@attribute 'classe' {{{','.join(classes)}}}")
     sortie.append("@data")
-    for nom in etiquettes:
-        liste = (dossier/nom).glob("*.txt")
-        for fichier in liste:
-            liste_mots = lecture(fichier)
-            vecteur = construire_vecteur(v, liste_mots, boolean)
-            vecteur.append(nom)
+    for c in class_dirs:
+        documents = c.glob("*.txt")
+        for d in documents:
+            voc_d = lecture(d)
+            vecteur = construire_vecteur(voc_all, voc_d, boolean)
+            vecteur.append(c.name)
             sortie.append(','.join(map(str, vecteur)))
 
     # ecriture du contenu de la variable dans le fichier de sortie
