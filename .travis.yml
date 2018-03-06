@@ -1,3 +1,5 @@
+language: python
+
 env:
     global:
         - BUILD_FILES="syllabus/syllabus slides/slides_introfdt"
