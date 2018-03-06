@@ -1,0 +1,36 @@
+@relation corpus
+@attribute 'art' numeric
+@attribute 'cinéma' numeric
+@attribute 'crise' numeric
+@attribute 'critique' numeric
+@attribute 'cynisme' numeric
+@attribute 'deuxième' numeric
+@attribute 'économie' numeric
+@attribute 'être' numeric
+@attribute 'ferme' numeric
+@attribute 'france' numeric
+@attribute 'hollywood' numeric
+@attribute 'industrie' numeric
+@attribute 'mal' numeric
+@attribute 'menacée' numeric
+@attribute 'métier' numeric
+@attribute 'monde' numeric
+@attribute 'mondialisation' numeric
+@attribute 'pendant' numeric
+@attribute 'personne' numeric
+@attribute 'petit' numeric
+@attribute 'reconstruire' numeric
+@attribute 'rêves' numeric
+@attribute 'temps' numeric
+@attribute 'usine' numeric
+@attribute 'va' numeric
+@attribute 'veut' numeric
+@attribute 'classe' {culture,societe}
+@data
+0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,culture
+1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,culture
+0,2,0,2,0,1,0,1,0,1,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,1,culture
+0,0,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0,0,1,0,1,0,0,culture
+0,0,0,0,0,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,0,societe
+0,0,1,0,0,0,1,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,societe
+1,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,1,0,0,0,societe
