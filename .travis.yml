@@ -4,6 +4,9 @@ env:
         - RELEASE_FILES="syllabus/syllabus.pdf slides/slides_introfdt.pdf"
         - MAKEFLAGS="-j 2"
 
+python:
+  - "3.6"
+
 addons:
   apt:
     packages:
@@ -11,7 +14,6 @@ addons:
       - curl
       - tar
       - python
-      - python3.6
 
 cache:
   directories:
