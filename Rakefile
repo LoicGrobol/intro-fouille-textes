@@ -24,21 +24,32 @@ task :test => %w[tests:default]
 task :clean_latex do
     latex_files.each do |f|
         Dir.chdir(File.dirname(f)) do
+            sh "latexmk -c"
+            rm_rf "tikzpics"
+        end
+    end
+end
+
+task :clobber_latex do
+    latex_files.each do |f|
+        Dir.chdir(File.dirname(f)) do
             sh "latexmk -C"
             rm_rf "tikzpics"
         end
     end
 end
 
-task :clean_dist do
+task :clobber_dist do
     rm_rf DISTDIR
 end
 
-task :clean => %w[clean_latex clean_dist]
+task :clean => %w[clean_latex]
+
+tast :clobber => %w[clobber_dist %clobber_latex]
 
 task :texliveonfly do
     latex_files.each do |f|
-        sh "texliveonfly -c lualatex #{f}"
+        sh "texliveonfly -c lualatex #{f} || true"
     end
 end
 
