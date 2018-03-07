@@ -45,7 +45,7 @@ end
 
 task :clean => %w[clean_latex]
 
-tast :clobber => %w[clobber_dist %clobber_latex]
+task :clobber => %w[clobber_dist %clobber_latex]
 
 task :texliveonfly do
     latex_files.each do |f|
