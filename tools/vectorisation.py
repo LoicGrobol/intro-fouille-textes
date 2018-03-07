@@ -10,6 +10,18 @@ import itertools as it
 from collections import Counter
 
 
+def _process(class_dirs, mots_vides, boolean=False):
+    contents = {d.name: [bag_of_words(f, mots_vides) for f in d]
+                for d in class_dirs}
+    lexicon = sorted(
+        set(
+            it.chain.from_iterable(
+                it.chain.from_iterable(
+                    contents.values()))))
+    return ({c: [vec(b, lexicon, boolean) for b in v] for c, v in contents.items()},
+            lexicon)
+
+
 def nettoyage(texte):
     texte = re.sub(r"[&%!?\|\"{\(\[|_\)\]},\.;/:§»«”“‘…–—−]", '', texte)
     texte = re.sub(r'\d', '', texte)
@@ -18,24 +30,18 @@ def nettoyage(texte):
     return texte
 
 
-def lecture(nom_fichier):
-    with open(nom_fichier, "r") as fichier:
+def bag_of_words(nom_fichier, mots_vides):
+    with open(nom_fichier) as fichier:
         text = fichier.read()
     text = nettoyage(text)
-    return [w.lower() for w in re.split(r"[\s\.]+", text) if w]
+    return Counter(w.lower()
+                   for w in re.split(r"[\s\.]+", text)
+                   for l in (w.lower(),)
+                   if w and w not in mots_vides)
 
 
-def vocabulaire(liste_fichiers, mots_vides):
-    vocab = set(mot
-                for fichier in liste_fichiers
-                for mot in lecture(fichier)
-                if mot not in mots_vides)
-    return sorted(vocab)
-
-
-def construire_vecteur(voc_ref, mots_fichier, boolean):
-    this_voc = Counter(mots_fichier)
-    vecteur = [this_voc.get(m, 0) for m in voc_ref]
+def vec(bow, lexicon, boolean):
+    vecteur = [bow.get(m, 0) for m in lexicon]
     if boolean:
         vecteur = [1 if v else 0 for v in vecteur]
     return vecteur
@@ -46,28 +52,26 @@ def process(corpus_path, out_path=None, boolean=False, fichier_mots_vides=None):
     if out_path is None:
         out_path = dossier.parent/'fichier-resultat.arff'
     if fichier_mots_vides is None:
-        liste_mots_vides = []
+        mots_vides = []
     else:
-        liste_mots_vides = lecture(fichier_mots_vides)
-    class_dirs = [d for d in dossier.iterdir()
-                  if d.is_dir and not d.name.startswith('.')]
-    voc_all = vocabulaire(it.chain.from_iterable(d.glob('*.txt') for d in class_dirs),
-                          liste_mots_vides)
-    # ecriture des donnees au format .arff dans la variable sortie
+        with open(fichier_mots_vides) as in_stream:
+            mots_vides = set(l.strip() for l in in_stream)
+    # Chaque sous-dossier (non-caché) du dossier principal est une étiquette de classe
+    class_dirs = {d: sorted(d.glob("*.txt"))
+                  for d in dossier.iterdir()
+                  if d.is_dir and not d.name.startswith('.')}
+    data, lexicon = _process(class_dirs, mots_vides, boolean)
+
+    # Écriture des donnees au format .arff dans la variable `sortie`
     sortie = ['@relation corpus']
-    sortie.append('\n'.join("@attribute '{m}' numeric".format(m=mot.replace("'", r"\'"))
-                            for mot in voc_all))
-    # chaque sous-dossier du dossier principal est une etiquette de classe
-    classes = [d.name for d in class_dirs]
+    for mot in lexicon:
+        sortie.append("@attribute '{m}' numeric".format(m=mot.replace("'", r"\'")))
+    classes = sorted(data.keys())
     sortie.append(f"@attribute 'classe' {{{','.join(classes)}}}")
     sortie.append("@data")
-    for c in sorted(class_dirs):
-        documents = sorted(c.glob("*.txt"))
-        for d in documents:
-            voc_d = lecture(d)
-            vecteur = construire_vecteur(voc_all, voc_d, boolean)
-            vecteur.append(c.name)
-            sortie.append(','.join(map(str, vecteur)))
+    for c in classes:
+        for v in data[c]:
+            sortie.append(','.join(str(col) for col in (*v, c)))
 
     # ecriture du contenu de la variable dans le fichier de sortie
     with open(out_path, 'w') as fichier_sortie:
