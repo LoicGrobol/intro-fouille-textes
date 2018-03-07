@@ -4,7 +4,6 @@ env:
     global:
         - BUILD_FILES="syllabus/syllabus slides/slides_introfdt"
         - RELEASE_FILES="syllabus/syllabus.pdf slides/slides_introfdt.pdf"
-        - MAKEFLAGS="-j 2"
 
 python:
   - "3.6"
@@ -16,6 +15,7 @@ addons:
       - curl
       - tar
       - python
+      - rake
 
 cache:
   directories:
@@ -29,8 +29,8 @@ install:
   - for f in $BUILD_FILES; do texliveonfly -c lualatex "$f" || true; done;
 
 script:
-  - make all
-  - make test
+  - rake
+  - rake test
 
 before_deploy:
   - echo "Deploying $RELEASE_FILES to GitHub releases"

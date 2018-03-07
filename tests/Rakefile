@@ -1,0 +1,22 @@
+here = File.dirname(File.realdirpath(__FILE__))
+root = File.dirname(here)
+
+task default: %w[tests:default]
+
+namespace :tests do
+    directory "#{here}/targets"
+
+    file "#{here}/targets/expl1.arff" => ["#{here}/targets"] do
+        sh "python3 #{root}/tools/vectorisation.py --mots-vides #{root}/data/mots_vides.txt #{root}/data/expl1 targets/expl1.arff"
+    end
+
+    task :vectorisation => ["#{here}/targets/expl1.arff"] do
+    	sh "diff #{here}/targets/expl1.arff #{here}/fixtures/expl1.arff"
+    end
+
+    task :clean do
+        rm_rf "#{here}/targets"
+    end
+
+    task default: %w[vectorisation]
+end
