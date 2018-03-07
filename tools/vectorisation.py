@@ -9,9 +9,13 @@ from collections import Counter
 
 
 def _process(class_dirs, mots_vides, boolean=False):
-    contents = {d.name: [bag_of_words(f, mots_vides) for f in d]
-                for d in class_dirs}
-    lexicon = sorted(set(w for bows in contents.values() for b in bows for w in b.keys()))
+    contents = {d.name: [bag_of_words(f, mots_vides) for f in files]
+                for d, files in class_dirs}
+    lexicon = sorted(set(w
+                         for bows in contents.values()
+                         for b in bows
+                         for w in b.keys()
+                         if w and w not in mots_vides))
     class_names = sorted(contents.keys())
     return (lexicon,
             class_names,
@@ -53,9 +57,9 @@ def process(corpus_path, out_path=None, boolean=False, fichier_mots_vides=None):
         with open(fichier_mots_vides) as in_stream:
             mots_vides = set(l.strip() for l in in_stream)
     # Chaque sous-dossier (non-caché) du dossier principal est une étiquette de classe
-    class_dirs = {d: sorted(d.glob("*.txt"))
+    class_dirs = ((d, sorted(d.glob("*.txt")))
                   for d in dossier.iterdir()
-                  if d.is_dir and not d.name.startswith('.')}
+                  if d.is_dir and not d.name.startswith('.'))
     lexicon, class_names, rows = _process(class_dirs, mots_vides, boolean)
 
     # Écriture des donnees au format .arff dans la variable `sortie`
