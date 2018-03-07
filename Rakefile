@@ -51,6 +51,8 @@ task :texliveonfly do
     latex_files.each do |f|
         sh "texliveonfly -c lualatex #{f} || true"
     end
+    latex_files.ext('.pdf').each do |f|
+        rm f
 end
 
 import "tests/Rakefile"
