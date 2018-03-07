@@ -1,21 +1,24 @@
+require 'tmpdir'
+
 DISTDIR = "_build"
-latex_files = Rake::FileList["slides/slides_introfdt.tex", "syllabus/syllabus.tex"]
+pdf_files = Rake::FileList["slides/slides_introfdt.pdf", "syllabus/syllabus.pdf"]
 latexmk = "latexmk -lualatex -halt-on-error -shell-escape -file-line-error -interaction=nonstopmode -cd"
 
 task default: %w[latex_dist]
 
 directory DISTDIR
+directory
 
 rule ".pdf" => ".tex" do |t|
   puts "\n" "Build #{t.source}."
   sh "#{latexmk} #{t.source}"
 end
 
-multitask latex_build: latex_files.ext('.pdf')
+multitask latex_build: pdf_files
 
 task :latex_dist => [DISTDIR, :latex_build] do
-    latex_files.ext('.pdf').each do |f|
-        cp f, "#{DISTDIR}/#{File.basename(f, File.extname(f))}.pdf", :verbose => true
+    pdf_files.each do |f|
+        cp f, "#{DISTDIR}/#{File.basename(f)}", :verbose => true
     end
 end
 
@@ -43,18 +46,13 @@ task :clobber_dist do
     rm_rf DISTDIR
 end
 
-task :clean => %w[clean_latex]
+task :clean => %w[clean_latex tests:clean]
 
-task :clobber => %w[clobber_dist %clobber_latex]
+task :clobber => %w[clean clobber_dist %clobber_latex]
 
 task :texliveonfly do
     latex_files.each do |f|
-        sh "texliveonfly -c lualatex #{f} || true"
-    end
-    latex_files.ext('.pdf').each do |f|
-        if File.exist?(f)
-            rm f
-        end
+        sh "texliveonfly -c lualatex #{f} -a '-outdir=#{Dir.tempdir()}' || true"
     end
 end
 
