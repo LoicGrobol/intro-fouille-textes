@@ -7,7 +7,6 @@ latexmk = "latexmk -lualatex -halt-on-error -shell-escape -file-line-error -inte
 task default: %w[latex_dist]
 
 directory DISTDIR
-directory
 
 rule ".pdf" => ".tex" do |t|
   puts "\n" "Build #{t.source}."
@@ -25,7 +24,7 @@ end
 task :test => %w[tests:default]
 
 task :clean_latex do
-    latex_files.each do |f|
+    pdf_files.each do |f|
         Dir.chdir(File.dirname(f)) do
             sh "latexmk -c"
             rm_rf "tikzpics"
@@ -34,7 +33,7 @@ task :clean_latex do
 end
 
 task :clobber_latex do
-    latex_files.each do |f|
+    pdf_files.each do |f|
         Dir.chdir(File.dirname(f)) do
             sh "latexmk -C"
             rm_rf "tikzpics"
@@ -51,8 +50,12 @@ task :clean => %w[clean_latex tests:clean]
 task :clobber => %w[clean clobber_dist %clobber_latex]
 
 task :texliveonfly do
-    latex_files.each do |f|
-        sh "texliveonfly -c lualatex #{f} -a '-outdir=#{Dir.tempdir()}' || true"
+    pdf_files.ext('.tex').each do |f|
+        p = File.realpath(f)
+        Dir.mktmpdir do |dir|
+            cd dir
+            sh "texliveonfly -c lualatex #{p} || true"
+        end
     end
 end
 
