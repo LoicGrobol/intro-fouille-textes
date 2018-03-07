@@ -5,23 +5,17 @@ import pathlib
 import re
 import sys
 
-import itertools as it
-
 from collections import Counter
 
 
 def _process(class_dirs, mots_vides, boolean=False):
     contents = {d.name: [bag_of_words(f, mots_vides) for f in d]
                 for d in class_dirs}
-    lexicon = sorted(
-        set(
-            it.chain.from_iterable(
-                it.chain.from_iterable(
-                    contents.values()))))
-    classes = sorted(contents.keys())
+    lexicon = sorted(set(w for bows in contents.values() for b in bows for w in b.keys()))
+    class_names = sorted(contents.keys())
     return (lexicon,
-            classes,
-            ([*vec(b, lexicon, boolean), c] for c in classes for b in contents[c]))
+            class_names,
+            ([*vec(b, lexicon, boolean), c] for c in class_names for b in contents[c]))
 
 
 def nettoyage(texte):
@@ -62,13 +56,13 @@ def process(corpus_path, out_path=None, boolean=False, fichier_mots_vides=None):
     class_dirs = {d: sorted(d.glob("*.txt"))
                   for d in dossier.iterdir()
                   if d.is_dir and not d.name.startswith('.')}
-    lexicon, classes, rows = _process(class_dirs, mots_vides, boolean)
+    lexicon, class_names, rows = _process(class_dirs, mots_vides, boolean)
 
     # Écriture des donnees au format .arff dans la variable `sortie`
     sortie = ['@relation corpus']
     for mot in lexicon:
         sortie.append("@attribute '{m}' numeric".format(m=mot.replace("'", r"\'")))
-    sortie.append(f"@attribute 'classe' {{{','.join(classes)}}}")
+    sortie.append(f"@attribute 'classe' {{{','.join(class_names)}}}")
     sortie.append("@data")
     for r in rows:
         sortie.append(','.join(map(str, r)))
