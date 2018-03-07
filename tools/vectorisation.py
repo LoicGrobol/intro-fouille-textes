@@ -18,8 +18,10 @@ def _process(class_dirs, mots_vides, boolean=False):
             it.chain.from_iterable(
                 it.chain.from_iterable(
                     contents.values()))))
-    return ({c: [vec(b, lexicon, boolean) for b in v] for c, v in contents.items()},
-            lexicon)
+    classes = sorted(contents.keys())
+    return (lexicon,
+            classes,
+            ([*vec(b, lexicon, boolean), c] for c in classes for b in contents[c]))
 
 
 def nettoyage(texte):
@@ -60,18 +62,16 @@ def process(corpus_path, out_path=None, boolean=False, fichier_mots_vides=None):
     class_dirs = {d: sorted(d.glob("*.txt"))
                   for d in dossier.iterdir()
                   if d.is_dir and not d.name.startswith('.')}
-    data, lexicon = _process(class_dirs, mots_vides, boolean)
+    lexicon, classes, rows = _process(class_dirs, mots_vides, boolean)
 
     # Écriture des donnees au format .arff dans la variable `sortie`
     sortie = ['@relation corpus']
     for mot in lexicon:
         sortie.append("@attribute '{m}' numeric".format(m=mot.replace("'", r"\'")))
-    classes = sorted(data.keys())
     sortie.append(f"@attribute 'classe' {{{','.join(classes)}}}")
     sortie.append("@data")
-    for c in classes:
-        for v in data[c]:
-            sortie.append(','.join(str(col) for col in (*v, c)))
+    for r in rows:
+        sortie.append(','.join(map(str, r)))
 
     # ecriture du contenu de la variable dans le fichier de sortie
     with open(out_path, 'w') as fichier_sortie:
