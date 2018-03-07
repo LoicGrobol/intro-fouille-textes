@@ -52,7 +52,9 @@ task :texliveonfly do
         sh "texliveonfly -c lualatex #{f} || true"
     end
     latex_files.ext('.pdf').each do |f|
-        rm f
+        if File.exist?(f)
+            rm f
+        end
     end
 end
 
