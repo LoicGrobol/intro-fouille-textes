@@ -53,8 +53,9 @@ task :texliveonfly do
     pdf_files.ext('.tex').each do |f|
         p = File.realpath(f)
         Dir.mktmpdir do |dir|
-            cd dir
-            sh "texliveonfly -c lualatex #{p} || true"
+            Dir.chdir(dir) do
+                sh "texliveonfly -c lualatex #{p} || true"
+            end
         end
     end
 end
