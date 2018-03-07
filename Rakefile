@@ -53,6 +53,7 @@ task :texliveonfly do
     end
     latex_files.ext('.pdf').each do |f|
         rm f
+    end
 end
 
 import "tests/Rakefile"
