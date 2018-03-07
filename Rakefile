@@ -1,7 +1,10 @@
+DISTDIR = "_build"
 latex_files = Rake::FileList["slides/slides_introfdt.tex", "syllabus/syllabus.tex"]
 latexmk = "latexmk -lualatex -halt-on-error -shell-escape -file-line-error -interaction=nonstopmode -cd"
 
-task default: %w[latex_build]
+task default: %w[latex_dist]
+
+directory DISTDIR
 
 rule ".pdf" => ".tex" do |t|
   puts "\n" "Build #{t.source}."
@@ -9,6 +12,12 @@ rule ".pdf" => ".tex" do |t|
 end
 
 multitask latex_build: latex_files.ext('.pdf')
+
+task :latex_dist => [DISTDIR, :latex_build] do
+    latex_files.ext('.pdf').each do |f|
+        cp f, "#{DISTDIR}/#{File.basename(f, File.extname(f))}.pdf", :verbose => true
+    end
+end
 
 task :test => %w[tests:default]
 
@@ -26,5 +35,11 @@ task :clean_dist do
 end
 
 task :clean => %w[clean_latex clean_dist]
+
+task :texliveonfly do
+    latex_files.each do |f|
+        sh "texliveonfly -c lualatex #{f}"
+    end
+end
 
 import "tests/Rakefile"

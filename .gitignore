@@ -2,6 +2,9 @@
 ### local folder
 local
 
+### dist
+_build
+
 ### virtual envs, avoid using different names
 .virtenv
 
