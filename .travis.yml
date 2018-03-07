@@ -22,7 +22,6 @@ cache:
 install:
   - source ./install_texlive.sh
   - rake texliveonfly
-  - rake clean
 
 script:
   - rake
