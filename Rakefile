@@ -8,7 +8,7 @@ rule ".pdf" => ".tex" do |t|
   sh "#{latexmk} #{t.source}"
 end
 
-task :latex_build => latex_files.ext('.pdf')
+multitask latex_build: latex_files.ext('.pdf')
 
 task :test => %w[tests:default]
 
