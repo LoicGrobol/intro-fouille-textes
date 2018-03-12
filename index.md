@@ -1,3 +1,7 @@
+---
+title: Introduction à la fouille de textes
+---
+
 ## Nouvelles
 
   - **2018-03-06** Cours le 9 avril 2018 de 10h à 12h en rattrapage du cours du 2 avril
