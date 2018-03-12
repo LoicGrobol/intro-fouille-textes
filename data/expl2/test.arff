@@ -1,0 +1,9 @@
+@relation corpus
+@attribute 'cinéma' numeric
+@attribute 'économie' numeric
+@attribute 'classe' {culture,societe}
+@data
+4,0,culture
+2,1,culture
+1,1,societe
+0,3,societe
