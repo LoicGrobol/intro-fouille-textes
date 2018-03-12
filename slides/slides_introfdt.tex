@@ -2532,6 +2532,7 @@
     \end{columns}
 \end{frame}
 
+\lecture{Introduction à la fouille de textes}{2018-03-05}
 \begin{frame}{Les maths en cinq secondes : produit scalaire}
     Intuitivement, le produit scalaire mesure la similarité des directions des vecteurs
     \begin{columns}
@@ -2848,16 +2849,71 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{« Automatique » ?}
-    Il reste à l'humain à
+\lecture{Introduction à la fouille de textes}{2018-03-05}
+
+\begin{frame}{« Apprentissage » ?}
+    Ce qu'on appelle \emph{apprendre} pour une machine consiste à transformer des exemples $(x_i, y_i)$ en règle $f: x⟼y$. Soit
     \begin{itemize}
-        \item Choisir une modélisation
-        \item Choisir un espace de recherche
-        \item Fixer les hyperparamètres
-        \item Préparer les données d'apprentissage
+        \item Étant donné un espace de recherche $F$
+        \item Étant donnée une mesure de qualité $q$ sur $F$
+        \item Trouver $f∈F$ qui maximise $q$
     \end{itemize}
-    « \emph{lThere is no free lunch} »
+    En général $F$ est paramétré par des nombre $a₁,…,a_n$ et on se ramène ainsi à chercher leurs valeurs pour que $q(f_{a₁,…,a_n})$ soit maximal.
 \end{frame}
+
+\begin{frame}{« Automatique » ?}
+    Il reste encore à l'humain à
+    \begin{enumerate}[<alert@+>]
+        \item\label{item|searchspace} Choisir un espace de recherche adapté
+        \item\label{item|loss} Choisir une mesure de qualité adaptée
+        \item\label{item|optim} Choisir une procédure d'optimisation adaptée
+    \end{enumerate}
+    En tenant compte
+
+    \begin{overprint}
+    \onslide<1>
+        Pour \ref{item|searchspace},
+        \begin{itemize}
+            \item De l'expressivité du modèle et de son adéquation au problème
+            \item De la lisibilité du résultat
+        \end{itemize}
+    \onslide<2>
+        Pour \ref{item|loss},
+        \begin{itemize}
+            \item De l'adéquation aux données d'apprentissage
+            \item La généralisabilité (éviter le surapprentissage)
+            \item La simplicité : rasoir d'Ockham
+        \end{itemize}
+    \onslide<3>
+        Pour \ref{item|optim},
+        \begin{itemize}
+            \item De l'incrémentalité
+            \item Du temps de calcul
+        \end{itemize}
+        On verra dans la suite que ces trois choix sont souvent dépendants.
+    \onslide<4>
+        \begin{itemize}
+            \item Il n'y a pas de recette miracle qui marche à chaque fois : « \emph{There is no free lunch} »
+            \item On devrait peut-être parler d'apprentissage \emph{artificiel} plutôt qu'\emph{automatique} cf \emph{Machine Learning}
+        \end{itemize}
+    \end{overprint}
+\end{frame}
+
+\begin{frame}{Plan des réjouissances}
+    On présente dans la suite un certain nombre de techniques classiques de classification par apprentissage automatique suivant avec pour chacune
+    \begin{itemize}
+        \item Espace de recherche
+        \item Technique de recherche
+        \item Propriétés et usages
+    \end{itemize}
+\end{frame}
+
+% ███████ ███████ ██████   ██████  ██████
+%    ███  ██      ██   ██ ██    ██ ██   ██
+%   ███   █████   ██████  ██    ██ ██████
+%  ███    ██      ██   ██ ██    ██ ██   ██
+% ███████ ███████ ██   ██  ██████  ██   ██
+
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
