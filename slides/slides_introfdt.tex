@@ -2667,6 +2667,7 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
 \section{Classification}
 \againframe{classif}
 
+\subsection{Principes généraux}
 \begin{frame}{Classification par règles expertes}
     La façon traditionnelle de faire de la classification
     \begin{itemize}
@@ -2680,6 +2681,7 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
         \item Qu'en pensez-vous ?
         \item Pour notre exemple de classification culture/société, comment faire ?
     \end{itemize}
+
 \end{frame}
 
 \begin{frame}{Classification par apprentissage automatique}
@@ -2826,8 +2828,8 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
                     300	400000\\
                     600	405000\\
                 };
-                \addplot[highlighta, domain=100:310, samples=1001] {9.133693238227375E-7*x^6-0.0015210072640020665*x^5+0.9901617434548338*x^4-326.9727250825201*x^3+58224.97189714596*x^2-5327933.125949258*x+196687335.202412};
-                \addplot[highlighta, domain=595:605, samples=1001] {9.133693238227375E-7*x^6-0.0015210072640020665*x^5+0.9901617434548338*x^4-326.9727250825201*x^3+58224.97189714596*x^2-5327933.125949258*x+196687335.202412};
+                \addplot[highlighta, domain=100:310, samples=200] {9.133693238227375E-7*x^6-0.0015210072640020665*x^5+0.9901617434548338*x^4-326.9727250825201*x^3+58224.97189714596*x^2-5327933.125949258*x+196687335.202412};
+                \addplot[highlighta, domain=594:606, samples=200] {9.133693238227375E-7*x^6-0.0015210072640020665*x^5+0.9901617434548338*x^4-326.9727250825201*x^3+58224.97189714596*x^2-5327933.125949258*x+196687335.202412};
             \end{axis}
         \end{tikzpicture}
         \caption{Polynôme de degré $6$}\label{fig|overfit}
@@ -2868,7 +2870,7 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
         \item\label{item|loss} Choisir une mesure de qualité adaptée
         \item\label{item|optim} Choisir une procédure d'optimisation adaptée
     \end{enumerate}
-    En tenant compte
+    \only<1-3>{En tenant compte}
 
     \begin{overprint}
     \onslide<1>
@@ -2900,7 +2902,7 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
 \end{frame}
 
 \begin{frame}{Plan des réjouissances}
-    On présente dans la suite un certain nombre de techniques classiques de classification par apprentissage automatique suivant avec pour chacune
+    On présente dans la suite plusieurs techniques classiques de classification par apprentissage automatique suivant avec pour chacune
     \begin{itemize}
         \item Espace de recherche
         \item Technique de recherche
@@ -2914,7 +2916,27 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
 %  ███    ██      ██   ██ ██    ██ ██   ██
 % ███████ ███████ ██   ██  ██████  ██   ██
 
+\subsection{Algorithme de la classe majoritaire}
+\begin{frame}{Algorithme de la classe majoritaire}
+    \textbf{Dans Weka} classifiers > rules > ZeroR
 
+    \textbf{Espace de recherche} Ensemble des fonctions constantes
+
+    Autrement dit : on renvoie toujours la même classe quelle que soit l'entrée.
+
+    \textbf{Technique de recherche} On choisit la fonction qui renvoie la classe majoritaire dans l'ensemble d'apprentissage.
+\end{frame}
+
+\begin{frame}{Propriétés}
+    \begin{itemize}
+        \item Très rapide en apprentissage comme en test
+        \item Très peu performant
+            \begin{itemize}
+                \item[→] Dans le meilleur des cas (si les classes sont déséquilibrées) on fait un peu mieux que le hasard
+            \end{itemize}
+    \end{itemize}
+    Il s'agit plutôt d'une \emph{baseline} : un système sérieux devrait en principe faire mieux.
+\end{frame}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
