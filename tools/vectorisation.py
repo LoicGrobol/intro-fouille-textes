@@ -8,14 +8,15 @@ import sys
 from collections import Counter
 
 
-def _process(class_dirs, mots_vides, boolean=False):
+def _process(class_dirs, mots_vides, boolean=False, lexicon=None):
     contents = {d.name: [bag_of_words(f, mots_vides) for f in files]
                 for d, files in class_dirs}
-    lexicon = sorted(set(w
-                         for bows in contents.values()
-                         for b in bows
-                         for w in b.keys()
-                         if w and w not in mots_vides))
+    if lexicon is None:
+        lexicon = sorted(set(w
+                             for bows in contents.values()
+                             for b in bows
+                             for w in b.keys()
+                             if w and w not in mots_vides))
     class_names = sorted(contents.keys())
     return (lexicon,
             class_names,
@@ -47,7 +48,7 @@ def vec(bow, lexicon, boolean):
     return vecteur
 
 
-def process(corpus_path, out_path=None, boolean=False, fichier_mots_vides=None):
+def process(corpus_path, out_path=None, boolean=False, fichier_mots_vides=None, lexicon=None):
     dossier = pathlib.Path(corpus_path)
     if out_path is None:
         out_path = dossier.parent/'fichier-resultat.arff'
@@ -56,11 +57,14 @@ def process(corpus_path, out_path=None, boolean=False, fichier_mots_vides=None):
     else:
         with open(fichier_mots_vides) as in_stream:
             mots_vides = set(l.strip() for l in in_stream)
+    if lexicon is not None:
+        with open(fichier_mots_vides) as in_stream:
+            lexicon = sorted(set(l.strip() for l in in_stream))
     # Chaque sous-dossier (non-caché) du dossier principal est une étiquette de classe
     class_dirs = ((d, sorted(d.glob("*.txt")))
                   for d in dossier.iterdir()
                   if d.is_dir and not d.name.startswith('.'))
-    lexicon, class_names, rows = _process(class_dirs, mots_vides, boolean)
+    lexicon, class_names, rows = _process(class_dirs, mots_vides, boolean, lexicon)
 
     # Écriture des donnees au format .arff dans la variable `sortie`
     sortie = ['@relation corpus']
@@ -90,11 +94,13 @@ def main_entry_point(argv=None):
                             help='Le dossier contenant corpus (un sous-dossier par étiquette)')
         parser.add_argument('--mots-vides', metavar='fichier_mots_vides', type=str, default=None,
                             help='Un fichier contenant une liste de mots vides (un par ligne)')
+        parser.add_argument('--lexicon', metavar='fichier_lexique', type=str, default=None,
+                            help='Un fichier contenant un lexique (un mot par ligne)')
         parser.add_argument('--boolean', action='store_true',
                             help='Utiliser des représentations booléennes')
 
         args = parser.parse_args(argv)
-        return process(args.corpus_path, args.out_path, args.boolean, args.mots_vides)
+        return process(args.corpus_path, args.out_path, args.boolean, args.mots_vides, args.lexicon)
 
     # Legacy interactive mode
     print('Mode interactif (legacy). Utiliser `vectorisation.py -h` pour le mode CLI.`')
