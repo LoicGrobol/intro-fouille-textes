@@ -17,6 +17,9 @@ title: Introduction à la fouille de textes
   - [Polycopié du cours](https://loicgrobol.github.io/intro-fouille-textes/poly/poly.pdf)
   - [Slides du cours](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/slides_introfdt.pdf)
 
+### Exercices
+  - [Examen 2017](https://loicgrobol.github.io/intro-fouille-textes/exos/exam2017.pdf)
+
 ## Outils et données
 
   - [Données d'exemple](https://loicgrobol.github.io/intro-fouille-textes/data.zip)
