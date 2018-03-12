@@ -2730,7 +2730,7 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
         \item En général « correspondre » au sens des moindres carrés
     \end{itemize}
     \textbf{Vocabulaire} Le degré (fixé manuellement) est un \alert{hyperparamètre}, les coefficients $a_i$ appris automatiquement sont des \alert{paramètres}.
-    Déterminer les paramètres qui minimisent le coût (ici la distance entre le modèle est les exemple) est une tâche d'\alert{optimisatio}n.
+    Déterminer les paramètres qui minimisent le coût (ici la distance entre le modèle est les exemple) est une tâche d'\alert{optimisation}.
 
     Étant donné une surface, on peut alors donner le prix correspondant : on donc a appris à prédire les prix !
 \end{frame}
@@ -2905,6 +2905,7 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
     On présente dans la suite plusieurs techniques classiques de classification par apprentissage automatique suivant avec pour chacune
     \begin{itemize}
         \item Espace de recherche
+        \item Hyperparamètres
         \item Technique de recherche
         \item Propriétés et usages
     \end{itemize}
@@ -2924,6 +2925,8 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
 
     Autrement dit : on renvoie toujours la même classe quelle que soit l'entrée.
 
+    \textbf{Hyperparamètres} Aucun !
+
     \textbf{Technique de recherche} On choisit la fonction qui renvoie la classe majoritaire dans l'ensemble d'apprentissage.
 \end{frame}
 
@@ -2936,6 +2939,71 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
             \end{itemize}
     \end{itemize}
     Il s'agit plutôt d'une \emph{baseline} : un système sérieux devrait en principe faire mieux.
+\end{frame}
+
+%  ██████  ██   ██
+% ██       ██  ██
+% ██ █████ █████
+% ██       ██  ██
+%  ██████  ██   ██
+
+\subsection{$k$-plus proches voisins}
+
+\begin{frame}{$k$-plus proches voisins}
+    \textbf{Dans Weka} classifiers > lazy > lBk
+
+    \textbf{Espace de recherche} Le singleton $\{f\}$, où $f$ est la fonction qui à un exemple $x$ associe la classe majoritaire dans l'ensemble des $k$ données d'entraînement les plus proches de $x$.
+
+    En général on utilise la distance euclidienne ou le coefficient d'overlap (pour des vecteurs booléens)
+
+    \textbf{Hyperparamètres} $k$, un entier \only<2>{
+        \begin{itemize}
+            \item Plus petit que le nombre d'exemples d'apprentissages
+            \item Idéalement non-multiple du nombre de classes
+        \end{itemize}}
+
+    \textbf{Technique de recherche} Aucune !
+\end{frame}
+
+\begin{frame}[fragile]{Exemple}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+
+            \draw[->] (-0.5,0) -- (5.25, 0);
+            \foreach \x in {1,...,5}
+                \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+            \draw[->] (0, -0.5) -- (0, 4.25);
+
+            \foreach \y in {1,...,4}
+                \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+            \draw (0, 0) node[below left] {\footnotesize $0$};
+
+            \foreach \x/\y/\c in {2/1/highlight6,4/0/highlight6,1/0/highlight6,2/3/highlight6,0/3/highlighta,1/2/highlighta,0/2/highlighta}{
+                \path[fill=\c] (\x, \y) circle[radius=3pt];
+            }
+
+            \foreach \ex/\ey [count=\i from 1] in {1/3,1/1,3/2} {
+                \path[fill=highlight3, visible on=\i] (\ex, \ey) circle[radius=3pt];
+            }
+        \end{tikzpicture}
+        \caption{Exemple de classification : $k$-NN}
+    \end{figure}
+    \only<3>{}
+\end{frame}
+
+\begin{frame}{Propriétés}
+    \begin{itemize}
+        \item Aucune recherche → apprentissage immédiat
+        \item Coût en opération : Taille de l'ensemble d'entraînement $×$ coût d'un calcul de distance
+        \item Pour être efficace : ensemble d'entraînement suffisamment dense
+            \begin{itemize}
+                \item[→] D'où sa faible utilisation en pratique en fouille de texte (à part comme baseline)
+            \end{itemize}
+        \item Fréquemment utilisé pour des moteurs de recommandation
+    \end{itemize}
 \end{frame}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
