@@ -88,10 +88,10 @@ def main_entry_point(argv=None):
     if argv:
         parser = argparse.ArgumentParser(description='Process some integers.')
         parser.add_argument('corpus_path', metavar='dossier_corpus', type=str,
-                            help='Le dossier contenant corpus (un sous-dossier par étiquette)')
+                            help='Le dossier contenant le corpus (un sous-dossier par étiquette)')
         parser.add_argument('out_path', metavar='fichier_sortie',
                             nargs='?', type=str, default=None,
-                            help='Le dossier contenant corpus (un sous-dossier par étiquette)')
+                            help='Le chemin du fichier de sortie')
         parser.add_argument('--mots-vides', metavar='fichier_mots_vides', type=str, default=None,
                             help='Un fichier contenant une liste de mots vides (un par ligne)')
         parser.add_argument('--lexicon', metavar='fichier_lexique', type=str, default=None,
