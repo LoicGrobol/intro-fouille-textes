@@ -2622,15 +2622,15 @@
 
 \begin{frame}{Autres normalisations}
     \begin{itemize}
-        \item Mesure de Dice
+        \item Mesure de Sørensen–Dice
             \begin{equation}
-                \frac{\innprod{t₁}{t₂}}{\norm{t₁}₂+\norm{t₂}₂}
+                2×\frac{\innprod{t₁}{t₂}}{\norm{t₁}₂+\norm{t₂}₂}
             \end{equation}
         \item Mesure de Jaccard
             \begin{equation}
                 \frac{\innprod{t₁}{t₂}}{\norm{t₁+t₂}₂}
             \end{equation}
-        \item Coefficient \emph{overlap}
+        \item Coefficient de recouvrement
             \begin{equation}
                 \frac{\innprod{t₁}{t₂}}{\min\mleft(\norm{t₁}₂, \norm{t₂}₂\mright)}
             \end{equation}
@@ -2642,15 +2642,15 @@ Attention : en général, ces mesures ne seront pas nécessairement inférieur
 \begin{frame}{Autres normalisations : versions booléennes}
     Si les coordonnées des vecteurs indiquent la présence d'un mot plutôt que sa fréquence, on a
     \begin{itemize}
-        \item Mesure de Dice
+        \item Mesure de Sørensen–Dice
             \begin{equation}
-                \frac{\#(t₁∩t₂)}{\#t₁+\#t₂}
+                2×\frac{\#(t₁∩t₂)}{\#t₁+\#t₂}
             \end{equation}
         \item Mesure de Jaccard
             \begin{equation}
                 \frac{\#(t₁∩t₂)}{\#(t₁∪t₂)}
             \end{equation}
-        \item Coefficient \emph{overlap}
+        \item Coefficient de recouvrement
             \begin{equation}
                 \frac{\#(t₁∩t₂)}{\min(\#t₁, \#t₂)}
             \end{equation}
