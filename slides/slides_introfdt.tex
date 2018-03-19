@@ -2966,6 +2966,7 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
     \textbf{Technique de recherche} Aucune !
 \end{frame}
 
+% TODO: improve this
 \begin{frame}[fragile]{Exemple}
     \begin{figure}
         \tikzset{external/export=true}
@@ -3155,9 +3156,65 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
     \end{itemize}
     On définit lors le gain associé à $a$ par
     \begin{equation}
-        g(a) = Gini(S) - ∑_i\frac{\#S_{a=v}}{\#S}Gini(S_{a=v})
+        g(S, a) = Gini(S) - ∑_i\frac{\#S_{a=v}}{\#S}Gini(S_{a=v})
     \end{equation}
-    Un attribut sera alors d'autant plus discriminant que son gain est élevé
+    \begin{itemize}
+        \item Un attribut est d'autant plus discriminant que son gain est élevé.
+        \item On peut procéder de même avec $H$ (ou un autre indice de diversité)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Attributs à valeurs scalaires}
+    Pour des attributs numériques, on se ramène à un choix discret en utilisant des seuils
+    \begin{itemize}
+        \item Pour un attribut $a$ à valeur numérique $∈[α, β]$ et $r∈[α, β]$, on note $a_r$ l'attribut booléen $a(x)⩽r$
+        \item On choisit $s$ tel que $g(S, a_r)$ soit maximal
+    \end{itemize}
+    On peut ensuite utiliser $a_r$ au lieu de $a$ dans notre choix d'attributs.
+\end{frame}
+
+\begin{frame}[fragile]{Représentation graphique des seuils}
+    \begin{figure}
+        % \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+
+            \draw[->] (-0.5,0) -- (5.25, 0);
+            \foreach \x in {1,...,5}
+                \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+            \draw[->] (0, -0.5) -- (0, 4.25);
+
+            \foreach \y in {1,...,4}
+                \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+            \draw (0, 0) node[below left] {\footnotesize $0$};
+
+            \foreach \x/\y/\c in {2/1/highlight6,4/0/highlight6,1/0/highlight6,2/3/highlight6,0/3/highlighta,1/2/highlighta,0/2/highlighta}{
+                \path[fill=\c] (\x, \y) circle[radius=3pt];
+            }
+
+            \draw[highlight3, line width=2pt, alt={<2,4>{}{invisible}}] (-0.5, 1.5) -- (5.25, 1.5);
+            \draw[highlight4, line width=2pt, visible on=3] (1.5, -0.5) -- (1.5, 4.25);
+            \draw[highlight4, line width=2pt, visible on=4] (1.5, 1.5) -- (1.5, 4.25);
+        \end{tikzpicture}
+        \caption{Exemple de classification par seuils}
+    \end{figure}
+    \only<4>{}
+\end{frame}
+
+\begin{frame}{Propriétés}
+    La principale qualité des arbres de décision tient dans leur simplicité
+    \begin{itemize}
+        \item \emph{White box} : on peut comprendre le résultat
+        \item Le modèle est de petite taille et est efficace même avec peu de données
+        \item La procédure d'apprentissage est assez proche du raisonnement humain conscient
+        \item Facilement combinables
+    \end{itemize}
+    Leur principal défaut est leur instabilité
+    \begin{itemize}
+        \item[→] des petites variations dans l'ensemble de test peuvent conduire à des changements importants dans l'arbre
+    \end{itemize}
+    Des extensions plus performantes, mais moins simples existent (\emph{random forest}…)
 \end{frame}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
