@@ -99,6 +99,7 @@
 		visible on/.style={alt=<#1>{}{invisible}}
 	}
 	\usepackage{tikz-qtree}
+    \usepackage{forest}
     \usepackage{tkz-graph}
     \usepackage[beamer, markings]{hf-tikz}
     \usepackage{pgfplots}
@@ -2941,11 +2942,11 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
     Il s'agit plutôt d'une \emph{baseline} : un système sérieux devrait en principe faire mieux.
 \end{frame}
 
-%  ██████  ██   ██
-% ██       ██  ██
-% ██ █████ █████
-% ██       ██  ██
-%  ██████  ██   ██
+% ██   ██      ███    ██ ███    ██
+% ██  ██       ████   ██ ████   ██
+% █████  █████ ██ ██  ██ ██ ██  ██
+% ██  ██       ██  ██ ██ ██  ██ ██
+% ██   ██      ██   ████ ██   ████
 
 \subsection{$k$-plus proches voisins}
 
@@ -3004,6 +3005,159 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
             \end{itemize}
         \item Fréquemment utilisé pour des moteurs de recommandation
     \end{itemize}
+\end{frame}
+
+% ████████ ██████  ███████ ███████
+%    ██    ██   ██ ██      ██
+%    ██    ██████  █████   █████
+%    ██    ██   ██ ██      ██
+%    ██    ██   ██ ███████ ███████
+
+\lecture{Introduction à la fouille de textes}{2018-03-19}
+\subsection{Arbres de décision}
+\begin{frame}{Arbres de décision}
+    \textbf{Dans Weka} trees (> J48)
+
+    \textbf{Espace de recherche} L'ensemble des arbres des arbres de recherche pour les attributs choisis
+
+    % TODO: cite
+    \textbf{Techniques de recherche} Plusieurs algorithmes, le plus connu étant C4.5, appelé J48 dans Weka
+\end{frame}
+
+\begin{frame}{Arbre de décision}
+    Modèle de prise de décision déterministe par succession de choix.
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{forest}
+            for tree={draw, l sep=2em, s sep=3em}
+            [outlook,ellipse
+                [humidity,ellipse,edge label={node[midway,left] {=sunny}}
+                    [yes,edge label={node[midway,left] {$⩽75$}}]
+                    [no,edge label={node[midway,right] {$>75$}}]
+                ]
+                [yes,edge label={node[midway] {=overcast}}]
+                [windy,ellipse,edge label={node[midway,right] {=rainy}}
+                    [yes,edge label={node[midway,left] {=true}}]
+                    [no,edge label={node[midway,right] {=false}}]
+                ]
+            ]
+        \end{forest}
+        \caption{Arbre de décision pour \emph{weather}}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Arbre de décision}
+    En python
+    \begin{figure}
+        \begin{lstlisting}[gobble=12, language=Python]
+            def classify(outlook, humidity, windy):
+                if outlook == "sunny":
+                    if humidity <= 75:
+                        return "yes"
+                    else:
+                    return "no"
+                elif outlook == "overcast":
+                    return "yes"
+                elif outlook == "rainy":
+                    if windy:
+                        return true
+                    else:
+                        return false
+        \end{lstlisting}
+        \caption{Code correspondant à l'arbre précédent}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Technique d'apprentissage}
+    C'est assez facile de construire un arbre parfait pour l'ensemble d'entraînement
+    \pause
+    \begin{itemize}
+        \item On énumère chacun des attributs jusqu'à avoir énuméré toutes les combinaisons existantes
+        \item[→] Surapprentissage !
+    \end{itemize}
+    Comment faire pour avoir un arbre bon, mais pas trop profond ?
+    \pause
+    \begin{itemize}
+        \item Faire en sorte de trier vite et bien
+        \item[→] En choisissant les attributs les plus discriminants
+    \end{itemize}
+    L'idée est donc de construire l'arbre progressivement, prenant à chaque étape le test le plus \alert{discriminant}, reste à savoir comment le détermine.
+\end{frame}
+
+\begin{frame}{Indice de diversité de Gini}
+    \begin{block}{Définition}
+        On appelle \emph{indice de diversité de Gini} d'une partition $S=⊔_{1⩽i⩽n}c_i$
+        \begin{equation}
+            Gini(S) = ∑_{1⩽i⩽n}p_i(1-p_i)
+        \end{equation}
+        avec $p_i=\frac{\#c_i}{∑_{j=1}^n\#c_j}$
+    \end{block}
+    Autrement dit, l'indice de diversité de Gini est la probabilité qu'un exemple choisi au hasard et classé au hasard soit mal classé.
+\end{frame}
+
+\begin{frame}{Indice de diversité de Gini}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=0, xmax=1, ymin=0,
+                         width=0.9\textwidth,
+                         height=0.8\textheight,
+                         xlabel={$p_1$},
+                         ylabel={$Gini(S)$},
+                         title={Indice de diversité de Gini : $y=x(1-x)+(1-x)x$},
+                         scaled ticks=false,]
+                \addplot[highlighta, domain=0:1, samples=1001] {x*(1-x)+(1-x)*x};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Indice de diversité de Gini pour un problème à deux classes}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Entropie}
+    \begin{block}{Définition}
+        On appelle \emph{entropie} d'une partition $S=⊔_{1⩽i⩽n}c_i$
+        \begin{equation}
+            H(S) = -∑_{1⩽i⩽n}p_i\log₂(p_i)
+        \end{equation}
+        avec $p_i=\frac{\#c_i}{∑_{j=1}^n\#c_j}$
+    \end{block}
+    Intuitivement, si on choisit au hasard et de façon uniforme un exemple $x$ dans $S$
+    \begin{itemize}
+        \item $p_i$ est la probabilité de l'évènement « La classe de $x$ est $c_i$ »
+        \item $-\log₂p_i$ mesure la surprise de l'évènement « La classe de $x$ est $c_i$ »
+    \end{itemize}
+    Finalement, $H$ est donc la surprise moyenne de $S$.
+\end{frame}
+
+\begin{frame}{Indice de diversité de Gini}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=0, xmax=1, ymin=0,
+                         width=0.9\textwidth,
+                         height=0.8\textheight,
+                         xlabel={$p_1$},
+                         ylabel={$H(S)$},
+                         title={Entropie : $y=-x\log₂(x)-(1-x)\log₂(1-x)$},
+                         scaled ticks=false,]
+                \addplot[highlighta, domain=0:1, samples=1001] {-x*ln(x)/ln(2)-(1-x)*ln(1-x)/ln(2)};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Entropie pour un problème à deux classes}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Choix des attributs}
+    On peut en déduire une valuation de « être un attribut discriminant » :
+    \begin{itemize}
+         \item Soit un attribut $a$ à valeurs discrètes
+         \item Pour toute valeur $v$ prise par $a$, on note $S_{a=v}$ l'ensemble des éléments de $S$ pour lesquels $a$ vaut $v$.
+    \end{itemize}
+    On définit lors le gain associé à $a$ par
+    \begin{equation}
+        g(a) = Gini(S) - ∑_i\frac{\#S_{a=v}}{\#S}Gini(S_{a=v})
+    \end{equation}
+    Un attribut sera alors d'autant plus discriminant que son gain est élevé
 \end{frame}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
