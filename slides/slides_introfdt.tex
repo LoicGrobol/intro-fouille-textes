@@ -3085,6 +3085,11 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
     L'idée est donc de construire l'arbre progressivement, prenant à chaque étape le test le plus \alert{discriminant}, reste à savoir comment le détermine.
 \end{frame}
 
+% FIXME: Review this whole part : start by growing the decision tree for the weather dataset by hand
+% thus motivating both the Gini indice definition and the general procedure and only formalize
+% things after. Plan on using real attribute names and values instead of abstract ones, use concrete
+% examples EVERYWHERE and add a lot of figures (possibly animated) e.g. the change S→S_{a,v}
+% graphically. Only introduce entropy after all that
 \begin{frame}{Indice de diversité de Gini}
     \begin{block}{Définition}
         On appelle \emph{indice de diversité de Gini} d'une partition $S=⊔_{1⩽i⩽n}c_i$
