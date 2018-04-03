@@ -95,13 +95,14 @@
 		alt/.code args={<#1>#2#3}{%
 		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
 		},
-        invisible/.style={opacity=0},
+        invisible/.style={opacity=0, fill opacity=0},
 		visible on/.style={alt=<#1>{}{invisible}}
 	}
 	\usepackage{tikz-qtree}
     \usepackage{forest}
     \usepackage{tkz-graph}
     \usepackage[beamer, markings]{hf-tikz}
+    \usepackage{tikz-3dplot}
     \usepackage{pgfplots}
         % Due to pgfplots meddling with pgfkeys, we have to redefine alt here.
         \pgfplotsset{
@@ -131,7 +132,8 @@
         \def\@appendnamedpathforactions#1{%
             \pgfsyssoftpath@getcurrentpath\@temppatha
             \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
-            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb}%
+            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb}%\usepackage{tikz-3dplot}
+
             \let\tikz@actions@path\@temppatha
         }
 
@@ -295,7 +297,7 @@
 \DeclareMathOperator{\IDF}{IDF}
 
 \ExplSyntaxOn
-    \DeclareExpandableDocumentCommand \eval { m } { \fp_eval:n { #1 } }
+    \DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
 \ExplSyntaxOff
 
 
@@ -3246,7 +3248,7 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
         p(C_k | x) = p(C_k) × p(x₁ | C_k) × … × p(x_n | C_k)
     \end{equation}
 
-    \textbf{Technique de recherche} En générale : forme fermée étant donné l'ensemble d'apprentissage
+    \textbf{Technique de recherche} En générale : formule explicite étant donné l'ensemble d'apprentissage
 \end{frame}
 
 \begin{frame}[fragile]{Probabilités conditionnelles}
@@ -3372,7 +3374,163 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
 
     Il reste à choisir comment déterminer $P(C)$ et les $P(x_i|C)$.
 \end{frame}
+% TODO: example slides. Do it, it is **very** easy to get confused about it at blackboard
 
+% ███████ ██    ██ ███    ███
+% ██      ██    ██ ████  ████
+% ███████ ██    ██ ██ ████ ██
+%      ██  ██  ██  ██  ██  ██
+% ███████   ████   ██      ██
+\lecture{Introduction à la fouille de textes}{2018-04-09}
+\subsection{SVM}
+
+% TODO: cite
+\begin{frame}<1-2>[label=SVMmain]{SVM}
+    \emph{Support Vector Machines} : \emph{machines à vecteurs de support} ou \emph{Séparateur à Vaste Marge}
+
+    \textbf{Dans Weka} classifiers > functions > SMO
+    \pause
+
+    \textbf{Espace de recherche} Ensemble des hyperplans affines de $ℝ^n$, où $n$ est le nombre d'attributs.
+    \pause
+
+    \textbf{Technique de recherche}
+    \begin{itemize}
+        \item Traditionnellement : problème d'optimisation quadratique
+        \item Plus récemment : descente de sous-gradient, descente de gradient par coordonnées
+        \begin{itemize}
+            \item[→] Linéaire ou quasi-linéaire (au moins en pratique)
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Hyperplans}
+    Dans un espace de dimension $n$, un \alert<1>{hyperplan} est un espace de dimension $n-1$
+    \begin{overprint}
+        \onslide<1>
+            \begin{itemize}
+                \item En dimension $3$, les hyperplans sont les \alert{plans}
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \tdplotsetmaincoords{70}{110}
+                        \begin{tikzpicture}[tdplot_main_coords]
+                            \node[coordinate] at (0, 0, 0) (O) {};
+                            \draw[->] (O) -- (2, 0, 0);
+                            \draw[->] (O) -- (0, 2, 0);
+                            \draw (O) -- (0, 0, 1) node[coordinate] (passthrough) {};
+                            \filldraw[draw=highlighta, fill=highlighta!30, fill opacity=0.75] (3, -3, 1) -- (3, 3, 1) -- (-3, 3, 1)  -- (-3, -3, 1) --cycle;
+                            \draw[->] (passthrough) -- + (0, 0, 1);
+                        \end{tikzpicture}
+                        \caption{Hyperplan en dimension $3$}
+                    \end{figure}
+                \end{itemize}
+        \onslide<2>
+            \begin{itemize}
+                \item En dimension $2$, les hyperplans sont les \alert{droites}
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \begin{tikzpicture}
+                            \node[coordinate] at (0, 0) (O) {};
+                            \draw[->] (-3, 0) -- (3, 0);
+                            \draw[->] (0, -2) -- (0, 2);
+
+                            \draw[highlighta] (-3, -2) -- (3, 1);
+                        \end{tikzpicture}
+                        \caption{Hyperplan en dimension $2$}
+                    \end{figure}
+            \end{itemize}
+        \onslide<3>
+            \begin{itemize}
+                \item En dimension $1$, les hyperplans sont les \alert{points}
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \begin{tikzpicture}
+                            \node[coordinate] at (0, 0) (O) {};
+                            \draw (-3, 0) -- (3, 0);
+
+                            \fill[highlighta] (1, 0) circle[radius=2pt];
+                        \end{tikzpicture}
+                        \caption{Hyperplan en dimension $1$}
+                    \end{figure}
+            \end{itemize}
+    \end{overprint}
+\end{frame}
+
+\begin{frame}[fragile]{Propriétés des hyperplans}
+    Les hyperplans séparent les espaces en demi-espaces
+    \begin{overprint}
+        \onslide<1-3>
+            \begin{itemize}
+                \item En dimension $3$ : demi-espaces
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \tdplotsetmaincoords{70}{110}
+                        \begin{tikzpicture}[tdplot_main_coords]
+                            \node[coordinate] at (0, 0, 0) (O) {};
+                            \draw[->] (O) -- (2, 0, 0);
+                            \draw[->] (O) -- (0, 2, 0);
+                            \draw (O) -- (0, 0, 1) node[coordinate] (passthrough) {};
+
+                            % Lower half-plane
+                            \begin{scope}[draw=highlight5, fill=highlight5!30, fill opacity=0.75, visible on=3]
+                                \filldraw (3, -3, -1) -- (3, 3, -1) -- (-3, 3, -1)  -- (-3, -3, -1) -- cycle;
+                                \filldraw (-3, 3, -1) -- (-3, -3, -1) -- (-3, -3, 1) -- (-3, 3, 1) -- cycle;
+                                \filldraw (3, -3, -1) -- (-3, -3, -1) -- (-3, -3, 1) -- (3, -3, 1) -- cycle;
+                                \filldraw (3, -3, -1) -- (3, 3, -1) -- (3, 3, 1) -- (3, -3, 1) -- cycle;
+                                \filldraw  (3, 3, -1) -- (-3, 3, -1) --  (-3, 3, 1) -- (3, 3, 1) -- cycle;
+                            \end{scope}
+
+                            \path[draw=highlighta, fill=highlighta!30, fill opacity=0.75] (3, -3, 1) -- (3, 3, 1) -- (-3, 3, 1)  -- (-3, -3, 1) -- cycle;
+                            \draw[->] (passthrough) -- + (0, 0, 1);
+
+                            % Upper half-plane
+                            \begin{scope}[draw=highlight5, fill=highlight5!30, fill opacity=0.75, visible on=2]
+                                \filldraw (3, -3, 2) -- (3, 3, 2) -- (-3, 3, 2)  -- (-3, -3, 2) -- cycle;
+                                \filldraw (-3, 3, 2) -- (-3, -3, 2) -- (-3, -3, 1) -- (-3, 3, 1) -- cycle;
+                                \filldraw (3, -3, 2) -- (-3, -3, 2) -- (-3, -3, 1) -- (3, -3, 1) -- cycle;
+                                \filldraw (3, -3, 2) -- (3, 3, 2) -- (3, 3, 1) -- (3, -3, 1) -- cycle;
+                                \filldraw  (3, 3, 2) -- (-3, 3, 2) --  (-3, 3, 1) -- (3, 3, 1) -- cycle;
+                            \end{scope}
+                        \end{tikzpicture}
+                        \caption{Demi-espaces en dimension $3$}
+                    \end{figure}
+                \end{itemize}
+        \onslide<4-6>
+            \begin{itemize}
+                \item En dimension $2$ : demi-plans
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \begin{tikzpicture}
+                            \node[coordinate] at (0, 0) (O) {};
+                            \draw[->] (-3, 0) -- (3, 0);
+                            \draw[->] (0, -2) -- (0, 2);
+
+                            \path[draw=highlight5, fill=highlight5!30, fill opacity=0.75, visible on=5] (-3, -2) -- (3, 1) -- (3, 2) -- (-3, 2) -- cycle;
+                            \path[draw=highlight5, fill=highlight5!30, fill opacity=0.75, visible on=6] (-3, -2) -- (3, 1) -- (3, -2) -- (-3, -2) -- cycle;
+
+                            \draw[highlighta] (-3, -2) -- (3, 1);
+                        \end{tikzpicture}
+                        \caption{Demi-espaces en dimension $2$}
+                    \end{figure}
+            \end{itemize}
+        % \onslide<3>
+        %     \begin{itemize}
+        %         \item En dimension $1$, les hyperplans sont les \alert{points}
+        %             \begin{figure}
+        %                 \tikzset{external/export=true}
+        %                 \begin{tikzpicture}
+        %                     \node[coordinate] at (0, 0) (O) {};
+        %                     \draw (-3, 0) -- (3, 0);
+        %
+        %                     \fill[highlighta] (1, 0) circle[radius=2pt];
+        %                 \end{tikzpicture}
+        %                 \caption{Hyperplan en dimension $1$}
+        %             \end{figure}
+        %     \end{itemize}
+    \end{overprint}
+\end{frame}
+
+\againframe<3>{SVMmain}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
