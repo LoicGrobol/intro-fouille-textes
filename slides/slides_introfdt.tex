@@ -3537,19 +3537,86 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
                     \draw[->] (0, -0.5) -- (0, 4.25);
 
                     \foreach \x/\y/\c in {2/1/6,4/0/6,1/0/6,2/3/a,0/3/a,1/2/a,0/2/a}{
-                        \path[alt=<10-12>{fill=highlight7}{fill=highlight\c}] (\x, \y) circle[radius=3pt];
+                        \path[alt=<10-12>{fill=highlight5}{fill=highlight\c}] (\x, \y) circle[radius=3pt];
                     }
 
                     \path[fill=highlighta!30, fill opacity=0.5, visible on=12] (-0.5, -0.5)  -- (4.25, 4.25) -- (-0.5, 4.25) -- cycle;
                     \path[fill=highlight6!30, fill opacity=0.5, visible on=12] (-0.5, -0.5)  -- (5.25, -0.5) -- (5.25, 4.25) -- (4.25, 4.25) -- cycle;
                     \draw[highlight3, visible on={11-13}] (-0.5, -0.5)  -- (4.25, 4.25);
                 \end{tikzpicture}
-                \caption{Classification linéaire en dimension $2$}
+                \caption{Classification \only<13>{linéaire} en dimension $2$}
             \end{figure}
+            \only<13>{On parle de \alert{classifieur linéaire}.}
     \end{overprint}
 \end{frame}
 
+% TODO: figs
+\begin{frame}{Classifieurs linéaires}
+    Le principe des classifieurs linéaire est donc, étant donné un problème à deux classes
+    \begin{itemize}
+        \item Trouver un hyperplan qui sépare l'espace des attributs en demi-espaces contenant chacun tous les exemples d'entraînement d'une seule classe
+        \item On classe les exemples de test dans la classe correspondant à leur demi-espace
+    \end{itemize}
+
+    Cela suppose de résoudre deux problèmes
+    \begin{itemize}
+        \item Existe-t-il un tel hyperplan ? (on dit dans ce cas que le problème est \emph{linéairement séparable})
+        \item S'il en existe un, il en existe en général une infinité
+            \begin{itemize}
+                \item[→] Lequel choisir ?
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% TODO: figs
+\begin{frame}{Notion de marge}
+    Intuitivement, pour espérer qu'un classifieur linéaire sache généraliser hors de l'ensemble d'entraînement, il faut qu'il sépare les classes le plus largement possible.
+
+    \begin{block}{Définition (marge)}
+        Étant donné à problème à deux classes, $C$ et $C'$, on appelle \emph{marge} d'un hyperplan $H$ le nombre
+        \begin{equation}
+            M(H) = \min_{x∈C}d(x, H) + \min_{x'∈C'}d(x', H)
+        \end{equation}
+    \end{block}
+
+    L'hyperplan recherché pour établir un SVM sera celui pour lequel la marge (sur l'ensemble d'entraînement) sera la plus grande.
+
+    {\footnotesize D'où \emph{séparateur à \alert{vaste marge}}.}
+\end{frame}
+
+\begin{frame}{Vecteurs de support}
+    Dans l'équation
+    \begin{equation}
+        M(H) = \min_{x∈C}d(x, H) + \min_{x'∈C'}d(x', H)
+    \end{equation}
+    Les points $x$ et $x'$ pour lesquels les minima sont atteints  sont appelés \emph{vecteurs de support}
+    % TODO: fig
+\end{frame}
+
 \againframe<3>{SVMmain}
+
+% TODO: figs
+\begin{frame}{Problèmes non-séparables}
+    En général, les problèmes réels ne ont pas linéairement séparables.
+    Plusieurs méthodes existent pour y adapter les SVM.
+    \begin{description}
+        \item[Marge douce] On remplace la fonction de marge $M$ par une fonction de la forme
+            \begin{equation}
+                L(H) = M(H) - C(H)
+            \end{equation}
+            où $C(H)$ est une pénalité pour les exemples mal classés par $H$.
+            On choisit comme précédemment l'hyperplan $H$ qui maximise $L(H)$.
+        \item[\emph{Kernel trick}]
+    \end{description}
+\end{frame}
+
+\begin{frame}{\emph{Kernel trick}}
+    Le \emph{Kernel trick} consiste à transformer un problème non-linéairement séparable en un problème linéairement séparable dans un espace de dimension supérieure.
+
+    % TODO: fig
+
+    En réalité, le problème en dimension supérieure est souvent lui aussi non-linéairement séparable, et on combine en général le \emph{Kernel trick} avec une marge douce.
+\end{frame}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
