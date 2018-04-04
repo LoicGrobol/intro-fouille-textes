@@ -2980,8 +2980,8 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
             \draw[->] (-0.5,0) -- (5.25, 0);
             \foreach \x in {1,...,5}
                 \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
-            \draw[->] (0, -0.5) -- (0, 4.25);
 
+            \draw[->] (0, -0.5) -- (0, 4.25);
             \foreach \y in {1,...,4}
                 \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
 
@@ -3513,20 +3513,39 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
                         \caption{Demi-espaces en dimension $2$}
                     \end{figure}
             \end{itemize}
-        % \onslide<3>
-        %     \begin{itemize}
-        %         \item En dimension $1$, les hyperplans sont les \alert{points}
-        %             \begin{figure}
-        %                 \tikzset{external/export=true}
-        %                 \begin{tikzpicture}
-        %                     \node[coordinate] at (0, 0) (O) {};
-        %                     \draw (-3, 0) -- (3, 0);
-        %
-        %                     \fill[highlighta] (1, 0) circle[radius=2pt];
-        %                 \end{tikzpicture}
-        %                 \caption{Hyperplan en dimension $1$}
-        %             \end{figure}
-        %     \end{itemize}
+        \onslide<7-9>
+            \begin{itemize}
+                \item En dimension $1$ : demi-droites
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \begin{tikzpicture}
+                            \node[coordinate] at (0, 0) (O) {};
+                            \draw (-3, 0) -- (3, 0);
+                            \draw[highlight5, visible on=8] (1,0) -- (3, 0);
+                            \draw[highlight5, visible on=9] (1,0) -- (-3, 0);
+                            \fill[highlighta] (1, 0) circle[radius=2pt];
+                        \end{tikzpicture}
+                        \caption{Demi-espaces en dimension $1$}
+                    \end{figure}
+            \end{itemize}
+        \onslide<10-13>
+            Cette propriété permet de construire des classifieurs
+            \begin{figure}
+                \tikzset{external/export=true}
+                \begin{tikzpicture}
+                    \draw[->] (-0.5,0) -- (5.25, 0);
+                    \draw[->] (0, -0.5) -- (0, 4.25);
+
+                    \foreach \x/\y/\c in {2/1/6,4/0/6,1/0/6,2/3/a,0/3/a,1/2/a,0/2/a}{
+                        \path[alt=<10-12>{fill=highlight7}{fill=highlight\c}] (\x, \y) circle[radius=3pt];
+                    }
+
+                    \path[fill=highlighta!30, fill opacity=0.5, visible on=12] (-0.5, -0.5)  -- (4.25, 4.25) -- (-0.5, 4.25) -- cycle;
+                    \path[fill=highlight6!30, fill opacity=0.5, visible on=12] (-0.5, -0.5)  -- (5.25, -0.5) -- (5.25, 4.25) -- (4.25, 4.25) -- cycle;
+                    \draw[highlight3, visible on={11-13}] (-0.5, -0.5)  -- (4.25, 4.25);
+                \end{tikzpicture}
+                \caption{Classification linéaire en dimension $2$}
+            \end{figure}
     \end{overprint}
 \end{frame}
 
