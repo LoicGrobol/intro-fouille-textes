@@ -2727,7 +2727,7 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
 \begin{frame}{Choix d'une famille de fonctions}
     Problème : $f$ pourrait avoir n'importe quelle forme !
     \begin{itemize}
-        \item[→] On choisit donc une famille de fonctions et y cherche celle qui semble le mieux correspondre à nos exemples
+        \item[→] On choisit une famille de fonctions et on y cherche celle qui semble le mieux correspondre à nos exemples
         \item Par exemple avec des polynômes :
             \begin{equation}
                 f(x) = a₀ + a₁x + a₂x²+ … + a_nx^n
@@ -2833,8 +2833,8 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
                     300	400000\\
                     600	405000\\
                 };
-                \addplot[highlighta, domain=100:310, samples=200] {9.133693238227375E-7*x^6-0.0015210072640020665*x^5+0.9901617434548338*x^4-326.9727250825201*x^3+58224.97189714596*x^2-5327933.125949258*x+196687335.202412};
-                \addplot[highlighta, domain=594:606, samples=200] {9.133693238227375E-7*x^6-0.0015210072640020665*x^5+0.9901617434548338*x^4-326.9727250825201*x^3+58224.97189714596*x^2-5327933.125949258*x+196687335.202412};
+                \addplot[highlighta, domain=100:310, samples at={100,101,...,311,311.1,311.15,311.18970915,311.19,311.2,...,312}] {9.133693238227375E-7*x^6-0.0015210072640020665*x^5+0.9901617434548338*x^4-326.9727250825201*x^3+58224.97189714596*x^2-5327933.125949258*x+196687335.202412};
+                \addplot[highlighta, domain=590:610, samples at={599.001,599.002,...,599.945,599.9455,599.945526073,599.9456,599.95,599.96,...,600,600.001,...,610}] {9.133693238227375E-7*x^6-0.0015210072640020665*x^5+0.9901617434548338*x^4-326.9727250825201*x^3+58224.97189714596*x^2-5327933.125949258*x+196687335.202412};
             \end{axis}
         \end{tikzpicture}
         \caption{Polynôme de degré $6$}\label{fig|overfit}
@@ -3667,7 +3667,7 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
 
 % TODO: figs
 \begin{frame}{Problèmes non-séparables}
-    En général, les problèmes réels ne ont pas linéairement séparables.
+    En général, les problèmes réels ne sont pas linéairement séparables.
     Plusieurs méthodes existent pour y adapter les SVM.
     \begin{description}
         \item[Marge douce] Modifier la définition de \emph{marge} pour tenir compte des exemples mal classés
@@ -3682,25 +3682,27 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
     \end{equation}
     où $C(H)$ est une pénalité pour les exemples mal classés par $H$.
     \begin{figure}
-        % \tikzset{external/export=true}
+        \tikzset{external/export=true}
         \begin{tikzpicture}[true scale=0.7]
             \path[clip] (-0.5, -0.5) rectangle (5.25, 4.25);
             \draw[->] (-0.5,0) -- (5.25, 0);
             \draw[->] (0, -0.5) -- (0, 4.25);
 
-            \foreach \x/\y/\c in {2/1/6,4/0/6,1/0/6,2/3/6,0/3/a,1/2/a,0/2/a}{
+            \foreach \x/\y/\c in {2/1/6,4/0/6,1/0/6,2/3/a,0/3/a,1/2/a,0/2/a}{
                 \path[fill=highlight\c] (\x, \y) circle[radius=3pt];
             }
+            \path[fill=highlight6, visible on={2-}] (1, 3) circle[radius=3pt];
 
             \begin{scope}[domain=-0.5:5.25]
-                \draw[highlight3, alt=<{4-5,7}>{}{opacity=0}] plot (\x, \x) node[right] {$H$};
+                \draw[highlight3, visible on=3] plot (\x, \x+1) node[right] {$H$};
             \end{scope}
-
-            \draw[<->, visible on=6] (1, 2) -- (2, 1) node[midway, above right] {$M(H)$};
         \end{tikzpicture}
         \caption{Hyperplan à marge douce maximale}
     \end{figure}
-    On choisit comme précédemment l'hyperplan $H$ qui maximise $L(H)$.
+    \only<2>{
+        \vspace{-\bigskipamount}
+        On choisit comme précédemment l'hyperplan $H$ qui maximise $L(H)$.
+    }
 \end{frame}
 
 \begin{frame}{\emph{Kernel trick}}
