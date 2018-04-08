@@ -3382,6 +3382,7 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
 % ███████ ██    ██ ██ ████ ██
 %      ██  ██  ██  ██  ██  ██
 % ███████   ████   ██      ██
+
 \lecture{Introduction à la fouille de textes}{2018-04-09}
 \subsection{SVM}
 
@@ -3706,7 +3707,7 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
 \end{frame}
 
 \begin{frame}[fragile]{\emph{Kernel trick}}
-    Le \emph{Kernel trick} consiste à transformer un problème non-linéairement séparable en un problème linéairement séparable dans un espace de dimension supérieure.
+    L'\emph{astuce du noyau} consiste à transformer un problème non-linéairement séparable en un problème linéairement séparable dans un espace de dimension supérieure.
 
     \begin{figure}
         \tikzset{external/export=true}
@@ -3719,17 +3720,41 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
                 \draw[highlight7, visible on={3-5}] plot (\x, {0.1*(\x-78)^2}) node [pos=0, right] {$y=ax²+bx+c$};
                 \draw[highlight3, visible on={6-}] plot (\x, {-0.1*\x+11.61});
             \end{scope}
+
             \foreach \x/\c [count=\i] in {68/6,69/6,70/6,73/a,74/a,76/a,80/a,82/a,85/6,86/6} {
                 \path[fill=highlight\c, visible on={1-4}] (\x, 0) node (base\i) {} circle[radius=3pt];
                 \path[fill=highlight\c, visible on={4-}] (\x, {0.1*(\x-78)^2})  node (raised\i) {} circle[radius=3pt];
                 \draw[->, visible on=4] (base\i) -- (raised\i);
             }
         \end{tikzpicture}
-        \caption{\emph{Kernel trick}}
+        \caption{Hyperplan séparateur en dimension supérieure}
     \end{figure}
-    \only<6>{
-        En réalité, le problème en dimension supérieure est souvent lui aussi non-linéairement séparable, et on combine en général le \emph{Kernel trick} avec une marge douce.
-    }
+    \vspace{-1\bigskipamount}
+    \begin{overprint}
+        \onslide<6>
+            \begin{itemize}
+                \item Les \emph{noyaux} en question sont des fonctions qui permettent d'éviter d'avoir à calculer explicitement les transformations pour passer en dimension supérieure.
+            \end{itemize}
+        \onslide<7>
+            \begin{itemize}
+                \item En réalité, le problème en dimension supérieure est souvent lui aussi non-linéairement séparable, et on combine en général le \emph{kernel trick} avec une marge douce.
+            \end{itemize}
+    \end{overprint}
+\end{frame}
+
+\begin{frame}{Propriétés}
+    Les SVM sont des modèles très efficaces, qui jusqu'à récemment étaient systématiquement les plus performants.
+    \begin{itemize}
+        \item Une fois l'apprentissage fait, la classification est très rapide
+        \item Les modèles sont peu gourmands en mémoire
+        \item Les modèles marchent mieux que les autres modèles présentés (en général)
+    \end{itemize}
+    Avec quelques inconvénients
+    \begin{itemize}
+        \item Les modèles sont difficilement interprétables
+        \item Le choix d'un noyau tient plus de l'artisanat que de la science
+        \item Les algorithmes classiques ne permettent pas d'apprentissage incrémental.
+    \end{itemize}
 \end{frame}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
