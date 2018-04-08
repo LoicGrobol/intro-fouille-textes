@@ -3757,6 +3757,64 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
     \end{itemize}
 \end{frame}
 
+% ███    ██ ███████ ████████
+% ████   ██ ██         ██
+% ██ ██  ██ █████      ██
+% ██  ██ ██ ██         ██
+% ██   ████ ███████    ██
+
+
+\subsection{Réseaux de neurones}
+
+% TODO: cite
+\begin{frame}{Réseaux de neurones}
+    \textbf{Dans Weka} classifiers > functions > MultilayerPerceptron
+    \pause
+
+    \textbf{Espace de recherche} Ensemble des chaînes de fonctions linéaires et d'activations non-linéaires
+    \pause
+
+    \textbf{Technique de recherche} en général : descente de gradient stochastique par rétropropagation
+\end{frame}
+
+\begin{frame}{Le modèle du perceptron}
+    Frank Rosenblatt (1957) sur une idée de Warren McCulloch et Walter Pitts (1943).
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[
+            basic/.style={draw, minimum width=3em},
+            input/.style={basic, circle},
+            weights/.style={basic, circle, minimum width=2em},
+            functions/.style={basic, circle},
+            true scale=0.8,
+        ]
+            \foreach \h [count=\hi ] in {$x_n$,$x_2$,$x_1$}{%
+                  \node[input] (f\hi) at (0,\hi*2cm-5 cm) {\h};
+                }
+            \node[functions] (sum) at (4,0) {$∑$};
+            \foreach \h [count=\hi ] in {$w_n$,$w_2$,$w_1$}{%
+                  \path (f\hi) -- node[weights] (w\hi) {\h} (sum);
+                  \draw[->] (f\hi) -- (w\hi);
+                  \draw[->] (w\hi) -- (sum);
+                }
+            \node[functions] (step) at (7,0) {};
+               \begin{scope}[xshift=7cm,scale=.75]
+                 \draw[thick] (0.5em,0.5em) -- (0,0.5em) --
+                              (0,-0.5em) --  (-0.5em,-0.5em)
+                              (0em,0.75em) -- (0em,-0.75em)
+                              (0.75em,0em) -- (-0.75em,0em);
+               \end{scope}
+            \draw[->] (sum) -- (step);
+            \draw[->] (step) -- ++(1,0);
+            % Labels
+            \node[above=1cm] at (f3) {Entrées};
+            \node[above=1cm] at (w3) {Poids};
+            \node[above=1cm of step] {Activation};
+        \end{tikzpicture}
+        \caption{Perceptron simple}
+    \end{figure}
+\end{frame}
+
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
 % ███████ ██████  ██████  █████   ██ ██  ██ ██   ██ ██   ███
