@@ -70,7 +70,7 @@ def process(corpus_path, out_path=None, boolean=False, fichier_mots_vides=None, 
     sortie = ['@relation corpus']
     for mot in lexicon:
         sortie.append("@attribute '{m}' numeric".format(m=mot.replace("'", r"\'")))
-    sortie.append(f"@attribute 'classe' {{{','.join(class_names)}}}")
+    sortie.append(f"@attribute 'xClasse' {{{','.join(class_names)}}}")
     sortie.append("@data")
     for r in rows:
         sortie.append(','.join(map(str, r)))
