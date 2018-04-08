@@ -78,6 +78,7 @@ def process(corpus_path, out_path=None, boolean=False, fichier_mots_vides=None, 
     # ecriture du contenu de la variable dans le fichier de sortie
     with open(out_path, 'w') as fichier_sortie:
         fichier_sortie.write('\n'.join(sortie))
+        fichier_sortie.write('\n')
 
     print('fichier-resultat.arff produit !')
 
