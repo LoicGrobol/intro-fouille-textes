@@ -3821,17 +3821,16 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
 \end{frame}
 
 \begin{frame}[fragile]{Fonction de Heavyside}
-    La fonction de Heavyside $H$ est l'activation classique pour faire du perceptron un classifieur binaire : elle transforme les nombres négatifs en $09$ et les nombres positifs en $1$.
+    La fonction de Heavyside $H$ est l'activation classique pour faire du perceptron un classifieur binaire : elle transforme les nombres négatifs en $0$ et les nombres positifs en $1$.
+    \vspace{-1\bigskipamount}
     \begin{figure}
         \tikzset{external/export=true}
         \begin{tikzpicture}
-            \begin{axis}[xmin=-10, xmax=10,
+            \begin{axis}[xmin=-10, xmax=10, ymin=-0.5,
                          width=0.9\textwidth,
                          height=0.8\textheight,
                          xlabel={$x$},
                          ylabel={$H(x)$},
-                         axis y line=center,
-                         axis x line=middle,
                          title={Fonction de Heavyside : $y=\max(x, 0)$},
                          scaled ticks=false,]
                 \addplot[highlighta, domain=-10:10, samples=100] {greater(x,0)};
@@ -3857,7 +3856,7 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
                     \end{equation}
             \end{itemize}
     \end{enumerate}
-    Une fois l'ensemble d'entraînement parcouru, on a réalisé une  \emph{époque d'apprentissage}, on peut alors soit s'arrêter, soit recommencer du début
+    Une fois l'ensemble d'entraînement parcouru, on a réalisé une  \emph{époque d'apprentissage}, on peut alors soit s'arrêter, soit recommencer du début.
     \begin{itemize}
         \item $α>0$ est un hyperparamètre appelé \emph{taux d'apprentissage}
     \end{itemize}
@@ -3865,32 +3864,87 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
 
 
 \begin{frame}[fragile]{Algorithme du perceptron}
+    En deux dimensions, avec les classes \textcolor{highlighta}{$1$} et \textcolor{highlight6}{$0$}, avec un taux d'apprentissage $α=0.5$.
+    % TODO: this could be even more automated
     \begin{figure}
         % \tikzset{external/export=true}
         \begin{tikzpicture}
-            \path[clip] (-0.5, -0.5) rectangle (5.25, 4.25);
-            \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+            \begin{scope}
+                \path[clip] (-0.5, -0.5) rectangle (5.25, 4.25);
+                \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
 
-            \draw[->] (-0.5,0) -- (5.25, 0);
-            \foreach \x in {1,...,5}
-                \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+                \draw[->] (-0.5,0) -- (5.25, 0);
+                \foreach \x in {1,...,5}
+                    \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
 
-            \draw[->] (0, -0.5) -- (0, 4.25);
-            \foreach \y in {1,...,4}
-                \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+                \draw[->] (0, -0.5) -- (0, 4.25);
+                \foreach \y in {1,...,4}
+                    \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
 
-            \draw (0, 0) node[below left] {\footnotesize $0$};
+                \draw (0, 0) node[below left] {\footnotesize $0$};
 
-            \foreach \x/\y/\c [count=\i] in {2/1/6,4/0/6,1/0/6,2/3/6,0/3/a,1/2/a,0/2/a}{
-                \path[alt=<\i>{highlight5}{fill=highlight\c}] (\x, \y) circle[radius=3pt];
-            }
-            \begin{scope}[domain=-0.5:5.25]
-                    \draw[highlight3, thick] plot (\x, 0);
+                \foreach \x/\y/\c [count=\i] in {2/1/6,4/0/6,1/0/6,2/3/6,0/3/a,1/2/a,0/2/a}{
+                    \node at (\x, \y) (sample\i) {};
+                    \path[ fill=highlight\c] (sample\i) circle[radius=3pt];
+                }
+
+                \begin{scope}[domain=-0.5:5.25]
+                    \begin{scope}
+                        \pgfmathsetmacro{\a}{2}
+                        \pgfmathsetmacro{\b}{1}
+                        \pgfmathsetmacro{\c}{-4}
+                        \pgfmathtruncatemacro{\toprightscore}{\a*5.25+\b*4.25+\c}
+                        \path[
+                            fill={\ifnum \toprightscore>0 highlighta\else highlight6\fi},
+                            fill opacity=0.5, visible on={3-4}
+                        ]
+                            plot (\x, {(\a*\x+\c)/(-\b)}) -- (5.25,4.25) -- (-0.5,4.25) -- cycle;
+                        \path[
+                            fill={\ifnum \toprightscore>0 highlight6\else highlighta\fi},
+                            fill opacity=0.5, visible on={3-4}
+                        ]
+                            plot (\x, {(\a*\x+\c)/(-\b)}) -- (5.25,-0.5) -- (-0.5,-0.5) -- cycle;
+
+                        \draw[highlight3, thick, visible on={2-4}] plot (\x, {(\a*\x+\c)/(-\b)});
+
+                        \draw[->, thick, visible on={2-5}] (1, {(\a+\c)/(-\b)}) -- +(\a, \b) node[coordinate, label=above:$w$] (w1) {};
+
+                        \path[draw=highlight5, very thick, visible on={4-7}] (sample1) circle[radius=3pt];
+                        \draw[->, thick, visible on={4-7}] (0, 0) -- (sample1) node[midway, above left] {$x$};
+
+                        \draw[->, thick, visible on={5}] (w1) -- +(-1, -0.5) node[midway, below right] {$α×(-1)⋅x$};
+                    \end{scope}
+                    \begin{scope}
+                        \pgfmathsetmacro{\a}{1}
+                        \pgfmathsetmacro{\b}{0.5}
+                        \pgfmathsetmacro{\c}{-4.5}
+                        \pgfmathtruncatemacro{\toprightscore}{\a*5.25+\b*4.25+\c}
+                        \path[
+                            fill={\ifnum \toprightscore>0 highlighta\else highlight6\fi},
+                            fill opacity=0.5, visible on=8,
+                        ]
+                            plot (\x, {(\a*\x+\c)/(-\b)}) -- (5.25,4.25) -- (-0.5,4.25) -- cycle;
+                        \path[
+                            fill={\ifnum \toprightscore>0 highlight6\else highlighta\fi},
+                            fill opacity=0.5, visible on=8,
+                        ] plot (\x, {(\a*\x+\c)/(-\b)}) -- (5.25,-0.5) -- (-0.5,-0.5) -- cycle;
+
+                        \draw[highlight3, thick, visible on={7-8}] plot (\x, {(\a*\x+\c)/(-\b)});
+
+                        \draw[->, thick, visible on={6-8}] (3.5, {(\a*3.5+\c)/(-\b)}) -- +(\a, \b) node[coordinate, label=above:$w$] (w2) {};
+
+                        \path[draw=highlight5, very thick, visible on=8] (sample1) circle[radius=3pt];
+                        \draw[->, thick, visible on=8] (0, 0) -- (sample1) node[midway, above left] {$x$};
+                    \end{scope}
+                \end{scope}
             \end{scope}
         \end{tikzpicture}
         \caption{Algorithme du perceptron}
     \end{figure}
+    \only<9>{}
 \end{frame}
+
+
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
 % ███████ ██████  ██████  █████   ██ ██  ██ ██   ██ ██   ███
