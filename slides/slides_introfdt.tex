@@ -3788,33 +3788,109 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
             functions/.style={basic, circle},
             true scale=0.8,
         ]
-            \foreach \h [count=\hi ] in {$x_n$,$x_2$,$x_1$}{%
+            \foreach \h [count=\hi] in {$x_n$,$x_2$,$x_1$,$1$}{%
                   \node[input] (f\hi) at (0,\hi*2cm-5 cm) {\h};
-                }
-            \node[functions] (sum) at (4,0) {$∑$};
-            \foreach \h [count=\hi ] in {$w_n$,$w_2$,$w_1$}{%
+            }
+            \node[functions] (sum) at (7,0) {$∑$};
+            \foreach \h [count=\hi] in {$w_n$,$w_2$,$w_1$,$w₀$}{%
                   \path (f\hi) -- node[weights] (w\hi) {\h} (sum);
                   \draw[->] (f\hi) -- (w\hi);
                   \draw[->] (w\hi) -- (sum);
-                }
-            \node[functions] (step) at (7,0) {};
-               \begin{scope}[xshift=7cm,scale=.75]
-                 \draw[thick] (0.5em,0.5em) -- (0,0.5em) --
+            }
+            \node at ($(f2)!0.5!(f1)$) {$⋮$};
+            \node at ($(w2)!0.5!(w1)$) {$⋮$};
+            \node[functions] (step) at (10,0) {};
+               \begin{scope}[xshift=10cm,scale=.75]
+                    \draw[thick] (0.5em,0.5em) -- (0,0.5em) --
                               (0,-0.5em) --  (-0.5em,-0.5em)
                               (0em,0.75em) -- (0em,-0.75em)
                               (0.75em,0em) -- (-0.75em,0em);
                \end{scope}
             \draw[->] (sum) -- (step);
             \draw[->] (step) -- ++(1,0);
+            \node[above right=0.5em and 3em of step] (class0) {$0$};
+            \node[below right=0.5em and 3em of step] (class1) {$1$};
+            \draw [decorate, decoration={brace, amplitude=1em}, xshift=-0.5ex] (class1.west) -- (class0.west);
             % Labels
-            \node[above=1cm] at (f3) {Entrées};
-            \node[above=1cm] at (w3) {Poids};
+            \node[above=1cm] at (f4) {Entrées};
+            \node[above=1cm] at (w4) {Poids};
             \node[above=1cm of step] {Activation};
         \end{tikzpicture}
         \caption{Perceptron simple}
     \end{figure}
 \end{frame}
 
+\begin{frame}[fragile]{Fonction de Heavyside}
+    La fonction de Heavyside $H$ est l'activation classique pour faire du perceptron un classifieur binaire : elle transforme les nombres négatifs en $09$ et les nombres positifs en $1$.
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=-10, xmax=10,
+                         width=0.9\textwidth,
+                         height=0.8\textheight,
+                         xlabel={$x$},
+                         ylabel={$H(x)$},
+                         axis y line=center,
+                         axis x line=middle,
+                         title={Fonction de Heavyside : $y=\max(x, 0)$},
+                         scaled ticks=false,]
+                \addplot[highlighta, domain=-10:10, samples=100] {greater(x,0)};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Courbe de la fonction de Heavyside}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Algorithme du perceptron}
+    Le perceptron s'entraîne en parcourant l'ensemble d'entraînement point par point.
+    On commence en initialisant tous les poids$ w_i$ à $0$ (ou à un petit nombre aléatoire).
+
+    Pour chaque exemple $x$ dont la classe est $y$
+    \begin{enumerate}
+        \item Calculer la classe observée $̄\bar{y}=H\mleft(∑w_ix_i\mright)$
+        \item
+            \begin{itemize}
+                \item Si $y=\bar{y}$, on ne change rien
+                \item Sinon, on met à jour les poids $w_i$ selon la règle
+                    \begin{equation}
+                        w_i ← w_i + α(y-\bar{y})x_i
+                    \end{equation}
+            \end{itemize}
+    \end{enumerate}
+    Une fois l'ensemble d'entraînement parcouru, on a réalisé une  \emph{époque d'apprentissage}, on peut alors soit s'arrêter, soit recommencer du début
+    \begin{itemize}
+        \item $α>0$ est un hyperparamètre appelé \emph{taux d'apprentissage}
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Algorithme du perceptron}
+    \begin{figure}
+        % \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \path[clip] (-0.5, -0.5) rectangle (5.25, 4.25);
+            \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+
+            \draw[->] (-0.5,0) -- (5.25, 0);
+            \foreach \x in {1,...,5}
+                \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+
+            \draw[->] (0, -0.5) -- (0, 4.25);
+            \foreach \y in {1,...,4}
+                \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+            \draw (0, 0) node[below left] {\footnotesize $0$};
+
+            \foreach \x/\y/\c [count=\i] in {2/1/6,4/0/6,1/0/6,2/3/6,0/3/a,1/2/a,0/2/a}{
+                \path[alt=<\i>{highlight5}{fill=highlight\c}] (\x, \y) circle[radius=3pt];
+            }
+            \begin{scope}[domain=-0.5:5.25]
+                    \draw[highlight3, thick] plot (\x, 0);
+            \end{scope}
+        \end{tikzpicture}
+        \caption{Algorithme du perceptron}
+    \end{figure}
+\end{frame}
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
 % ███████ ██████  ██████  █████   ██ ██  ██ ██   ██ ██   ███
