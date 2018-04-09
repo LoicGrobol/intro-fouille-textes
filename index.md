@@ -4,11 +4,14 @@ title: Introduction à la fouille de textes
 
 ## Nouvelles
 
+  - **2018-04-09** Les dates pour l'évaluation ont été arrêtées : voir plus bas
   - **2018-03-06** Cours le 9 avril 2018 de 10h à 12h en rattrapage du cours du 2 avril
   - **2018-03-06** [`vectorisation.py`](https://loicgrobol.github.io/intro-fouille-textes/tools/vectorisation.py) mis à jour pour compatibilité python 3.6+
 
   - **Où** Salle Benveniste, [ILPGA](http://www.ilpga.univ-paris3.f), [9 Rue des Bernardins, 75005 Paris](https://www.openstreetmap.org/way/55894044)
   - **Quand** [Le lundi de 14h à 16h](https://calendar.google.com/calendar?cid=aGdsODY4a3F2YXVxMXBpOHU2MXUwZTNsZGdAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ) (voir aussi [le calendrier de Paris 3 pour les dates](http://www.univ-paris3.fr/le-calendrier-universitaire-116398.kjsp))
+      - **Date limite pour l'envoi des dossiers** lundi 7 mai 2018 à 23h59
+      - **Examen final** le 22 avril 2018 à 14h (même salle)
   - **Contact** Loïc Grobol [<loic.grobol@gmail.com>](mailto:loic.grobol@gmail.com)
 
 ## Documents
