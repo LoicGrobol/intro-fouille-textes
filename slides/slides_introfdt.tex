@@ -25,15 +25,15 @@
     \let\footnoterule\relax  % No footnote rule, push down footnote
 
 % 9-Highlights colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/colourschemes.pdf)
-\definecolor{highlight0}{RGB}{51, 34, 136}  % Deep blue
+\definecolor{highlight0}{RGB}{51, 34, 136}    % Deep blue
 \definecolor{highlight1}{RGB}{136, 204, 238}  % Clear blue
-\definecolor{highlight2}{RGB}{68, 170, 153}  % Teal
-\definecolor{highlight3}{RGB}{17, 119, 51}  % Forest green
-\definecolor{highlight4}{RGB}{153, 153, 51}  % Khaki
+\definecolor{highlight2}{RGB}{68, 170, 153}   % Teal
+\definecolor{highlight3}{RGB}{17, 119, 51}    % Forest green
+\definecolor{highlight4}{RGB}{153, 153, 51}   % Khaki
 \definecolor{highlight5}{RGB}{221, 204, 119}  % Beige
 \definecolor{highlight6}{RGB}{204, 102, 119}  % Pink
-\definecolor{highlight7}{RGB}{136, 34, 85}  % Purple
-\definecolor{highlight8}{RGB}{170, 68, 153}  % Violet
+\definecolor{highlight7}{RGB}{136, 34, 85}    % Purple
+\definecolor{highlight8}{RGB}{170, 68, 153}   % Violet
 
 % Alternative navy blue for ⩽4 palettes
 \definecolor{highlighta}{RGB}{68, 118, 170}  % Navy blue
@@ -95,12 +95,14 @@
 		alt/.code args={<#1>#2#3}{%
 		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
 		},
-        invisible/.style={opacity=0},
+        invisible/.style={opacity=0, fill opacity=0},
 		visible on/.style={alt=<#1>{}{invisible}}
 	}
 	\usepackage{tikz-qtree}
+    \usepackage{forest}
     \usepackage{tkz-graph}
     \usepackage[beamer, markings]{hf-tikz}
+    \usepackage{tikz-3dplot}
     \usepackage{pgfplots}
         % Due to pgfplots meddling with pgfkeys, we have to redefine alt here.
         \pgfplotsset{
@@ -130,7 +132,8 @@
         \def\@appendnamedpathforactions#1{%
             \pgfsyssoftpath@getcurrentpath\@temppatha
             \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
-            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb}%
+            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb}%\usepackage{tikz-3dplot}
+
             \let\tikz@actions@path\@temppatha
         }
 
@@ -274,6 +277,8 @@
 \DeclarePairedDelimiterX\compset[2]{\lbrace}{\rbrace}{#1\,\delimsize|\,#2}
 \DeclarePairedDelimiterX\innprod[2]{\langle}{\rangle}{#1\,\delimsize|\,#2}
 
+\DeclareMathOperator*\argmax{argmax}
+
 % Easy column vectors \vcord{a,b,c} ou \vcord[;]{a;b;c}
 % Here be black magic
 \ExplSyntaxOn
@@ -292,7 +297,7 @@
 \DeclareMathOperator{\IDF}{IDF}
 
 \ExplSyntaxOn
-    \DeclareExpandableDocumentCommand \eval { m } { \fp_eval:n { #1 } }
+    \DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
 \ExplSyntaxOff
 
 
@@ -2622,15 +2627,15 @@
 
 \begin{frame}{Autres normalisations}
     \begin{itemize}
-        \item Mesure de Dice
+        \item Mesure de Sørensen–Dice
             \begin{equation}
-                \frac{\innprod{t₁}{t₂}}{\norm{t₁}₂+\norm{t₂}₂}
+                2×\frac{\innprod{t₁}{t₂}}{\norm{t₁}₂+\norm{t₂}₂}
             \end{equation}
         \item Mesure de Jaccard
             \begin{equation}
                 \frac{\innprod{t₁}{t₂}}{\norm{t₁+t₂}₂}
             \end{equation}
-        \item Coefficient \emph{overlap}
+        \item Coefficient de recouvrement
             \begin{equation}
                 \frac{\innprod{t₁}{t₂}}{\min\mleft(\norm{t₁}₂, \norm{t₂}₂\mright)}
             \end{equation}
@@ -2642,15 +2647,15 @@ Attention : en général, ces mesures ne seront pas nécessairement inférieur
 \begin{frame}{Autres normalisations : versions booléennes}
     Si les coordonnées des vecteurs indiquent la présence d'un mot plutôt que sa fréquence, on a
     \begin{itemize}
-        \item Mesure de Dice
+        \item Mesure de Sørensen–Dice
             \begin{equation}
-                \frac{\#(t₁∩t₂)}{\#t₁+\#t₂}
+                2×\frac{\#(t₁∩t₂)}{\#t₁+\#t₂}
             \end{equation}
         \item Mesure de Jaccard
             \begin{equation}
                 \frac{\#(t₁∩t₂)}{\#(t₁∪t₂)}
             \end{equation}
-        \item Coefficient \emph{overlap}
+        \item Coefficient de recouvrement
             \begin{equation}
                 \frac{\#(t₁∩t₂)}{\min(\#t₁, \#t₂)}
             \end{equation}
@@ -2722,7 +2727,7 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
 \begin{frame}{Choix d'une famille de fonctions}
     Problème : $f$ pourrait avoir n'importe quelle forme !
     \begin{itemize}
-        \item[→] On choisit donc une famille de fonctions et y cherche celle qui semble le mieux correspondre à nos exemples
+        \item[→] On choisit une famille de fonctions et on y cherche celle qui semble le mieux correspondre à nos exemples
         \item Par exemple avec des polynômes :
             \begin{equation}
                 f(x) = a₀ + a₁x + a₂x²+ … + a_nx^n
@@ -2828,8 +2833,8 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
                     300	400000\\
                     600	405000\\
                 };
-                \addplot[highlighta, domain=100:310, samples=200] {9.133693238227375E-7*x^6-0.0015210072640020665*x^5+0.9901617434548338*x^4-326.9727250825201*x^3+58224.97189714596*x^2-5327933.125949258*x+196687335.202412};
-                \addplot[highlighta, domain=594:606, samples=200] {9.133693238227375E-7*x^6-0.0015210072640020665*x^5+0.9901617434548338*x^4-326.9727250825201*x^3+58224.97189714596*x^2-5327933.125949258*x+196687335.202412};
+                \addplot[highlighta, domain=100:310, samples at={100,101,...,311,311.1,311.15,311.18970915,311.19,311.2,...,312}] {9.133693238227375E-7*x^6-0.0015210072640020665*x^5+0.9901617434548338*x^4-326.9727250825201*x^3+58224.97189714596*x^2-5327933.125949258*x+196687335.202412};
+                \addplot[highlighta, domain=590:610, samples at={599.001,599.002,...,599.945,599.9455,599.945526073,599.9456,599.95,599.96,...,600,600.001,...,610}] {9.133693238227375E-7*x^6-0.0015210072640020665*x^5+0.9901617434548338*x^4-326.9727250825201*x^3+58224.97189714596*x^2-5327933.125949258*x+196687335.202412};
             \end{axis}
         \end{tikzpicture}
         \caption{Polynôme de degré $6$}\label{fig|overfit}
@@ -2941,11 +2946,11 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
     Il s'agit plutôt d'une \emph{baseline} : un système sérieux devrait en principe faire mieux.
 \end{frame}
 
-%  ██████  ██   ██
-% ██       ██  ██
-% ██ █████ █████
-% ██       ██  ██
-%  ██████  ██   ██
+% ██   ██      ███    ██ ███    ██
+% ██  ██       ████   ██ ████   ██
+% █████  █████ ██ ██  ██ ██ ██  ██
+% ██  ██       ██  ██ ██ ██  ██ ██
+% ██   ██      ██   ████ ██   ████
 
 \subsection{$k$-plus proches voisins}
 
@@ -2965,6 +2970,7 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
     \textbf{Technique de recherche} Aucune !
 \end{frame}
 
+% TODO: improve this
 \begin{frame}[fragile]{Exemple}
     \begin{figure}
         \tikzset{external/export=true}
@@ -2974,8 +2980,8 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
             \draw[->] (-0.5,0) -- (5.25, 0);
             \foreach \x in {1,...,5}
                 \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
-            \draw[->] (0, -0.5) -- (0, 4.25);
 
+            \draw[->] (0, -0.5) -- (0, 4.25);
             \foreach \y in {1,...,4}
                 \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
 
@@ -3006,6 +3012,885 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
     \end{itemize}
 \end{frame}
 
+% ████████ ██████  ███████ ███████
+%    ██    ██   ██ ██      ██
+%    ██    ██████  █████   █████
+%    ██    ██   ██ ██      ██
+%    ██    ██   ██ ███████ ███████
+
+\lecture{Introduction à la fouille de textes}{2018-03-19}
+\subsection{Arbres de décision}
+\begin{frame}{Arbres de décision}
+    \textbf{Dans Weka} trees (> J48)
+
+    \textbf{Espace de recherche} L'ensemble des arbres de recherche pour les attributs choisis
+
+    % TODO: cite
+    \textbf{Techniques de recherche} Plusieurs algorithmes, le plus connu étant C4.5, appelé J48 dans Weka
+\end{frame}
+
+\begin{frame}{Arbre de décision}
+    Modèle de prise de décision déterministe par succession de choix.
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{forest}
+            for tree={draw, l sep=2em, s sep=3em}
+            [outlook,ellipse
+                [humidity,ellipse,edge label={node[midway,left] {=sunny}}
+                    [yes,edge label={node[midway,left] {$⩽75$}}]
+                    [no,edge label={node[midway,right] {$>75$}}]
+                ]
+                [yes,edge label={node[midway] {=overcast}}]
+                [windy,ellipse,edge label={node[midway,right] {=rainy}}
+                    [yes,edge label={node[midway,left] {=true}}]
+                    [no,edge label={node[midway,right] {=false}}]
+                ]
+            ]
+        \end{forest}
+        \caption{Arbre de décision pour \emph{weather}}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Arbre de décision}
+    En python
+    \begin{figure}
+        \begin{lstlisting}[gobble=12, language=Python]
+            def classify(outlook, humidity, windy):
+                if outlook == "sunny":
+                    if humidity <= 75:
+                        return "yes"
+                    else:
+                    return "no"
+                elif outlook == "overcast":
+                    return "yes"
+                elif outlook == "rainy":
+                    if windy:
+                        return true
+                    else:
+                        return false
+        \end{lstlisting}
+        \caption{Code correspondant à l'arbre précédent}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Technique d'apprentissage}
+    C'est assez facile de construire un arbre parfait pour l'ensemble d'entraînement
+    \pause
+    \begin{itemize}
+        \item On énumère chacun des attributs jusqu'à avoir énuméré toutes les combinaisons existantes
+        \item[→] Surapprentissage !
+    \end{itemize}
+    Comment faire pour avoir un arbre bon, mais pas trop profond ?
+    \pause
+    \begin{itemize}
+        \item Faire en sorte de trier vite et bien
+        \item[→] En choisissant les attributs les plus discriminants
+    \end{itemize}
+    L'idée est donc de construire l'arbre progressivement, prenant à chaque étape le test le plus \alert{discriminant}, reste à savoir comment le détermine.
+\end{frame}
+
+% FIXME: Review this whole part : start by growing the decision tree for the weather dataset by hand
+% thus motivating both the Gini indice definition and the general procedure and only formalize
+% things after. Plan on using real attribute names and values instead of abstract ones, use concrete
+% examples EVERYWHERE and add a lot of figures (possibly animated) e.g. the change S→S_{a,v}
+% graphically. Only introduce entropy after all that
+\begin{frame}{Indice de diversité de Gini}
+    \begin{block}{Définition}
+        On appelle \emph{indice de diversité de Gini} d'une partition $S=⊔_{1⩽i⩽n}c_i$
+        \begin{equation}
+            Gini(S) = ∑_{1⩽i⩽n}p_i(1-p_i)
+        \end{equation}
+        avec $p_i=\frac{\#c_i}{∑_{j=1}^n\#c_j}$
+    \end{block}
+    Autrement dit, l'indice de diversité de Gini est la probabilité qu'un exemple choisi au hasard et classé au hasard soit mal classé.
+\end{frame}
+
+\begin{frame}{Indice de diversité de Gini}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=0, xmax=1, ymin=0,
+                         width=0.9\textwidth,
+                         height=0.8\textheight,
+                         xlabel={$p_1$},
+                         ylabel={$Gini(S)$},
+                         title={Indice de diversité de Gini : $y=x(1-x)+(1-x)x$},
+                         scaled ticks=false,]
+                \addplot[highlighta, domain=0:1, samples=1001] {x*(1-x)+(1-x)*x};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Indice de diversité de Gini pour un problème à deux classes}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Entropie}
+    \begin{block}{Définition}
+        On appelle \emph{entropie} d'une partition $S=⊔_{1⩽i⩽n}c_i$
+        \begin{equation}
+            H(S) = -∑_{1⩽i⩽n}p_i\log₂(p_i)
+        \end{equation}
+        avec $p_i=\frac{\#c_i}{∑_{j=1}^n\#c_j}$
+    \end{block}
+    Intuitivement, si on choisit au hasard et de façon uniforme un exemple $x$ dans $S$
+    \begin{itemize}
+        \item $p_i$ est la probabilité de l'évènement « La classe de $x$ est $c_i$ »
+        \item $-\log₂p_i$ mesure la surprise de l'évènement « La classe de $x$ est $c_i$ »
+    \end{itemize}
+    Finalement, $H$ est donc la surprise moyenne de $S$.
+\end{frame}
+
+\begin{frame}{Indice de diversité de Gini}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=0, xmax=1, ymin=0,
+                         width=0.9\textwidth,
+                         height=0.8\textheight,
+                         xlabel={$p_1$},
+                         ylabel={$H(S)$},
+                         title={Entropie : $y=-x\log₂(x)-(1-x)\log₂(1-x)$},
+                         scaled ticks=false,]
+                \addplot[highlighta, domain=0:1, samples=1001] {-x*ln(x)/ln(2)-(1-x)*ln(1-x)/ln(2)};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Entropie pour un problème à deux classes}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Choix des attributs}
+    On peut en déduire une valuation de « être un attribut discriminant » :
+    \begin{itemize}
+         \item Soit un attribut $a$ à valeurs discrètes
+         \item Pour toute valeur $v$ prise par $a$, on note $S_{a=v}$ l'ensemble des éléments de $S$ pour lesquels $a$ vaut $v$.
+    \end{itemize}
+    On définit lors le gain associé à $a$ par
+    \begin{equation}
+        g(S, a) = Gini(S) - ∑_i\frac{\#S_{a=v}}{\#S}Gini(S_{a=v})
+    \end{equation}
+    \begin{itemize}
+        \item Un attribut est d'autant plus discriminant que son gain est élevé.
+        \item On peut procéder de même avec $H$ (ou un autre indice de diversité)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Attributs à valeurs scalaires}
+    Pour des attributs numériques, on se ramène à un choix discret en utilisant des seuils
+    \begin{itemize}
+        \item Pour un attribut $a$ à valeur numérique $∈[α, β]$ et $r∈[α, β]$, on note $a_r$ l'attribut booléen $a(x)⩽r$
+        \item On choisit $s$ tel que $g(S, a_r)$ soit maximal
+    \end{itemize}
+    On peut ensuite utiliser $a_r$ au lieu de $a$ dans notre choix d'attributs.
+\end{frame}
+
+\begin{frame}<3>[fragile]{Représentation graphique des seuils}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+
+            \draw[->] (-0.5,0) -- (5.25, 0);
+            \foreach \x in {1,...,5}
+                \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+            \draw[->] (0, -0.5) -- (0, 4.25);
+
+            \foreach \y in {1,...,4}
+                \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+            \draw (0, 0) node[below left] {\footnotesize $0$};
+
+            \foreach \x/\y/\c in {2/1/highlight6,4/0/highlight6,1/0/highlight6,2/3/highlight6,0/3/highlighta,1/2/highlighta,0/2/highlighta}{
+                \path[fill=\c] (\x, \y) circle[radius=3pt];
+            }
+
+            \draw[highlight3, line width=2pt, alt={<2,4>{}{invisible}}] (-0.5, 1.5) -- (5.25, 1.5);
+            \draw[highlight4, line width=2pt, visible on=3] (1.5, -0.5) -- (1.5, 4.25);
+            \draw[highlight4, line width=2pt, visible on=4] (1.5, 1.5) -- (1.5, 4.25);
+        \end{tikzpicture}
+        \caption{Exemple de classification par seuils}
+    \end{figure}
+    \only<4>{}
+\end{frame}
+
+\begin{frame}{Propriétés}
+    La principale qualité des arbres de décision tient dans leur simplicité
+    \begin{itemize}
+        \item \emph{White box} : on peut comprendre le résultat
+        \item Le modèle est de petite taille et est efficace même avec peu de données
+        \item La procédure d'apprentissage est assez proche du raisonnement humain conscient
+        \item Facilement combinables
+    \end{itemize}
+    Leur principal défaut est leur instabilité
+    \begin{itemize}
+        \item[→] des petites variations dans l'ensemble de test peuvent conduire à des changements importants dans l'arbre
+    \end{itemize}
+    Des extensions plus performantes, mais moins simples existent (\emph{random forest}…)
+\end{frame}
+
+
+% ██████   █████  ██    ██ ███████ ███████
+% ██   ██ ██   ██  ██  ██  ██      ██
+% ██████  ███████   ████   █████   ███████
+% ██   ██ ██   ██    ██    ██           ██
+% ██████  ██   ██    ██    ███████ ███████
+
+\lecture{Introduction à la fouille de textes}{2018-03-26}
+\subsection{\emph{Naïve Bayes}}
+
+\begin{frame}{\emph{Naïve Bayes}}
+    \textbf{Dans Weka} classifiers > bayes > NaiveBayes
+
+    \textbf{Espace de recherche} Ensemble des fonctions de la forme
+    \begin{equation}
+        x ⟼ \argmax_k p(C_k | x)
+    \end{equation}
+    avec
+    \begin{equation}
+        p(C_k | x) = p(C_k) × p(x₁ | C_k) × … × p(x_n | C_k)
+    \end{equation}
+
+    \textbf{Technique de recherche} En générale : formule explicite étant donné l'ensemble d'apprentissage
+\end{frame}
+
+\begin{frame}[fragile]{Les maths en cinq secondes : probabilités conditionnelles}
+    On lance un dé à six faces équilibré. On note
+    \begin{description}
+        \item[A] « le résultat est inférieur ou égal à $4$ »
+        \item[B] « le résultat est supérieur ou égal à $3$ »
+    \end{description}
+    \begin{columns}
+    \alt<1>{\column{\textwidth}}{\column{0.45\textwidth}}
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[
+                    hfit/.style={rounded corners, inner sep=0pt},
+                    vfit/.style={rounded corners, inner sep=0pt}
+                ]
+                \matrix[matrix of nodes, column sep=1em, row sep=1em] (m) {
+                    $1$   & $2$\\
+                    $3$   & $4$\\
+                    $5$   & $6$\\
+                };
+
+                \node[fit=(m), inner sep=1em, draw, label=above right:$Ω$] (O) {};
+                \node[fit=(m-1-2)(m-1-2)(m-2-1)(m-2-2), hfit, draw, fill=highlighta, fill opacity=0.5, label=above:$A$] (A) {};
+                \node[fit=(m-2-1)(m-3-2), vfit, draw, fill=highlight6, fill opacity=0.5, label=below:$B$] (B) {};
+            \end{tikzpicture}
+            \caption{Univers}
+        \end{figure}
+    \only<2-3>{\column{0.45\textwidth}
+        On a
+        \begin{align}
+            P(A) &= \alt<1-2>{\phantom{\frac{4}{6}=\frac{2}{3}}}{\frac{4}{6}=\frac{2}{3}}\\
+            P(B) &= \alt<1-2>{\phantom{\frac{4}{6}=\frac{2}{3}}}{\frac{4}{6}=\frac{2}{3}}
+        \end{align}
+    }
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Les maths en cinq secondes : probabilités conditionnelles}
+    On note
+    \vspace{-1\smallskipamount}
+    \begin{itemize}
+        \item $P(A|B)$ \alt<1>{la probabilité que $A$ se réalise sachant que $B$ se réalise}{la probabilité que le résultat soit inférieur ou égal à $4$ sachant qu'il est supérieur ou égal à $3$}
+        \item $P(B|A)$ \alt<1>{la probabilité que $B$ se réalise sachant que $A$ se réalise}{la probabilité que le résultat soit supérieur ou égal à $3$ sachant qu'il est inférieur ou égal à $4$}
+    \end{itemize}
+    \vspace{-1\bigskipamount}
+    \begin{columns}
+    \alt<1-2>{\column{\textwidth}}{\column{0.45\textwidth}}
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[
+                    hfit/.style={rounded corners, inner sep=0pt},
+                    vfit/.style={rounded corners, inner sep=0pt},
+                    true scale=0.8
+                ]
+                \matrix[matrix of nodes, column sep=1em, row sep=1em] (m) {
+                    $1$   & $2$\\
+                    $3$   & $4$\\
+                    $5$   & $6$\\
+                };
+
+                \node[fit=(m), inner sep=1em, draw, label=above right:$Ω$] (O) {};
+                \node[fit=(m-1-2)(m-1-2)(m-2-1)(m-2-2), hfit, draw, fill=highlighta, fill opacity=0.5, label=above:$A$] (A) {};
+                \node[fit=(m-2-1)(m-3-2), vfit, draw, fill=highlight6, fill opacity=0.5, label=below:$B$] (B) {};
+            \end{tikzpicture}
+            \caption{Univers}
+        \end{figure}
+    \only<3->{\column{0.45\textwidth}
+        On a
+        \begin{align}
+            P(A|B) &= \alt<1-3>{\phantom{\frac{2}{3}}}{\frac{2}{4}=\frac{1}{2}}\\
+            P(B|A) &= \alt<1-3>{\phantom{\frac{1}{2}}}{\frac{2}{4}=\frac{1}{2}}
+        \end{align}
+    }
+    \end{columns}
+    \vspace{-1\bigskipamount}
+    \only<5>{
+        \begin{itemize}
+            \item Dans le cas général, on a $P(X|Y) = \frac{P(X∩Y)}{P(Y)}$
+            \item $X$ et $Y$ sont \emph{indépendants} si $P(X|Y)=P(X)$, soit $P(X)P(Y)=P(X∩Y)$
+        \end{itemize}
+    %TODO: add exemples d'evt indépendants
+    }
+\end{frame}
+
+\begin{frame}{Les maths en cinq secondes : théorème de Bayes}
+    On a
+    \begin{align}
+        P(X|Y)
+            &= \frac{P(X∩Y)}{P(Y)}\\
+            &= \frac{\frac{P(X∩Y)}{P(X)}×P(X)}{P(Y)}\\
+            &= \frac{P(Y|X)×P(X)}{P(Y)}
+    \end{align}
+    \begin{block}{Théorème de Bayes}
+        Pour tous évènements $X$ et $Y$ de probabilités non-nulles,
+        \begin{equation}
+            P(X|Y)=\frac{P(Y|X)×P(X)}{P(Y)}
+        \end{equation}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Naïve Bayes : technique}
+    Soit un document $d$ à catégoriser.
+    On lui attribue la classe $C$ telle que $P(C|d)$ est maximale.
+
+    Pour une classe donnée $C$, on a par le théorème de Bayes
+    \begin{equation}
+        P(C|d) = \frac{P(d|C)×P(C)}{P(d)}
+    \end{equation}
+    $P(d)$ ne dépend pas de $C$, il reste donc à maximiser $P(d|C)×P(C)$.
+\end{frame}
+
+\begin{frame}{Naïve Bayes : technique}
+    Si on représente les documents par des sacs de mots, $d$ est un vecteur $(x₁, …, x_n)$.
+    Donc
+    \begin{equation}
+        P(d|C) = P((x₁, …, x_n)|C)
+    \end{equation}
+
+    Et en supposant que les $x_i$ sont indépendants (« Naïve »)
+    \begin{equation}
+        P(d|C) = P(x₁|C)×…×P(x_n|C)
+    \end{equation}
+
+    Il reste à choisir comment déterminer $P(C)$ et les $P(x_i|C)$.
+\end{frame}
+% TODO: example slides. Do it, it is **very** easy to get confused about it at blackboard
+
+% ███████ ██    ██ ███    ███
+% ██      ██    ██ ████  ████
+% ███████ ██    ██ ██ ████ ██
+%      ██  ██  ██  ██  ██  ██
+% ███████   ████   ██      ██
+
+\lecture{Introduction à la fouille de textes}{2018-04-09}
+\subsection{SVM}
+
+% TODO: cite
+\begin{frame}<1-2>[label=SVMmain]{SVM}
+    \emph{Support Vector Machines} : \emph{machines à vecteurs de support} ou \emph{Séparateur à Vaste Marge}
+
+    \textbf{Dans Weka} classifiers > functions > SMO
+    \pause
+
+    \textbf{Espace de recherche} Ensemble des hyperplans affines de $ℝ^n$, où $n$ est le nombre d'attributs.
+    \pause
+
+    \textbf{Technique de recherche}
+    \begin{itemize}
+        \item Traditionnellement : problème d'optimisation quadratique
+        \item Plus récemment : descente de sous-gradient, descente de gradient par coordonnées
+        \begin{itemize}
+            \item[→] Linéaire ou quasi-linéaire (au moins en pratique)
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Hyperplans}
+    Dans un espace de dimension $n$, un \alert<1>{hyperplan} est un espace de dimension $n-1$
+    \begin{overprint}
+        \onslide<1>
+            \begin{itemize}
+                \item En dimension $3$, les hyperplans sont les \alert{plans}
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \tdplotsetmaincoords{70}{110}
+                        \begin{tikzpicture}[tdplot_main_coords]
+                            \node[coordinate] at (0, 0, 0) (O) {};
+                            \draw[->] (O) -- (2, 0, 0);
+                            \draw[->] (O) -- (0, 2, 0);
+                            \draw (O) -- (0, 0, 1) node[coordinate] (passthrough) {};
+                            \filldraw[draw=highlighta, fill=highlighta!30, fill opacity=0.75] (3, -3, 1) -- (3, 3, 1) -- (-3, 3, 1)  -- (-3, -3, 1) --cycle;
+                            \draw[->] (passthrough) -- + (0, 0, 1);
+                        \end{tikzpicture}
+                        \caption{Hyperplan en dimension $3$}
+                    \end{figure}
+                \end{itemize}
+        \onslide<2>
+            \begin{itemize}
+                \item En dimension $2$, les hyperplans sont les \alert{droites}
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \begin{tikzpicture}
+                            \node[coordinate] at (0, 0) (O) {};
+                            \draw[->] (-3, 0) -- (3, 0);
+                            \draw[->] (0, -2) -- (0, 2);
+
+                            \draw[highlighta] (-3, -2) -- (3, 1);
+                        \end{tikzpicture}
+                        \caption{Hyperplan en dimension $2$}
+                    \end{figure}
+            \end{itemize}
+        \onslide<3>
+            \begin{itemize}
+                \item En dimension $1$, les hyperplans sont les \alert{points}
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \begin{tikzpicture}
+                            \node[coordinate] at (0, 0) (O) {};
+                            \draw (-3, 0) -- (3, 0);
+
+                            \fill[highlighta] (1, 0) circle[radius=2pt];
+                        \end{tikzpicture}
+                        \caption{Hyperplan en dimension $1$}
+                    \end{figure}
+            \end{itemize}
+    \end{overprint}
+\end{frame}
+
+\begin{frame}[fragile]{Propriétés des hyperplans}
+    Les hyperplans séparent les espaces en demi-espaces
+    \begin{overprint}
+        \onslide<1-3>
+            \begin{itemize}
+                \item En dimension $3$ : demi-espaces
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \tdplotsetmaincoords{70}{110}
+                        \begin{tikzpicture}[tdplot_main_coords]
+                            \node[coordinate] at (0, 0, 0) (O) {};
+                            \draw[->] (O) -- (2, 0, 0);
+                            \draw[->] (O) -- (0, 2, 0);
+                            \draw (O) -- (0, 0, 1) node[coordinate] (passthrough) {};
+
+                            % Lower half-plane
+                            \begin{scope}[draw=highlight5, fill=highlight5!30, fill opacity=0.75, visible on=3]
+                                \filldraw (3, -3, -1) -- (3, 3, -1) -- (-3, 3, -1)  -- (-3, -3, -1) -- cycle;
+                                \filldraw (-3, 3, -1) -- (-3, -3, -1) -- (-3, -3, 1) -- (-3, 3, 1) -- cycle;
+                                \filldraw (3, -3, -1) -- (-3, -3, -1) -- (-3, -3, 1) -- (3, -3, 1) -- cycle;
+                                \filldraw (3, -3, -1) -- (3, 3, -1) -- (3, 3, 1) -- (3, -3, 1) -- cycle;
+                                \filldraw  (3, 3, -1) -- (-3, 3, -1) --  (-3, 3, 1) -- (3, 3, 1) -- cycle;
+                            \end{scope}
+
+                            \path[draw=highlighta, fill=highlighta!30, fill opacity=0.75] (3, -3, 1) -- (3, 3, 1) -- (-3, 3, 1)  -- (-3, -3, 1) -- cycle;
+                            \draw[->] (passthrough) -- + (0, 0, 1);
+
+                            % Upper half-plane
+                            \begin{scope}[draw=highlight5, fill=highlight5!30, fill opacity=0.75, visible on=2]
+                                \filldraw (3, -3, 2) -- (3, 3, 2) -- (-3, 3, 2)  -- (-3, -3, 2) -- cycle;
+                                \filldraw (-3, 3, 2) -- (-3, -3, 2) -- (-3, -3, 1) -- (-3, 3, 1) -- cycle;
+                                \filldraw (3, -3, 2) -- (-3, -3, 2) -- (-3, -3, 1) -- (3, -3, 1) -- cycle;
+                                \filldraw (3, -3, 2) -- (3, 3, 2) -- (3, 3, 1) -- (3, -3, 1) -- cycle;
+                                \filldraw  (3, 3, 2) -- (-3, 3, 2) --  (-3, 3, 1) -- (3, 3, 1) -- cycle;
+                            \end{scope}
+                        \end{tikzpicture}
+                        \caption{Demi-espaces en dimension $3$}
+                    \end{figure}
+                \end{itemize}
+        \onslide<4-6>
+            \begin{itemize}
+                \item En dimension $2$ : demi-plans
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \begin{tikzpicture}
+                            \node[coordinate] at (0, 0) (O) {};
+                            \draw[->] (-3, 0) -- (3, 0);
+                            \draw[->] (0, -2) -- (0, 2);
+
+                            \path[draw=highlight5, fill=highlight5!30, fill opacity=0.75, visible on=5] (-3, -2) -- (3, 1) -- (3, 2) -- (-3, 2) -- cycle;
+                            \path[draw=highlight5, fill=highlight5!30, fill opacity=0.75, visible on=6] (-3, -2) -- (3, 1) -- (3, -2) -- (-3, -2) -- cycle;
+
+                            \draw[highlighta] (-3, -2) -- (3, 1);
+                        \end{tikzpicture}
+                        \caption{Demi-espaces en dimension $2$}
+                    \end{figure}
+            \end{itemize}
+        \onslide<7-9>
+            \begin{itemize}
+                \item En dimension $1$ : demi-droites
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \begin{tikzpicture}
+                            \node[coordinate] at (0, 0) (O) {};
+                            \draw (-3, 0) -- (3, 0);
+                            \draw[highlight5, visible on=8] (1,0) -- (3, 0);
+                            \draw[highlight5, visible on=9] (1,0) -- (-3, 0);
+                            \fill[highlighta] (1, 0) circle[radius=2pt];
+                        \end{tikzpicture}
+                        \caption{Demi-espaces en dimension $1$}
+                    \end{figure}
+            \end{itemize}
+        \onslide<10-13>
+            Cette propriété permet de construire des classifieurs
+            \begin{figure}
+                \tikzset{external/export=true}
+                \begin{tikzpicture}
+                    \draw[->] (-0.5,0) -- (5.25, 0);
+                    \draw[->] (0, -0.5) -- (0, 4.25);
+
+                    \foreach \x/\y/\c in {2/1/6,4/0/6,1/0/6,2/3/a,0/3/a,1/2/a,0/2/a}{
+                        \path[alt=<10-12>{fill=highlight5}{fill=highlight\c}] (\x, \y) circle[radius=3pt];
+                    }
+
+                    \path[fill=highlighta!30, fill opacity=0.5, visible on=12] (-0.5, -0.5)  -- (4.25, 4.25) -- (-0.5, 4.25) -- cycle;
+                    \path[fill=highlight6!30, fill opacity=0.5, visible on=12] (-0.5, -0.5)  -- (5.25, -0.5) -- (5.25, 4.25) -- (4.25, 4.25) -- cycle;
+                    \draw[highlight3, visible on={11-13}] (-0.5, -0.5)  -- (4.25, 4.25);
+                \end{tikzpicture}
+                \caption{Classification \only<13>{linéaire} en dimension $2$}
+            \end{figure}
+            \only<13>{On parle de \alert{classifieur linéaire}.}
+    \end{overprint}
+\end{frame}
+
+% TODO: figs
+\begin{frame}{Classifieurs linéaires}
+    Le principe des classifieurs linéaire est donc, étant donné un problème à deux classes
+    \begin{itemize}
+        \item Trouver un hyperplan qui sépare l'espace des attributs en demi-espaces contenant chacun tous les exemples d'entraînement d'une seule classe
+        \item On classe les exemples de test dans la classe correspondant à leur demi-espace
+    \end{itemize}
+
+    Cela suppose de résoudre deux problèmes
+    \begin{itemize}
+        \item Existe-t-il un tel hyperplan ? (on dit dans ce cas que le problème est \emph{linéairement séparable})
+        \item S'il en existe un, il en existe en général une infinité
+            \begin{itemize}
+                \item[→] Lequel choisir ?
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Notion de marge}
+    \only<1-7>{
+        Intuitivement, pour espérer qu'un classifieur linéaire généralise bien, il faut qu'il sépare les classes le plus largement possible.
+    }
+    \begin{overprint}
+        \onslide<1-3>
+            \begin{figure}
+                \tikzset{external/export=true}
+                \begin{tikzpicture}
+                    \path[clip] (-0.5, -0.5) rectangle (5.25, 4.25);
+                    \draw[->] (-0.5,0) -- (5.25, 0);
+                    \draw[->] (0, -0.5) -- (0, 4.25);
+
+                    \foreach \x/\y/\c in {2/1/6,4/0/6,1/0/6,2/3/a,0/3/a,1/2/a,0/2/a}{
+                        \path[fill=highlight\c] (\x, \y) circle[radius=3pt];
+                    }
+
+                    \begin{scope}[domain=-0.5:5.25]
+                        \draw[highlight7, visible on=1] plot (\x, 1+0.75*\x);
+                        \draw[highlight7, visible on=2]  plot (\x, \x-1);
+                        \draw[highlight3, visible on=3] plot (\x, \x);
+                    \end{scope}
+                \end{tikzpicture}
+                \caption{Largeurs de séparation d'hyperplans}
+            \end{figure}
+        \onslide<4-7>
+            \vspace{-1\bigskipamount}
+            \begin{columns}
+                \column{0.45\textwidth}
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \begin{tikzpicture}[true scale=0.7]
+                            \path[clip] (-0.5, -0.5) rectangle (5.25, 4.25);
+                            \draw[->] (-0.5,0) -- (5.25, 0);
+                            \draw[->] (0, -0.5) -- (0, 4.25);
+
+                            \foreach \x/\y/\c in {2/1/6,4/0/6,1/0/6,2/3/a,0/3/a,1/2/a,0/2/a}{
+                                \path[fill=highlight\c] (\x, \y) circle[radius=3pt];
+                            }
+
+                            \begin{scope}[domain=-0.5:5.25]
+                                \draw[dashed, visible on={5-}] plot (\x, \x+1);
+                                \draw[dashed, visible on={5-}]  plot (\x, \x-1);
+                                \draw[highlight3, alt=<{4-5,7}>{}{opacity=0}] plot (\x, \x) node[right] {$H$};
+                            \end{scope}
+
+                            \draw[<->, visible on=6] (1, 2) -- (2, 1) node[midway, above right] {$M(H)$};
+                        \end{tikzpicture}
+                        \caption{Marge d'un hyperplan}
+                    \end{figure}
+                \column{0.45\textwidth}
+                    \begin{block}{Définition (marge)}
+                        Soit deux classes, $C$ et $C'$, on appelle \emph{marge} d'un hyperplan séparateur $H$ le nombre
+                        \begin{equation}
+                            M(H) = \min_{x∈C}d(x, H) + \min_{x'∈C'}d(x', H)
+                        \end{equation}
+                    \end{block}
+            \end{columns}
+            On choisit $H$ pour lequel $M(H)$ est maximale sur l'ensemble d'entraînement.
+            \begin{itemize}
+                \item[→] D'où \emph{séparateur à \alert{vaste marge}}.
+            \end{itemize}
+    \end{overprint}
+\end{frame}
+
+\begin{frame}{Vecteurs de support}
+    Les points $x$ et $x'$ pour lesquels les minima sont atteints sont appelés \textcolor{highlight7}{vecteurs de support}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.7]
+            \path[clip] (-0.5, -0.5) rectangle (5.25, 4.25);
+            \draw[->] (-0.5,0) -- (5.25, 0);
+            \draw[->] (0, -0.5) -- (0, 4.25);
+
+            \foreach \x/\y/\c in {4/0/6,1/0/6,0/3/a,0/2/a}{
+                \path[fill=highlight\c] (\x, \y) circle[radius=3pt];
+            }
+
+            \foreach \x/\y/\c in {2/1/6,1/0/6,2/3/a,1/2/a}{
+                \path[fill=highlight\c] (\x, \y) circle[radius=3pt];
+                \draw[highlight7] (\x, \y) circle[radius=5pt];
+            }
+
+            \begin{scope}[domain=-0.5:5.25]
+                \draw[dashed] plot (\x, \x+1);
+                \draw[dashed]  plot (\x, \x-1);
+                \draw[highlight3] plot (\x, \x) node[right] {$H$};
+            \end{scope}
+        \end{tikzpicture}
+        \caption{Vecteurs de support}
+    \end{figure}
+    On peut montrer que $H$ ne dépend que de la position des vecteurs de support.
+\end{frame}
+
+\againframe<3>{SVMmain}
+
+% TODO: figs
+\begin{frame}{Problèmes non-séparables}
+    En général, les problèmes réels ne sont pas linéairement séparables.
+    Plusieurs méthodes existent pour y adapter les SVM.
+    \begin{description}
+        \item[Marge douce] Modifier la définition de \emph{marge} pour tenir compte des exemples mal classés
+        \item[\emph{Kernel trick}] Transformer le problème en un problème équivalent mais linéairement séparable
+    \end{description}
+\end{frame}
+
+\begin{frame}{Marge douce}
+    On remplace la fonction de marge $M$ par une fonction de la forme
+    \begin{equation}
+        L(H) = M(H) - C(H)
+    \end{equation}
+    où $C(H)$ est une pénalité pour les exemples mal classés par $H$.
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.7]
+            \path[clip] (-0.5, -0.5) rectangle (5.25, 4.25);
+            \draw[->] (-0.5,0) -- (5.25, 0);
+            \draw[->] (0, -0.5) -- (0, 4.25);
+
+            \foreach \x/\y/\c in {2/1/6,4/0/6,1/0/6,2/3/a,0/3/a,1/2/a,0/2/a}{
+                \path[fill=highlight\c] (\x, \y) circle[radius=3pt];
+            }
+            \path[fill=highlight6, visible on={2-}] (1, 3) circle[radius=3pt];
+
+            \begin{scope}[domain=-0.5:5.25]
+                \draw[highlight3, visible on=3] plot (\x, \x+1) node[right] {$H$};
+            \end{scope}
+        \end{tikzpicture}
+        \caption{Hyperplan à marge douce maximale}
+    \end{figure}
+    \only<3>{
+        \vspace{-\bigskipamount}
+        On choisit comme précédemment l'hyperplan $H$ qui maximise $L(H)$.
+    }
+\end{frame}
+
+\begin{frame}[fragile]{\emph{Kernel trick}}
+    L'\emph{astuce du noyau} consiste à transformer un problème non-linéairement séparable en un problème linéairement séparable dans un espace de dimension supérieure.
+
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[x=0.4cm, y=0.2cm]
+            \draw[->] (65, 0) -- (90, 0);
+            \draw[->, visible on={2-}] (65, 0) -- (65, 13);
+
+            \begin{scope}[domain=65:90]
+                \path[clip] (64, -0.5) rectangle (92, 12);
+                \draw[highlight7, visible on={3-5}] plot (\x, {0.1*(\x-78)^2}) node [pos=0, right] {$y=ax²+bx+c$};
+                \draw[highlight3, visible on={6-}] plot (\x, {-0.1*\x+11.61});
+            \end{scope}
+
+            \foreach \x/\c [count=\i] in {68/6,69/6,70/6,73/a,74/a,76/a,80/a,82/a,85/6,86/6} {
+                \path[fill=highlight\c, visible on={1-4}] (\x, 0) node (base\i) {} circle[radius=3pt];
+                \path[fill=highlight\c, visible on={4-}] (\x, {0.1*(\x-78)^2})  node (raised\i) {} circle[radius=3pt];
+                \draw[->, visible on=4] (base\i) -- (raised\i);
+            }
+        \end{tikzpicture}
+        \caption{Hyperplan séparateur en dimension supérieure}
+    \end{figure}
+    \vspace{-1\bigskipamount}
+    \begin{overprint}
+        \onslide<6>
+            \begin{itemize}
+                \item Les \emph{noyaux} en question sont des fonctions qui permettent d'éviter d'avoir à calculer explicitement les transformations pour passer en dimension supérieure.
+            \end{itemize}
+        \onslide<7>
+            \begin{itemize}
+                \item En réalité, le problème en dimension supérieure est souvent lui aussi non-linéairement séparable, et on combine en général le \emph{kernel trick} avec une marge douce.
+            \end{itemize}
+    \end{overprint}
+\end{frame}
+
+\begin{frame}{Propriétés}
+    Les SVM sont des modèles très efficaces, qui jusqu'à récemment étaient systématiquement les plus performants.
+    \begin{itemize}
+        \item Une fois l'apprentissage fait, la classification est très rapide
+        \item Les modèles sont peu gourmands en mémoire
+        \item Les modèles marchent mieux que les autres modèles présentés (en général)
+    \end{itemize}
+    Avec quelques inconvénients
+    \begin{itemize}
+        \item Les modèles sont difficilement interprétables
+        \item Le choix d'un noyau tient plus de l'artisanat que de la science
+        \item Les algorithmes classiques ne permettent pas d'apprentissage incrémental.
+    \end{itemize}
+\end{frame}
+
+% ███    ██ ███████ ████████
+% ████   ██ ██         ██
+% ██ ██  ██ █████      ██
+% ██  ██ ██ ██         ██
+% ██   ████ ███████    ██
+
+
+\subsection{Réseaux de neurones}
+
+% TODO: cite
+\begin{frame}{Réseaux de neurones}
+    \textbf{Dans Weka} classifiers > functions > MultilayerPerceptron
+    \pause
+
+    \textbf{Espace de recherche} Ensemble des chaînes de fonctions linéaires et d'activations non-linéaires
+    \pause
+
+    \textbf{Technique de recherche} en général : descente de gradient stochastique par rétropropagation
+\end{frame}
+
+\begin{frame}{Le modèle du perceptron}
+    Frank Rosenblatt (1957) sur une idée de Warren McCulloch et Walter Pitts (1943).
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[
+            basic/.style={draw, minimum width=3em},
+            input/.style={basic, circle},
+            weights/.style={basic, circle, minimum width=2em},
+            functions/.style={basic, circle},
+            true scale=0.8,
+        ]
+            \foreach \h [count=\hi] in {$x_n$,$x_2$,$x_1$,$1$}{%
+                  \node[input] (f\hi) at (0,\hi*2cm-5 cm) {\h};
+            }
+            \node[functions] (sum) at (7,0) {$∑$};
+            \foreach \h [count=\hi] in {$w_n$,$w_2$,$w_1$,$w₀$}{%
+                  \path (f\hi) -- node[weights] (w\hi) {\h} (sum);
+                  \draw[->] (f\hi) -- (w\hi);
+                  \draw[->] (w\hi) -- (sum);
+            }
+            \node at ($(f2)!0.5!(f1)$) {$⋮$};
+            \node at ($(w2)!0.5!(w1)$) {$⋮$};
+            \node[functions] (step) at (10,0) {};
+               \begin{scope}[xshift=10cm,scale=.75]
+                    \draw[thick] (0.5em,0.5em) -- (0,0.5em) --
+                              (0,-0.5em) --  (-0.5em,-0.5em)
+                              (0em,0.75em) -- (0em,-0.75em)
+                              (0.75em,0em) -- (-0.75em,0em);
+               \end{scope}
+            \draw[->] (sum) -- (step);
+            \draw[->] (step) -- ++(1,0);
+            \node[above right=0.5em and 3em of step] (class0) {$0$};
+            \node[below right=0.5em and 3em of step] (class1) {$1$};
+            \draw [decorate, decoration={brace, amplitude=1em}, xshift=-0.5ex] (class1.west) -- (class0.west);
+            % Labels
+            \node[above=1cm] at (f4) {Entrées};
+            \node[above=1cm] at (w4) {Poids};
+            \node[above=1cm of step] {Activation};
+        \end{tikzpicture}
+        \caption{Perceptron simple}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Fonction de Heavyside}
+    La fonction de Heavyside $H$ est l'activation classique pour faire du perceptron un classifieur binaire : elle transforme les nombres négatifs en $09$ et les nombres positifs en $1$.
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=-10, xmax=10,
+                         width=0.9\textwidth,
+                         height=0.8\textheight,
+                         xlabel={$x$},
+                         ylabel={$H(x)$},
+                         axis y line=center,
+                         axis x line=middle,
+                         title={Fonction de Heavyside : $y=\max(x, 0)$},
+                         scaled ticks=false,]
+                \addplot[highlighta, domain=-10:10, samples=100] {greater(x,0)};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Courbe de la fonction de Heavyside}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Algorithme du perceptron}
+    Le perceptron s'entraîne en parcourant l'ensemble d'entraînement point par point.
+    On commence en initialisant tous les poids$ w_i$ à $0$ (ou à un petit nombre aléatoire).
+
+    Pour chaque exemple $x$ dont la classe est $y$
+    \begin{enumerate}
+        \item Calculer la classe observée $̄\bar{y}=H\mleft(∑w_ix_i\mright)$
+        \item
+            \begin{itemize}
+                \item Si $y=\bar{y}$, on ne change rien
+                \item Sinon, on met à jour les poids $w_i$ selon la règle
+                    \begin{equation}
+                        w_i ← w_i + α(y-\bar{y})x_i
+                    \end{equation}
+            \end{itemize}
+    \end{enumerate}
+    Une fois l'ensemble d'entraînement parcouru, on a réalisé une  \emph{époque d'apprentissage}, on peut alors soit s'arrêter, soit recommencer du début
+    \begin{itemize}
+        \item $α>0$ est un hyperparamètre appelé \emph{taux d'apprentissage}
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Algorithme du perceptron}
+    \begin{figure}
+        % \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \path[clip] (-0.5, -0.5) rectangle (5.25, 4.25);
+            \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+
+            \draw[->] (-0.5,0) -- (5.25, 0);
+            \foreach \x in {1,...,5}
+                \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+
+            \draw[->] (0, -0.5) -- (0, 4.25);
+            \foreach \y in {1,...,4}
+                \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+            \draw (0, 0) node[below left] {\footnotesize $0$};
+
+            \foreach \x/\y/\c [count=\i] in {2/1/6,4/0/6,1/0/6,2/3/6,0/3/a,1/2/a,0/2/a}{
+                \path[alt=<\i>{highlight5}{fill=highlight\c}] (\x, \y) circle[radius=3pt];
+            }
+            \begin{scope}[domain=-0.5:5.25]
+                    \draw[highlight3, thick] plot (\x, 0);
+            \end{scope}
+        \end{tikzpicture}
+        \caption{Algorithme du perceptron}
+    \end{figure}
+\end{frame}
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
 % ███████ ██████  ██████  █████   ██ ██  ██ ██   ██ ██   ███
