@@ -37,9 +37,9 @@ def bag_of_words(nom_fichier, mots_vides):
     text = nettoyage(text)
     return Counter(
         l
-        for w in re.split(r"[\s\.]+", text)
+        for w in filter(re.split(r"[\s\.]+", text))
         for l in (w.lower(),)
-        if l and l not in mots_vides
+        if l not in mots_vides
     )
 
 
