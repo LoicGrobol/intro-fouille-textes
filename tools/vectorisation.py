@@ -35,10 +35,12 @@ def bag_of_words(nom_fichier, mots_vides):
     with open(nom_fichier) as fichier:
         text = fichier.read()
     text = nettoyage(text)
-    return Counter(w.lower()
-                   for w in re.split(r"[\s\.]+", text)
-                   for l in (w.lower(),)
-                   if w and w not in mots_vides)
+    return Counter(
+        l
+        for w in re.split(r"[\s\.]+", text)
+        for l in (w.lower(),)
+        if l and l not in mots_vides
+    )
 
 
 def vec(bow, lexicon, boolean):
