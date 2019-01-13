@@ -1,7 +1,9 @@
+sudo: required
 language: python
+services: docker
 
 python:
-  - "3.6"
+  - "3.7"
 
 addons:
   apt:
@@ -14,33 +16,32 @@ addons:
 
 cache:
   directories:
-    - "/tmp/texlive"
-    - "$HOME/.texlive"
-    - "$HOME/texmf"
     - "slides/tikzpics/"
 
-install:
-  - source ./install_texlive.sh
-  - rake texliveonfly
+tex-config:
+- tex-scheme=small
+- push-type=none
+- build-pattern=slides/slides_introfdt.tex
+- packages=lipsum, blindtext
 
 script:
-  - rake
-  - rake test
+- docker pull strauman/travis-latexbuild:small # select small texlive scheme
+- docker run --mount src=$TRAVIS_BUILD_DIR/,target=/repo,type=bind strauman/travis-latexbuild:small # also it here
 
-before_deploy:
-  - echo "Deploying $RELEASE_FILES to GitHub releases"
+# before_deploy:
+#   - echo "Deploying $RELEASE_FILES to GitHub releases"
 
-deploy:
-  provider: releases
-  overwrite: true
-  api_key:
-    secure: ghw3ui2BrizHpN9cxOuF1NumvigEeIUhY9FI4la3oAUFkt+XoCbP7swK746jBh3YU6/ILuUioorYcSktwQYqCqM15ct+Fo7xs6eFKxYEFmHRfuQBKce08piSgoGFkDZKW/oHws5lOgUkTY/sbIS+l24nu0zsicMAg2FhVU9Bq9Yjo2X5JgGQq3PbktVYibkLR9ByKYzkXCt1UsjFCZKFjoV5oBC1AGmvawcliYcjBN8UAThaiwz1rCjfn0r//3tosfMdSG0++Jbf6zEPOyv04LTcHCYo1m6nbECQI+hKR0kBTtgN18uSqKsGHQ6uJz4gPagE7nOJs0Tzwpmn3t7Ps0S3wLMjUNqmKvNYC5DaKcLZ1tzi+cZa+rznfqKnR1F7rJt+tO1J2d+VDZRooaeizS8JxCMIzhRdLIU6/7mKgPWX1fhMosIWVv0UqikrstUUKxgNWm+7WVBtnerBRc4idsk0J289LudmyMjwp0Qv94l8wqh3Pifd93bdg5+LT0NDD2f862v6UIZcbBth9QoQEtwFTzoNneHpA76MbHxhnI2OeDzkmjK/7HWxAt/fh81hJ5naLhbcM9zMM0JxeapNMhxJU0FY4+XpeCRIVOYXH7FpHtIV3QXy3z9AKMCnvGFXUN6Bqy/GRZyf9hLAfuj4yVg4DhGNbJNeK7lTXAnOo1Y=
-  file_glob: true
-  file: _build/*
-  skip_cleanup: true
-  on:
-    repo: LoicGrobol/intro-fouille-textes
-    tags: true
-
-after_failure:
-    - cat slides/slides_introfdt.log
+# deploy:
+#   provider: releases
+#   overwrite: true
+#   api_key:
+#     secure: ghw3ui2BrizHpN9cxOuF1NumvigEeIUhY9FI4la3oAUFkt+XoCbP7swK746jBh3YU6/ILuUioorYcSktwQYqCqM15ct+Fo7xs6eFKxYEFmHRfuQBKce08piSgoGFkDZKW/oHws5lOgUkTY/sbIS+l24nu0zsicMAg2FhVU9Bq9Yjo2X5JgGQq3PbktVYibkLR9ByKYzkXCt1UsjFCZKFjoV5oBC1AGmvawcliYcjBN8UAThaiwz1rCjfn0r//3tosfMdSG0++Jbf6zEPOyv04LTcHCYo1m6nbECQI+hKR0kBTtgN18uSqKsGHQ6uJz4gPagE7nOJs0Tzwpmn3t7Ps0S3wLMjUNqmKvNYC5DaKcLZ1tzi+cZa+rznfqKnR1F7rJt+tO1J2d+VDZRooaeizS8JxCMIzhRdLIU6/7mKgPWX1fhMosIWVv0UqikrstUUKxgNWm+7WVBtnerBRc4idsk0J289LudmyMjwp0Qv94l8wqh3Pifd93bdg5+LT0NDD2f862v6UIZcbBth9QoQEtwFTzoNneHpA76MbHxhnI2OeDzkmjK/7HWxAt/fh81hJ5naLhbcM9zMM0JxeapNMhxJU0FY4+XpeCRIVOYXH7FpHtIV3QXy3z9AKMCnvGFXUN6Bqy/GRZyf9hLAfuj4yVg4DhGNbJNeK7lTXAnOo1Y=
+#   file_glob: true
+#   file: _build/*
+#   skip_cleanup: true
+#   on:
+#     repo: LoicGrobol/intro-fouille-textes
+#     tags: true
+#
+# after_failure:
+#     - cat slides/slides_introfdt.log

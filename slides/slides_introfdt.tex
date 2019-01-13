@@ -24,7 +24,8 @@
     % FIXME: not pretty and footnotes are still too big
     \let\footnoterule\relax  % No footnote rule, push down footnote
 
-% 9-Highlights colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/colourschemes.pdf)
+% TODO: update these to the last version
+% 9-Highlights colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf)
 \definecolor{highlight0}{RGB}{51, 34, 136}    % Deep blue
 \definecolor{highlight1}{RGB}{136, 204, 238}  % Clear blue
 \definecolor{highlight2}{RGB}{68, 170, 153}   % Teal
@@ -96,7 +97,7 @@
 		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
 		},
         invisible/.style={opacity=0, fill opacity=0},
-		visible on/.style={alt=<#1>{}{invisible}}
+		visible on/.style={alt={<#1>{}{invisible}}}
 	}
 	\usepackage{tikz-qtree}
     \usepackage{forest}
@@ -249,7 +250,7 @@
     hair lines/.style={line width = 0.05pt, lightgray},
     data/.style={draw, ellipse},
     program/.style={draw, rectangle},
-    accent on/.style={alt={#1{draw=accent, text=accent, thick}{draw}}},
+    accent on/.style={alt={<#1>{draw=accent, text=accent, thick}{draw}}},
     true scale/.style={scale=#1, every node/.style={transform shape}},
     highlight/.style={color=highlight#1}
 }
@@ -3542,9 +3543,9 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
                         \path[alt=<10-12>{fill=highlight5}{fill=highlight\c}] (\x, \y) circle[radius=3pt];
                     }
 
-                    \path[fill=highlighta!30, fill opacity=0.5, visible on=12] (-0.5, -0.5)  -- (4.25, 4.25) -- (-0.5, 4.25) -- cycle;
-                    \path[fill=highlight6!30, fill opacity=0.5, visible on=12] (-0.5, -0.5)  -- (5.25, -0.5) -- (5.25, 4.25) -- (4.25, 4.25) -- cycle;
-                    \draw[highlight3, visible on={11-13}] (-0.5, -0.5)  -- (4.25, 4.25);
+                    \path[fill=highlighta!30, fill opacity=0.5] (-0.5, -0.5)  -- (4.25, 4.25) -- (-0.5, 4.25) -- cycle;
+                    \path[fill=highlight6!30, fill opacity=0.5] (-0.5, -0.5)  -- (5.25, -0.5) -- (5.25, 4.25) -- (4.25, 4.25) -- cycle;
+                    \draw[highlight3,] (-0.5, -0.5)  -- (4.25, 4.25);
                 \end{tikzpicture}
                 \caption{Classification \only<13>{linéaire} en dimension $2$}
             \end{figure}
@@ -3833,7 +3834,8 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
                          ylabel={$H(x)$},
                          title={Fonction de Heavyside : $y=\max(x, 0)$},
                          scaled ticks=false,]
-                \addplot[highlighta, domain=-10:10, samples=100] {greater(x,0)};
+                \addplot[highlighta, domain=-10:0, samples=100] {greater(x,0)};
+                \addplot[highlighta, domain=0:10, samples=100] {greater(x,0)};
             \end{axis}
         \end{tikzpicture}
         \caption{Courbe de la fonction de Heavyside}
