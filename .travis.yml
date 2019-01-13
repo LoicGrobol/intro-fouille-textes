@@ -37,5 +37,4 @@ deploy:
     tags: true
 
 after_failure:
-    - cat slides/tikzpics/slides_introfdt-figure1.log
     - cat slides/slides_introfdt.log
