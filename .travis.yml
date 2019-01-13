@@ -15,7 +15,7 @@ tex-config:
     - push-type=none
     - build-pattern=slides/slides_introfdt.tex
     - packages=lipsum, blindtext
-    - latexmk-flags=-lualatex
+    - latexmk-flags=-lualatex -shell-escape
 
 script:
     - docker pull strauman/travis-latexbuild:full # select small texlive scheme
