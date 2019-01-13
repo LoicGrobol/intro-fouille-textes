@@ -20,14 +20,15 @@ cache:
     - "slides/tikzpics/"
 
 tex-config:
-- tex-scheme=small
-- push-type=none
-- build-pattern=slides/slides_introfdt.tex
-- packages=lipsum, blindtext
+    - tex-scheme=full
+    - push-type=none
+    - build-pattern=slides/slides_introfdt.tex
+    - packages=lipsum, blindtext
+    - latexmk-flags=-lualatex
 
 script:
-- docker pull strauman/travis-latexbuild:small # select small texlive scheme
-- docker run --mount src=$TRAVIS_BUILD_DIR/,target=/repo,type=bind strauman/travis-latexbuild:small # also it here
+- docker pull strauman/travis-latexbuild:full # select small texlive scheme
+- docker run --mount src=$TRAVIS_BUILD_DIR/,target=/repo,type=bind strauman/travis-latexbuild:full # also it here
 
 # before_deploy:
 #   - echo "Deploying $RELEASE_FILES to GitHub releases"
