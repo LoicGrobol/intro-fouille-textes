@@ -19,7 +19,7 @@ tex-config:
 
 script:
     - docker pull strauman/travis-latexbuild:full # select small texlive scheme
-    - travis_wait 40 docker run --mount src=$TRAVIS_BUILD_DIR/,target=/repo,type=bind strauman/travis-latexbuild:full # also it here
+    - travis_wait 60 docker run --mount src=$TRAVIS_BUILD_DIR/,target=/repo,type=bind strauman/travis-latexbuild:full # also it here
 
 before_deploy:
   - echo "Deploying $RELEASE_FILES to GitHub releases"
