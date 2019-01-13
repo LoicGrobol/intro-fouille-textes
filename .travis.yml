@@ -14,7 +14,7 @@ tex-config:
     - tex-scheme=full
     - push-type=none
     - build-pattern=slides/slides_introfdt.tex
-    - packages=lipsum, blindtext
+    - packages=biber
     - latexmk-flags=-lualatex -shell-escape
 
 script:
