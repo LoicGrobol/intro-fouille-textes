@@ -513,10 +513,10 @@
     \begin{figure}
         \tikzset{external/export=true}
         \begin{tikzpicture}
-            \node[ellipse, accent on=<2>] (in) {Entrée};
-            \node[right=1cm of in, text width=10ex, accent on=<3>] (prog) {Programme réalisant la tâche};
-            \node[ellipse, accent on=<2>, right=1cm of prog] (out) {Résultat};
-            \node[ellipse, accent on=<2>, below=1cm of prog] (res) {Ressources};
+            \node[ellipse, accent on=2] (in) {Entrée};
+            \node[right=1cm of in, text width=10ex, accent on=3] (prog) {Programme réalisant la tâche};
+            \node[ellipse, accent on=2, right=1cm of prog] (out) {Résultat};
+            \node[ellipse, accent on=2, below=1cm of prog] (res) {Ressources};
             \draw[->] (in) -- (prog);
             \draw[->] (prog) -- (out);
             \draw[->] (res) -- (prog);
