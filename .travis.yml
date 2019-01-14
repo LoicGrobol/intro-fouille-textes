@@ -8,6 +8,7 @@ python:
 cache:
     directories:
         - "slides/tikzpics/"
+        - "slides/_minted-slides_introfdt"
         - "/tmp/texlive"
         - "$HOME/.texlive"
 
