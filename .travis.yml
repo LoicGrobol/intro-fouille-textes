@@ -22,7 +22,7 @@ script:
 
 before_deploy:
     - echo "Deploying $RELEASE_FILES to GitHub releases"
-    - bash travis_before_deploy.sh
+    - source travis_before_deploy.sh
 
 deploy:
   provider: releases
