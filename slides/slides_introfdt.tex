@@ -487,7 +487,7 @@
         \end{tikzpicture}
     \end{figure}
 
-    On peut considérer chaque tâche comme une \aler{boîte noire} : la façon dont le programme fonctionne ne nous intéresse pas ici.
+    On peut considérer chaque tâche comme une \alert{boîte noire} : la façon dont le programme fonctionne ne nous intéresse pas ici.
 \end{frame}
 
 \begin{frame}{Quelques exemples de tâches}
@@ -627,22 +627,40 @@
     \begin{figure}
         % \tikzset{external/export=true}
         \begin{forest}
-            for tree={draw, l sep=2em, s sep=3em}
-            [\mintinline{<tab}le>
-                [\mintinline{<tr>}
-                    [\mintinline{<th>} produit ]
-                    [\mintinline{<th>} marque ]
-                    [\mintinline{<th>} {prix en euros} ]
+            for tree={font=\tiny}
+            [\mintinline{xml}{<table>}
+                [\mintinline{xml}{<tr>}
+                    [\mintinline{xml}{<th>}
+                        [produit]
+                    ]
+                    [\mintinline{xml}{<th>}
+                        [marque]
+                    ]
+                    [\mintinline{xml}{<th>}
+                        [{prix en euros}]
+                    ]
                 ]
-                [\mintinline{<tr>}
-                    [\mintinline{<td>} {ordinateur portable} ]
-                    [\mintinline{<td>} truc ]
-                    [\mintinline{<td>} 800 ]
+                [\mintinline{xml}{<tr>}
+                    [\mintinline{xml}{<td>}
+                        [{ordinateur portable}]
+                    ]
+                    [\mintinline{xml}{<td>}
+                        [truc]
+                    ]
+                    [\mintinline{xml}{<td>}
+                        [800]
+                    ]
                 ]
-                [\mintinline{<tr>}
-                    [\mintinline{<td>} tablette ]
-                    [\mintinline{<td>} machin ]
-                    [\mintinline{<td>} 200 ]
+                [\mintinline{xml}{<tr>}
+                    [\mintinline{xml}{<td>}
+                        [tablette]
+                    ]
+                    [\mintinline{xml}{<td>}
+                        [machin]
+                    ]
+                    [\mintinline{xml}{<td>}
+                        [200]
+                    ]
                 ]
             ]
         \end{forest}
