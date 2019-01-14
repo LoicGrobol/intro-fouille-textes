@@ -9,7 +9,7 @@
 \NewDocumentCommand\pdftitle{}{Introduction à la fouille de textes}
 \NewDocumentCommand\mymail{}{loic.grobol@gmail.com}
 \NewDocumentCommand\titlepagetitle{}{\pdftitle}
-\NewDocumentCommand\docdate{}{2018}
+\NewDocumentCommand\docdate{}{2019}
 \NewDocumentCommand\conference{}{M1 Plurital}
 
 \documentclass[hyperref={unicode}, xcolor={svgnames}, french]{beamer}
@@ -316,11 +316,11 @@
 	\titlepage
 \end{frame}
 
-\lecture{Introduction à la fouille de textes}{2018-01-15}
+\lecture{Introduction à la fouille de textes}{2019-01-15}
 \begin{frame}{Informations pratiques}
     \begin{description}[*]
         \item[Où] Salle Benveniste, ILPGA, 9 Rue des Bernardins, 75005 Paris
-        \item[Quand] Le lundi de 14h à 16h (voir le calendrier de Paris 3 pour les dates)
+        \item[Quand] Le lundi de 13h30 à 15h30 (voir le calendrier de Paris 3 pour les dates)
         \item[Contact] \shorturl[mailto][:]{loic.grobol@gmail.com}
         \item[Web] {\shorturl{loicgrobol.github.io/intro-fouille-textes}}
     \end{description}
@@ -333,14 +333,14 @@
         \item[Cours] Exemples, exercices, expérimentations, explications
         \item[Évaluation] en contrôle continu
             \begin{description}
-                \item[Partiel] en semaine 13 (2018-04-23) → \SI{50}{\percent}
+                \item[Partiel] en semaine 13 → \SI{50}{\percent}
                 \item[Projet] → \SI{50}{\percent}
             \end{description}
     \end{description}
 \end{frame}
 
 \begin{frame}{Projet final}
-    « Utiliser des programmes d'apprentissage automatique pour un tâche de classification de textes »
+    « Utiliser des programmes d'apprentissage artificiel pour une tâche de classification de textes »
     \begin{itemize}
         \item Définir le sujet
         \item Constituer le corpus de travail
@@ -351,7 +351,7 @@
 \end{frame}
 
 \begin{frame}{Weka ?}
-    Une suite de logiciels pour l'apprentissage automatique avec une interface graphique
+    Une suite de logiciels pour l'apprentissage artificiel avec une interface graphique
     \begin{itemize}
         \item \shorturl{www.cs.waikato.ac.nz/ml/weka}
         \item À installer dès que possible sur votre machine
@@ -442,12 +442,19 @@
     La suite de ce cours est articulée en deux parties
     \begin{itemize}
         \item Les tâches élémentaires de la fouille de textes
-         \begin{itemize}
-             \item Qu'est-ce qu'une tâche ?
-             \item Quelles sont les tâches élémentaires ?
-             \item Combiner des tâches élémentaires
-         \end{itemize}
+             \begin{itemize}
+                 \item Qu'est-ce qu'une tâche ?
+                 \item Quelles sont les tâches élémentaires ?
+                 \item Combiner des tâches élémentaires
+                 \item Ressources linguistiques pour la fouille de textes
+                 \item Mesures de qualité des systèmes de fouille de textes
+             \end{itemize}
         \item Une tâche particulière : la classification de textes
+            \begin{itemize}
+                \item Généralités sur la classification par apprentissage artificiel
+                \item Algorithmes d'apprentissage de classification
+                \item Utiliser Weka pour construire des classifieurs
+            \end{itemize}
     \end{itemize}
 \end{frame}
 
@@ -748,7 +755,7 @@
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Programmes}
-    Deuxième option : apprentissage automatique
+    Deuxième option : apprentissage artificiel
     \begin{figure}
         \tikzset{external/export=true}
         \begin{tikzpicture}[scale=0.9, every node/.style={transform shape}]
@@ -764,12 +771,12 @@
             \draw[->] (train) -- (progapp);
             \draw[->] (progapp) -- (mod);
         \end{tikzpicture}
-        \caption{Schéma d'une approche par apprentissage automatique}
+        \caption{Schéma d'une approche par apprentissage artificiel}
     \end{figure}
     Ici le \textcolor{highlighta}{programme réalisant la tâche} est générique, mais utilise comme ressource un \textcolor{highlight3}{modèle} généré par un \textcolor{highlight6}{programme d'entraînement} à partir d'\textcolor{highlight7}{exemples} produit par des humains.
 \end{frame}
 
-\begin{frame}{Apprentissage automatique}
+\begin{frame}{Apprentissage artificiel}
     Avantages
     \begin{itemize}
         \item Peut utiliser des données d'apprentissage génériques
@@ -3975,7 +3982,7 @@
 
         Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
         \vfill
-        © 2018, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
+        © 2019, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
 
         \shorturl[http]{lattice.cnrs.fr/Grobol-Loic}
     \end{center}

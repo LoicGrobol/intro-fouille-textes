@@ -12,18 +12,18 @@ Contenus pour le cours « Introduction à la fouille de textes » du master 
 ## Documents
 
   - [Syllabus](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/syllabus.pdf)
-  - [Polycopié du cours](/poly/poly.pdf)
+  - [Polycopié du cours](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/poly.pdf)
   - [Slides du cours](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/slides_introfdt.pdf)
 
 ## Liens utiles
 
   - [Le site du projet Weka](https://www.cs.waikato.ac.nz/ml/weka/)
-  - [La page du cours des années précédentes](http://www.lattice.cnrs.fr/sites/itellier/fouille_textes.html)
+  - [La page du cours de l'an dernier](archives/2018)
   - [Site du master Plurital](http://plurital.org)
 
 ## Licences <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png"/></a>
 
-Copyright © 2018 Loïc Grobol [\<loic.grobol@gmail.com\>](mailto:loic.grobol@gmail.com)
+Copyright © 2019 Loïc Grobol [\<loic.grobol@gmail.com\>](mailto:loic.grobol@gmail.com)
 
 Sauf indication contraire, les fichiers présents dans ce dépôt sont distribués selon les termes de la licence [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/).
 
