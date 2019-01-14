@@ -11,7 +11,7 @@ cache:
     - "slides/tikzpics/"
 
 script:
-    - ./latexdockercmd.sh latexmk -lualatex -interaction=nonstopmode -halt-on-error -shell-escape -outdir=./_build "./slides/slides_introfdt.tex"
+    - ./latexdockercmd.sh "cd slides && latexmk -lualatex -interaction=nonstopmode -halt-on-error -shell-escape slides_introfdt.tex"
 
 before_deploy:
   - echo "Deploying $RELEASE_FILES to GitHub releases"

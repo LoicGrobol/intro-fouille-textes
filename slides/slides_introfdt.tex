@@ -170,7 +170,7 @@
     % TikZ externalisation
     \usetikzlibrary{external}
     % Create the `tikzpics/` folder if it does not exist
-    \ShellEscape{mkdir tikzpics}
+    \ShellEscape{mkdir -p tikzpics}
     % Only externalise pictures on demand (to avoid messing up with metropolis theme)
     \tikzset{
         external/export=false,
