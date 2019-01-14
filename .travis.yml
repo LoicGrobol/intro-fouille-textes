@@ -22,6 +22,7 @@ script:
 
 before_deploy:
     - echo "Deploying $RELEASE_FILES to GitHub releases"
+    - bash travis_before_deploy.sh
 
 deploy:
   provider: releases
@@ -36,7 +37,7 @@ deploy:
   skip_cleanup: true
   on:
     repo: LoicGrobol/intro-fouille-textes
-    tags: true
+    branch: master
 
 after_failure:
     - cat slides/slides_introfdt.log
