@@ -12,7 +12,7 @@ cache:
         - "/tmp/texlive"
         - "$HOME/.texlive"
 
- before_install:
+before_install:
     - travis_wait 45 bash ./travis_setup.sh
     - export PATH="/tmp/texlive/bin/x86_64-linux:$PATH"
 
