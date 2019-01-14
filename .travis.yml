@@ -10,16 +10,8 @@ cache:
   directories:
     - "slides/tikzpics/"
 
-tex-config:
-    - tex-scheme=full
-    - push-type=none
-    - build-pattern=slides/slides_introfdt.tex
-    - packages=biber
-    - latexmk-flags=-lualatex -shell-escape
-
 script:
-    - docker pull strauman/travis-latexbuild:full # select small texlive scheme
-    - travis_wait 60 docker run --mount src=$TRAVIS_BUILD_DIR/,target=/repo,type=bind strauman/travis-latexbuild:full # also it here
+    - ./latexdockercmd.sh latexmk -lualatex -shell-escape -outdir=./_build "slides/slides_introfdt.tex"
 
 before_deploy:
   - echo "Deploying $RELEASE_FILES to GitHub releases"
