@@ -99,7 +99,6 @@
         invisible/.style={opacity=0, fill opacity=0},
 		visible on/.style={alt={<#1>{}{invisible}}}
 	}
-	\usepackage{tikz-qtree}
     \usepackage{forest}
     \usepackage{tkz-graph}
     \usepackage[beamer, markings]{hf-tikz}
@@ -178,27 +177,10 @@
     }
     \tikzexternalize
 
-\usepackage{listings}
-\renewcommand{\lstlistingname}{Example}
-
-    \makeatletter
-    	\lstset{
-    		basicstyle=\ttfamily\lst@ifdisplaystyle\footnotesize\fi,
-    		columns=fullflexible,
-    		showstringspaces=false,
-    		commentstyle=\color{gray}\upshape
-    	}
-    \makeatother
-
-	\lstdefinelanguage{XML}{
-	    morestring=[s]{"}{"},
-	    morecomment=[s]{?}{?},
-	    morecomment=[s]{!--}{--},
-	    moredelim=[s][\color{black}]{>}{<},
-	    moredelim=[s][\color{highlighta}]{\ }{=},
-	    stringstyle=\color{highlight3},
-	    identifierstyle=\color{highlight7}
-	}
+\usepackage{minted}
+	\usemintedstyle{lovelace}
+	\setminted{autogobble, fontsize=\scriptsize, tabsize=2}
+	\setmintedinline{fontsize=auto}
 
 \usepackage[style=authoryear, block=ragged, doi=false, isbn=false]{biblatex}
     \AtEveryBibitem{
@@ -403,6 +385,10 @@
         \item \alert{La masse de données} plutôt que les compétences expertes
         \item \alert{Les méthodes numériques} plutôt que symboliques
         \item Une démarche \alert{inductive} plutôt que déductive
+            \begin{itemize}
+                \item i.e. on part de nos observations pour faire des hypothèses plutôt que l'inverse
+            \end{itemize}
+
     \end{itemize}
     Et cette tendance se généralise depuis à l'ensemble des domaines de l'informatique.
 
@@ -415,7 +401,7 @@
     \begin{itemize}
         \item Le web 2.0 se démocratise au même moment
         \item C'est une formidable source de données linguistiques
-        \item Mais elles sont en général spontanées et potentiellement mal formées
+        \item Mais elles sont en général spontanées, donc plus \alert{irrégulières} qu'auparavant
     \end{itemize}
 
     Et le TAL traditionnel, et en particulier
@@ -424,14 +410,14 @@
         \item Grammaires formelles
         \item Représentations logiques
     \end{itemize}
-    ne sont pas adaptées.
+    est moins bien équipé pour les traiter
 \end{frame}
 
 \begin{frame}{Un changement de paradigme}
     En fouille de textes, par rapport au TAL traditionnel
     \begin{itemize}
-        \item On privilégie les analyses de surface
-        \item On s'appuie sur la quantité des données pour compenser leur hétérogénéité
+        \item On privilégie les \alert{analyses de surface}
+        \item On s'appuie sur la \alert{quantité des données} pour compenser leur hétérogénéité
         \item On réduit les ambitions : pas question d'accéder au sens profond des textes
     \end{itemize}
 
@@ -476,7 +462,7 @@
             \begin{itemize}
                 \item[→] « Tenir une conversation par écrit en se faisant passer pour un être humain » convient
             \end{itemize}
-        \item En pratique on a des ambitions plus modestes
+        \item En pratique on a \alert{des ambitions plus modestes}
         \item Mais on est encore loin de les satisfaire !
          \begin{itemize}
              \item Notre mesure du succès est « s'approcher le plus possible d'une solution de référence validée par un humain »
@@ -487,7 +473,7 @@
 \begin{frame}{Caractérisation}
     \begin{itemize}
         \item Chaque tâche a une visée applicative précise et autonome
-        \item Elle est caractérisée par ses entrées, ses sorties et les ressources auxquelles elle fait appel
+        \item Elle est caractérisée par ses \alert{entrées}, ses \alert{sorties} et les \alert{ressources} auxquelles elle fait appel
     \end{itemize}
 
     \begin{figure}
@@ -501,7 +487,7 @@
         \end{tikzpicture}
     \end{figure}
 
-    On peut considérer chaque tâche comme une boîte noire : la façon dont le programme fonctionne ne nous intéresse pas ici.
+    On peut considérer chaque tâche comme une \aler{boîte noire} : la façon dont le programme fonctionne ne nous intéresse pas ici.
 \end{frame}
 
 \begin{frame}{Quelques exemples de tâches}
@@ -540,7 +526,7 @@
 \end{frame}
 
 \begin{frame}{Entrées ou ressources ?}
-    Le critère qu'on retiendra en pratique est la mutabilité
+    Pour savoir si un élément est l'un ou l'autre, le critère qu'on retiendra en pratique est la \alert{mutabilité}
     \begin{itemize}
         \item Une ressource est une donnée stable qui n'est pas modifiée entre deux exécutions du programme
         \item Une donnée d'entrée change à chaque exécution du programme
@@ -554,6 +540,7 @@
         \item Déterminer le nom du héros et des principaux protagonistes d'un texte narratif
         \item Découper la transcription d'un discours en parties thématiques
         \item Repérer dans un ensemble de tweets ceux qui sont sarcastiques ou ironiques
+        \item Déterminer les symptômes présentés par un patient à partir d'un rapport clinique
     \end{enumerate}
 \end{frame}
 
@@ -593,7 +580,7 @@
 
 \begin{frame}[fragile=singleslide]{Textes bruts}
     \begin{figure}
-        \begin{lstlisting}[gobble=12, basicstyle=\ttfamily\small]
+        \begin{minted}{text}
             et comment est-ce qu'on fait une omelette est-ce que vous
             pourriez m'expliquer
             comment on fait une omelette ?
@@ -603,7 +590,7 @@
             je les mets dans un récipient
             je mets du sel et du poivre directement
             je bats bon je prépare ma poêle je mets du beurre hein ?
-        \end{lstlisting}
+        \end{minted}
         \caption{Exemple de texte brut}
     \end{figure}
     \vskip0pt plus 1fill
@@ -623,43 +610,42 @@
 \begin{frame}[fragile=singleslide]{Documents semi-structuré}
     Cas typique : XML et HTML
     \begin{figure}
-        \begin{lstlisting}[gobble=12, language=XML]
+        \begin{minted}{xml}
             <table>
                 <tr><th>produit</th><th>marque</th><th>prix en euros</th></tr>
                 <tr><td>ordinateur portable</td><td>truc</td><td>800</td></tr>
                 <tr><td>tablette</td><td>machin</td><td>200</td></tr>
             </table>
-        \end{lstlisting}
+        \end{minted}
         \caption{HTML vu comme texte brut}
     \end{figure}
-    On peut le considérer comme du texte brut où chaque balise (\lstinline[language=XML]{<td>}, \lstinline[language=XML]{</tr>}…) compte comme un seul caractère.
+    On peut le considérer comme du texte brut où chaque balise (\mintinline{xml}{<td>}, \mintinline{xml}{</tr>}…) compte comme un seul caractère.
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Documents semi-structuré}
     On peut aussi le considérer comme un arbre
     \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}[font=\tiny]
-            \tikzset{level distance=2em, sibling distance=1ex}
-
-            \Tree[.{\lstinline[language=XML]{<table>}}
-                [.{\lstinline[language=XML]{<tr>}}
-                    [.{\lstinline[language=XML]{<th>}} produit ]
-                    [.{\lstinline[language=XML]{<th>}} marque ]
-                    [.{\lstinline[language=XML]{<th>}} {prix en euros} ]
+        % \tikzset{external/export=true}
+        \begin{forest}
+            for tree={draw, l sep=2em, s sep=3em}
+            [\mintinline{<tab}le>
+                [\mintinline{<tr>}
+                    [\mintinline{<th>} produit ]
+                    [\mintinline{<th>} marque ]
+                    [\mintinline{<th>} {prix en euros} ]
                 ]
-                [.{\lstinline[language=XML]{<tr>}}
-                    [.{\lstinline[language=XML]{<td>}} {ordinateur portable} ]
-                    [.{\lstinline[language=XML]{<td>}} truc ]
-                    [.{\lstinline[language=XML]{<td>}} 800 ]
+                [\mintinline{<tr>}
+                    [\mintinline{<td>} {ordinateur portable} ]
+                    [\mintinline{<td>} truc ]
+                    [\mintinline{<td>} 800 ]
                 ]
-                [.{\lstinline[language=XML]{<tr>}}
-                    [.{\lstinline[language=XML]{<td>}} tablette ]
-                    [.{\lstinline[language=XML]{<td>}} machin ]
-                    [.{\lstinline[language=XML]{<td>}} 200 ]
+                [\mintinline{<tr>}
+                    [\mintinline{<td>} tablette ]
+                    [\mintinline{<td>} machin ]
+                    [\mintinline{<td>} 200 ]
                 ]
             ]
-        \end{tikzpicture}
+        \end{forest}
         \caption{HTML vu comme un arbre}
     \end{figure}
 \end{frame}
@@ -793,34 +779,34 @@
     \end{itemize}
 \end{frame}
 
-% \lecture{Introduction à la fouille de textes}{2018-01-22}
-% \begin{frame}{Quelques exemples}
-%     Quelques exemples de programmes issus d'apprentissage automatique
-%     \begin{itemize}
-%         \item SEM (POS tagging, chunking, détection d'entités nommées)
-%             \begin{itemize}
-%                 \item[→] \shorturl{apps.lattice.cnrs.fr/sem}
-%             \end{itemize}
-%         \item UDPipe (segmenteur/étiqueteur/parser)
-%             \begin{itemize}
-%                 \item[→] \shorturl{ufal.mff.cuni.cz/udpipe}
-%             \end{itemize}
-%         \item Google translate (traduction)
-%             \begin{itemize}
-%                 \item[→] \shorturl{translate.google.com}
-%             \end{itemize}
-%         \item Deep summarization (résumé de review Amazon)
-%             \begin{itemize}
-%                 \item[→] \shorturl{github.com/harpribot/deep-summarization}
-%             \end{itemize}
-%         \item @picdescbot (description d'images en langage naturel\textsuperscript{1})
-%             \begin{itemize}
-%                 \item[→] \shorturl{twitter.com/picdescbot}
-%             \end{itemize}
-%     \end{itemize}
-%     \vskip0pt plus 1fill
-%     {\tiny 1. Encore plus fort : \citetitle{alishahi2017encoding} \parencite{alishahi2017encoding}}
-% \end{frame}
+\lecture{Introduction à la fouille de textes}{2018-01-22}
+\begin{frame}{Quelques exemples}
+    Quelques exemples de programmes issus d'apprentissage automatique
+    \begin{itemize}
+        \item SEM (POS tagging, chunking, détection d'entités nommées)
+            \begin{itemize}
+                \item[→] \shorturl{apps.lattice.cnrs.fr/sem}
+            \end{itemize}
+        \item UDPipe (segmenteur/étiqueteur/parser)
+            \begin{itemize}
+                \item[→] \shorturl{ufal.mff.cuni.cz/udpipe}
+            \end{itemize}
+        \item Google translate (traduction)
+            \begin{itemize}
+                \item[→] \shorturl{translate.google.com}
+            \end{itemize}
+        \item Deep summarization (résumé de review Amazon)
+            \begin{itemize}
+                \item[→] \shorturl{github.com/harpribot/deep-summarization}
+            \end{itemize}
+        \item @picdescbot (description d'images en langage naturel\textsuperscript{1})
+            \begin{itemize}
+                \item[→] \shorturl{twitter.com/picdescbot}
+            \end{itemize}
+    \end{itemize}
+    \vskip0pt plus 1fill
+    {\tiny 1. Encore plus fort : \citetitle{alishahi2017encoding} \parencite{alishahi2017encoding}}
+\end{frame}
 %
 % % ███████ ██    ██  █████  ██      ██    ██  █████  ████████ ██  ██████  ███    ██
 % % ██      ██    ██ ██   ██ ██      ██    ██ ██   ██    ██    ██ ██    ██ ████   ██
