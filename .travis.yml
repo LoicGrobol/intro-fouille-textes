@@ -9,9 +9,15 @@ python:
 cache:
   directories:
     - "slides/tikzpics/"
+    - "/tmp/texlive"
+    - "$HOME/.texlive"
+
+ before_install:
+ - travis_wait 45 bash ./travis_setup.sh
+ - export PATH="/tmp/texlive/bin/x86_64-linux:$PATH"
 
 script:
-    - ./latexdockercmd.sh /bin/sh -c "cd slides && latexmk -lualatex -interaction=nonstopmode -halt-on-error -shell-escape slides_introfdt.tex"
+    - "cd slides && latexmk -lualatex -interaction=nonstopmode -halt-on-error -shell-escape slides_introfdt.tex"
 
 before_deploy:
   - echo "Deploying $RELEASE_FILES to GitHub releases"
