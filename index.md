@@ -16,7 +16,7 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2019
 ## Liens utiles
 
   - [Le site du projet Weka](https://www.cs.waikato.ac.nz/ml/weka/)
-  - [La page du cours des années précédentes](archives/2018)
+  - [La page du cours de l'an dernier](archives/2018)
   - [Site du master Plurital](http://plurital.org)
 
 ## Licences
@@ -25,7 +25,7 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2019
 
  Copyright © 2019 Loïc Grobol [\<loic.grobol@gmail.com\>](mailto:loic.grobol@gmail.com)
 
- Sauf indication contraire, les fichiers présents dans ce dépôt sont distribués selon les termes de la licence [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/). Voir [le README](../README.md#Licences) pour plus de détails.
+ Sauf indication contraire, les fichiers présents dans ce dépôt sont distribués selon les termes de la licence [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/). Voir [le README](README.md#Licences) pour plus de détails.
 
  Un résumé simplifié de cette licence est disponible à <https://creativecommons.org/licenses/by/4.0/>.
 
