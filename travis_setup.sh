@@ -3,7 +3,6 @@
  # setup script to install texlive and add to path
  texlive_year="2018"
 
- sudo apt-get -qq update
  export PATH=/tmp/texlive/bin/x86_64-linux:$PATH
 
  if ! command -v pdflatex > /dev/null; then
