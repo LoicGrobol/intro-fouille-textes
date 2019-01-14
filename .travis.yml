@@ -17,7 +17,7 @@ cache:
  - export PATH="/tmp/texlive/bin/x86_64-linux:$PATH"
 
 script:
-    - "cd slides && latexmk -lualatex -interaction=nonstopmode -halt-on-error -shell-escape slides_introfdt.tex"
+    - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/slides_introfdt.tex
 
 before_deploy:
   - echo "Deploying $RELEASE_FILES to GitHub releases"
