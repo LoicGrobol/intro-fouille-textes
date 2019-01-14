@@ -11,7 +11,7 @@ cache:
     - "slides/tikzpics/"
 
 script:
-    - travis_wait 60  ./latexdockercmd.sh latexmk -lualatex -interaction=nonstopmode -halt-on-error -shell-escape -outdir=./_build "./slides/slides_introfdt.tex"
+    - ./latexdockercmd.sh latexmk -lualatex -interaction=nonstopmode -halt-on-error -shell-escape -outdir=./_build "./slides/slides_introfdt.tex"
 
 before_deploy:
   - echo "Deploying $RELEASE_FILES to GitHub releases"
