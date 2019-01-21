@@ -23,13 +23,13 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2019
 ## Twittographie
 Non-exhaustive
 
-- [\@Seb_Ruder](https://twitter.com/seb_ruder)
-- [\@yoavgo](https://twitter.com/yoavgo)
-- [\@harmaru](https://twitter.com/hardmaru)
-- [\@honnibal](https://twitter.com/honnibal)
-- [\@gchrupala](https://twitter.com/gchrupala)
-- [\@emilymbender](https://twitter.com/emilymbender)
-- [\@\_shrdlu\_](https://twitter.com/_shrdlu_)
+- [@Seb_Ruder](https://twitter.com/seb_ruder)
+- [@yoavgo](https://twitter.com/yoavgo)
+- [@harmaru](https://twitter.com/hardmaru)
+- [@honnibal](https://twitter.com/honnibal)
+- [@gchrupala](https://twitter.com/gchrupala)
+- [@emilymbender](https://twitter.com/emilymbender)
+- [@\_shrdlu\_](https://twitter.com/_shrdlu_)
 
 ## Licences
 
