@@ -42,4 +42,6 @@ deploy:
   skip_cleanup: true
   on:
     repo: LoicGrobol/intro-fouille-textes
-    branch: master, stable
+    branch:
+        - master
+        - stable
