@@ -13,7 +13,7 @@ python:
 cache:
     directories:
         - "slides/lecture1/tikzpics/"
-        - "slides/lecture1/_minted-slides_introfdt"
+        - "slides/lecture1/_minted-lecture1"
         - "/tmp/texlive"
         - "$HOME/.texlive"
 
