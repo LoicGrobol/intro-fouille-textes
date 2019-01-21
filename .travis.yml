@@ -36,10 +36,12 @@ deploy:
     secure: ghw3ui2BrizHpN9cxOuF1NumvigEeIUhY9FI4la3oAUFkt+XoCbP7swK746jBh3YU6/ILuUioorYcSktwQYqCqM15ct+Fo7xs6eFKxYEFmHRfuQBKce08piSgoGFkDZKW/oHws5lOgUkTY/sbIS+l24nu0zsicMAg2FhVU9Bq9Yjo2X5JgGQq3PbktVYibkLR9ByKYzkXCt1UsjFCZKFjoV5oBC1AGmvawcliYcjBN8UAThaiwz1rCjfn0r//3tosfMdSG0++Jbf6zEPOyv04LTcHCYo1m6nbECQI+hKR0kBTtgN18uSqKsGHQ6uJz4gPagE7nOJs0Tzwpmn3t7Ps0S3wLMjUNqmKvNYC5DaKcLZ1tzi+cZa+rznfqKnR1F7rJt+tO1J2d+VDZRooaeizS8JxCMIzhRdLIU6/7mKgPWX1fhMosIWVv0UqikrstUUKxgNWm+7WVBtnerBRc4idsk0J289LudmyMjwp0Qv94l8wqh3Pifd93bdg5+LT0NDD2f862v6UIZcbBth9QoQEtwFTzoNneHpA76MbHxhnI2OeDzkmjK/7HWxAt/fh81hJ5naLhbcM9zMM0JxeapNMhxJU0FY4+XpeCRIVOYXH7FpHtIV3QXy3z9AKMCnvGFXUN6Bqy/GRZyf9hLAfuj4yVg4DhGNbJNeK7lTXAnOo1Y=
   file_glob: true
   file:
-      - slides//lecture1/lecture1.pdf
+      - slides/lecture1/lecture1.pdf
       - syllabus/syllabus.pdf
       - poly/poly.pdf
   skip_cleanup: true
   on:
     repo: LoicGrobol/intro-fouille-textes
-    branch: master
+    branch:
+        - master
+        - stable

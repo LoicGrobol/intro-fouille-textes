@@ -9,7 +9,7 @@
 \NewDocumentCommand\pdftitle{}{Introduction à la fouille de textes}
 \NewDocumentCommand\mymail{}{loic.grobol@gmail.com}
 \NewDocumentCommand\titlepagetitle{}{\pdftitle}
-\NewDocumentCommand\docdate{}{2019}
+\NewDocumentCommand\docdate{}{2019-01-21}
 \NewDocumentCommand\conference{}{M1 Plurital}
 
 \documentclass[hyperref={unicode}, xcolor={svgnames}, french]{beamer}
@@ -54,16 +54,7 @@
 % \setbeameroption{show notes on second screen=left}
 
 
-\usepackage{polyglossia}
-	\setmainlanguage{french}
-    \setotherlanguage{english}
-
-    % PATCH: fix spacing in monospaced text
-    \usepackage{xpatch}
-    \makeatletter
-        \xapptocmd\ttfamily{\nofrench@punctuation}{}{}
-    \makeatother
-
+\usepackage[french, english]{babel}
 \usepackage{amsfonts,amssymb}
 \usepackage{amsmath,amsthm}
 \usepackage{mathtools}	% AMS Maths service pack
@@ -87,6 +78,7 @@
 \usepackage{bookmark}
 \usepackage{caption}
     \captionsetup{skip=1ex}
+\usepackage[iso]{datetime}
 
 \usepackage{csquotes}
 \usepackage{tikz}
@@ -218,9 +210,10 @@
 \renewcommand\todo[1]{\todox[inline]{#1}}
 
 \title{\titlepagetitle}
+\subtitle{Cours 1 : \docdate}
 \author{\textbf{\myname} (\mylab)}
 \institute{}
-\date{\conference\\\docdate}
+\date{\footnotesize Version {\yyyymmdddate\today}T\currenttime}
 
 \titlegraphic{\ccby}
 
@@ -357,12 +350,16 @@
         \item Augmentation de leurs capacités de mémorisation et de traitement
         \item[→] Il devient possible de traiter rapidement de grandes quantités d'informations
     \end{itemize}
-    Le terme \alert{fouille de données} désigne l'ensemble des techniques permettant de prendre des décisions pertinentes à partir de l'analyse de données massives.
+    Le terme \alert{fouille de données} désigne l'ensemble des techniques permettant de prendre des décisions pertinentes à partir de l'analyse de \alert{données massives}.
 \end{frame}
 
 \begin{frame}{La fouille de données}
-    Intéressant et rentable
+    Intéressant et rentable pour plein de gens sympathiques
     \begin{itemize}
+        \item Pour l'armée
+            \begin{itemize}
+                \item[→] Aider à la \alert{prise de décision} à partir de données brutes
+            \end{itemize}
         \item Pour les banques et les assurances
             \begin{itemize}
                 \item[→] Fiabilité d'un crédit, d'une garantie…
@@ -373,7 +370,7 @@
             \end{itemize}
         \item Pour la vente et le marketing
             \begin{itemize}
-                \item[→] Cibler des publicités, étudier un marché…
+                \item[→] \alert{Cibler} des publicités, étudier un marché…
             \end{itemize}
         \item …
     \end{itemize}
@@ -382,11 +379,11 @@
 \begin{frame}{Particularités innovantes}
     Par rapport à l'IA traditionnelle, on privilégie
     \begin{itemize}
-        \item \alert{La masse de données} plutôt que les compétences expertes
+        \item \alert{La masse des données} plutôt que les compétences expertes
         \item \alert{Les méthodes numériques} plutôt que symboliques
         \item Une démarche \alert{inductive} plutôt que déductive
             \begin{itemize}
-                \item i.e. on part de nos observations pour faire des hypothèses plutôt que l'inverse
+                \item[→] On part de nos observations pour faire des hypothèses plutôt que l'inverse
             \end{itemize}
 
     \end{itemize}
@@ -396,10 +393,10 @@
 \end{frame}
 
 \begin{frame}{La fouille de textes}
-    Applications de la fouille de données au TAL et vice-versa pour le traitement des données linguistiques massives.
+    Applications de la fouille de données au \alert{TAL} et vice-versa pour le traitement des données linguistiques massives.
 
     \begin{itemize}
-        \item Le web 2.0 se démocratise au même moment
+        \item Le « web 2.0 » se démocratise au même moment
         \item C'est une formidable source de données linguistiques
         \item Mais elles sont en général spontanées, donc plus \alert{irrégulières} qu'auparavant
     \end{itemize}
@@ -427,7 +424,7 @@
 \begin{frame}{Sommaire}
     La suite de ce cours est articulée en deux parties
     \begin{itemize}
-        \item Les tâches \alert{élémentaires} de la fouille de textes
+        \item Les \alert{tâches élémentaires} de la fouille de textes
              \begin{itemize}
                  \item Qu'est-ce qu'une tâche ?
                  \item Quelles sont les tâches élémentaires ?
@@ -481,7 +478,7 @@
         \begin{tikzpicture}
             \node[data] (in) {Entrée};
             \node[program, right=1cm of in, text width=10ex] (prog) {Programme réalisant la tâche};
-            \node[data, right=1cm of prog] (out) {Résultat};
+            \node[data, right=1cm of prog] (out) {Sortie};
             \draw[->] (in) -- (prog);
             \draw[->] (prog) -- (out);
         \end{tikzpicture}
@@ -508,7 +505,7 @@
         \begin{tikzpicture}
             \node[ellipse, accent on=2] (in) {Entrée};
             \node[right=1cm of in, text width=10ex, accent on=3] (prog) {Programme réalisant la tâche};
-            \node[ellipse, accent on=2, right=1cm of prog] (out) {Résultat};
+            \node[ellipse, accent on=2, right=1cm of prog] (out) {Sortie};
             \node[ellipse, accent on=2, below=1cm of prog] (res) {Ressources};
             \draw[->] (in) -- (prog);
             \draw[->] (prog) -- (out);
@@ -528,8 +525,8 @@
 \begin{frame}{Entrées ou ressources ?}
     Pour savoir si un élément est l'un ou l'autre, le critère qu'on retiendra en pratique est la \alert{mutabilité}
     \begin{itemize}
-        \item Une ressource est une donnée stable qui n'est pas modifiée entre deux exécutions du programme
-        \item Une donnée d'entrée change à chaque exécution du programme
+        \item Une ressource est une donnée \alert{stable} qui n'est pas modifiée entre deux exécutions du programme
+        \item Une donnée d'entrée \alert{change} à chaque exécution du programme
     \end{itemize}
 \end{frame}
 
@@ -551,6 +548,7 @@
 % ██████   ██████  ██   ████ ██   ████ ███████ ███████
 
 % TODO: add exemples/exercises
+\subsection{Données}
 \begin{frame}{Données}
     On peut regrouper grossièrement les données utilisées en fouille de texte dans trois catégories
     \begin{itemize}
@@ -625,7 +623,7 @@
 \begin{frame}[fragile=singleslide]{Documents semi-structuré}
     On peut aussi le considérer comme un arbre
     \begin{figure}
-        % \tikzset{external/export=true}
+        \tikzset{external/export=true}
         \begin{forest}
             for tree={font=\tiny}
             [\mintinline{xml}{<table>}
@@ -685,6 +683,7 @@
 % ██   ██ ███████ ███████ ███████  ██████   ██████  ██   ██  ██████ ███████ ███████
 
 
+\subsection{Ressources}
 \begin{frame}{Les ressources}
     \begin{quote}
         {\only<2>{\small}Toute donnée ou programme disponible pendant l'exécution d'un programme peut être qualifiée de \emph{ressource}.}
@@ -718,23 +717,28 @@
             \begin{itemize}
                 \item[→] \shorturl[http]{almanach.inria.fr/~sagot/lefff.html}
             \end{itemize}
-        \item La base de connaissances structurée Wikidata
+        \item Wikidata \only<2>{(base de connaissances structurée)}
             \begin{itemize}
                 \item[→] \shorturl{www.wikidata.org}
             \end{itemize}
-        \item Le segmenteur/étiqueteur/parser UDPipe
+        \item UDPipe \only<2>{(programme)}
             \begin{itemize}
                 \item[→] \shorturl{ufal.mff.cuni.cz/udpipe}
             \end{itemize}
-        \item Le corpus arboré pour le français (French Treebank)
+        \item Le \alt<1>{French Treebank}{corpus arboré pour le français (French Treebank)}
             \begin{itemize}
                 \item[→] \shorturl[http]{ftb.linguist.univ-paris-diderot.fr}
             \end{itemize}
-        \item Le réseau lexical JeuxDeMots
+        \item Universal dependencies \only<2>{(ensemble de corpus)}
+            \begin{itemize}
+                 \item[→] \shorturl{universaldependencies.org}
+            \end{itemize}
+        \item JeuxDeMots \only<2>{(réseau lexical)}
             \begin{itemize}
                 \item[→] \shorturl{www.jeuxdemots.org/jdm-about.php}
             \end{itemize}
     \end{itemize}
+    \only<1>{De quelle type de ressource s'agit-il ?}
 \end{frame}
 
 % ██████  ██████   ██████   ██████  ██████   █████  ███    ███ ███    ███ ███████ ███████
@@ -744,22 +748,36 @@
 % ██      ██   ██  ██████   ██████  ██   ██ ██   ██ ██      ██ ██      ██ ███████ ███████
 
 
+\subsection{Programmes}
 \begin{frame}{Programmes}
     Première option : programmes « écrits à la main »
     \begin{itemize}
-        \item Reposent sur des connaissances expertes
-        \item Adaptés dans des contextes stables et non-adverses
-        \item Peu de robustesse aux changements et à l'hétérogénéité
+        \item Reposent sur des \alert{connaissances expertes}
+        \item Adaptés dans des contextes \alert{stables} et \alert{non-adverses}
+        \item Peu de robustesse aux changements et à l'\alert{hétérogénéité}
         \item Dans un contexte adverse (e.g.\ spam vs.\ anti-spam), gare à la course de la reine rouge !
     \end{itemize}
     Attention : ça ne signifie pas que c'est une impasse !
     \begin{itemize}
-        \item[→] FRMG (\shorturl[http]{alpage.inria.fr/frmgwiki/})
+        \item[→] FRMG (\shorturl[http]{alpage.inria.fr/frmgwiki})
     \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{Programmes}
-    Deuxième option : apprentissage artificiel
+\begin{frame}{Programmes}
+    Deuxième option : \alert{apprentissage artificiel}
+
+    \begin{itemize}
+        \item[→] Plutôt que d'écrire des traitements nous-même, on va essayer de les faire générer par la machine
+    \end{itemize}
+
+    Hypothèse\footnote{Pas tout à fait vraie} : les humains apprennent à réaliser une tâche en  regardant des \alert{exemples} et en \alert{extrapolant}.
+
+    \begin{itemize}
+        \item[→] Donc si on jette suffisamment d'exemples sur un programme qui simule l'apprentissage humain on devrait pouvoir récupérer un programme sans avoir à l'écrire explicitement
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Programmes}
     \begin{figure}
         \tikzset{external/export=true}
         \begin{tikzpicture}[scale=0.9, every node/.style={transform shape}]
@@ -787,17 +805,16 @@
             \begin{itemize}
                 \item[→] Permet de concentrer les besoins en connaissances expertes
             \end{itemize}
-        \item En général plus robustes aux données irrégulières et à l'hétérogénéité
-        \item Plus facilement transférable (e.g.\ d'une langue à une autre)
+        \item En général plus \alert{robustes} aux données irrégulières et à l'hétérogénéité
+        \item Plus facilement \alert{transférable} (e.g.\ d'une langue à une autre)
     \end{itemize}
     Inconvénients
     \begin{itemize}
-        \item Parfois trop peu explicite (surtout en \textit{Deep Learning})
+        \item Parfois trop peu \alert{explicite}, surtout en \textit{Deep Learning} (mais voir \shorturl{blackboxnlp.github.io})
         \item Dépend beaucoup de la qualité des données d'entraînement
     \end{itemize}
 \end{frame}
 
-\lecture{Introduction à la fouille de textes}{2018-01-22}
 \begin{frame}{Quelques exemples}
     Quelques exemples de programmes issus d'apprentissage automatique
     \begin{itemize}

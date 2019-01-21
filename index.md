@@ -20,6 +20,17 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2019
   - [La page du cours de l'an dernier](archives/2018)
   - [Site du master Plurital](http://plurital.org)
 
+## Twittographie
+Non-exhaustive
+
+- [\@Seb_Ruder](https://twitter.com/seb_ruder)
+- [\@yoavgo](https://twitter.com/yoavgo)
+- [\@harmaru](https://twitter.com/hardmaru)
+- [\@honnibal](https://twitter.com/honnibal)
+- [\@gchrupala](https://twitter.com/gchrupala)
+- [\@emilymbender](https://twitter.com/emilymbender)
+- [\@\_shrdlu\_](https://twitter.com/_shrdlu_)
+
 ## Licences
 
 <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png"/></a>
