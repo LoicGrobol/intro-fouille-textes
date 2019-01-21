@@ -10,7 +10,9 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2019
 
   - [Syllabus](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/syllabus.pdf)
   - [Polycopié du cours](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/poly.pdf)
-  - [Slides du cours](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/slides_introfdt.pdf)
+
+### Slides
+  - [2019-01-21](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture1.pdf)
 
 ## Liens utiles
 
