@@ -1,0 +1,758 @@
+% Copyright © 2018, Loïc Grobol <loic.grobol@gmail.com>
+% This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (https://creativecommons.org/licenses/by/4.0/)
+
+\RequirePackage{xparse}
+\RequirePackage{shellesc}
+% Settings
+\NewDocumentCommand\myname{}{Loïc Grobol}
+\NewDocumentCommand\mylab{}{Lattice / ALMAnaCH}
+\NewDocumentCommand\pdftitle{}{Introduction à la fouille de textes}
+\NewDocumentCommand\mymail{}{loic.grobol@gmail.com}
+\NewDocumentCommand\titlepagetitle{}{\pdftitle}
+\NewDocumentCommand\docdate{}{2019-01-28}
+\NewDocumentCommand\conference{}{M1 Plurital}
+
+\documentclass[hyperref={unicode}, xcolor={svgnames}, french]{beamer}
+\usetheme[sectionpage=progressbar,
+          subsectionpage=progressbar,
+          progressbar=frametitle]{metropolis}
+    \definecolor{accent}{RGB}{51, 34, 136}
+    \setbeamercolor{alerted text}{fg=accent}
+    \makeatletter
+        \setlength{\metropolis@progressinheadfoot@linewidth}{1pt}
+    \makeatother
+    % FIXME: not pretty and footnotes are still too big
+    \let\footnoterule\relax  % No footnote rule, push down footnote
+
+% TODO: update these to the last version
+% 9-Highlights colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf)
+\definecolor{highlight0}{RGB}{51, 34, 136}    % Deep blue
+\definecolor{highlight1}{RGB}{136, 204, 238}  % Clear blue
+\definecolor{highlight2}{RGB}{68, 170, 153}   % Teal
+\definecolor{highlight3}{RGB}{17, 119, 51}    % Forest green
+\definecolor{highlight4}{RGB}{153, 153, 51}   % Khaki
+\definecolor{highlight5}{RGB}{221, 204, 119}  % Beige
+\definecolor{highlight6}{RGB}{204, 102, 119}  % Pink
+\definecolor{highlight7}{RGB}{136, 34, 85}    % Purple
+\definecolor{highlight8}{RGB}{170, 68, 153}   % Violet
+
+% Alternative navy blue for ⩽4 palettes
+\definecolor{highlighta}{RGB}{68, 118, 170}  % Navy blue
+
+% Use non-standard fonts
+\usefonttheme{professionalfonts}
+\setsansfont[BoldFont={Fira Sans SemiBold}, ItalicFont={Fira Sans Book Italic}]{Fira Sans Book}
+\setmonofont[Scale=0.9]{Fira Mono}
+
+% Fix missing glyphs in Fira by delegating to polyglossia/babel
+\usepackage{newunicodechar}
+\newunicodechar{ }{~}   % U+202F NARROW NO-BREAK SPACE
+\newunicodechar{ }{ }  % U+2009 THIN SPACE
+
+% Notes on left screen
+% \usepackage{pgfpages}
+% \setbeameroption{show notes on second screen=left}
+
+
+\usepackage[french, english]{babel}
+\usepackage{amsfonts,amssymb}
+\usepackage{amsmath,amsthm}
+\usepackage{mathtools}	% AMS Maths service pack
+	\newtagform{brackets}{[}{]}	% Pour des lignes d'équation numérotées entre crochets
+	\mathtoolsset{showonlyrefs, showmanualtags, mathic}	% affiche les tags manuels (\tag et \tag*) et corrige le kerning des maths inline dans un bloc italique voir la doc de mathtools
+	\usetagform{brackets}	% Utilise le style de tags défini plus haut
+\usepackage{lualatex-math}
+
+\usepackage[math-style=french]{unicode-math}
+	\setmathfont{Libertinus Math}
+\usepackage{newunicodechar}
+	\newunicodechar{√}{\sqrt}
+\usepackage{mleftright}
+
+
+\usepackage{tabu}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{multicol}
+\usepackage{ccicons}
+\usepackage{bookmark}
+\usepackage{caption}
+    \captionsetup{skip=1ex}
+\usepackage[iso]{datetime}
+
+\usepackage{csquotes}
+\usepackage{tikz}
+	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}}
+    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep = 0pt]{\node[#1] (#2) {$\displaystyle #3$};}}
+	\tikzset{
+		alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+		},
+        invisible/.style={opacity=0, fill opacity=0},
+		visible on/.style={alt={<#1>{}{invisible}}}
+	}
+    \usepackage{forest}
+    \usepackage{tkz-graph}
+    \usepackage[beamer, markings]{hf-tikz}
+    \usepackage{tikz-3dplot}
+    \usepackage{pgfplots}
+        % Due to pgfplots meddling with pgfkeys, we have to redefine alt here.
+        \pgfplotsset{
+    		alt/.code args={<#1>#2#3}{%
+    		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+    		},
+    	}
+        \pgfplotsset{compat=1.15}
+        \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}}
+
+    \usetikzlibrary{matrix}
+    \usetikzlibrary{shapes, shapes.geometric}
+    \usetikzlibrary{decorations.pathreplacing}
+	\usetikzlibrary{positioning, calc, intersections}
+    \usetikzlibrary{fit}
+    \usetikzlibrary{backgrounds}
+
+    % Do evil things with soft path
+    % From <https://tex.stackexchange.com/a/301364/8547>
+    \makeatletter
+        \def\@appendnamedsoftpath#1{%
+            \pgfsyssoftpath@getcurrentpath\@temppatha
+            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
+            \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb}%
+            \pgfsyssoftpath@setcurrentpath\@temppatha
+        }
+        \def\@appendnamedpathforactions#1{%
+            \pgfsyssoftpath@getcurrentpath\@temppatha
+            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
+            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb}%\usepackage{tikz-3dplot}
+
+            \let\tikz@actions@path\@temppatha
+        }
+
+        \tikzset{
+            use path for main/.code={%
+                \tikz@addmode{%
+                    \expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname
+                }%
+            },
+            append path for main/.code={%
+                \tikz@addmode{%
+                    \@appendnamedsoftpath{#1}%
+                }%
+            },
+            use path for actions/.code={%
+                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}%
+            },
+            append path for actions/.code={%
+                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions
+                \@appendnamedpathforactions{#1}}%
+            },
+            use path/.style={%
+                use path for main=#1,
+                use path for actions=#1,
+            },
+            append path/.style={%
+                append path for main=#1,
+                append path for actions=#1
+            }
+        }
+    \makeatother
+
+    % TikZ externalisation
+    \usetikzlibrary{external}
+    % Create the `tikzpics/` folder if it does not exist
+    \ShellEscape{mkdir -p tikzpics}
+    % Only externalise pictures on demand (to avoid messing up with metropolis theme)
+    \tikzset{
+        external/export=false,
+        external/prefix=tikzpics/
+    }
+    \tikzexternalize
+
+\usepackage{minted}
+	\usemintedstyle{lovelace}
+	\setminted{autogobble, fontsize=\scriptsize, tabsize=2}
+	\setmintedinline{fontsize=auto}
+
+\usepackage[style=authoryear, block=ragged, doi=false, isbn=false]{biblatex}
+    \AtEveryBibitem{
+        \ifentrytype{online}
+        {} {
+            \iffieldequalstr{howpublished}{online}
+            {
+                \clearfield{howpublished}
+            } {
+                \clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}
+            }
+        }
+    }
+
+	\addbibresource{biblio.bib}
+
+% Compact bibliography style
+\setbeamertemplate{bibliography item}[text]
+
+\AtEveryBibitem{
+    \clearfield{series}
+    \clearfield{pages}
+    \clearlist{publisher}
+    \clearname{editor}
+    \clearlist{location}
+}
+\renewcommand*{\bibfont}{\tiny}
+
+\usepackage{hyperxmp}	% XMP metadata
+
+\usepackage[type={CC},modifier={by},version={4.0}]{doclicense}
+
+\usepackage{todonotes}
+\let\todox\todo
+\renewcommand\todo[1]{\todox[inline]{#1}}
+
+\title{\titlepagetitle}
+\subtitle{Cours 1 : \docdate}
+\author{\textbf{\myname} (\mylab)}
+\institute{}
+\date{\footnotesize Version {\yyyymmdddate\today}T\currenttime}
+
+\titlegraphic{\ccby}
+
+% Tikz styles
+
+% Schémas de tâches
+\tikzset{
+    >=stealth,
+    hair lines/.style={line width = 0.05pt, lightgray},
+    data/.style={draw, ellipse},
+    program/.style={draw, rectangle},
+    accent on/.style={alt={<#1>{draw=accent, text=accent, thick}{draw}}},
+    true scale/.style={scale=#1, every node/.style={transform shape}},
+    highlight/.style={color=highlight#1}
+}
+
+% Styles des heatmap pour les moyennes
+\pgfplotsset{
+    meanheatmap/.style={
+        colorbar, colormap name=SRON,
+        view={0}{90},
+        samples=100,
+        domain=0:1,
+        min=0, max=1,
+        xlabel={$P$},
+        ylabel={$R$},
+    }
+}
+
+% Commands spécifiques
+\NewDocumentCommand\shorturl{ O{https} O{://} m }{%
+    \href{#1#2#3}{\nolinkurl{#3}}%
+}
+
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiterX\compset[2]{\lbrace}{\rbrace}{#1\,\delimsize|\,#2}
+\DeclarePairedDelimiterX\innprod[2]{\langle}{\rangle}{#1\,\delimsize|\,#2}
+
+\DeclareMathOperator*\argmax{argmax}
+
+% Easy column vectors \vcord{a,b,c} ou \vcord[;]{a;b;c}
+% Here be black magic
+\ExplSyntaxOn
+	\NewDocumentCommand{\vcord}{O{,}m}{\vector_main:nnnn{p}{\\}{#1}{#2}}
+	\NewDocumentCommand{\tvcord}{O{,}m}{\vector_main:nnnn{psmall}{\\}{#1}{#2}}
+	\seq_new:N\l__vector_arg_seq
+	\cs_new_protected:Npn\vector_main:nnnn #1 #2 #3 #4{
+		\seq_set_split:Nnn\l__vector_arg_seq{#3}{#4}
+		\begin{#1matrix}
+			\seq_use:Nnnn\l__vector_arg_seq{#2}{#2}{#2}
+		\end{#1matrix}
+	}
+\ExplSyntaxOff
+
+\DeclareMathOperator{\TF}{TF}
+\DeclareMathOperator{\IDF}{IDF}
+
+\ExplSyntaxOn
+    \DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
+\ExplSyntaxOff
+
+
+% ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████
+% ██   ██ ██    ██ ██      ██    ██ ████  ████ ██      ████   ██    ██
+% ██   ██ ██    ██ ██      ██    ██ ██ ████ ██ █████   ██ ██  ██    ██
+% ██   ██ ██    ██ ██      ██    ██ ██  ██  ██ ██      ██  ██ ██    ██
+% ██████   ██████   ██████  ██████  ██      ██ ███████ ██   ████    ██
+
+
+\begin{document}
+\pdfbookmark[2]{Title}{title}
+
+\begin{frame}[plain]
+	\titlepage
+\end{frame}
+
+% ███████ ██    ██  █████  ██      ██    ██  █████  ████████ ██  ██████  ███    ██
+% ██      ██    ██ ██   ██ ██      ██    ██ ██   ██    ██    ██ ██    ██ ████   ██
+% █████   ██    ██ ███████ ██      ██    ██ ███████    ██    ██ ██    ██ ██ ██  ██
+% ██       ██  ██  ██   ██ ██      ██    ██ ██   ██    ██    ██ ██    ██ ██  ██ ██
+% ███████   ████   ██   ██ ███████  ██████  ██   ██    ██    ██  ██████  ██   ████
+
+\section{Évaluation}
+
+\begin{frame}{Évaluation}
+    Objectif : comparer \alert{objectivement} des programmes réalisant une même tâche
+    \begin{itemize}
+        \item Doit se faire avec exactement les mêmes données
+            \begin{itemize}
+                \item Ressources et entrées !
+            \end{itemize}
+        \item[→] Établissement de données de référence \alert{\textit{Gold Standard}}
+            \begin{itemize}
+                \item[→] MetaTreebank Universal Dependencies \shorturl[http]{universaldependencies.org}
+                \item[→] OntoNotes \shorturl{catalog.ldc.upenn.edu/LDC2013T19}
+            \end{itemize}
+        \item On met ensuite en concurrence les programmes sur ces données → challenge/shared task
+            \begin{itemize}
+                \item[→] CoNLL 2018 \shorturl[http]{universaldependencies.org/conll18}
+                \item[→] \alert{DEFT} \shorturl{deft.limsi.fr}
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{\textit{Train} et \textit{test}}
+    L'évaluation d'un système ne se fait pas sur le jeu de données de développement
+    \begin{itemize}
+        \item Sinon une simple mémorisation suffit !
+        \item On sépare le \textit{Gold Standard} en une partie \alert{\textit{train}} et une partie \alert{\textit{test}}
+        \item Dans le cas d'une campagne d'évaluation, le \textit{test} est souvent tenu secret
+            \begin{itemize}
+                \item[→] Voir par exemple la \textit{shared task CoNLL 2017 pour un exemple sophistiqué}
+            \end{itemize}
+        \item[→] Valable y compris pour les programmes non-appris !
+        \item On ajoute aussi parfois un ensemble dit « de développement »
+        \item Classiquement \SI{80}{\percent}/\SI{10}{\percent}/\SI{10}{\percent}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Validation croisée}
+    Le découpage train/dev/test ajoute de l'objectivité et est facile à mettre en œuvre mais
+    \begin{itemize}
+        \item Il prive d'une partie des données → sous-performance
+        \item Il induit un biais lié au découpage si celui-ci est fixe
+    \end{itemize}
+
+    Pour y limiter cet effet, on utilise parfois la méthode de validation croisée
+    \begin{itemize}
+        \item<1-> On découpe le corpus en $n$ parties de taille égales
+        \item<2-> On utilise $n-1$ parties comme \textcolor{highlighta}{\textit{train}} et la dernière comme \textcolor{highlight6}{\textit{test}}
+        \item<3-> On répète l'opération pour les $n$ combinaisons possibles
+        \item<12-> On retient comme évaluation globale une moyenne des résultats
+    \end{itemize}
+    \begin{center}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[scale=0.7]
+            \foreach \x in {2, ..., 11}
+                \draw[alt=<\x>{fill=highlight6}{{alt=<1,12>{}{fill=highlighta}}}]
+                    (\x-2, 0) -- ++(1, 0) -- ++(0, 1) -- ++(-1, 0) -- ++(0, -1) -- cycle;
+        \end{tikzpicture}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Tâches élémentaires}
+    Parmi l'ensemble des tâches, possible, certaines paraissent plus naturellement élémentaires
+    \begin{itemize}
+        \item Par leur relative simplicité de description
+        \item Par leur capacité, en se combinant, à décrire une grande partie des autres tâches
+    \end{itemize}
+
+    Il s'agit de
+        \begin{itemize}
+            \item la recherche d'information (RI)
+            \item la classification
+            \item l'annotation
+            \item l'extraction d'information (EI)
+        \end{itemize}
+\end{frame}
+
+% ██████  ██
+% ██   ██ ██
+% ██████  ██
+% ██   ██ ██
+% ██   ██ ██
+
+
+\section{Recherche d'information}
+
+\begin{frame}[fragile=singleslide]{Recherche d'information}
+    La \emph{Recherche d'Information} est la tâche consistant à trouver dans un corpus des documents \alert{pertinents} étant donnée une requête
+    \begin{itemize}
+        \item « Trouver dans le catalogue d'une bibliothèque de ouvrages qui traitent de l'art macabre au XVème siècle »
+        \item « Trouver un site internet qui vend des ordinateurs portable sans système d'exploitation »
+    \end{itemize}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.80]
+            \node[data, highlight=4] (in) {Requête};
+            \node[program, right=1cm of in, text width=15ex] (prog) {Programme de RI};
+            \node[data, right=1cm of prog] (out) {documents};
+            \node[data, below=.6cm of prog, highlight=1] (res) {Corpus};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (res) -- (prog);
+        \end{tikzpicture}
+    \end{figure}
+    \vskip-1ex
+    \begin{itemize}
+        \item Le \textcolor{highlight1}{corpus} est une ressource obligatoire
+        \item La \textcolor{highlight4}{requête} n'est \emph{pas} faite en langage fortement structuré (type SPARQL)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Domaines d'application}
+    Globalement tous les moteurs de recherche
+    \begin{itemize}
+        \item Web : Qwant, Duckduckgo, Framabee, Google…
+        \item Site : tous les sites avec une fonction de recherche (e.g. sites marchands)
+        \item Documentaires : en bibliothèques, archives…
+        \item …
+    \end{itemize}
+    Mais aussi les détecteurs de similarité
+    \begin{itemize}
+        \item Détection de plagiat e.g.\ Compilatio (\shorturl{compilatio.net})
+        \item Détection de doublons e.g.\ sur le réseau StackExchange
+    \end{itemize}
+    Note : avoir défini précisément ce que « pertinent » veut dire n'est pas forcément nécessaire ! Il suffit d'avoir défini un \textit{Gold}.
+\end{frame}
+
+% WARNING: Here be dragons
+\begin{frame}[fragile]{Évaluation : préliminaires}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[fill opacity=0.5, text opacity=1,
+                            alt=<1>{true scale=0.9}{true scale=0.75}]
+            \draw[name path=D]
+                (-6,-2) rectangle (6,2)
+                node [above left] {$D$ : ensemble de tous les documents};
+            \draw[alt={<1,6>{fill=highlight2, text=highlight2}{}}, name path=P]
+                (-1, 0) circle [x radius=2, y radius=1, rotate=30]
+                node[below left=1.3 and .15] {$P$ : documents pertinents};
+            \draw[alt={<1,6>{fill=highlight4, text=highlight4}{}}, name path=R]
+                (1, 0) circle [x radius=2, y radius=1.5]
+                node[above right=1.5 and 0.1] {$R$ : documents retournés};
+            \begin{scope}[alt=<2-4>{even odd rule}{}]
+                \clip[alt=<2-3>{use path=P}{use path=R},
+                      alt=<3-5>{append path=D}{}];
+                \only<5>{\clip[use path=P, append path=D];}
+                \path[alt={<2,5>{fill=highlight3}{}},
+                      alt={<3,4>{fill=highlight6}{}},
+                      alt=<2-3>{use path=R}{use path=P},
+                      alt=<5>{use path=D}];
+            \end{scope}
+        \end{tikzpicture}
+        \caption{Représentation de l'ensemble des documents}
+    \end{figure}
+    \only<2->{
+        On définit les indicateurs suivants
+        \begin{tabu}{|*{3}{X[m,c]|}}
+            \hline
+                & \uncover<2,3,6>{\textcolor{highlight4}{Retournés}}   & \uncover<4,5,6>{Non-retournés}\\
+            \hline
+            \uncover<2,4,6>{\textcolor{highlight2}{Pertinents}}    & \uncover<2,6>{\textcolor{highlight3}{Vrais positifs $P∩R$}}    & \uncover<4,6>{\textcolor{highlight6}{Faux négatifs $P\smallsetminus R$}}\\
+            \hline
+            \uncover<3,5,6>{Non-pertinents}    & \uncover<3,6>{\textcolor{highlight6}{Faux positifs $R\smallsetminus P$}} & \uncover<5,6>{\textcolor{highlight3}{Vrais négatifs $D\smallsetminus(P∪R)$}}\\
+            \hline
+        \end{tabu}
+    }
+\end{frame}
+
+\begin{frame}{Évaluation}
+    Les mesures d'évaluations usuelles rendent compte de façon synthétique du tableau précédent pour une expérience de RI
+    \begin{description}
+        \item[La précision] $P=\frac{VP}{VP+FP}$ « combien de documents retournés sont réellement pertinents ? »
+        \item[Le rappel] $R=\frac{VP}{VP+FN}$ « parmi les documents pertinents, combien ont été trouvés ? »
+        \item[La F-mesure] $F=2×\frac{P×R}{P+R}$ est la moyenne harmonique\textsuperscript{1} des deux précédentes
+    \end{description}
+    \vskip0pt plus 1fill
+    {\tiny Exactement $F=\frac{2}{\frac{1}{P}+\frac{1}{R}}=2×\frac{P×R}{P+R}$}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Exemples}
+    Déterminer $P$, $R$ et $F$ dans les cas suivants
+    \begin{itemize}
+        \item $VP=1$, $VN=0$, $FP=1$, $FN=1$
+        \item $VP=100$, $VN=50$, $FP=20$, $FN=15$
+        \item \mbox{}\\
+            {
+                \tikzset{external/export=true}
+                \begin{tikzpicture}[fill opacity=0.5, true scale=0.7, text opacity=1]
+                    \draw[name path=D]
+                        (-6,-2) rectangle (6,2)
+                        node [above left] {$D$};
+                    \draw[fill=highlight2, text=highlight2]
+                        (-1.5, -0.25) node[text=black] {$15$} circle [x radius=2.5, y radius=1, rotate=20]
+                        node[below left=1.1 and .15] {$P$ };
+                    \draw[fill=highlight4, text=highlight4]
+                        (1.5, 0) node[text=black] {$10$ }circle [x radius=2.5, y radius=1.7]
+                        node[above right=1.5 and 0.5] {$R$};
+                    \node at (0, 0) {$40$};
+                    \node at (5.5, 1.5) {$2713$};
+                \end{tikzpicture}
+            }
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Questions}
+    \begin{enumerate}
+        \item $P$, $R$ et $F$ dépendent-elles de la taille de $D$ ?
+        \item Donner une méthode pour avoir à coup sûr $R=1$
+        \item Donner une méthode pour avoir à coup sûr $P=1$
+        \item Dans ces cas, que faut $F$ ? Et que vaudrait la moyenne arithmétique de $P$ et $R$.
+    \end{enumerate}
+\end{frame}
+
+\lecture{Introduction à la fouille de textes}{2018-01-29}
+
+\begin{frame}[fragile]{Aparté : moyennes}
+    \begin{onlyenv}<1>
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}
+                \begin{axis}[meanheatmap]
+                    \addplot3[surf, shader=interp]
+                        {2*(x*y)/(x+y)};
+                \end{axis}
+            \end{tikzpicture}
+        \caption{Moyenne harmonique de $P$ et $R$ : $2×\frac{P×R}{P+R}$}
+        \end{figure}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}
+                \begin{axis}[meanheatmap]
+                    \addplot3[surf, shader=interp]
+                        {(x+y)/2};
+                \end{axis}
+            \end{tikzpicture}
+            \caption{Moyenne arithmétique de $P$ et $R$ : $\frac{P+R}{2}$}
+        \end{figure}
+    \end{onlyenv}
+    \begin{onlyenv}<3>
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}
+                \begin{axis}[meanheatmap]
+                    \addplot3[surf, shader=interp]
+                        {(sqrt(x*y))};
+                \end{axis}
+            \end{tikzpicture}
+        \caption{Moyenne géométrique de $P$ et $R$ : $√{P×R}$}
+        \end{figure}
+    \end{onlyenv}
+    \begin{onlyenv}<4>
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}
+                \begin{axis}[meanheatmap]
+                    \addplot3[surf, shader=interp]
+                        {sqrt((x*x+y*y)/2)};
+                \end{axis}
+            \end{tikzpicture}
+        \caption{Moyenne quadratique de $P$ et $R$ : $√{\frac{P²+R²}{2}}$}
+        \end{figure}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}[fragile]{F-scores généralisés}
+    \begin{columns}
+    \alt<1>{\column{\textwidth}}{\column{0.45\textwidth}}
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[alt=<2>{true scale=0.5}{}]
+                \begin{axis}[meanheatmap]
+                    \addplot3[surf, shader=interp]
+                        {(x*y*(1+0.5^2))/(y+x*0.5^2)};
+                \end{axis}
+            \end{tikzpicture}
+        \caption{$F_β$ ($β=0.5$)}
+        \end{figure}
+    \only<2>{
+        \column{0.45\textwidth}
+        \vspace{\baselineskip}
+        L'idée est de pondérer la moyenne harmonique
+        \begin{align}
+            F_{λ, μ}(P, R)
+                &= \frac{λ+μ}{\frac{λ}{P}+\frac{μ}{R}}\\
+                & (λ+μ) \frac{P×R}{λP + μR}\\
+                &= \frac{λ+μ}{μ} \frac{P×R}{\underbrace{\frac{λ}{μ}}_{β²}P + R}\\
+                &= (1+β²)\frac{P×R}{β²P + R}
+        \end{align}
+    }
+    \end{columns}
+    La F-mesure est simplement le cas $β=1$.
+\end{frame}
+
+%  ██████ ██       █████  ███████ ███████ ██ ███████
+% ██      ██      ██   ██ ██      ██      ██ ██
+% ██      ██      ███████ ███████ ███████ ██ █████
+% ██      ██      ██   ██      ██      ██ ██ ██
+%  ██████ ███████ ██   ██ ███████ ███████ ██ ██
+
+
+\section{Classification}
+
+\begin{frame}[label=classif,fragile]{Classification}
+    La \emph{classification} est la tâche consistant à \alert{répartir} des données dans un ensemble de classes.
+    \begin{itemize}
+        \item « Détecter les spams dans un ensemble d'emails »
+        \item « Repérer dans un ensemble de tweets ceux qui sont sarcastiques ou ironique »
+        \item « Classer un ensemble de textes par genre littéraire »
+    \end{itemize}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.80]
+            \node[data, highlight=4] (in) {Donnée};
+            \node[program, right=1cm of in, text width=15ex] (prog) {Programme de classification};
+            \node[data, right=1cm of prog] (out) {Classe};
+            \node[data, below=.6cm of prog, highlight=8] (res) {Classes};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (res) -- (prog);
+        \end{tikzpicture}
+    \end{figure}
+    \begin{itemize}
+        \item Les \textcolor{highlight8}{classes} sont connus à l'avance
+        \item Chaque \textcolor{highlight4}{donnée} appartient à une classe.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Domaines d'application}
+    \begin{itemize}
+        \item Classification par type de document
+            \begin{itemize}
+                \item[→] DEFT 2018 tâche 1 (\shorturl{deft.limsi.fr/2018})
+            \end{itemize}
+        \item Classification par opinion/sentiment
+            \begin{itemize}
+                \item[→] DEFT 2018 tâche 2
+            \end{itemize}
+        \item Classification par qualité
+            \begin{itemize}
+                \item[→] \shorturl{www.youtube.com/watch?v=anwy2MPT5RE}
+            \end{itemize}
+        \item[…]
+    \end{itemize}
+    Ne s'applique pas qu'aux textes, mais de façon générale à tous les types de données !
+    \begin{itemize}
+        \item[→] Le temps permet-il de faire un tennis ? (Weka \texttt{weater.numeric})
+        \item[→] Cet empan de texte est-il un groupe nominal ?
+        \item[…]
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Évaluation}
+    \colorlet{VP}{highlight3}
+    \colorlet{VN}{highlight2}
+    \colorlet{FN}{highlight4}
+    \colorlet{FP}{highlight8}
+    \begin{figure}
+        \begin{tikzpicture}[
+            table/.style={
+                matrix of nodes,
+                row sep=-\pgflinewidth,
+                column sep=-\pgflinewidth,
+                nodes={draw, text width=3ex, align=center},
+                text depth=0.25ex,
+                text height=1em,
+                nodes in empty cells
+            },
+            aa/.style={alt=<3>{fill=VP}{}, alt={<4,5>{fill=VN}{}}},
+            bb/.style={alt=<4>{fill=VP}{}, alt={<3,5>{fill=VN}{}}},
+            cc/.style={alt=<5>{fill=VP}{}, alt={<3,4>{fill=VN}{}}},
+            ab/.style={alt=<3>{fill=FN}{}, alt=<4>{fill=FP}{}, alt=<5>{fill=VN}{}},
+            ac/.style={alt=<3>{fill=FN}{}, alt=<4>{fill=VN}{}, alt=<5>{fill=FP}{}},
+            ba/.style={alt=<3>{fill=FP}{}, alt=<4>{fill=FN}{}, alt=<5>{fill=VN}{}},
+            bc/.style={alt=<3>{fill=VN}{}, alt=<4>{fill=FN}{}, alt=<5>{fill=FP}{}},
+            ca/.style={alt=<3>{fill=FP}{}, alt=<4>{fill=VN}{}, alt=<5>{fill=FN}{}},
+            cb/.style={alt=<3>{fill=VN}{}, alt=<4>{fill=FP}{}, alt=<5>{fill=FN}{}},
+        ]
+            \matrix[table]{
+                    & |(apred)| A   & |(bpred)| B   & |(cpred)| C\\
+                |(atrue)| A   & |[aa]| $16$  & |[ab]| $0$   & |[ac]| $0$\\
+                |(btrue)| B   & |[ba]| $0$   & |[bb]| $19$  & |[bc]| $1$\\
+                |(ctrue)| C   & |[ca]| $0$   & |[cb]| $2$   & |[cc]| $15$\\
+            };
+
+            \draw [decorate, decoration={brace, amplitude=1em}, yshift=-0.5ex] (apred.north west) -- (cpred.north east) node [midway, above=1.25ex] {Classes prédites};
+            \draw [decorate, decoration={brace, amplitude=1em, mirror}, xshift=-0.5ex] (atrue.north west) -- (ctrue.south west) node [midway, left=1.25ex, rotate=90, anchor=south] {Vraies classes};
+        \end{tikzpicture}
+        \caption{Matrice de confusion pour un problème à trois classes}
+    \end{figure}
+    \vspace{-1em}
+    \only<2>{On calcule pour les mêmes indicateurs que pour la RI}
+    \only<3>{Pour A}\only<4>{Pour B}\only<5>{Pour C}
+    \only<2-5>{
+        \begin{itemize}
+            % TODO: dans la liste suivante ajouter les totaux pour chaque classe à chaque slide
+            \item \textcolor{VP}{Vrais Positifs}
+                \only<3>{$16$}\only<4>{$19$}\only<5>{$15$}
+            \item \textcolor{VN}{Vrais Négatifs}
+                \only<3>{$19+2+1+15=37$}
+                \only<4>{$16+0+0+15=31$}
+                \only<5>{$16+0+0+19=35$}
+            \item \textcolor{FN}{Faux Négatifs}
+                \only<3>{$0+0=0$}\only<4>{$0+1=1$}\only<5>{$0+2=2$}
+            \item \textcolor{FP}{Faux Positifs}
+                \only<3>{$0+0=0$}\only<4>{$0+2=2$}\only<5>{$0+1=1$}
+        \end{itemize}
+    }
+    \only<6>{Puis pour chaque classe, $P$, $R$ et $F$ et la moyenne sur l'ensemble
+        \begin{description}
+            \item[macro-average] Sans pondération
+            \item[micro-average] Pondérée par la taille des classes
+        \end{description}
+    }
+\end{frame}
+
+
+\begin{frame}{Exercice}
+    Étant donnée la matrice de confusion précédente, déterminer précision, rappel et F-mesure pour chacune des classes, ainsi que la micro- et macro-average.
+\end{frame}
+
+
+
+%  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
+% ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
+% ███████ ██████  ██████  █████   ██ ██  ██ ██   ██ ██   ███
+% ██   ██ ██      ██      ██      ██  ██ ██ ██   ██ ██  ██ ██
+% ██   ██ ██      ██      ███████ ██   ████ ██████  ██ ██   ██
+
+\appendix
+\pgfkeys{/metropolis/inner/sectionpage=simple}  % Avoid random errors with section page progressbar
+\section{Annexes}
+\pdfbookmark[2]{Remerciements}{acknowledgements}
+\begin{frame}{Remerciements}
+    Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017fouille} \parencite{tellier2017fouille} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
+\end{frame}
+
+\pdfbookmark[2]{Références}{references}
+\begin{frame}[allowframebreaks]{References}
+    \printbibliography[heading=none]
+\end{frame}
+
+\pdfbookmark[2]{Licence}{licence}
+\begin{frame}{Licence}
+    \begin{center}
+        {\huge \ccby}
+        \vfill
+        This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
+
+        Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
+        \vfill
+        © 2019, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
+
+        \shorturl[http]{lattice.cnrs.fr/Grobol-Loic}
+    \end{center}
+\end{frame}
+
+\end{document}
