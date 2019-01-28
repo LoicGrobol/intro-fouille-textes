@@ -24,7 +24,6 @@
     % FIXME: not pretty and footnotes are still too big
     \let\footnoterule\relax  % No footnote rule, push down footnote
 
-% TODO: update these to the last version
 % 9-Highlights colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf)
 \definecolor{highlight0}{RGB}{51, 34, 136}    % Deep blue
 \definecolor{highlight1}{RGB}{136, 204, 238}  % Clear blue
@@ -320,17 +319,17 @@
 \end{frame}
 
 \begin{frame}{\textit{Train} et \textit{test}}
-    L'évaluation d'un système ne se fait pas sur le jeu de données de développement
+    L'évaluation d'un système ne se fait pas sur le jeu de données utilisées pour l'entraînement
     \begin{itemize}
-        \item Sinon une simple mémorisation suffit !
-        \item On sépare le \textit{Gold Standard} en une partie \alert{\textit{train}} et une partie \alert{\textit{test}}
-        \item Dans le cas d'une campagne d'évaluation, le \textit{test} est souvent tenu secret
+        \item<+-> Sinon une simple mémorisation suffit !
+        \item<+-> On sépare le \textit{Gold Standard} en une partie \alert{\textit{train}} et une partie \alert{\textit{test}}
+        \item<.-> Dans le cas d'une campagne d'évaluation, le \textit{test} est souvent tenu secret
             \begin{itemize}
                 \item[→] Voir par exemple la \textit{shared task CoNLL 2017 pour un exemple sophistiqué}
             \end{itemize}
-        \item[→] Valable y compris pour les programmes non-appris !
-        \item On ajoute aussi parfois un ensemble dit « de développement »
-        \item Classiquement \SI{80}{\percent}/\SI{10}{\percent}/\SI{10}{\percent}
+        \item<.->[→] Valable y compris pour les programmes non-appris !
+        \item<.-> On ajoute aussi parfois un ensemble dit « de développement »
+        \item<.-> Classiquement \SI{80}{\percent}/\SI{10}{\percent}/\SI{10}{\percent}
     \end{itemize}
 \end{frame}
 
@@ -338,10 +337,10 @@
     Le découpage train/dev/test ajoute de l'objectivité et est facile à mettre en œuvre mais
     \begin{itemize}
         \item Il prive d'une partie des données → sous-performance
-        \item Il induit un biais lié au découpage si celui-ci est fixe
+        \item Il induit un \alert{biais} lié au découpage si celui-ci est fixe
     \end{itemize}
 
-    Pour y limiter cet effet, on utilise parfois la méthode de validation croisée
+    Pour y limiter cet effet, on utilise parfois la méthode de \alert{validation croisée}
     \begin{itemize}
         \item<1-> On découpe le corpus en $n$ parties de taille égales
         \item<2-> On utilise $n-1$ parties comme \textcolor{highlighta}{\textit{train}} et la dernière comme \textcolor{highlight6}{\textit{test}}
@@ -359,10 +358,10 @@
 \end{frame}
 
 \begin{frame}{Tâches élémentaires}
-    Parmi l'ensemble des tâches, possible, certaines paraissent plus naturellement élémentaires
+    Parmi l'ensemble des tâches, possible, certaines paraissent plus naturellement \alert{élémentaires}
     \begin{itemize}
-        \item Par leur relative simplicité de description
-        \item Par leur capacité, en se combinant, à décrire une grande partie des autres tâches
+        \item Par leur relative \alert{simplicité} de description
+        \item Par leur capacité, en se \alert{combinant}, à décrire une grande partie des autres tâches
     \end{itemize}
 
     Il s'agit de
@@ -409,7 +408,7 @@
 \end{frame}
 
 \begin{frame}{Domaines d'application}
-    Globalement tous les moteurs de recherche
+    Globalement tous les \alert{moteurs de recherche}
     \begin{itemize}
         \item Web : Qwant, Duckduckgo, Framabee, Google…
         \item Site : tous les sites avec une fonction de recherche (e.g. sites marchands)
@@ -470,17 +469,15 @@
     \begin{description}
         \item[La précision] $P=\frac{VP}{VP+FP}$ « combien de documents retournés sont réellement pertinents ? »
         \item[Le rappel] $R=\frac{VP}{VP+FN}$ « parmi les documents pertinents, combien ont été trouvés ? »
-        \item[La F-mesure] $F=2×\frac{P×R}{P+R}$ est la moyenne harmonique\textsuperscript{1} des deux précédentes
+        \item[La F-mesure] $F=2×\frac{P×R}{P+R}$ est la moyenne harmonique\footnote{Exactement $F=\frac{2}{\frac{1}{P}+\frac{1}{R}}=2×\frac{P×R}{P+R}$} des deux précédentes
     \end{description}
-    \vskip0pt plus 1fill
-    {\tiny Exactement $F=\frac{2}{\frac{1}{P}+\frac{1}{R}}=2×\frac{P×R}{P+R}$}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{Exemples}
+\begin{frame}[fragile]{Exemples}
     Déterminer $P$, $R$ et $F$ dans les cas suivants
     \begin{itemize}
+        \item<1,2> $VP=100$, $VN=50$, $FP=20$, $FN=15$
         \item $VP=1$, $VN=0$, $FP=1$, $FN=1$
-        \item $VP=100$, $VN=50$, $FP=20$, $FN=15$
         \item \mbox{}\\
             {
                 \tikzset{external/export=true}
@@ -501,16 +498,20 @@
     \end{itemize}
 \end{frame}
 
+\begin{frame}{Exemple}
+    Pour la requête « achat en ligne de canards », un moteur de recherche renvoie \num{60} pages. Parmi celles-ci, on voit que \num{17} sont pertinentes.
+
+    Quelle sont la précision, le rappel et la F-mesure du moteur de recherche pour cette requête ?
+\end{frame}
+
 \begin{frame}{Questions}
     \begin{enumerate}
         \item $P$, $R$ et $F$ dépendent-elles de la taille de $D$ ?
         \item Donner une méthode pour avoir à coup sûr $R=1$
         \item Donner une méthode pour avoir à coup sûr $P=1$
-        \item Dans ces cas, que faut $F$ ? Et que vaudrait la moyenne arithmétique de $P$ et $R$.
+        \item Dans ces cas, que vaut $F$ ? Et que vaudrait la moyenne arithmétique de $P$ et $R$.
     \end{enumerate}
 \end{frame}
-
-\lecture{Introduction à la fouille de textes}{2018-01-29}
 
 \begin{frame}[fragile]{Aparté : moyennes}
     \begin{onlyenv}<1>
@@ -563,31 +564,41 @@
     \end{onlyenv}
 \end{frame}
 
-\begin{frame}[fragile]{F-scores généralisés}
+\begin{frame}[fragile=singleslide]{F-scores généralisés}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[meanheatmap]
+                \addplot3[surf, shader=interp]
+                    {(x*y*(1+0.5^2))/(y+x*0.5^2)};
+            \end{axis}
+        \end{tikzpicture}
+    \caption{$F_β$ ($β=0.5$)}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]
     \begin{columns}
-    \alt<1>{\column{\textwidth}}{\column{0.45\textwidth}}
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}[alt=<2>{true scale=0.5}{}]
-                \begin{axis}[meanheatmap]
-                    \addplot3[surf, shader=interp]
-                        {(x*y*(1+0.5^2))/(y+x*0.5^2)};
-                \end{axis}
-            \end{tikzpicture}
-        \caption{$F_β$ ($β=0.5$)}
-        \end{figure}
-    \only<2>{
         \column{0.45\textwidth}
-        \vspace{\baselineskip}
-        L'idée est de pondérer la moyenne harmonique
-        \begin{align}
-            F_{λ, μ}(P, R)
-                &= \frac{λ+μ}{\frac{λ}{P}+\frac{μ}{R}}\\
-                & (λ+μ) \frac{P×R}{λP + μR}\\
-                &= \frac{λ+μ}{μ} \frac{P×R}{\underbrace{\frac{λ}{μ}}_{β²}P + R}\\
-                &= (1+β²)\frac{P×R}{β²P + R}
-        \end{align}
-    }
+            \begin{figure}
+                \tikzset{external/export=true}
+                \begin{tikzpicture}
+                    \begin{axis}[meanheatmap]
+                        \addplot3[surf, shader=interp]
+                            {(x*y*(1+0.5^2))/(y+x*0.5^2)};
+                    \end{axis}
+                \end{tikzpicture}
+            \caption{$F_β$ ($β=0.5$)}
+            \end{figure}
+        \column{0.45\textwidth}
+            L'idée est de pondérer la moyenne harmonique
+            \begin{align}
+                F_{λ, μ}(P, R)
+                    &= \frac{λ+μ}{\frac{λ}{P}+\frac{μ}{R}}\\
+                    &= (λ+μ) \frac{P×R}{λP + μR}\\
+                    &= \frac{λ+μ}{μ} \frac{P×R}{\underbrace{\frac{λ}{μ}}_{β²}P + R}\\
+                    &= (1+β²)\frac{P×R}{β²P + R}
+            \end{align}
     \end{columns}
     La F-mesure est simplement le cas $β=1$.
 \end{frame}
@@ -689,7 +700,7 @@
         \caption{Matrice de confusion pour un problème à trois classes}
     \end{figure}
     \vspace{-1em}
-    \only<2>{On calcule pour les mêmes indicateurs que pour la RI}
+    \only<2>{On calcule pour chaque classe les mêmes indicateurs que pour la RI}
     \only<3>{Pour A}\only<4>{Pour B}\only<5>{Pour C}
     \only<2-5>{
         \begin{itemize}
@@ -713,7 +724,6 @@
         \end{description}
     }
 \end{frame}
-
 
 \begin{frame}{Exercice}
     Étant donnée la matrice de confusion précédente, déterminer précision, rappel et F-mesure pour chacune des classes, ainsi que la micro- et macro-average.
