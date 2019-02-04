@@ -1,0 +1,643 @@
+% Copyright © 2018, Loïc Grobol <loic.grobol@gmail.com>
+% This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (https://creativecommons.org/licenses/by/4.0/)
+
+\RequirePackage{xparse}
+\RequirePackage{shellesc}
+% Settings
+\NewDocumentCommand\myname{}{Loïc Grobol}
+\NewDocumentCommand\mylab{}{Lattice / ALMAnaCH}
+\NewDocumentCommand\pdftitle{}{Introduction à la fouille de textes}
+\NewDocumentCommand\mymail{}{loic.grobol@gmail.com}
+\NewDocumentCommand\titlepagetitle{}{\pdftitle}
+\NewDocumentCommand\docdate{}{2019-02-04}
+\NewDocumentCommand\conference{}{M1 Plurital}
+
+\documentclass[hyperref={unicode}, xcolor={svgnames}, french]{beamer}
+\usetheme[sectionpage=progressbar,
+          subsectionpage=progressbar,
+          progressbar=frametitle]{metropolis}
+    \definecolor{accent}{RGB}{51, 34, 136}
+    \setbeamercolor{alerted text}{fg=accent}
+    \makeatletter
+        \setlength{\metropolis@progressinheadfoot@linewidth}{1pt}
+    \makeatother
+    % FIXME: not pretty and footnotes are still too big
+    \let\footnoterule\relax  % No footnote rule, push down footnote
+
+% 9-Highlights colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf)
+\definecolor{highlight0}{RGB}{51, 34, 136}    % Deep blue
+\definecolor{highlight1}{RGB}{136, 204, 238}  % Clear blue
+\definecolor{highlight2}{RGB}{68, 170, 153}   % Teal
+\definecolor{highlight3}{RGB}{17, 119, 51}    % Forest green
+\definecolor{highlight4}{RGB}{153, 153, 51}   % Khaki
+\definecolor{highlight5}{RGB}{221, 204, 119}  % Beige
+\definecolor{highlight6}{RGB}{204, 102, 119}  % Pink
+\definecolor{highlight7}{RGB}{136, 34, 85}    % Purple
+\definecolor{highlight8}{RGB}{170, 68, 153}   % Violet
+
+% Alternative navy blue for ⩽4 palettes
+\definecolor{highlighta}{RGB}{68, 118, 170}  % Navy blue
+
+% Use non-standard fonts
+\usefonttheme{professionalfonts}
+\setsansfont[BoldFont={Fira Sans SemiBold}, ItalicFont={Fira Sans Book Italic}]{Fira Sans Book}
+\setmonofont[Scale=0.9]{Fira Mono}
+
+% Fix missing glyphs in Fira by delegating to polyglossia/babel
+\usepackage{newunicodechar}
+\newunicodechar{ }{~}   % U+202F NARROW NO-BREAK SPACE
+\newunicodechar{ }{ }  % U+2009 THIN SPACE
+
+% Notes on left screen
+% \usepackage{pgfpages}
+% \setbeameroption{show notes on second screen=left}
+
+
+\usepackage[french, english]{babel}
+\usepackage{amsfonts,amssymb}
+\usepackage{amsmath,amsthm}
+\usepackage{mathtools}	% AMS Maths service pack
+	\newtagform{brackets}{[}{]}	% Pour des lignes d'équation numérotées entre crochets
+	\mathtoolsset{showonlyrefs, showmanualtags, mathic}	% affiche les tags manuels (\tag et \tag*) et corrige le kerning des maths inline dans un bloc italique voir la doc de mathtools
+	\usetagform{brackets}	% Utilise le style de tags défini plus haut
+\usepackage{lualatex-math}
+
+\usepackage[math-style=french]{unicode-math}
+	\setmathfont{Libertinus Math}
+\usepackage{newunicodechar}
+	\newunicodechar{√}{\sqrt}
+\usepackage{mleftright}
+
+
+\usepackage{tabu}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{multicol}
+\usepackage{ccicons}
+\usepackage{bookmark}
+\usepackage{caption}
+    \captionsetup{skip=1ex}
+\usepackage[iso]{datetime}
+
+\usepackage{csquotes}
+\usepackage{tikz}
+	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}}
+    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep = 0pt]{\node[#1] (#2) {$\displaystyle #3$};}}
+	\tikzset{
+		alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+		},
+        invisible/.style={opacity=0, fill opacity=0},
+		visible on/.style={alt={<#1>{}{invisible}}}
+	}
+    \usepackage{forest}
+    \usepackage{tkz-graph}
+    \usepackage[beamer, markings]{hf-tikz}
+    \usepackage{tikz-3dplot}
+    \usepackage{pgfplots}
+        % Due to pgfplots meddling with pgfkeys, we have to redefine alt here.
+        \pgfplotsset{
+    		alt/.code args={<#1>#2#3}{%
+    		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+    		},
+    	}
+        \pgfplotsset{compat=1.15}
+        \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}}
+
+    \usetikzlibrary{matrix}
+    \usetikzlibrary{shapes, shapes.geometric}
+    \usetikzlibrary{decorations.pathreplacing}
+	\usetikzlibrary{positioning, calc, intersections}
+    \usetikzlibrary{fit}
+    \usetikzlibrary{backgrounds}
+
+    % Do evil things with soft path
+    % From <https://tex.stackexchange.com/a/301364/8547>
+    \makeatletter
+        \def\@appendnamedsoftpath#1{%
+            \pgfsyssoftpath@getcurrentpath\@temppatha
+            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
+            \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb}%
+            \pgfsyssoftpath@setcurrentpath\@temppatha
+        }
+        \def\@appendnamedpathforactions#1{%
+            \pgfsyssoftpath@getcurrentpath\@temppatha
+            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
+            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb}%\usepackage{tikz-3dplot}
+
+            \let\tikz@actions@path\@temppatha
+        }
+
+        \tikzset{
+            use path for main/.code={%
+                \tikz@addmode{%
+                    \expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname
+                }%
+            },
+            append path for main/.code={%
+                \tikz@addmode{%
+                    \@appendnamedsoftpath{#1}%
+                }%
+            },
+            use path for actions/.code={%
+                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}%
+            },
+            append path for actions/.code={%
+                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions
+                \@appendnamedpathforactions{#1}}%
+            },
+            use path/.style={%
+                use path for main=#1,
+                use path for actions=#1,
+            },
+            append path/.style={%
+                append path for main=#1,
+                append path for actions=#1
+            }
+        }
+    \makeatother
+
+    % TikZ externalisation
+    \usetikzlibrary{external}
+    % Create the `tikzpics/` folder if it does not exist
+    \ShellEscape{mkdir -p tikzpics}
+    % Only externalise pictures on demand (to avoid messing up with metropolis theme)
+    \tikzset{
+        external/export=false,
+        external/prefix=tikzpics/
+    }
+    \tikzexternalize
+
+\usepackage{minted}
+	\usemintedstyle{lovelace}
+	\setminted{autogobble, fontsize=\scriptsize, tabsize=2}
+	\setmintedinline{fontsize=auto}
+
+\usepackage[style=authoryear, block=ragged, doi=false, isbn=false]{biblatex}
+    \AtEveryBibitem{
+        \ifentrytype{online}
+        {} {
+            \iffieldequalstr{howpublished}{online}
+            {
+                \clearfield{howpublished}
+            } {
+                \clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}
+            }
+        }
+    }
+
+	\addbibresource{biblio.bib}
+
+% Compact bibliography style
+\setbeamertemplate{bibliography item}[text]
+
+\AtEveryBibitem{
+    \clearfield{series}
+    \clearfield{pages}
+    \clearlist{publisher}
+    \clearname{editor}
+    \clearlist{location}
+}
+\renewcommand*{\bibfont}{\tiny}
+
+\usepackage{hyperxmp}	% XMP metadata
+
+\usepackage[type={CC},modifier={by},version={4.0}]{doclicense}
+
+\usepackage{todonotes}
+\let\todox\todo
+\renewcommand\todo[1]{\todox[inline]{#1}}
+
+\title{\titlepagetitle}
+\subtitle{Cours 3 : \docdate}
+\author{\textbf{\myname} (\mylab)}
+\institute{}
+\date{\footnotesize Version {\yyyymmdddate\today}T\currenttime}
+
+\titlegraphic{\ccby}
+
+% Tikz styles
+
+% Schémas de tâches
+\tikzset{
+    >=stealth,
+    hair lines/.style={line width = 0.05pt, lightgray},
+    data/.style={draw, ellipse},
+    program/.style={draw, rectangle},
+    accent on/.style={alt={<#1>{draw=accent, text=accent, thick}{draw}}},
+    true scale/.style={scale=#1, every node/.style={transform shape}},
+    highlight/.style={color=highlight#1}
+}
+
+% Styles des heatmap pour les moyennes
+\pgfplotsset{
+    meanheatmap/.style={
+        colorbar, colormap name=SRON,
+        view={0}{90},
+        samples=100,
+        domain=0:1,
+        min=0, max=1,
+        xlabel={$P$},
+        ylabel={$R$},
+    }
+}
+
+% Commands spécifiques
+\NewDocumentCommand\shorturl{ O{https} O{://} m }{%
+    \href{#1#2#3}{\nolinkurl{#3}}%
+}
+
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiterX\compset[2]{\lbrace}{\rbrace}{#1\,\delimsize|\,#2}
+\DeclarePairedDelimiterX\innprod[2]{\langle}{\rangle}{#1\,\delimsize|\,#2}
+
+\DeclareMathOperator*\argmax{argmax}
+
+% Easy column vectors \vcord{a,b,c} ou \vcord[;]{a;b;c}
+% Here be black magic
+\ExplSyntaxOn
+	\NewDocumentCommand{\vcord}{O{,}m}{\vector_main:nnnn{p}{\\}{#1}{#2}}
+	\NewDocumentCommand{\tvcord}{O{,}m}{\vector_main:nnnn{psmall}{\\}{#1}{#2}}
+	\seq_new:N\l__vector_arg_seq
+	\cs_new_protected:Npn\vector_main:nnnn #1 #2 #3 #4{
+		\seq_set_split:Nnn\l__vector_arg_seq{#3}{#4}
+		\begin{#1matrix}
+			\seq_use:Nnnn\l__vector_arg_seq{#2}{#2}{#2}
+		\end{#1matrix}
+	}
+\ExplSyntaxOff
+
+\DeclareMathOperator{\TF}{TF}
+\DeclareMathOperator{\IDF}{IDF}
+
+\ExplSyntaxOn
+    \DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
+\ExplSyntaxOff
+
+
+% ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████
+% ██   ██ ██    ██ ██      ██    ██ ████  ████ ██      ████   ██    ██
+% ██   ██ ██    ██ ██      ██    ██ ██ ████ ██ █████   ██ ██  ██    ██
+% ██   ██ ██    ██ ██      ██    ██ ██  ██  ██ ██      ██  ██ ██    ██
+% ██████   ██████   ██████  ██████  ██      ██ ███████ ██   ████    ██
+
+
+\begin{document}
+\pdfbookmark[2]{Title}{title}
+
+\begin{frame}[plain]
+	\titlepage
+\end{frame}
+
+\begin{frame}{Exercice}
+    \begin{itemize}
+        \item Un moteur de recherche donné renvoie en général la plupart des documents pertinent pour une requête, mais aussi beaucoup de documents qui n'ont rien à voir. A-t-il une bonne précision ? Un bon rappel ?
+        \item J'entre dans un moteur de recherche la requête « Chopin ». Il renvoie \num{10} documents qui concernent Frédéric Chopin, \num{5} qui concernent Florent Chopin, un qui concerne Paul-François Choppin, \num{2} qui concernent George Sand et \num{3} qui concernent la mission Apollo 13. Évaluer ce résultat.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Exercice}
+    Étant donnée la matrice de confusion suivante (vraies classes en lignes)
+    \begin{enumerate}
+        \item Sans faire de calculs, que penser des résultats pour la classe « pony » ?
+        \item Déterminer précision, rappel et F-mesure pour chacune des classes, ainsi que la micro- et macro-average.
+    \end{enumerate}
+    \begin{table}
+        \begin{tabu}{|l|*{2}{c|}}
+            \hline
+                        &  pony    & metal band\\
+            \hline
+            pony        & \num{20} & \num{12}\\
+            \hline
+            metal band  & \num{4}  & \num{12}\\
+            \hline
+        \end{tabu}
+        \caption{Matrice de confusion pour un problème à deux classes}
+    \end{table}
+
+    {\small\shorturl[http]{aiweirdness.com/post/174211306032/metal-band-or-my-little-pony}}
+\end{frame}
+
+% ██       █████  ██████  ███████ ██      ██      ██ ███    ██  ██████
+% ██      ██   ██ ██   ██ ██      ██      ██      ██ ████   ██ ██
+% ██      ███████ ██████  █████   ██      ██      ██ ██ ██  ██ ██   ███
+% ██      ██   ██ ██   ██ ██      ██      ██      ██ ██  ██ ██ ██    ██
+% ███████ ██   ██ ██████  ███████ ███████ ███████ ██ ██   ████  ██████
+
+\section{Annotation}
+
+\begin{frame}[fragile=singleslide]{Annotation}
+    L'\emph{annotation} ou \emph{étiquetage} est la tâche consistant à attribuer une étiquette à chaque élément d'un ensemble \alert{structuré}.
+
+    \begin{itemize}
+        \item « Déterminer les catégories grammaticales des mots d'une phrase »
+        \item « Découper un discours en parties thématiques »
+    \end{itemize}
+
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.80]
+            \node[data, highlight=4] (in) {Donnée};
+            \node[program, right=1cm of in, text width=12ex] (prog) {Programme d'annotation};
+            \node[data, right=1cm of prog] (out) {Donnée annotée};
+            \node[data, below=.6cm of prog, highlight=8] (res) {Ensemble des étiquettes};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (res) -- (prog);
+        \end{tikzpicture}
+    \end{figure}
+    \vskip-1em
+    \begin{itemize}
+        \item La \textcolor{highlight4}{donnée} à annoter est composée de plusieurs unités et munie d'une structure d'\alert{ordre}
+        \item Chacune des unités se voit attribuer une des \textcolor{highlight8}{étiquettes} possibles, qui sont connus à l'avance
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Structure et ordre}
+    L'annotation se distingue de la classification par la notion de \emph{structure}.
+    \begin{itemize}
+        \item Les unités à annoter sont liées par des relations
+            \begin{itemize}
+                \item Ordre total (séquence)
+                \item Ordre partiel (arbre, DAG)
+                \item Arbitraires (graphe)
+            \end{itemize}
+        \item Les étiquettes qui leur sont attribuées dépendent de ces relations
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Exemples}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+                Le  & petit & chat  & est & content\\
+                DET & ADJ   & NC    & V   & ADJ\\
+            };
+            \foreach \x in {1, ..., 5}
+                \draw[->] (m-1-\x) -- (m-2-\x);
+        \end{tikzpicture}
+        \caption{\emph{Part Of Speech Tagging}}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Exemples}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+                Le  & petit & chat  & est & content\\
+                B & I   & I   & B & B\\
+            };
+            \foreach \x in {1, ..., 5}
+                \draw[->] (m-1-\x) -- (m-2-\x);
+
+            \matrix[matrix of nodes, anchor=base, below=2em of m] (s){
+                (   & Le    & petit & chat & )  & ( & est   & ) & (  & mort & )\\
+            };
+            \foreach \x/\y in {4/5, 4/6, 5/8, 5/9}
+                \draw[->] (m-2-\x) -- (s-1-\y);
+        \end{tikzpicture}
+        \caption{\emph{Chunking}}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Exemples}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{forest}
+            [S
+                [NP→\textcolor{highlighta}{sub}
+                    [Det the]
+                    [N cat]
+                ]
+                [VP→\textcolor{highlighta}{pred}
+                    [V sat]
+                    [PP→\textcolor{highlighta}{mod}
+                        [P on]
+                        [NP
+                            [Det the]
+                            [N mat]
+                        ]
+                    ]
+                ]
+            ]
+        \end{forest}
+        \caption{\textcolor{highlighta}{Étiquetage fonctionnel} d'un arbre syntaxique}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Évaluation}
+    Pour évaluer un étiquetage, on choisit en général de le considérer comme un problème de classification à plusieurs classes
+    \begin{itemize}
+        \item On considère chaque unité comme une donnée et chaque étiquette comme une classe
+        \item On calcule comme précédemment $P$, $R$ et $F$
+        \item On privilégie les micro-averages pour les scores globaux
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Aparté : micro-average et exactitude}
+    \begin{theorem}
+        Si chaque unité reçoit une unique étiquette, les micro-average de $P$, $R$ et $F$ sont égales à l'exactitude.
+    \end{theorem}
+    On considère la matrice de confusion suivante
+    \begin{center}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[
+            table/.style={
+                matrix of nodes,
+                row sep=-\pgflinewidth,
+                column sep=-\pgflinewidth,
+                nodes={draw, text width=3ex, align=center},
+                text depth=0.25ex,
+                text height=1em,
+                nodes in empty cells
+            },
+            aa/.style={},
+            bb/.style={},
+            cc/.style={},
+            ab/.style={},
+            ac/.style={},
+            ba/.style={},
+            bc/.style={},
+            ca/.style={},
+            cb/.style={},
+        ]
+            \matrix[table]{
+                    & |(apred)| A   & |(bpred)| B   & |(cpred)| C\\
+                |(atrue)| A   & |[aa]| $aa$  & |[ab]| $ab$   & |[ac]| $ac$\\
+                |(btrue)| B   & |[ba]| $ba$   & |[bb]| $bb$  & |[bc]| $bc$\\
+                |(ctrue)| C   & |[ca]| $ca$   & |[cb]| $cb$   & |[cc]| $cc$\\
+            };
+
+            \draw [decorate, decoration={brace, amplitude=1em}, yshift=-0.5ex] (apred.north west) -- (cpred.north east) node [midway, above=1.25ex] {Classes prédites};
+            \draw [decorate, decoration={brace, amplitude=1em, mirror}, xshift=-0.5ex] (atrue.north west) -- (ctrue.south west) node [midway, left=1.25ex, rotate=90, anchor=south] {Vraies classes};
+        \end{tikzpicture}
+    \end{center}
+    Et on regarde le tableau !
+\end{frame}
+
+% TODO: add slides for the proof above
+
+% ███████ ██
+% ██      ██
+% █████   ██
+% ██      ██
+% ███████ ██
+
+\section{L'extraction d'informations}
+\begin{frame}[fragile]{Extraction d'informations}
+    L'\emph{extraction d'informations} est la tâche consistant à trouver dans un document les \alert{réponses} à des questions prédéfinies.
+
+    \only<1>{
+        \begin{itemize}
+            \item « Déterminer le nom du héros et des principaux protagonistes d'un texte narratif »
+            \item « Déterminer les symptômes présentés par un patient à partir d'un rapport clinique »
+        \end{itemize}
+    }
+
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.80]
+            \node[data, highlight=4] (in) {Donnée};
+            \node[program, right=1cm of in, text width=12ex] (prog) {Programme d'EI};
+            \node[data, right=1cm of prog, highlight=6] (out) {Champs remplis};
+            \node[data, below=.6cm of prog, highlight=8] (res) {Champs à remplir};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (res) -- (prog);
+        \end{tikzpicture}
+    \end{figure}
+
+    \only<2>{
+        \begin{itemize}
+            \item La \textcolor{highlight4}{donnée} est un texte brut ou un document semi-structuré
+            \item La \textcolor{highlight6}{sortie} est un tableau qui donne la valeur de chacun des champs
+            \item Les \textcolor{highlight8}{champs} \emph{peuvent} être multivalués et en nombre variable
+        \end{itemize}
+    }
+\end{frame}
+
+% TODO: add cites
+\begin{frame}{Domaines d'application}
+    Ils sont nombreux !
+    \begin{itemize}
+        \item Identification de protagonistes (littérature, militaire)
+        \item Identification d'événement (biomédical, militaire)
+        \item Fouille d'arguments
+            \begin{itemize}
+                \item Aide à la décision (politique)
+                    \begin{itemize}
+                        \item[→] IBM Watson (\textcite{slonim2014claims}, \shorturl{youtube.com/watch?v=sEf0GLvrP9U})
+                    \end{itemize}
+                \item Aide à la lecture (judiciaire, scientifique)
+                    \begin{itemize}
+                        \item[→] « Argument zoning » (\textcite{teufel2009argument}, \shorturl{www.cl.cam.ac.uk/~sht25/az.html})
+                    \end{itemize}
+            \end{itemize}
+        \item …
+    \end{itemize}
+    À l'extrême, la tâche se confond avec la compréhension de document.
+\end{frame}
+
+\begin{frame}{Évaluation}
+    L'idée est toujours de se comparer à une référence humaine.
+    \begin{itemize}
+        \item Basiquement : on compare les contenus des champs et on en déduit $P$, $R$ et $F$
+        \item Plus subtilement : on peut utiliser des mesures d'adéquation entre les réponses
+            \begin{itemize}
+                \item[→] Une réponse peut être partiellement correcte : on pondère~!
+            \end{itemize}
+        \item Pour certaines tâches, on utilise des mesures spécifiques
+            \begin{itemize}
+                \item Pour les tâches comprenant une composante de localisation (NER, Argument Zoning), on peut appliquer des pondérations différentes à extraction et localisation
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% ██████  ███████ ██       █████  ████████ ██  ██████  ███    ██ ███████
+% ██   ██ ██      ██      ██   ██    ██    ██ ██    ██ ████   ██ ██
+% ██████  █████   ██      ███████    ██    ██ ██    ██ ██ ██  ██ ███████
+% ██   ██ ██      ██      ██   ██    ██    ██ ██    ██ ██  ██ ██      ██
+% ██   ██ ███████ ███████ ██   ██    ██    ██  ██████  ██   ████ ███████
+
+
+\section{Relations entre tâches}
+\begin{frame}<1>[label=taskrel]{Relations entre tâches}
+    Les tâches présentées précédemment sont \emph{élémentaires} au sens où on peut y réduire la plupart des tâches de la fouille de texte.
+
+    Cependant ces tâches ne sont pas complètement indépendantes les unes des autres \emph{via} des reformulations.
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{La RI comme classification}
+    Puisque la RI consiste à déterminer parmi un ensemble de documents lesquels sont pertinents, on peut la voir comme un problème de classification binaire.
+
+    \begin{itemize}
+        \item On répartit les documents entre les deux classes « pertinent » et « non-pertinent »
+        \item La requête, qui était une donnée, devient une ressource
+    \end{itemize}
+    \vskip-1em
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.75]
+            \node[data] (in) {Requête};
+            \node[program, right=2cm of in, text width=16ex] (prog) {Programme de classification};
+            \node[data, right=1.5cm of prog] (out) {Documents pertinents};
+            \node[above left=0.25cm and 0.25cm of prog.north west] (ri) {RI};
+            \draw ($(prog.north west)+(-1.5cm, 0.75cm)$) -- ($(prog.north east)+(1cm, 0.75cm)$) -- ($(prog.south east)+(1cm, -1.25cm)$) -- ($(prog.south west)+(-1.5cm, -1.25cm)$) -- cycle;
+            \node[data, below=1.5cm of prog] (res) {Corpus};
+            \draw[->] (in.south) |- ($(prog.south)-(0, 0.75cm)$) -- (prog.south);
+            \draw[->] (res.west) -| ($(prog.west)-(0.75cm, 0)$) -- (prog.west);
+            \draw[->] (prog) -- (out);
+        \end{tikzpicture}
+        \caption{La RI comme une classification}
+    \end{figure}
+\end{frame}
+
+% TODO: add graphics and examples
+\begin{frame}{L'annotation comme classification}
+    Plusieurs stratégies sont envisageables pour conserver l'information de structure
+    \begin{itemize}
+        \item Voir la suite des étiquettes d'une séquence comme une seule classe.
+        \item Étiqueter par classifications successives en utilisant à chaque étape l'ensemble des étiquettes précédentes comme information pour choisir l'étiquette suivante.
+    \end{itemize}
+\end{frame}
+
+
+
+%  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
+% ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
+% ███████ ██████  ██████  █████   ██ ██  ██ ██   ██ ██   ███
+% ██   ██ ██      ██      ██      ██  ██ ██ ██   ██ ██  ██ ██
+% ██   ██ ██      ██      ███████ ██   ████ ██████  ██ ██   ██
+
+\appendix
+\pgfkeys{/metropolis/inner/sectionpage=simple}  % Avoid random errors with section page progressbar
+\section{Annexes}
+\pdfbookmark[2]{Remerciements}{acknowledgements}
+\begin{frame}{Remerciements}
+    Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017fouille} \parencite{tellier2017fouille} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
+\end{frame}
+
+\pdfbookmark[2]{Références}{references}
+\begin{frame}[allowframebreaks]{References}
+    \printbibliography[heading=none]
+\end{frame}
+
+\pdfbookmark[2]{Licence}{licence}
+\begin{frame}{Licence}
+    \begin{center}
+        {\huge \ccby}
+        \vfill
+        This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
+
+        Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
+        \vfill
+        © 2019, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
+
+        \shorturl[http]{lattice.cnrs.fr/Grobol-Loic}
+    \end{center}
+\end{frame}
+
+\end{document}

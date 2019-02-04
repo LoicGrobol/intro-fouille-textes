@@ -16,6 +16,8 @@ cache:
         - "slides/lecture1/_minted-lecture1"
         - "slides/lecture2/tikzpics/"
         - "slides/lecture2/_minted-lecture2"
+        - "slides/lecture3/tikzpics/"
+        - "slides/lecture3/_minted-lecture2"
         - "/tmp/texlive"
         - "$HOME/.texlive"
 
@@ -26,6 +28,7 @@ before_install:
 script:
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture1/lecture1.tex
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture2/lecture2.tex
+    - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture2/lecture3.tex
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape syllabus/syllabus.tex
 
 before_deploy:
@@ -41,6 +44,7 @@ deploy:
   file:
       - slides/lecture1/lecture1.pdf
       - slides/lecture2/lecture2.pdf
+      - slides/lecture3/lecture3.pdf
       - syllabus/syllabus.pdf
       - poly/poly.pdf
   skip_cleanup: true
