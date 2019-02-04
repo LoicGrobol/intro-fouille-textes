@@ -18,7 +18,7 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2019
 #### 2019-01-28 – Évaluation, RI et classification
   - À lire → Poly jusqu'à 2.3.2
   - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture2.pdf)
-  -
+
 #### 2019-02-04 – Étiquetage, EI et relations entre tâches
   - À lire → Poly jusqu'à 2.4 (non-inclus)
   - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture3.pdf)
