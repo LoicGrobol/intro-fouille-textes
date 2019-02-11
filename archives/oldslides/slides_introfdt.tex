@@ -1254,789 +1254,789 @@
 \end{frame}
 
 
-% % ██       █████  ██████  ███████ ██      ██      ██ ███    ██  ██████
-% % ██      ██   ██ ██   ██ ██      ██      ██      ██ ████   ██ ██
-% % ██      ███████ ██████  █████   ██      ██      ██ ██ ██  ██ ██   ███
-% % ██      ██   ██ ██   ██ ██      ██      ██      ██ ██  ██ ██ ██    ██
-% % ███████ ██   ██ ██████  ███████ ███████ ███████ ██ ██   ████  ██████
-%
-% \lecture{Introduction à la fouille de textes}{2018-02-05}
-% \subsection{Annotation}
-%
-% \begin{frame}[fragile=singleslide]{Annotation}
-%     L'\emph{annotation} ou \emph{étiquetage} est la tâche consistant à attribuer une étiquette à chaque élément d'un ensemble \alert{structuré}.
-%
-%     \begin{itemize}
-%         \item « Déterminer les catégories grammaticales des mots d'une phrase »
-%         \item « Découper un discours en parties thématiques »
-%     \end{itemize}
-%
-%     \begin{figure}
-%         \tikzset{external/export=true}
-%         \begin{tikzpicture}[true scale=0.80]
-%             \node[data, highlight=4] (in) {Donnée};
-%             \node[program, right=1cm of in, text width=12ex] (prog) {Programme d'annotation};
-%             \node[data, right=1cm of prog] (out) {Donnée annotée};
-%             \node[data, below=.6cm of prog, highlight=8] (res) {Ensemble des étiquettes};
-%             \draw[->] (in) -- (prog);
-%             \draw[->] (prog) -- (out);
-%             \draw[->] (res) -- (prog);
-%         \end{tikzpicture}
-%     \end{figure}
-%     \vskip-1em
-%     \begin{itemize}
-%         \item La \textcolor{highlight4}{donnée} à annoter est composée de plusieurs unités et munie d'une structure d'\alert{ordre}
-%         \item Chacune des unités se voit attribuer une des \textcolor{highlight8}{étiquettes} possibles, qui sont connus à l'avance
-%     \end{itemize}
-% \end{frame}
-%
-% \begin{frame}{Structure et ordre}
-%     L'annotation se distingue de la classification par la notion de \emph{structure}.
-%     \begin{itemize}
-%         \item Les unités à annoter sont liées par des relations
-%             \begin{itemize}
-%                 \item Ordre total (séquence)
-%                 \item Ordre partiel (arbre, DAG)
-%                 \item Arbitraires (graphe)
-%             \end{itemize}
-%         \item Les étiquettes qui leur sont attribuées dépendent de ces relations
-%     \end{itemize}
-% \end{frame}
-%
-% \begin{frame}[fragile=singleslide]{Exemples}
-%     \begin{figure}
-%         \tikzset{external/export=true}
-%         \begin{tikzpicture}
-%             \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
-%                 Le  & petit & chat  & est & mort\\
-%                 DET & ADJ   & NC    & V   & ADJ\\
-%             };
-%             \foreach \x in {1, ..., 5}
-%                 \draw[->] (m-1-\x) -- (m-2-\x);
-%         \end{tikzpicture}
-%         \caption{\emph{Part Of Speech Tagging}}
-%     \end{figure}
-% \end{frame}
-%
-% \begin{frame}[fragile=singleslide]{Exemples}
-%     \begin{figure}
-%         \tikzset{external/export=true}
-%         \begin{tikzpicture}
-%             \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
-%                 Le  & petit & chat  & est & mort\\
-%                 B & I   & I   & B & B\\
-%             };
-%             \foreach \x in {1, ..., 5}
-%                 \draw[->] (m-1-\x) -- (m-2-\x);
-%
-%             \matrix[matrix of nodes, anchor=base, below=2em of m] (s){
-%                 (   & Le    & petit & chat & )  & ( & est   & ) & (  & mort & )\\
-%             };
-%             \foreach \x/\y in {4/5, 4/6, 5/8, 5/9}
-%                 \draw[->] (m-2-\x) -- (s-1-\y);
-%         \end{tikzpicture}
-%         \caption{\emph{Chunking}}
-%     \end{figure}
-% \end{frame}
-%
-% \begin{frame}[fragile=singleslide]{Exemples}
-%     \begin{figure}
-%         \tikzset{external/export=true}
-%         \begin{tikzpicture}
-%             \tikzset{every tree node/.style={align=center,anchor=north}}
-%             \Tree [.S
-%                 [.NP→\textcolor{highlighta}{sub} [.Det the ] [.N cat ] ]
-%                 [.VP→\textcolor{highlighta}{pred} [.V sat ]
-%                     [.PP→\textcolor{highlighta}{mod} [.P on ]
-%                         [.NP [.Det the ] [.N mat ] ]
-%                     ]
-%                 ]
-%             ]
-%         \end{tikzpicture}
-%         \caption{\textcolor{highlighta}{Étiquetage fonctionnel} d'un arbre syntaxique}
-%     \end{figure}
-% \end{frame}
-%
-% \begin{frame}{Évaluation}
-%     Pour évaluer un étiquetage, on choisit en général de le considérer comme un problème de classification à plusieurs classes
-%     \begin{itemize}
-%         \item On considère chaque unité comme une donnée et chaque étiquette comme une classe
-%         \item On calcule comme précédemment $P$, $R$ et $F$
-%         \item On privilégie les micro-averages pour les scores globaux
-%     \end{itemize}
-% \end{frame}
-%
-% \begin{frame}[fragile]{Aparté : micro-average et exactitude}
-%     \begin{theorem}
-%         Si chaque unité reçoit une unique étiquette, les micro-average de $P$, $R$ et $F$ sont égales à l'exactitude.
-%     \end{theorem}
-%     On considère la matrice de confusion suivante
-%     \begin{center}
-%         \tikzset{external/export=true}
-%         \begin{tikzpicture}[
-%             table/.style={
-%                 matrix of nodes,
-%                 row sep=-\pgflinewidth,
-%                 column sep=-\pgflinewidth,
-%                 nodes={draw, text width=3ex, align=center},
-%                 text depth=0.25ex,
-%                 text height=1em,
-%                 nodes in empty cells
-%             },
-%             aa/.style={},
-%             bb/.style={},
-%             cc/.style={},
-%             ab/.style={},
-%             ac/.style={},
-%             ba/.style={},
-%             bc/.style={},
-%             ca/.style={},
-%             cb/.style={},
-%         ]
-%             \matrix[table]{
-%                     & |(apred)| A   & |(bpred)| B   & |(cpred)| C\\
-%                 |(atrue)| A   & |[aa]| $aa$  & |[ab]| $ab$   & |[ac]| $ac$\\
-%                 |(btrue)| B   & |[ba]| $ba$   & |[bb]| $bb$  & |[bc]| $bc$\\
-%                 |(ctrue)| C   & |[ca]| $ca$   & |[cb]| $cb$   & |[cc]| $cc$\\
-%             };
-%
-%             \draw [decorate, decoration={brace, amplitude=1em}, yshift=-0.5ex] (apred.north west) -- (cpred.north east) node [midway, above=1.25ex] {Classes prédites};
-%             \draw [decorate, decoration={brace, amplitude=1em, mirror}, xshift=-0.5ex] (atrue.north west) -- (ctrue.south west) node [midway, left=1.25ex, rotate=90, anchor=south] {Vraies classes};
-%         \end{tikzpicture}
-%     \end{center}
-%     Et on regarde le tableau !
-% \end{frame}
-%
-% % TODO: add slides for the proof above
-%
-% % ███████ ██
-% % ██      ██
-% % █████   ██
-% % ██      ██
-% % ███████ ██
-%
-% \subsection{L'extraction d'informations}
-% \begin{frame}[fragile]{Extraction d'informations}
-%     L'\emph{extraction d'informations} est la tâche consistant à trouver dans un document les \alert{réponses} à des questions prédéfinies.
-%
-%     \only<1>{
-%         \begin{itemize}
-%             \item « Déterminer le nom du héros et des principaux protagonistes d'un texte narratif »
-%             \item « Déterminer les symptômes présentés par un patient à partir d'un rapport clinique »
-%         \end{itemize}
-%     }
-%
-%     \begin{figure}
-%         \tikzset{external/export=true}
-%         \begin{tikzpicture}[true scale=0.80]
-%             \node[data, highlight=4] (in) {Donnée};
-%             \node[program, right=1cm of in, text width=12ex] (prog) {Programme d'EI};
-%             \node[data, right=1cm of prog, highlight=6] (out) {Champs remplis};
-%             \node[data, below=.6cm of prog, highlight=8] (res) {Champs à remplir};
-%             \draw[->] (in) -- (prog);
-%             \draw[->] (prog) -- (out);
-%             \draw[->] (res) -- (prog);
-%         \end{tikzpicture}
-%     \end{figure}
-%
-%     \only<2>{
-%         \begin{itemize}
-%             \item La \textcolor{highlight4}{donnée} est un texte brut ou un document semi-structuré
-%             \item La \textcolor{highlight6}{sortie} est un tableau qui donne la valeur de chacun des champs
-%             \item Les \textcolor{highlight8}{champs} \emph{peuvent} être multivalués et en nombre variable
-%         \end{itemize}
-%     }
-% \end{frame}
-%
-% % TODO: add cites
-% \begin{frame}{Domaines d'application}
-%     Ils sont nombreux !
-%     \begin{itemize}
-%         \item Identification de protagonistes (littérature, militaire)
-%         \item Identification d'événement (biomédical, militaire)
-%         \item Fouille d'arguments
-%             \begin{itemize}
-%                 \item Aide à la décision (politique)
-%                     \begin{itemize}
-%                         \item[→] IBM Watson (\textcite{slonim2014claims}, \shorturl{youtube.com/watch?v=sEf0GLvrP9U})
-%                     \end{itemize}
-%                 \item Aide à la lecture (judiciaire, scientifique)
-%                     \begin{itemize}
-%                         \item[→] « Argument zoning » (\textcite{teufel2009argument}, \shorturl{www.cl.cam.ac.uk/~sht25/az.html})
-%                     \end{itemize}
-%             \end{itemize}
-%         \item …
-%     \end{itemize}
-%     À l'extrême, la tâche se confond avec la compréhension de document.
-% \end{frame}
-%
-% \begin{frame}{Évaluation}
-%     L'idée est toujours de se comparer à une référence humaine.
-%     \begin{itemize}
-%         \item Basiquement : on compare les contenus des champs et on en déduit $P$, $R$ et $F$
-%         \item Plus subtilement : on peut utiliser des mesures d'adéquation entre les réponses
-%             \begin{itemize}
-%                 \item[→] Une réponse peut être partiellement correcte : on pondère~!
-%             \end{itemize}
-%         \item Pour certaines tâches, on utilise des mesures spécifiques
-%             \begin{itemize}
-%                 \item Pour les tâches comprenant une composante de localisation (NER, Argument Zoning), on peut appliquer des pondérations différentes à extraction et localisation
-%             \end{itemize}
-%     \end{itemize}
-% \end{frame}
-%
-% % ██████  ███████ ██       █████  ████████ ██  ██████  ███    ██ ███████
-% % ██   ██ ██      ██      ██   ██    ██    ██ ██    ██ ████   ██ ██
-% % ██████  █████   ██      ███████    ██    ██ ██    ██ ██ ██  ██ ███████
-% % ██   ██ ██      ██      ██   ██    ██    ██ ██    ██ ██  ██ ██      ██
-% % ██   ██ ███████ ███████ ██   ██    ██    ██  ██████  ██   ████ ███████
-%
-%
-% \subsection{Relations entre tâches}
-% \begin{frame}<1>[label=taskrel]{Relations entre tâches}
-%     Les tâches présentées précédemment sont \emph{élémentaires} au sens où on peut y réduire la plupart des tâches de la fouille de texte.
-%
-%     Cependant ces tâches ne sont pas complètement indépendantes les unes des autres \emph{via} des reformulations.
-% \end{frame}
-%
-% \begin{frame}[fragile=singleslide]{La RI comme classification}
-%     Puisque la RI consiste à déterminer parmi un ensemble de documents lesquels sont pertinents, on peut la voir comme un problème de classification binaire.
-%
-%     \begin{itemize}
-%         \item On répartit les documents entre les deux classes « pertinent » et « non-pertinent »
-%         \item La requête, qui était une donnée, devient une ressource
-%     \end{itemize}
-%     \vskip-1em
-%     \begin{figure}
-%         \tikzset{external/export=true}
-%         \begin{tikzpicture}[true scale=0.75]
-%             \node[data] (in) {Requête};
-%             \node[program, right=2cm of in, text width=16ex] (prog) {Programme de classification};
-%             \node[data, right=1.5cm of prog] (out) {Documents pertinents};
-%             \node[above left=0.25cm and 0.25cm of prog.north west] (ri) {RI};
-%             \draw ($(prog.north west)+(-1.5cm, 0.75cm)$) -- ($(prog.north east)+(1cm, 0.75cm)$) -- ($(prog.south east)+(1cm, -1.25cm)$) -- ($(prog.south west)+(-1.5cm, -1.25cm)$) -- cycle;
-%             \node[data, below=1.5cm of prog] (res) {Corpus};
-%             \draw[->] (in.south) |- ($(prog.south)-(0, 0.75cm)$) -- (prog.south);
-%             \draw[->] (res.west) -| ($(prog.west)-(0.75cm, 0)$) -- (prog.west);
-%             \draw[->] (prog) -- (out);
-%         \end{tikzpicture}
-%         \caption{La RI comme une classification}
-%     \end{figure}
-% \end{frame}
-%
-% % TODO: add graphics and examples
-% \begin{frame}{L'annotation comme classification}
-%     Plusieurs stratégies sont envisageables pour conserver l'information de structure
-%     \begin{itemize}
-%         \item Voir la suite des étiquettes d'une séquence comme une seule classe.
-%         \item Étiqueter par classifications successives en utilisant à chaque étape l'ensemble des étiquettes précédentes comme information pour choisir l'étiquette suivante.
-%     \end{itemize}
-% \end{frame}
-%
-% % TODO: add slides for EI as tagging
-%
-%
-% % ██████  ███████  ██████  ██████  ███    ███ ██████
-% % ██   ██ ██      ██      ██    ██ ████  ████ ██   ██
-% % ██   ██ █████   ██      ██    ██ ██ ████ ██ ██████
-% % ██   ██ ██      ██      ██    ██ ██  ██  ██ ██
-% % ██████  ███████  ██████  ██████  ██      ██ ██
-%
-% \lecture{Introduction à la fouille de textes}{2018-02-12}
-% \subsection{Décomposition en tâches élémentaires}
-% \begin{frame}[fragile]{Décomposition en tâches élémentaires}
-%     Les tâches \emph{élémentaires} le sont parce qu'on peut y réduire des tâches plus complexes.
-%
-%     \only<1>{
-%         \begin{figure}
-%             \tikzset{external/export=true}
-%             \begin{tikzpicture}[true scale=0.75]
-%                 \node[data] (in) {Entrée};
-%                 \node[right=1cm of in, text width=10ex, accent on=<1>] (prog) {Programme};
-%                 \node[data, right=1cm of prog] (out) {Résultat};
-%                 \draw[->] (in) -- (prog);
-%                 \draw[->] (prog) -- (out);
-%             \end{tikzpicture}
-%             \caption{Schéma général d'une tâche}
-%         \end{figure}
-%         Le \alert{programme} réalisant la tâche sera ainsi composé de sous-programmes réalisant des tâches élémentaires.
-%     }
-%
-%     \only<2>{
-%         \begin{figure}
-%             \tikzset{external/export=true}
-%             \begin{tikzpicture}[true scale=0.75]
-%                 \node[data] (in1) {Entrée};
-%                 \node[program, right=1cm of in1, text width=12ex] (prog1) {Programme élémentaire};
-%                 \node[data, right=0.75cm of prog1] (out1) {Résultat};
-%                 \draw[->] (in1) -- (prog1);
-%                 \draw[->] (prog1) -- (out1);
-%
-%                 \node[program, right=0.75cm of out1, text width=12ex] (prog2) {Programme élémentaire};
-%                 \node[data, right=1cm of prog2] (out2) {Résultat};
-%                 \draw[->] (out1) -- (prog2);
-%                 \draw[->] (prog2) -- (out2);
-%
-%                 \draw ($(prog1.north west)+(-0.5cm, 1cm)$) rectangle ($(prog2.south east)+(0.5cm, -1cm)$);
-%             \end{tikzpicture}
-%             \caption{Décomposition d'une tâche complexe}
-%         \end{figure}
-%     }
-%
-%     \only<3>{
-%         \begin{figure}
-%             \tikzset{external/export=true}
-%             \begin{tikzpicture}[true scale=0.75]
-%                 \node[data] (in1) {Entrée};
-%                 \node[program, right=2cm of in1, text width=12ex] (prog1) {Programme élémentaire};
-%                 \node[data, right=1cm of prog1] (out1) {Résultat};
-%                 \draw[->] (in1) -- (prog1);
-%                 \draw[->] (prog1) -- (out1);
-%
-%                 \node[program, above=1cm of out1, text width=12ex] (prog2) {Programme élémentaire};
-%                 \node[data, right=2cm of prog2] (out2) {Résultat};
-%                 \draw[->] (out1) -- (prog2);
-%                 \draw[->] (prog2) -- (out2);
-%                 \draw[->] (in1) -- ($(prog1.west)-(0.75cm, 0)$) |- (prog2.west);
-%
-%                 \draw ($(prog1.south west)+(-1cm, -1cm)$) rectangle ($(prog2.north east)+(1cm, 1cm)$);
-%             \end{tikzpicture}
-%             \caption{Décomposition d'une tâche complexe}
-%         \end{figure}
-%     }
-% \end{frame}
-%
-% \begin{frame}{Exemple : les systèmes de Question/Réponse}
-%     Les systèmes de question/réponse fournissent des réponses factuelles à des requêtes données en langage naturel
-%
-%     \begin{figure}
-%         \tikzset{external/export=true}
-%         \begin{tikzpicture}[true scale=0.75]
-%             \node[data, text width=15ex] (in) {« Quelle est la vitesse d'une hirondelle ? »};
-%             \node[program, right=1cm of in, text width=15ex] (prog) {Programme de Q/R};
-%             \node[data, right=1cm of prog] (out) {« \SI{60}{km/h} »};
-%             \node[data, below=.6cm of prog] (res) {Corpus};
-%             \draw[->] (in) -- (prog);
-%             \draw[->] (prog) -- (out);
-%             \draw[->] (res) -- (prog);
-%         \end{tikzpicture}
-%         \caption{Structure d'un système de Q/R}
-%     \end{figure}
-% \end{frame}
-%
-% \begin{frame}[fragile]{Q/R via RI}
-%     % TODO: add progressive result feedback on the “Quelle est la vitesse d'une hirondelle sample question”
-%     % TODO: add arrow colours
-%     La première reformulation possible utilise un système de \alert<1>{RI}
-%
-%     \begin{figure}
-%         \tikzset{external/export=true}
-%         \begin{tikzpicture}[true scale=0.55]
-%             \node[data, alt=<2>{highlight=6}{}] (in) {Question};
-%             \node[coordinate, right=1cm of in] (split) {};
-%             \fill[alt=<2>{highlight=6}{}] (split) circle[radius=2pt];
-%             \draw[alt=<2>{highlight=6, thick}{}] (in) -- (split);
-%
-%             \node[program, above right=0.5cm and 1cm of split, alt=<2>{highlight=a}{}] (term) {Terminologie};
-%             \node[data, right=1cm of term, alt=<3>{highlight=a}{}] (words) {Mots};
-%             \node[program, right=1cm of words, accent on=<1>, alt=<3>{highlight=3}{}] (ri) {RI};
-%             \node[data, right=1cm of ri, alt=<3-4>{highlight=8}{}] (docs) {Docs};
-%             \node[program, right=1cm of docs, alt=<4>{highlight=3}{}] (ei) {EI};
-%             \node[coordinate, below right=0.5cm and 1cm of ei] (gather) {};
-%             \node[data, right=1cm of gather, alt=<4>{highlight=a}{}] (answer) {Réponse};
-%             \draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (term);
-%             \draw[->] (term) -- (words);
-%             \draw[->] (words) -- (ri);
-%             \draw[->] (ri) -- (docs);
-%             \draw[->] (docs) -- (ei);
-%             \draw[->] (ei) -| (gather) -- (answer);
-%
-%             \node[program, below right=0.5cm and 1cm of split, alt=<2>{highlight=3}{}] (classif) {Classifieur};
-%             \node[data, below=1cm of ei, alt=<4>{highlight=2}{}] (field) {Champs};
-%             \draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (classif);
-%             \draw[->] (classif) -- (field);
-%             \draw[->] (field) -- (ei);
-%
-%             \draw ($(split)+(-0.5cm, 2cm)$) rectangle ($(field.south east)+(1cm, -0.5cm)$);
-%
-%             \node[data, below=3cm of ri, alt=<3>{highlight=2}{}] (corpus) {Corpus};
-%             \draw[->] (corpus) -- (ri);
-%         \end{tikzpicture}
-%         \caption{Système de Question/Réponse via Recherche d'Informations}
-%     \end{figure}
-%     \only<2->{
-%         \begin{itemize}
-%             \only<2>{
-%                 \item \textcolor{highlight6}{La question en langage naturel} est envoyée en parallèle à \textcolor{highlighta}{un extracteur de mots-clés} et à un \textcolor{highlight3}{classifieur} qui détermine le type de la réponse attendue
-%             }
-%             \only<3>{
-%                 \item \textcolor{highlighta}{Les mots-clés extraits} sont utilisés comme requête pour \textcolor{highlight3}{le programme de RI} qui sélectionne dans \textcolor{highlight2}{le corpus} \textcolor{highlight8}{les documents pertinents} pour répondre à la question
-%             }
-%             \only<4>{
-%                 \item<4> \textcolor{highlight3}{Un programme d'EI} extrait des \textcolor{highlight8}{documents pertinents} le contenu des \textcolor{highlight2}{champs}, qui constituent la \textcolor{highlighta}{réponse} à la question posée
-%             }
-%         \end{itemize}
-%     }
-% \end{frame}
-%
-% \begin{frame}<1>[fragile]{Q/R via base de connaissances}
-%     % TODO: add further overlay
-%     % TODO: add progressive result feedback on the “Quelle est la vitesse d'une hirondelle sample question”
-%     % TODO: add arrow colours
-%     Une autre stratégie consiste à reformuler la question en requête dans une \alert<1>{base de connaissances structurée}
-%
-%     \begin{figure}
-%         \tikzset{external/export=true}
-%         \begin{tikzpicture}[true scale=0.6]
-%             \node[data, alt=<2>{highlight=6}{}] (in) {Question};
-%             \node[coordinate, right=1cm of in] (split) {};
-%             \draw[alt=<2>{highlight=6, thick}{}] (in) -- (split);
-%
-%             \node[program, above right=0.5cm and 1cm of split, alt=<2>{highlight=a}{}] (trad) {Traduction};
-%             \node[data, right=1cm of trad, alt=<2-3>{highlight=3}{}] (req) {Requête};
-%             \node[program, right=1cm of req, alt=<3>{highlight=3}{}] (int) {Interrogation};
-%             \node[coordinate, below right=0.5cm and 1cm of int] (gather) {};
-%             \node[data, right=1cm of gather, alt=<4>{highlight=a}{}] (answer) {Réponse};
-%             \draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (trad);
-%             \draw[->] (trad) -- (req);
-%             \draw[->] (req) -- (int);
-%             \draw[->] (int) -| (gather) -- (answer);
-%
-%             \node[program, below=1cm of req, alt=<2>{highlight=3}{}] (ei) {EI};
-%             \node[data, accent on=<1>, alt=<4>{highlight=2}{}] at (int|-ei) (base) {Base};
-%             \draw[->] (ei) -- (base);
-%             \draw[->] (base) -- (int);
-%
-%             \draw ($(split|-trad.north)+(-0.5cm,0.5cm)$) rectangle ($(int.east|-ei.south)+(1.25cm, -0.5cm)$);
-%
-%             \node[data, below=1cm of ei, alt=<3>{highlight=2}{}] (corpus) {Corpus};
-%             \draw[->] (corpus.west) -- ++ (-0.25cm, 0) |- (ei.west);
-%         \end{tikzpicture}
-%         \caption{Système de Question/Réponse utilisant une base de connaissances}
-%     \end{figure}
-%     \only<2->{
-%         \begin{itemize}
-%             \item<2|only@2> \textcolor{highlight6}{La question en langue naturelle} est \textcolor{highlighta}{traduite} en une \textcolor{highlight3}{requête} dans un langage formel (SQL, SPARQL…)
-%         \end{itemize}
-%     }
-% \end{frame}
-%
-% % TODO: add links and refs for the two deompositions
-%
-% \begin{frame}{Conclusion}
-%     On a donc vu qu'on pouvait
-%     \begin{itemize}
-%         \item Réaliser des tâches complexes en se ramenant des tâches élémentaires
-%         \item Reformuler les tâches élémentaires en terme de classification
-%     \end{itemize}
-%
-%     En pratique, on peut donc presque toujours ramener n'importe quelle tâche de fouille de texte à de la classification, on parlera donc pour celle-ci de \alert{tâche pivot}.
-%     \begin{itemize}
-%         \item[→] Attention cependant à ne pas faire cuire les pâtes comme un mathématicien…
-%     \end{itemize}
-% \end{frame}
-%
-% % ██████  ███████ ██████  ██████  ███████ ███████
-% % ██   ██ ██      ██   ██ ██   ██ ██      ██
-% % ██████  █████   ██████  ██████  █████   ███████
-% % ██   ██ ██      ██      ██   ██ ██           ██
-% % ██   ██ ███████ ██      ██   ██ ███████ ███████
-%
-%
-% \section{Représentation des données}
-%
-% \begin{frame}{Représentation des données}
-%     Étant donné que
-%     \begin{itemize}
-%         \item La classification joue en fouille de texte le rôle de tâche pivot
-%         \item On privilégie pour la classification des données au format tabulaire
-%     \end{itemize}
-%     Il est naturel de vouloir mettre les données à traiter sous forme tabulaire.
-% \end{frame}
-%
-% % ███████ ████████  █████  ████████
-% % ██         ██    ██   ██    ██
-% % ███████    ██    ███████    ██
-% %      ██    ██    ██   ██    ██
-% % ███████    ██    ██   ██    ██
-%
-% \subsection{Spécificités statistiques}
-% \begin{frame}{Loi de Zipf}
-%     Dans \textit{Ulysse} de James Joyce on\textsuperscript{1} observe\textsuperscript{2} que
-%     \begin{itemize}
-%         \item Le mot le plus courant apparaît \num{8000} fois
-%         \item Le dixième mot le plus courant apparaît \num{800} fois
-%         \item Le centième mot le plus courant apparaît \num{80} fois
-%         \item Le millième mot le plus courant apparaît \num{8} fois
-%     \end{itemize}
-%
-%     \begin{block}{Hypothèse (Loi de Zipf)}
-%         La fréquence $f(n)$ du $n$-ième mot le plus fréquent d'un corpus vérifie
-%         \begin{equation}
-%             f(n) = \frac{K}{n}
-%         \end{equation}
-%         où $K$ est une constante ne dépendant que du corpus.
-%     \end{block}
-%     \vskip0pt plus 1fill
-%     {\tiny 1. Georges Zipf (1902-1950) dans \parencite{zipf1949human}\\2. d'après la légende}
-% \end{frame}
-%
-% % TODO: add Ulysse répartition
-% % TODO: add visualisation for fat tail
-% \begin{frame}{Loi de Zipf : observations}
-%     \begin{figure}
-%         \tikzset{external/export=true}
-%         \begin{tikzpicture}
-%             \begin{axis}[xmin=0, ymin=0, xmax=20,
-%                          width=0.9\textwidth,
-%                          height=0.8\textheight,
-%                          xlabel={Rang},
-%                          ylabel={Fréquence d'apparition},
-%                          title={Loi de Zipf : $y=\frac{K}{x}$},
-%                          scaled ticks=false,
-%                          ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}]
-%                 \addplot[highlighta, domain=1:20, samples=1001] {max(8000/x, 1)};
-%             \end{axis}
-%         \end{tikzpicture}
-%         \caption{Courbe d'une loi de Zipf ($K=\num{8000}$)}
-%     \end{figure}
-% \end{frame}
-%
-% % TODO: add cites
-% \begin{frame}{Loi de Zipf : observations}
-%     \begin{itemize}
-%         \item La loi de Zipf se vérifie plutôt bien expérimentalement
-%         \item En pratique, les répartitions observées sont de la forme $f(n)=\frac{k}{x^s}$ avec $s$ proche de $1$
-%         \item Ce type de distribution, dites \emph{loi de puissance} est omniprésent en statistiques (en en sciences en général)
-%         \item Elles font parties des distributions dites \emph{à longue traîne} (\textit{fat tail})
-%         \item Une autre approche due à Mandelbrot présente une généralisation de la loi de Zipf comme le résultat de contraintes d'optimalité d'utilisation d'un canal de communication.
-%     \end{itemize}
-% \end{frame}
-%
-% \begin{frame}{Loi de Heaps}
-%     Si la loi de Zipf donne une estimation de la répartition du vocabulaire d'un corpus, la loi de Heaps est une estimation de sa diversité
-%     \begin{block}{Hypothèse : loi de Heaps}
-%         Le nombre $V$ de mots distincts dans sous-corpus de taille $M$ vérifie
-%         \begin{equation}
-%             V = K×M^β
-%         \end{equation}
-%         Où $K$ et $β$ sont des paramètres dépendant du corpus
-%     \end{block}
-%     \begin{itemize}
-%         \item[→] Ce $K$ n'est pas le même que pour la loi de Zipf, et $β$ n'a aucun lien avec la pondération de $F_β$
-%         \item[→] On parle souvent de relation \emph{types-tokens}
-%         \item[→] Pour l'anglais, on a $K∈[30, 100]$ et $β≈0.5$
-%         \item[→] Cette loi peut-elle être valable quelle que soit la taille de la collection ?
-%     \end{itemize}
-% \end{frame}
-%
-% \begin{frame}[label=heapslawgraph]{Loi de Heaps}
-%     \begin{figure}
-%         \tikzset{external/export=true}
-%         \begin{tikzpicture}
-%             \begin{axis}[xmin=0, xmax=800000, ymin=0,
-%                          width=0.9\textwidth,
-%                          height=0.8\textheight,
-%                          xlabel={Taille de la collection},
-%                          ylabel={Taille du vocabulaire},
-%                          title={Loi de Heaps : $y=K×x^β$},
-%                          scaled ticks=false,
-%                          ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}]
-%                 \addplot[highlighta, domain=0:800000, samples=1001] {40*x^0.5};
-%             \end{axis}
-%         \end{tikzpicture}
-%         \caption{Courbe d'une loi de Heaps}
-%     \end{figure}
-% \end{frame}
-%
-% % ███████ ███████  █████  ████████ ███████
-% % ██      ██      ██   ██    ██    ██
-% % █████   █████   ███████    ██    ███████
-% % ██      ██      ██   ██    ██         ██
-% % ██      ███████ ██   ██    ██    ███████
-%
-%
-% \subsection{Choix des attributs}
-% \begin{frame}{Choix des attributs}
-%     Pour pouvoir faire de la classification, il faut pouvoir mettre les données au bon format
-%     \begin{description}[<+->][*]
-%         \item[Objectif] Transformer les documents à traiter en fichiers tabulaires pour les passer à un classifieur
-%         \item[Problème] Quel choix d'attributs (colonnes) ?
-%         \item[Solution] Ça dépend des cas !
-%             \begin{itemize}
-%                 \item[→] Mais on peut identifier plusieurs stratégies élémentaires (air connu)
-%             \end{itemize}
-%     \end{description}
-% \end{frame}
-%
-% \begin{frame}[fragile=singleslide]{Caractères}
-%     Puisqu'un texte brut est une séquence de caractères : utilisons comme attribut la fréquence de chaque caractère
-%
-%     \begin{figure}
-%         \begin{tabu}{*{5}{>{\ttfamily\small}X[m, c]}}
-%             Texte   & a & b & c & …\\
-%             Ulysse  & 90578 & 17848 & 27902 & …
-%         \end{tabu}
-%     \end{figure}
-%
-%     \begin{itemize}
-%         \item Combien d'attributs par texte ?
-%         \item Est-ce suffisant ?
-%             \begin{itemize}
-%                 \item Suffisant pour quoi ?
-%             \end{itemize}
-%     \end{itemize}
-% \end{frame}
-%
-% \begin{frame}{$n$-grammes de caractères}
-%     % TODO: add corrections
-%     % TODO: add sources
-%     % TODO: add examples
-%     Une stratégie un peu plus raffinée est de compter non pas les caractères, mais les séquences de caractères de longueur $n$.
-%
-%     Exemple : « Le petit chat est mort »
-%
-%     \begin{itemize}
-%         \item Quels sont les unigrammes ?
-%         \item Quels sont les bigrammes ?
-%         \item Quels sont les trigrammes ?
-%         \item En général, pour un alphabet à $k$ caractères, combien y a-t-il de $n$-grammes ?
-%     \end{itemize}
-%
-%     En pratique, les trigrammes peuvent suffire pour certaines applications !
-%     \begin{itemize}
-%         \item Détection du plagiat
-%     \end{itemize}
-%
-%     Pour plus de richesse, on peut aussi utiliser des \emph{skip-grams}
-% \end{frame}
-%
-% \lecture{Introduction à la fouille de textes}{2018-02-19}
-%
-% \begin{frame}<-2>{Mots}
-%     Faisons \alt<1>{enfin de la}{un peu de} linguistique : comptons les mots !
-%     \begin{itemize}
-%         \item Problème : qu'est-ce qu'un mot ?
-%             \begin{itemize}
-%                 \item \emph{pomme de terre} ?
-%                 \item \emph{y a-\textbf{t}-il} ?
-%                 \item …
-%             \end{itemize}
-%         \item On a plutôt tendance à compter les \alert{tokens}
-%             \begin{itemize}
-%                 \item « Séquences de caractères comprises entre deux séparateurs »
-%                 \item[→] Problème : qu'est-ce qu'un séparateur ? \begin{itemize}
-%                     \item « E-mail » vs. « Alsace–Lorraine »
-%                     \item « […] kiwi. Hier […] » vs. « M. Martin »
-%                     \item « Yann Le Bourdonnec » vs. « Félix le chat »
-%                 \end{itemize}
-%                 \item On délègue à un segmenteur (\emph{tokenizer})
-%             \end{itemize}
-%     \end{itemize}
-% \end{frame}
-%
-% \begin{frame}<1>[label=wordcols]{Des mots aux colonnes}
-%     Objectif : utiliser les fréquences des mots comme attributs (colonnes) dans une représentation tabulaire.
-%     \begin{itemize}
-%         \item Combien de colonnes faut-il ?
-% \only<2->{
-%             \begin{itemize}
-%                 \item[→] $K×M^β$ (loi de Heaps)
-%                 \item Pour \emph{Ulysse}, environ \num{34000}
-%             \end{itemize}
-%         \item Il faut donc arriver à filtrer !
-%             \begin{itemize}
-%                 \item Supprimer les mots vides (\emph{stop words}) : \emph{le}, \emph{à}, \emph{mais}…
-%                 \item Ne conserver certaines catégories spécifiques à la tâche (noms, adjectifs…)
-%                 \item Supprimer les hapax (mots n'apparaissant qu'un seule fois)
-%                 \item[→] De façon générale, ne conserver qu'une bande de fréquence
-%             \end{itemize}
-% }
-%     \end{itemize}
-% \end{frame}
-%
-% \againframe{heapslawgraph}
-%
-% \againframe<2>{wordcols}
-%
-% \begin{frame}[fragile]{Filtrer les hapax}
-%     \begin{figure}
-%         \tikzset{external/export=true}
-%         \begin{tikzpicture}
-%             \begin{axis}[xmin=0, ymin=0, xmax=40, ymax=15,
-%                          xtick=\empty,
-%                          ytick=\empty,
-%                          alt=<2>{extra y ticks={1}}{},
-%                          width=0.9\textwidth,
-%                          height=0.8\textheight,
-%                          xlabel={Rang},
-%                          ylabel={Fréquence d'apparition},
-%                          title={$y=\frac{K}{x}$}]
-%                 \addplot[highlighta, domain=1:20, samples=501] {20/x};
-%                 \addplot[highlighta, alt=<2>{dotted}{}, domain=20:40, samples=500] {1};
-%                 \only<2>{
-%                     \draw[highlight6] (axis cs:0,1) -- (current axis.east|-{axis cs:0,1});
-%                 }
-%             \end{axis}
-%         \end{tikzpicture}
-%         \caption{\alt<2>{Filtrage des hapax sur la c}{C}ourbe de Zipf}
-%     \end{figure}
-% \end{frame}
-%
-% \againframe<2>{wordcols}
-%
-% \begin{frame}[fragile=singleslide]{Filtrer une bande de fréquences}
-%     \begin{figure}
-%         \tikzset{external/export=true}
-%         \begin{tikzpicture}
-%             \begin{axis}[xmin=0, ymin=0, xmax=40, ymax=20,
-%                          xtick=\empty,
-%                          ytick={2, 15},
-%                          yticklabels={$a$, $b$},
-%                          width=0.9\textwidth,
-%                          height=0.8\textheight,
-%                          xlabel={Rang},
-%                          ylabel={Fréquence d'apparition},
-%                          title={$y=\frac{K}{x}$}]
-%                 \addplot[highlighta, dotted, domain=1:1.33, samples=333] {20/x};
-%                 \addplot[highlighta, domain=1.33:10, samples=333] {20/x};
-%                 \addplot[highlighta, dotted, domain=10:40, samples=333] {max(20/x,1)};
-%                 \draw[highlight6] (axis cs:0,15) -- (current axis.east|-{axis cs:0,15});
-%                 \draw[highlight6] (axis cs:0,2) -- (current axis.east|-{axis cs:0,2});
-%             \end{axis}
-%         \end{tikzpicture}
-%         \caption{Filtrage d'une bande de fréquences sur la courbe de Zipf}
-%     \end{figure}
-% \end{frame}
-%
-% \begin{frame}{Mots}
-%     Pour réduire encore plus le nombre de colonnes
-%     \begin{itemize}
-%         \item Lemmatiser : \{\emph{est}, \emph{était}, \emph{suis}, \emph{êtes}, \emph{furent}…\} → \emph{est}
-%         \item Radicaliser : \{\emph{homme}, \emph{hommes}\} → \emph{homme}
-%         \item Fixer un lexique \emph{a priori}
-%             \begin{itemize}
-%                 \item[→] Avec les dangers que ça comporte
-%             \end{itemize}
-%     \end{itemize}
-%
-%     À l'inverse, pour plus de détails, on peut utiliser des $n$-grammes de mots
-%     \begin{itemize}
-%         \item[→] Représentation plus riche, mais amplifie le problème de quantité
-%     \end{itemize}
-% \end{frame}
-%
-% \begin{frame}{Traits linguistiques avancés}
-%     Si les ressource le permettent, on peut envisager d'autres attributs
-%     \begin{itemize}
-%         \item Avec un étiqueteur morphosyntaxique : POS, $n$-grammes de POS
-%         \item Avec un parser : largeur/profondeur/taille moyenne des arbres/constituants, paires gouverneur-gouverné, paires nœud-relation…
-%         \item Avec des analyseurs sémantiques : rôles
-%         \item Avec des bases de connaissances : présence de certains concepts
-%         \item …
-%     \end{itemize}
-%     Mais on introduit alors des dépendances vis-à-vis des ressources, ce qui multiplie les causes d'erreurs.
-% \end{frame}
+% ██       █████  ██████  ███████ ██      ██      ██ ███    ██  ██████
+% ██      ██   ██ ██   ██ ██      ██      ██      ██ ████   ██ ██
+% ██      ███████ ██████  █████   ██      ██      ██ ██ ██  ██ ██   ███
+% ██      ██   ██ ██   ██ ██      ██      ██      ██ ██  ██ ██ ██    ██
+% ███████ ██   ██ ██████  ███████ ███████ ███████ ██ ██   ████  ██████
+
+\lecture{Introduction à la fouille de textes}{2018-02-05}
+\subsection{Annotation}
+
+\begin{frame}[fragile=singleslide]{Annotation}
+    L'\emph{annotation} ou \emph{étiquetage} est la tâche consistant à attribuer une étiquette à chaque élément d'un ensemble \alert{structuré}.
+
+    \begin{itemize}
+        \item « Déterminer les catégories grammaticales des mots d'une phrase »
+        \item « Découper un discours en parties thématiques »
+    \end{itemize}
+
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.80]
+            \node[data, highlight=4] (in) {Donnée};
+            \node[program, right=1cm of in, text width=12ex] (prog) {Programme d'annotation};
+            \node[data, right=1cm of prog] (out) {Donnée annotée};
+            \node[data, below=.6cm of prog, highlight=8] (res) {Ensemble des étiquettes};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (res) -- (prog);
+        \end{tikzpicture}
+    \end{figure}
+    \vskip-1em
+    \begin{itemize}
+        \item La \textcolor{highlight4}{donnée} à annoter est composée de plusieurs unités et munie d'une structure d'\alert{ordre}
+        \item Chacune des unités se voit attribuer une des \textcolor{highlight8}{étiquettes} possibles, qui sont connus à l'avance
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Structure et ordre}
+    L'annotation se distingue de la classification par la notion de \emph{structure}.
+    \begin{itemize}
+        \item Les unités à annoter sont liées par des relations
+            \begin{itemize}
+                \item Ordre total (séquence)
+                \item Ordre partiel (arbre, DAG)
+                \item Arbitraires (graphe)
+            \end{itemize}
+        \item Les étiquettes qui leur sont attribuées dépendent de ces relations
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Exemples}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+                Le  & petit & chat  & est & mort\\
+                DET & ADJ   & NC    & V   & ADJ\\
+            };
+            \foreach \x in {1, ..., 5}
+                \draw[->] (m-1-\x) -- (m-2-\x);
+        \end{tikzpicture}
+        \caption{\emph{Part Of Speech Tagging}}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Exemples}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+                Le  & petit & chat  & est & mort\\
+                B & I   & I   & B & B\\
+            };
+            \foreach \x in {1, ..., 5}
+                \draw[->] (m-1-\x) -- (m-2-\x);
+
+            \matrix[matrix of nodes, anchor=base, below=2em of m] (s){
+                (   & Le    & petit & chat & )  & ( & est   & ) & (  & mort & )\\
+            };
+            \foreach \x/\y in {4/5, 4/6, 5/8, 5/9}
+                \draw[->] (m-2-\x) -- (s-1-\y);
+        \end{tikzpicture}
+        \caption{\emph{Chunking}}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Exemples}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \tikzset{every tree node/.style={align=center,anchor=north}}
+            \Tree [.S
+                [.NP→\textcolor{highlighta}{sub} [.Det the ] [.N cat ] ]
+                [.VP→\textcolor{highlighta}{pred} [.V sat ]
+                    [.PP→\textcolor{highlighta}{mod} [.P on ]
+                        [.NP [.Det the ] [.N mat ] ]
+                    ]
+                ]
+            ]
+        \end{tikzpicture}
+        \caption{\textcolor{highlighta}{Étiquetage fonctionnel} d'un arbre syntaxique}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Évaluation}
+    Pour évaluer un étiquetage, on choisit en général de le considérer comme un problème de classification à plusieurs classes
+    \begin{itemize}
+        \item On considère chaque unité comme une donnée et chaque étiquette comme une classe
+        \item On calcule comme précédemment $P$, $R$ et $F$
+        \item On privilégie les micro-averages pour les scores globaux
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Aparté : micro-average et exactitude}
+    \begin{theorem}
+        Si chaque unité reçoit une unique étiquette, les micro-average de $P$, $R$ et $F$ sont égales à l'exactitude.
+    \end{theorem}
+    On considère la matrice de confusion suivante
+    \begin{center}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[
+            table/.style={
+                matrix of nodes,
+                row sep=-\pgflinewidth,
+                column sep=-\pgflinewidth,
+                nodes={draw, text width=3ex, align=center},
+                text depth=0.25ex,
+                text height=1em,
+                nodes in empty cells
+            },
+            aa/.style={},
+            bb/.style={},
+            cc/.style={},
+            ab/.style={},
+            ac/.style={},
+            ba/.style={},
+            bc/.style={},
+            ca/.style={},
+            cb/.style={},
+        ]
+            \matrix[table]{
+                    & |(apred)| A   & |(bpred)| B   & |(cpred)| C\\
+                |(atrue)| A   & |[aa]| $aa$  & |[ab]| $ab$   & |[ac]| $ac$\\
+                |(btrue)| B   & |[ba]| $ba$   & |[bb]| $bb$  & |[bc]| $bc$\\
+                |(ctrue)| C   & |[ca]| $ca$   & |[cb]| $cb$   & |[cc]| $cc$\\
+            };
+
+            \draw [decorate, decoration={brace, amplitude=1em}, yshift=-0.5ex] (apred.north west) -- (cpred.north east) node [midway, above=1.25ex] {Classes prédites};
+            \draw [decorate, decoration={brace, amplitude=1em, mirror}, xshift=-0.5ex] (atrue.north west) -- (ctrue.south west) node [midway, left=1.25ex, rotate=90, anchor=south] {Vraies classes};
+        \end{tikzpicture}
+    \end{center}
+    Et on regarde le tableau !
+\end{frame}
+
+% TODO: add slides for the proof above
+
+% ███████ ██
+% ██      ██
+% █████   ██
+% ██      ██
+% ███████ ██
+
+\subsection{L'extraction d'informations}
+\begin{frame}[fragile]{Extraction d'informations}
+    L'\emph{extraction d'informations} est la tâche consistant à trouver dans un document les \alert{réponses} à des questions prédéfinies.
+
+    \only<1>{
+        \begin{itemize}
+            \item « Déterminer le nom du héros et des principaux protagonistes d'un texte narratif »
+            \item « Déterminer les symptômes présentés par un patient à partir d'un rapport clinique »
+        \end{itemize}
+    }
+
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.80]
+            \node[data, highlight=4] (in) {Donnée};
+            \node[program, right=1cm of in, text width=12ex] (prog) {Programme d'EI};
+            \node[data, right=1cm of prog, highlight=6] (out) {Champs remplis};
+            \node[data, below=.6cm of prog, highlight=8] (res) {Champs à remplir};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (res) -- (prog);
+        \end{tikzpicture}
+    \end{figure}
+
+    \only<2>{
+        \begin{itemize}
+            \item La \textcolor{highlight4}{donnée} est un texte brut ou un document semi-structuré
+            \item La \textcolor{highlight6}{sortie} est un tableau qui donne la valeur de chacun des champs
+            \item Les \textcolor{highlight8}{champs} \emph{peuvent} être multivalués et en nombre variable
+        \end{itemize}
+    }
+\end{frame}
+
+% TODO: add cites
+\begin{frame}{Domaines d'application}
+    Ils sont nombreux !
+    \begin{itemize}
+        \item Identification de protagonistes (littérature, militaire)
+        \item Identification d'événement (biomédical, militaire)
+        \item Fouille d'arguments
+            \begin{itemize}
+                \item Aide à la décision (politique)
+                    \begin{itemize}
+                        \item[→] IBM Watson (\textcite{slonim2014claims}, \shorturl{youtube.com/watch?v=sEf0GLvrP9U})
+                    \end{itemize}
+                \item Aide à la lecture (judiciaire, scientifique)
+                    \begin{itemize}
+                        \item[→] « Argument zoning » (\textcite{teufel2009argument}, \shorturl{www.cl.cam.ac.uk/~sht25/az.html})
+                    \end{itemize}
+            \end{itemize}
+        \item …
+    \end{itemize}
+    À l'extrême, la tâche se confond avec la compréhension de document.
+\end{frame}
+
+\begin{frame}{Évaluation}
+    L'idée est toujours de se comparer à une référence humaine.
+    \begin{itemize}
+        \item Basiquement : on compare les contenus des champs et on en déduit $P$, $R$ et $F$
+        \item Plus subtilement : on peut utiliser des mesures d'adéquation entre les réponses
+            \begin{itemize}
+                \item[→] Une réponse peut être partiellement correcte : on pondère~!
+            \end{itemize}
+        \item Pour certaines tâches, on utilise des mesures spécifiques
+            \begin{itemize}
+                \item Pour les tâches comprenant une composante de localisation (NER, Argument Zoning), on peut appliquer des pondérations différentes à extraction et localisation
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% ██████  ███████ ██       █████  ████████ ██  ██████  ███    ██ ███████
+% ██   ██ ██      ██      ██   ██    ██    ██ ██    ██ ████   ██ ██
+% ██████  █████   ██      ███████    ██    ██ ██    ██ ██ ██  ██ ███████
+% ██   ██ ██      ██      ██   ██    ██    ██ ██    ██ ██  ██ ██      ██
+% ██   ██ ███████ ███████ ██   ██    ██    ██  ██████  ██   ████ ███████
+
+
+\subsection{Relations entre tâches}
+\begin{frame}<1>[label=taskrel]{Relations entre tâches}
+    Les tâches présentées précédemment sont \emph{élémentaires} au sens où on peut y réduire la plupart des tâches de la fouille de texte.
+
+    Cependant ces tâches ne sont pas complètement indépendantes les unes des autres \emph{via} des reformulations.
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{La RI comme classification}
+    Puisque la RI consiste à déterminer parmi un ensemble de documents lesquels sont pertinents, on peut la voir comme un problème de classification binaire.
+
+    \begin{itemize}
+        \item On répartit les documents entre les deux classes « pertinent » et « non-pertinent »
+        \item La requête, qui était une donnée, devient une ressource
+    \end{itemize}
+    \vskip-1em
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.75]
+            \node[data] (in) {Requête};
+            \node[program, right=2cm of in, text width=16ex] (prog) {Programme de classification};
+            \node[data, right=1.5cm of prog] (out) {Documents pertinents};
+            \node[above left=0.25cm and 0.25cm of prog.north west] (ri) {RI};
+            \draw ($(prog.north west)+(-1.5cm, 0.75cm)$) -- ($(prog.north east)+(1cm, 0.75cm)$) -- ($(prog.south east)+(1cm, -1.25cm)$) -- ($(prog.south west)+(-1.5cm, -1.25cm)$) -- cycle;
+            \node[data, below=1.5cm of prog] (res) {Corpus};
+            \draw[->] (in.south) |- ($(prog.south)-(0, 0.75cm)$) -- (prog.south);
+            \draw[->] (res.west) -| ($(prog.west)-(0.75cm, 0)$) -- (prog.west);
+            \draw[->] (prog) -- (out);
+        \end{tikzpicture}
+        \caption{La RI comme une classification}
+    \end{figure}
+\end{frame}
+
+% TODO: add graphics and examples
+\begin{frame}{L'annotation comme classification}
+    Plusieurs stratégies sont envisageables pour conserver l'information de structure
+    \begin{itemize}
+        \item Voir la suite des étiquettes d'une séquence comme une seule classe.
+        \item Étiqueter par classifications successives en utilisant à chaque étape l'ensemble des étiquettes précédentes comme information pour choisir l'étiquette suivante.
+    \end{itemize}
+\end{frame}
+
+% TODO: add slides for EI as tagging
+
+
+% ██████  ███████  ██████  ██████  ███    ███ ██████
+% ██   ██ ██      ██      ██    ██ ████  ████ ██   ██
+% ██   ██ █████   ██      ██    ██ ██ ████ ██ ██████
+% ██   ██ ██      ██      ██    ██ ██  ██  ██ ██
+% ██████  ███████  ██████  ██████  ██      ██ ██
+
+\lecture{Introduction à la fouille de textes}{2018-02-12}
+\subsection{Décomposition en tâches élémentaires}
+\begin{frame}[fragile]{Décomposition en tâches élémentaires}
+    Les tâches \emph{élémentaires} le sont parce qu'on peut y réduire des tâches plus complexes.
+
+    \only<1>{
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[true scale=0.75]
+                \node[data] (in) {Entrée};
+                \node[right=1cm of in, text width=10ex, accent on=<1>] (prog) {Programme};
+                \node[data, right=1cm of prog] (out) {Résultat};
+                \draw[->] (in) -- (prog);
+                \draw[->] (prog) -- (out);
+            \end{tikzpicture}
+            \caption{Schéma général d'une tâche}
+        \end{figure}
+        Le \alert{programme} réalisant la tâche sera ainsi composé de sous-programmes réalisant des tâches élémentaires.
+    }
+
+    \only<2>{
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[true scale=0.75]
+                \node[data] (in1) {Entrée};
+                \node[program, right=1cm of in1, text width=12ex] (prog1) {Programme élémentaire};
+                \node[data, right=0.75cm of prog1] (out1) {Résultat};
+                \draw[->] (in1) -- (prog1);
+                \draw[->] (prog1) -- (out1);
+
+                \node[program, right=0.75cm of out1, text width=12ex] (prog2) {Programme élémentaire};
+                \node[data, right=1cm of prog2] (out2) {Résultat};
+                \draw[->] (out1) -- (prog2);
+                \draw[->] (prog2) -- (out2);
+
+                \draw ($(prog1.north west)+(-0.5cm, 1cm)$) rectangle ($(prog2.south east)+(0.5cm, -1cm)$);
+            \end{tikzpicture}
+            \caption{Décomposition d'une tâche complexe}
+        \end{figure}
+    }
+
+    \only<3>{
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[true scale=0.75]
+                \node[data] (in1) {Entrée};
+                \node[program, right=2cm of in1, text width=12ex] (prog1) {Programme élémentaire};
+                \node[data, right=1cm of prog1] (out1) {Résultat};
+                \draw[->] (in1) -- (prog1);
+                \draw[->] (prog1) -- (out1);
+
+                \node[program, above=1cm of out1, text width=12ex] (prog2) {Programme élémentaire};
+                \node[data, right=2cm of prog2] (out2) {Résultat};
+                \draw[->] (out1) -- (prog2);
+                \draw[->] (prog2) -- (out2);
+                \draw[->] (in1) -- ($(prog1.west)-(0.75cm, 0)$) |- (prog2.west);
+
+                \draw ($(prog1.south west)+(-1cm, -1cm)$) rectangle ($(prog2.north east)+(1cm, 1cm)$);
+            \end{tikzpicture}
+            \caption{Décomposition d'une tâche complexe}
+        \end{figure}
+    }
+\end{frame}
+
+\begin{frame}{Exemple : les systèmes de Question/Réponse}
+    Les systèmes de question/réponse fournissent des réponses factuelles à des requêtes données en langage naturel
+
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.75]
+            \node[data, text width=15ex] (in) {« Quelle est la vitesse d'une hirondelle ? »};
+            \node[program, right=1cm of in, text width=15ex] (prog) {Programme de Q/R};
+            \node[data, right=1cm of prog] (out) {« \SI{60}{km/h} »};
+            \node[data, below=.6cm of prog] (res) {Corpus};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (res) -- (prog);
+        \end{tikzpicture}
+        \caption{Structure d'un système de Q/R}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Q/R via RI}
+    % TODO: add progressive result feedback on the “Quelle est la vitesse d'une hirondelle sample question”
+    % TODO: add arrow colours
+    La première reformulation possible utilise un système de \alert<1>{RI}
+
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.55]
+            \node[data, alt=<2>{highlight=6}{}] (in) {Question};
+            \node[coordinate, right=1cm of in] (split) {};
+            \fill[alt=<2>{highlight=6}{}] (split) circle[radius=2pt];
+            \draw[alt=<2>{highlight=6, thick}{}] (in) -- (split);
+
+            \node[program, above right=0.5cm and 1cm of split, alt=<2>{highlight=a}{}] (term) {Terminologie};
+            \node[data, right=1cm of term, alt=<3>{highlight=a}{}] (words) {Mots};
+            \node[program, right=1cm of words, accent on=<1>, alt=<3>{highlight=3}{}] (ri) {RI};
+            \node[data, right=1cm of ri, alt=<3-4>{highlight=8}{}] (docs) {Docs};
+            \node[program, right=1cm of docs, alt=<4>{highlight=3}{}] (ei) {EI};
+            \node[coordinate, below right=0.5cm and 1cm of ei] (gather) {};
+            \node[data, right=1cm of gather, alt=<4>{highlight=a}{}] (answer) {Réponse};
+            \draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (term);
+            \draw[->] (term) -- (words);
+            \draw[->] (words) -- (ri);
+            \draw[->] (ri) -- (docs);
+            \draw[->] (docs) -- (ei);
+            \draw[->] (ei) -| (gather) -- (answer);
+
+            \node[program, below right=0.5cm and 1cm of split, alt=<2>{highlight=3}{}] (classif) {Classifieur};
+            \node[data, below=1cm of ei, alt=<4>{highlight=2}{}] (field) {Champs};
+            \draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (classif);
+            \draw[->] (classif) -- (field);
+            \draw[->] (field) -- (ei);
+
+            \draw ($(split)+(-0.5cm, 2cm)$) rectangle ($(field.south east)+(1cm, -0.5cm)$);
+
+            \node[data, below=3cm of ri, alt=<3>{highlight=2}{}] (corpus) {Corpus};
+            \draw[->] (corpus) -- (ri);
+        \end{tikzpicture}
+        \caption{Système de Question/Réponse via Recherche d'Informations}
+    \end{figure}
+    \only<2->{
+        \begin{itemize}
+            \only<2>{
+                \item \textcolor{highlight6}{La question en langage naturel} est envoyée en parallèle à \textcolor{highlighta}{un extracteur de mots-clés} et à un \textcolor{highlight3}{classifieur} qui détermine le type de la réponse attendue
+            }
+            \only<3>{
+                \item \textcolor{highlighta}{Les mots-clés extraits} sont utilisés comme requête pour \textcolor{highlight3}{le programme de RI} qui sélectionne dans \textcolor{highlight2}{le corpus} \textcolor{highlight8}{les documents pertinents} pour répondre à la question
+            }
+            \only<4>{
+                \item<4> \textcolor{highlight3}{Un programme d'EI} extrait des \textcolor{highlight8}{documents pertinents} le contenu des \textcolor{highlight2}{champs}, qui constituent la \textcolor{highlighta}{réponse} à la question posée
+            }
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}<1>[fragile]{Q/R via base de connaissances}
+    % TODO: add further overlay
+    % TODO: add progressive result feedback on the “Quelle est la vitesse d'une hirondelle sample question”
+    % TODO: add arrow colours
+    Une autre stratégie consiste à reformuler la question en requête dans une \alert<1>{base de connaissances structurée}
+
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.6]
+            \node[data, alt=<2>{highlight=6}{}] (in) {Question};
+            \node[coordinate, right=1cm of in] (split) {};
+            \draw[alt=<2>{highlight=6, thick}{}] (in) -- (split);
+
+            \node[program, above right=0.5cm and 1cm of split, alt=<2>{highlight=a}{}] (trad) {Traduction};
+            \node[data, right=1cm of trad, alt=<2-3>{highlight=3}{}] (req) {Requête};
+            \node[program, right=1cm of req, alt=<3>{highlight=3}{}] (int) {Interrogation};
+            \node[coordinate, below right=0.5cm and 1cm of int] (gather) {};
+            \node[data, right=1cm of gather, alt=<4>{highlight=a}{}] (answer) {Réponse};
+            \draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (trad);
+            \draw[->] (trad) -- (req);
+            \draw[->] (req) -- (int);
+            \draw[->] (int) -| (gather) -- (answer);
+
+            \node[program, below=1cm of req, alt=<2>{highlight=3}{}] (ei) {EI};
+            \node[data, accent on=<1>, alt=<4>{highlight=2}{}] at (int|-ei) (base) {Base};
+            \draw[->] (ei) -- (base);
+            \draw[->] (base) -- (int);
+
+            \draw ($(split|-trad.north)+(-0.5cm,0.5cm)$) rectangle ($(int.east|-ei.south)+(1.25cm, -0.5cm)$);
+
+            \node[data, below=1cm of ei, alt=<3>{highlight=2}{}] (corpus) {Corpus};
+            \draw[->] (corpus.west) -- ++ (-0.25cm, 0) |- (ei.west);
+        \end{tikzpicture}
+        \caption{Système de Question/Réponse utilisant une base de connaissances}
+    \end{figure}
+    \only<2->{
+        \begin{itemize}
+            \item<2|only@2> \textcolor{highlight6}{La question en langue naturelle} est \textcolor{highlighta}{traduite} en une \textcolor{highlight3}{requête} dans un langage formel (SQL, SPARQL…)
+        \end{itemize}
+    }
+\end{frame}
+
+% TODO: add links and refs for the two deompositions
+
+\begin{frame}{Conclusion}
+    On a donc vu qu'on pouvait
+    \begin{itemize}
+        \item Réaliser des tâches complexes en se ramenant des tâches élémentaires
+        \item Reformuler les tâches élémentaires en terme de classification
+    \end{itemize}
+
+    En pratique, on peut donc presque toujours ramener n'importe quelle tâche de fouille de texte à de la classification, on parlera donc pour celle-ci de \alert{tâche pivot}.
+    \begin{itemize}
+        \item[→] Attention cependant à ne pas faire cuire les pâtes comme un mathématicien…
+    \end{itemize}
+\end{frame}
+
+% ██████  ███████ ██████  ██████  ███████ ███████
+% ██   ██ ██      ██   ██ ██   ██ ██      ██
+% ██████  █████   ██████  ██████  █████   ███████
+% ██   ██ ██      ██      ██   ██ ██           ██
+% ██   ██ ███████ ██      ██   ██ ███████ ███████
+
+
+\section{Représentation des données}
+
+\begin{frame}{Représentation des données}
+    Étant donné que
+    \begin{itemize}
+        \item La classification joue en fouille de texte le rôle de tâche pivot
+        \item On privilégie pour la classification des données au format tabulaire
+    \end{itemize}
+    Il est naturel de vouloir mettre les données à traiter sous forme tabulaire.
+\end{frame}
+
+% ███████ ████████  █████  ████████
+% ██         ██    ██   ██    ██
+% ███████    ██    ███████    ██
+%      ██    ██    ██   ██    ██
+% ███████    ██    ██   ██    ██
+
+\subsection{Spécificités statistiques}
+\begin{frame}{Loi de Zipf}
+    Dans \textit{Ulysse} de James Joyce on\textsuperscript{1} observe\textsuperscript{2} que
+    \begin{itemize}
+        \item Le mot le plus courant apparaît \num{8000} fois
+        \item Le dixième mot le plus courant apparaît \num{800} fois
+        \item Le centième mot le plus courant apparaît \num{80} fois
+        \item Le millième mot le plus courant apparaît \num{8} fois
+    \end{itemize}
+
+    \begin{block}{Hypothèse (Loi de Zipf)}
+        La fréquence $f(n)$ du $n$-ième mot le plus fréquent d'un corpus vérifie
+        \begin{equation}
+            f(n) = \frac{K}{n}
+        \end{equation}
+        où $K$ est une constante ne dépendant que du corpus.
+    \end{block}
+    \vskip0pt plus 1fill
+    {\tiny 1. Georges Zipf (1902-1950) dans \parencite{zipf1949human}\\2. d'après la légende}
+\end{frame}
+
+% TODO: add Ulysse répartition
+% TODO: add visualisation for fat tail
+\begin{frame}{Loi de Zipf : observations}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=0, ymin=0, xmax=20,
+                         width=0.9\textwidth,
+                         height=0.8\textheight,
+                         xlabel={Rang},
+                         ylabel={Fréquence d'apparition},
+                         title={Loi de Zipf : $y=\frac{K}{x}$},
+                         scaled ticks=false,
+                         ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}]
+                \addplot[highlighta, domain=1:20, samples=1001] {max(8000/x, 1)};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Courbe d'une loi de Zipf ($K=\num{8000}$)}
+    \end{figure}
+\end{frame}
+
+% TODO: add cites
+\begin{frame}{Loi de Zipf : observations}
+    \begin{itemize}
+        \item La loi de Zipf se vérifie plutôt bien expérimentalement
+        \item En pratique, les répartitions observées sont de la forme $f(n)=\frac{k}{x^s}$ avec $s$ proche de $1$
+        \item Ce type de distribution, dites \emph{loi de puissance} est omniprésent en statistiques (en en sciences en général)
+        \item Elles font parties des distributions dites \emph{à longue traîne} (\textit{fat tail})
+        \item Une autre approche due à Mandelbrot présente une généralisation de la loi de Zipf comme le résultat de contraintes d'optimalité d'utilisation d'un canal de communication.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Loi de Heaps}
+    Si la loi de Zipf donne une estimation de la répartition du vocabulaire d'un corpus, la loi de Heaps est une estimation de sa diversité
+    \begin{block}{Hypothèse : loi de Heaps}
+        Le nombre $V$ de mots distincts dans sous-corpus de taille $M$ vérifie
+        \begin{equation}
+            V = K×M^β
+        \end{equation}
+        Où $K$ et $β$ sont des paramètres dépendant du corpus
+    \end{block}
+    \begin{itemize}
+        \item[→] Ce $K$ n'est pas le même que pour la loi de Zipf, et $β$ n'a aucun lien avec la pondération de $F_β$
+        \item[→] On parle souvent de relation \emph{types-tokens}
+        \item[→] Pour l'anglais, on a $K∈[30, 100]$ et $β≈0.5$
+        \item[→] Cette loi peut-elle être valable quelle que soit la taille de la collection ?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[label=heapslawgraph]{Loi de Heaps}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=0, xmax=800000, ymin=0,
+                         width=0.9\textwidth,
+                         height=0.8\textheight,
+                         xlabel={Taille de la collection},
+                         ylabel={Taille du vocabulaire},
+                         title={Loi de Heaps : $y=K×x^β$},
+                         scaled ticks=false,
+                         ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}]
+                \addplot[highlighta, domain=0:800000, samples=1001] {40*x^0.5};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Courbe d'une loi de Heaps}
+    \end{figure}
+\end{frame}
+%
+% ███████ ███████  █████  ████████ ███████
+% ██      ██      ██   ██    ██    ██
+% █████   █████   ███████    ██    ███████
+% ██      ██      ██   ██    ██         ██
+% ██      ███████ ██   ██    ██    ███████
+
+
+\subsection{Choix des attributs}
+\begin{frame}{Choix des attributs}
+    Pour pouvoir faire de la classification, il faut pouvoir mettre les données au bon format
+    \begin{description}[<+->][*]
+        \item[Objectif] Transformer les documents à traiter en fichiers tabulaires pour les passer à un classifieur
+        \item[Problème] Quel choix d'attributs (colonnes) ?
+        \item[Solution] Ça dépend des cas !
+            \begin{itemize}
+                \item[→] Mais on peut identifier plusieurs stratégies élémentaires (air connu)
+            \end{itemize}
+    \end{description}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Caractères}
+    Puisqu'un texte brut est une séquence de caractères : utilisons comme attribut la fréquence de chaque caractère
+
+    \begin{figure}
+        \begin{tabu}{*{5}{>{\ttfamily\small}X[m, c]}}
+            Texte   & a & b & c & …\\
+            Ulysse  & 90578 & 17848 & 27902 & …
+        \end{tabu}
+    \end{figure}
+
+    \begin{itemize}
+        \item Combien d'attributs par texte ?
+        \item Est-ce suffisant ?
+            \begin{itemize}
+                \item Suffisant pour quoi ?
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{$n$-grammes de caractères}
+    % TODO: add corrections
+    % TODO: add sources
+    % TODO: add examples
+    Une stratégie un peu plus raffinée est de compter non pas les caractères, mais les séquences de caractères de longueur $n$.
+
+    Exemple : « Le petit chat est mort »
+
+    \begin{itemize}
+        \item Quels sont les unigrammes ?
+        \item Quels sont les bigrammes ?
+        \item Quels sont les trigrammes ?
+        \item En général, pour un alphabet à $k$ caractères, combien y a-t-il de $n$-grammes ?
+    \end{itemize}
+
+    En pratique, les trigrammes peuvent suffire pour certaines applications !
+    \begin{itemize}
+        \item Détection du plagiat
+    \end{itemize}
+
+    Pour plus de richesse, on peut aussi utiliser des \emph{skip-grams}
+\end{frame}
+
+\lecture{Introduction à la fouille de textes}{2018-02-19}
+
+\begin{frame}<-2>{Mots}
+    Faisons \alt<1>{enfin de la}{un peu de} linguistique : comptons les mots !
+    \begin{itemize}
+        \item Problème : qu'est-ce qu'un mot ?
+            \begin{itemize}
+                \item \emph{pomme de terre} ?
+                \item \emph{y a-\textbf{t}-il} ?
+                \item …
+            \end{itemize}
+        \item On a plutôt tendance à compter les \alert{tokens}
+            \begin{itemize}
+                \item « Séquences de caractères comprises entre deux séparateurs »
+                \item[→] Problème : qu'est-ce qu'un séparateur ? \begin{itemize}
+                    \item « E-mail » vs. « Alsace–Lorraine »
+                    \item « […] kiwi. Hier […] » vs. « M. Martin »
+                    \item « Yann Le Bourdonnec » vs. « Félix le chat »
+                \end{itemize}
+                \item On délègue à un segmenteur (\emph{tokenizer})
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}<1>[label=wordcols]{Des mots aux colonnes}
+    Objectif : utiliser les fréquences des mots comme attributs (colonnes) dans une représentation tabulaire.
+    \begin{itemize}
+        \item Combien de colonnes faut-il ?
+\only<2->{
+            \begin{itemize}
+                \item[→] $K×M^β$ (loi de Heaps)
+                \item Pour \emph{Ulysse}, environ \num{34000}
+            \end{itemize}
+        \item Il faut donc arriver à filtrer !
+            \begin{itemize}
+                \item Supprimer les mots vides (\emph{stop words}) : \emph{le}, \emph{à}, \emph{mais}…
+                \item Ne conserver certaines catégories spécifiques à la tâche (noms, adjectifs…)
+                \item Supprimer les hapax (mots n'apparaissant qu'un seule fois)
+                \item[→] De façon générale, ne conserver qu'une bande de fréquence
+            \end{itemize}
+}
+    \end{itemize}
+\end{frame}
+
+\againframe{heapslawgraph}
+
+\againframe<2>{wordcols}
+
+\begin{frame}[fragile]{Filtrer les hapax}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=0, ymin=0, xmax=40, ymax=15,
+                         xtick=\empty,
+                         ytick=\empty,
+                         alt=<2>{extra y ticks={1}}{},
+                         width=0.9\textwidth,
+                         height=0.8\textheight,
+                         xlabel={Rang},
+                         ylabel={Fréquence d'apparition},
+                         title={$y=\frac{K}{x}$}]
+                \addplot[highlighta, domain=1:20, samples=501] {20/x};
+                \addplot[highlighta, alt=<2>{dotted}{}, domain=20:40, samples=500] {1};
+                \only<2>{
+                    \draw[highlight6] (axis cs:0,1) -- (current axis.east|-{axis cs:0,1});
+                }
+            \end{axis}
+        \end{tikzpicture}
+        \caption{\alt<2>{Filtrage des hapax sur la c}{C}ourbe de Zipf}
+    \end{figure}
+\end{frame}
+
+\againframe<2>{wordcols}
+
+\begin{frame}[fragile=singleslide]{Filtrer une bande de fréquences}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[xmin=0, ymin=0, xmax=40, ymax=20,
+                         xtick=\empty,
+                         ytick={2, 15},
+                         yticklabels={$a$, $b$},
+                         width=0.9\textwidth,
+                         height=0.8\textheight,
+                         xlabel={Rang},
+                         ylabel={Fréquence d'apparition},
+                         title={$y=\frac{K}{x}$}]
+                \addplot[highlighta, dotted, domain=1:1.33, samples=333] {20/x};
+                \addplot[highlighta, domain=1.33:10, samples=333] {20/x};
+                \addplot[highlighta, dotted, domain=10:40, samples=333] {max(20/x,1)};
+                \draw[highlight6] (axis cs:0,15) -- (current axis.east|-{axis cs:0,15});
+                \draw[highlight6] (axis cs:0,2) -- (current axis.east|-{axis cs:0,2});
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Filtrage d'une bande de fréquences sur la courbe de Zipf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Mots}
+    Pour réduire encore plus le nombre de colonnes
+    \begin{itemize}
+        \item Lemmatiser : \{\emph{est}, \emph{était}, \emph{suis}, \emph{êtes}, \emph{furent}…\} → \emph{est}
+        \item Radicaliser : \{\emph{homme}, \emph{hommes}\} → \emph{homme}
+        \item Fixer un lexique \emph{a priori}
+            \begin{itemize}
+                \item[→] Avec les dangers que ça comporte
+            \end{itemize}
+    \end{itemize}
+
+    À l'inverse, pour plus de détails, on peut utiliser des $n$-grammes de mots
+    \begin{itemize}
+        \item[→] Représentation plus riche, mais amplifie le problème de quantité
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Traits linguistiques avancés}
+    Si les ressource le permettent, on peut envisager d'autres attributs
+    \begin{itemize}
+        \item Avec un étiqueteur morphosyntaxique : POS, $n$-grammes de POS
+        \item Avec un parser : largeur/profondeur/taille moyenne des arbres/constituants, paires gouverneur-gouverné, paires nœud-relation…
+        \item Avec des analyseurs sémantiques : rôles
+        \item Avec des bases de connaissances : présence de certains concepts
+        \item …
+    \end{itemize}
+    Mais on introduit alors des dépendances vis-à-vis des ressources, ce qui multiplie les causes d'erreurs.
+\end{frame}
 %
 % % ███    ███ ███████  █████  ███████ ██    ██ ██████  ███████
 % % ████  ████ ██      ██   ██ ██      ██    ██ ██   ██ ██

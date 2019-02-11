@@ -556,55 +556,6 @@
     \end{itemize}
 \end{frame}
 
-% ██████  ███████ ██       █████  ████████ ██  ██████  ███    ██ ███████
-% ██   ██ ██      ██      ██   ██    ██    ██ ██    ██ ████   ██ ██
-% ██████  █████   ██      ███████    ██    ██ ██    ██ ██ ██  ██ ███████
-% ██   ██ ██      ██      ██   ██    ██    ██ ██    ██ ██  ██ ██      ██
-% ██   ██ ███████ ███████ ██   ██    ██    ██  ██████  ██   ████ ███████
-
-
-\section{Relations entre tâches}
-\begin{frame}<1>[label=taskrel]{Relations entre tâches}
-    Les tâches présentées précédemment sont \emph{élémentaires} au sens où on peut y réduire la plupart des tâches de la fouille de texte.
-
-    Cependant ces tâches ne sont pas complètement indépendantes les unes des autres \emph{via} des reformulations.
-\end{frame}
-
-\begin{frame}[fragile=singleslide]{La RI comme classification}
-    Puisque la RI consiste à déterminer parmi un ensemble de documents lesquels sont pertinents, on peut la voir comme un problème de classification binaire.
-
-    \begin{itemize}
-        \item On répartit les documents entre les deux classes « pertinent » et « non-pertinent »
-        \item La requête, qui était une donnée, devient une ressource
-    \end{itemize}
-    \vskip-1em
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}[true scale=0.75]
-            \node[data] (in) {Requête};
-            \node[program, right=2cm of in, text width=16ex] (prog) {Programme de classification};
-            \node[data, right=1.5cm of prog] (out) {Documents pertinents};
-            \node[above left=0.25cm and 0.25cm of prog.north west] (ri) {RI};
-            \draw ($(prog.north west)+(-1.5cm, 0.75cm)$) -- ($(prog.north east)+(1cm, 0.75cm)$) -- ($(prog.south east)+(1cm, -1.25cm)$) -- ($(prog.south west)+(-1.5cm, -1.25cm)$) -- cycle;
-            \node[data, below=1.5cm of prog] (res) {Corpus};
-            \draw[->] (in.south) |- ($(prog.south)-(0, 0.75cm)$) -- (prog.south);
-            \draw[->] (res.west) -| ($(prog.west)-(0.75cm, 0)$) -- (prog.west);
-            \draw[->] (prog) -- (out);
-        \end{tikzpicture}
-        \caption{La RI comme une classification}
-    \end{figure}
-\end{frame}
-
-% TODO: add graphics and examples
-\begin{frame}{L'annotation comme classification}
-    Plusieurs stratégies sont envisageables pour conserver l'information de structure
-    \begin{itemize}
-        \item Voir la suite des étiquettes d'une séquence comme une seule classe.
-        \item Étiqueter par classifications successives en utilisant à chaque étape l'ensemble des étiquettes précédentes comme information pour choisir l'étiquette suivante.
-    \end{itemize}
-\end{frame}
-
-
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
