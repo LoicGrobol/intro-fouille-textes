@@ -40,6 +40,7 @@
 
 \usetheme[
 	sectionpage=progressbar,
+    subsectionpage=progressbar,
 	progressbar=frametitle,
 ]{metropolis}
 	\colorlet{accent}{sronbrightgreen}
@@ -374,7 +375,6 @@
     }
 \end{frame}
 
-% TODO: add graphics and examples
 \begin{frame}{L'annotation comme classification}
     Plusieurs stratégies sont envisageables pour conserver l'information de structure
     \begin{itemize}
@@ -387,25 +387,72 @@
     \begin{figure}
         \tikzset{external/export=true}
         \begin{tikzpicture}[
-                row 2 column 1/.style={visible on=1},
-                row 2 column 2/.style={visible on=2},
-                row 2 column 3/.style={visible on=3},
-                row 2 column 4/.style={visible on=4},
-                row 2 column 5/.style={visible on=5},
+                row 2 column 1/.style={visible on={1,2,6}},
+                row 2 column 2/.style={visible on={2,3,6}},
+                row 2 column 3/.style={visible on={3,4,6}},
+                row 2 column 4/.style={visible on={4,5,6}},
+                row 2 column 5/.style={visible on={5-}},
             ]
             \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
                 Le  & petit & chat  & est & content\\
                 DET & ADJ   & NC    & V   & ADJ\\
             };
             \foreach \x in {1, ..., 5}
-                \draw[->, visible on={\x-}] (m-1-\x) -- (m-2-\x);
+                \draw[->, visible on={\x,6}] (m-1-\x) -- (m-2-\x);
         \end{tikzpicture}
         \caption{\emph{Part Of Speech Tagging} comme une suite de classifications}
     \end{figure}
-    \only<5>{}
+    \only<6>{}
 \end{frame}
 
-% TODO: EI comme annotation
+\begin{frame}[fragile]{EI comme annotation}
+    \begin{figure}
+        \begin{overprint}
+            \onslide<1>
+                \tikzset{external/export=true}
+                \begin{tikzpicture}
+                    \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+                        En & 2019 & la & France & gagne & à & l' & Eurovision\\
+                        O & D & O & C & O & O & O & E\\
+                    };
+                    \foreach \x in {1, ..., 8}
+                        \draw[->] (m-1-\x) -- (m-2-\x);
+                \end{tikzpicture}
+            \onslide<2>
+                \tikzset{external/export=true}
+                \begin{tikzpicture}
+                    \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+                        En & 2019 & la & France & gagne & à & l' & Eurovision\\
+                        O & B-D & B-C & I-C & O & O & B-E & I-E\\\\
+                    };
+                    \foreach \x in {1, ..., 8}
+                        \draw[->] (m-1-\x) -- (m-2-\x);
+                \end{tikzpicture}
+            \onslide<3>
+                \tikzset{external/export=true}
+                \begin{tikzpicture}
+                    \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+                        En & 2019 & la & France & gagne & à & l' & Eurovision\\
+                        O & U-D & B-C & L-C & O & O & B-E & L-E\\\\
+                    };
+                    \foreach \x in {1, ..., 8}
+                        \draw[->] (m-1-\x) -- (m-2-\x);
+                \end{tikzpicture}
+        \end{overprint}
+        \caption{\emph{EI} comme une annotation}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Exercice}
+    \begin{enumerate}
+        \item Donner la suite d'étiquettes correspondant au parenthésage suivant : (Le volcan Eyjafjallajökull)\textsubscript{P} est (entré en éruption)\textsubscript{E} (hier)\textsubscript{D} à (15h30)\textsubscript{T}
+            \begin{enumerate}
+                \item En BIO
+                \item En BILOU
+            \end{enumerate}
+        \item Donner une phrase qui correspond à la suite d'étiquettes de chunking \texttt{B-N I-N I-N I-V I-Adj}
+    \end{enumerate}
+\end{frame}
 
 % ██████  ███████  ██████  ██████  ███    ███ ██████
 % ██   ██ ██      ██      ██    ██ ████  ████ ██   ██
