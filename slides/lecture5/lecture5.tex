@@ -493,26 +493,28 @@
     \begin{itemize}
         \item Les textes sont notés $t_1$, $t_2$, …, $t_m$
         \item Les attributs sont notés $a_1$, $a_2$, …, $a_n$
-        \item La valeur du $j$-ème attribut pour le $i$-ème texte est notée $a_{i,j}$ (ligne, colonne)
+        \item La valeur du $j$-ème attribut pour le $i$-ème texte est notée $v_{i,j}$ (ligne, colonne)
     \end{itemize}
 
+	% TODO: version de la table avec textes et mots avant la version littérale
     \begin{figure}
         \begin{tabu} to 0.9\linewidth {X[m, c]|*{4}{X[m, c]}}
                     & $a_1$     & $a_2$     & $…$ & $a_n$\\
             \hline
-            $t_1$   & $a_{1,1}$ & $a_{1,2}$ & $…$ & $a_{1,n}$\\
-            $t_2$   & $a_{2,1}$ & $a_{2,2}$ & $…$ & $a_{2,n}$\\
+            $t_1$   & $v_{1,1}$ & $v_{1,2}$ & $…$ & $v_{1,n}$\\
+            $t_2$   & $v_{2,1}$ & $v_{2,2}$ & $…$ & $v_{2,n}$\\
             $⋮$    & $⋮$      & $⋮$       &     & $⋮$\\
-            $t_m$   & $a_{m,1}$ & $a_{m,2}$ & $…$ & $a_{m,n}$\\
+            $t_m$   & $v_{m,1}$ & $v_{m,2}$ & $…$ & $v_{m,n}$\\
          \end{tabu}
     \end{figure}
 \end{frame}
 
-\againframe{attrval}
+% TODO: add exemples
 
+% TODO: ajouter une transition
 % TODO: add cites
 \begin{frame}{TF.IDF}
-    On veut pouvoir pondérer l'importance d'un terme (mot, caractère, $n$-gramme…) en fonction de sa spécificité (au sens large) pour un document.
+    \only<-2>{On veut pouvoir pondérer l'importance d'un terme (mot, caractère, $n$-gramme…) en fonction de sa spécificité (au sens large) pour un document.}
 
     \begin{itemize}
         \item \emph{\textbf{T}erm \textbf{F}requency $×$ \textbf{I}nverse \textbf{D}ocument \textbf{F}requency}
@@ -520,15 +522,15 @@
         \item
             \only<1>{
                 \begin{equation}
-                    \IDF(j) = \log\mleft(\frac{m}{\#\compset{i}{a_{i,j}>0}}\mright)
+                    \IDF(j) = \log\mleft(\frac{m}{\#\compset{i}{n_{i,j}>0}}\mright)
                 \end{equation}
             }
             \only<2>{
                 \begin{equation}
-                    \IDF(j) = \log\frac{\overbrace{m}^{\mathclap{\text{nombre total de documents}}}}{\underbrace{\#\compset{i}{a_{i,j}>0}}_{\mathclap{\text{nombre de documents contenant $a_j$}}}}
+                    \IDF(j) = \log\frac{\overbrace{m}^{\mathclap{\text{nombre total de documents}}}}{\underbrace{\#\compset{i}{n_{i,j}>0}}_{\mathclap{\text{nombre de documents contenant $a_j$}}}}
                 \end{equation}
             }
-            \only<3->{$\IDF(j) = \log\frac{m}{\#\compset{i}{a_{i,j}>0}}$}
+            \only<3->{$\IDF(j) = \log\frac{m}{\#\compset{i}{n_{i,j}>0}}$}
         \only<3->{
             \item Intuitivement $\IDF$ mesure la rareté d'un attribut, donc (on espère !) son informativité
             \item « Si $a_j$ est présent dans tous les textes, savoir qu'il est présent dans $t_i$ ne donne pas d'information sur $t_i$ »
@@ -537,6 +539,8 @@
         }
     \end{itemize}
 \end{frame}
+
+% TODO: Slide sur la surprise, intro aux probas
 
 \section{Représentations vectorielles et similarités}
 
@@ -936,50 +940,6 @@
         \caption{Distances de Minkowski pour notre exemple}
     \end{figure}
 \end{frame}
-
-\begin{frame}{Les maths en cinq secondes : produit scalaire}
-    \begin{block}{Définition (produit scalaire)}
-        On appelle \emph{produit scalaire de $t₁$ et $t₂$} le nombre
-        \begin{equation}
-            \innprod{t₁}{t₂} = \norm{t₁}₂×\norm{t₂}₂×\cosθ
-        \end{equation}
-        Où $θ$ est l'écart angulaire entre $t₁$ et $t₂$.
-    \end{block}
-    \begin{columns}
-    \column{.5\textwidth}
-        Dans un repère raisonnable, on a de plus
-        \begin{equation}
-            \innprod{t₁}{t₂} = ∑_k v_{1,k}v_{2,k}
-        \end{equation}
-        Soit pour notre exemple
-        \begin{equation}
-            \innprod{t₁}{t₂} = 3×1 + 1×2 = 5
-        \end{equation}
-    \column{.5\textwidth}
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}[true scale=0.8]
-                \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (4, 3);
-
-                \draw[->] (-0.5,0) -- (4.25, 0);
-                \foreach \x in {1,...,4}
-                    \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
-                \draw[->] (0, -0.5) -- (0, 3.25);
-
-                \foreach \y in {1,...,3}
-                    \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
-
-                \draw (0, 0) node[below left] {\footnotesize $0$};
-
-                \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, below right] {$t₁$};
-                \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t₂$};
-
-                \draw [domain=18.4:60] plot ({cos(\x)}, {sin(\x)}) (0.9, 0.9) node {$θ$};
-            \end{tikzpicture}
-        \end{figure}
-    \end{columns}
-\end{frame}
-
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
