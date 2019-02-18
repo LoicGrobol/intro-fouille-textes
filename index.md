@@ -24,8 +24,11 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2019
   - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture3.pdf)
 
 #### 2019-02-11 – Relations entre tâches et représentation des données
-  - À lire → Poly jusqu'à 4 (inclus)
+  - À lire → Poly jusqu'à 2.4 (inclus)
   - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture4.pdf)
+
+#### 2019-02-18
+  - À lire → Poly jusqu'à 2.6 (inclus)
 
 ## Liens utiles
 
