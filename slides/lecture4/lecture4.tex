@@ -811,7 +811,7 @@
     % TODO: add examples
     Une stratégie un peu plus raffinée est de compter non pas les caractères, mais les séquences de caractères de longueur $n$.
 
-    Exemple : « Le petit chat est mort »
+    Exemple : « Le petit chat est content »
 
     \begin{itemize}
         \item Quels sont les unigrammes ?
@@ -827,134 +827,6 @@
 
     Pour plus de richesse, on peut aussi utiliser des \emph{skip-grams}
 \end{frame}
-
-\lecture{Introduction à la fouille de textes}{2018-02-19}
-
-\begin{frame}<-2>{Mots}
-    Faisons \alt<1>{enfin de la}{un peu de} linguistique : comptons les mots !
-    \begin{itemize}
-        \item Problème : qu'est-ce qu'un mot ?
-            \begin{itemize}
-                \item \emph{pomme de terre} ?
-                \item \emph{y a-\textbf{t}-il} ?
-                \item …
-            \end{itemize}
-        \item On a plutôt tendance à compter les \alert{tokens}
-            \begin{itemize}
-                \item « Séquences de caractères comprises entre deux séparateurs »
-                \item[→] Problème : qu'est-ce qu'un séparateur ? \begin{itemize}
-                    \item « E-mail » vs. « Alsace–Lorraine »
-                    \item « […] kiwi. Hier […] » vs. « M. Martin »
-                    \item « Yann Le Bourdonnec » vs. « Félix le chat »
-                \end{itemize}
-                \item On délègue à un segmenteur (\emph{tokenizer})
-            \end{itemize}
-    \end{itemize}
-\end{frame}
-
-\begin{frame}<1>[label=wordcols]{Des mots aux colonnes}
-    Objectif : utiliser les fréquences des mots comme attributs (colonnes) dans une représentation tabulaire.
-    \begin{itemize}
-        \item Combien de colonnes faut-il ?
-\only<2->{
-            \begin{itemize}
-                \item[→] $K×M^β$ (loi de Heaps)
-                \item Pour \emph{Ulysse}, environ \num{34000}
-            \end{itemize}
-        \item Il faut donc arriver à filtrer !
-            \begin{itemize}
-                \item Supprimer les mots vides (\emph{stop words}) : \emph{le}, \emph{à}, \emph{mais}…
-                \item Ne conserver certaines catégories spécifiques à la tâche (noms, adjectifs…)
-                \item Supprimer les hapax (mots n'apparaissant qu'un seule fois)
-                \item[→] De façon générale, ne conserver qu'une bande de fréquence
-            \end{itemize}
-}
-    \end{itemize}
-\end{frame}
-
-\againframe{heapslawgraph}
-
-\againframe<2>{wordcols}
-
-\begin{frame}[fragile]{Filtrer les hapax}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}
-            \begin{axis}[xmin=0, ymin=0, xmax=40, ymax=15,
-                         xtick=\empty,
-                         ytick=\empty,
-                         alt=<2>{extra y ticks={1}}{},
-                         width=0.9\textwidth,
-                         height=0.8\textheight,
-                         xlabel={Rang},
-                         ylabel={Fréquence d'apparition},
-                         title={$y=\frac{K}{x}$}]
-                \addplot[highlighta, domain=1:20, samples=501] {20/x};
-                \addplot[highlighta, alt=<2>{dotted}{}, domain=20:40, samples=500] {1};
-                \only<2>{
-                    \draw[highlight6] (axis cs:0,1) -- (current axis.east|-{axis cs:0,1});
-                }
-            \end{axis}
-        \end{tikzpicture}
-        \caption{\alt<2>{Filtrage des hapax sur la c}{C}ourbe de Zipf}
-    \end{figure}
-\end{frame}
-
-\againframe<2>{wordcols}
-
-\begin{frame}[fragile=singleslide]{Filtrer une bande de fréquences}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}
-            \begin{axis}[xmin=0, ymin=0, xmax=40, ymax=20,
-                         xtick=\empty,
-                         ytick={2, 15},
-                         yticklabels={$a$, $b$},
-                         width=0.9\textwidth,
-                         height=0.8\textheight,
-                         xlabel={Rang},
-                         ylabel={Fréquence d'apparition},
-                         title={$y=\frac{K}{x}$}]
-                \addplot[highlighta, dotted, domain=1:1.33, samples=333] {20/x};
-                \addplot[highlighta, domain=1.33:10, samples=333] {20/x};
-                \addplot[highlighta, dotted, domain=10:40, samples=333] {max(20/x,1)};
-                \draw[highlight6] (axis cs:0,15) -- (current axis.east|-{axis cs:0,15});
-                \draw[highlight6] (axis cs:0,2) -- (current axis.east|-{axis cs:0,2});
-            \end{axis}
-        \end{tikzpicture}
-        \caption{Filtrage d'une bande de fréquences sur la courbe de Zipf}
-    \end{figure}
-\end{frame}
-
-\begin{frame}{Mots}
-    Pour réduire encore plus le nombre de colonnes
-    \begin{itemize}
-        \item Lemmatiser : \{\emph{est}, \emph{était}, \emph{suis}, \emph{êtes}, \emph{furent}…\} → \emph{est}
-        \item Radicaliser : \{\emph{homme}, \emph{hommes}\} → \emph{homme}
-        \item Fixer un lexique \emph{a priori}
-            \begin{itemize}
-                \item[→] Avec les dangers que ça comporte
-            \end{itemize}
-    \end{itemize}
-
-    À l'inverse, pour plus de détails, on peut utiliser des $n$-grammes de mots
-    \begin{itemize}
-        \item[→] Représentation plus riche, mais amplifie le problème de quantité
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Traits linguistiques avancés}
-    Si les ressource le permettent, on peut envisager d'autres attributs
-    \begin{itemize}
-        \item Avec un étiqueteur morphosyntaxique : POS, $n$-grammes de POS
-        \item Avec un parser : largeur/profondeur/taille moyenne des arbres/constituants, paires gouverneur-gouverné, paires nœud-relation…
-        \item Avec des analyseurs sémantiques : rôles
-        \item Avec des bases de connaissances : présence de certains concepts
-        \item …
-    \end{itemize}
-    Mais on introduit alors des dépendances vis-à-vis des ressources, ce qui multiplie les causes d'erreurs.
-\end{frame}
-
 
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
