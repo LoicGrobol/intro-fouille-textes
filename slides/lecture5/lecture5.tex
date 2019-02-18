@@ -9,7 +9,7 @@
 \NewDocumentCommand\pdftitle{}{Introduction à la fouille de textes}
 \NewDocumentCommand\mymail{}{loic.grobol@gmail.com}
 \NewDocumentCommand\titlepagetitle{}{\pdftitle}
-\NewDocumentCommand\titlepagesubtitle{}{\docdate Cours 5 : représenation des données}
+\NewDocumentCommand\titlepagesubtitle{}{Cours 5 : représenation des données}
 \NewDocumentCommand\docdate{}{2019-02-18}
 \NewDocumentCommand\conference{}{M1 Plurital}
 
@@ -314,13 +314,20 @@
 \end{frame}
 
 \begin{frame}{Exercice}
-    Une requête dans un moteur de recherche renvoie \num{27} documents. Parmi ceux-ci, \num{13} sont pertinents pour cette requête. Une étude du corpus montre que parmi ses \num{1024} documents, \num{15} étaient pertinents pour cette requête.
-    \begin{itemize}
-        \item Déterminer les nombres de vrais positifs, vrais négatifs, faux positifs et faux négatifs
-        \item Déterminer la précision, le rappel et la $F$-mesure associées
-        \item Mêmes questions pour un corpus de taille \num{2713}
-    \end{itemize}
+    La tâche de \emph{résolution d'anaphores}\footnote{Ou en tout cas une version simplifiée} consiste à déterminer l'antécédent d'un pronom dans un texte.
+	\vspace{\bigskipamount}
+
+	\begin{overprint}
+		\onslide<2-3> \alert<3>{Le père d'Aino} est heureux de vous annoncer que \alert{sa} fille se marie dimanche prochain
+		\onslide<4-> Je n'ai pas pu faire rentrer \alert<5>{la poussette} dans \alert<6->{la valise} parce qu'\alert{elle} est trop \alt<4-5>{grande}{\textbf<6>{petite}}
+	\end{overprint}
+
+	\only<7>{
+		Reformuler cette tâche comme une combinaison de tâches élémentaires.
+	}
 \end{frame}
+
+\section{Attributs des documents}
 
 \begin{frame}<-2>{Mots}
     Faisons \alt<1>{enfin de la}{un peu de} linguistique : comptons les \alert{mots} !
@@ -345,7 +352,7 @@
 \end{frame}
 
 \begin{frame}<1>[label=wordcols]{Des mots aux colonnes}
-    Objectif : utiliser les fréquences des mots comme attributs (colonnes) dans une représentation tabulaire.
+    Objectif : utiliser les \alert{fréquences} des mots comme attributs (colonnes) dans une représentation tabulaire.
     \begin{itemize}
         \item Combien de colonnes faut-il ?
 \only<2->{
@@ -496,7 +503,7 @@
         \item La valeur du $j$-ème attribut pour le $i$-ème texte est notée $v_{i,j}$ (ligne, colonne)
     \end{itemize}
 
-	% TODO: version de la table avec textes et mots avant la version littérale
+	% TODO: version de la table avec textes et mots avant la version littrale
     \begin{figure}
         \begin{tabu} to 0.9\linewidth {X[m, c]|*{4}{X[m, c]}}
                     & $a_1$     & $a_2$     & $…$ & $a_n$\\
@@ -662,6 +669,28 @@
     }
 \end{frame}
 
+\begin{frame}{Exercice}
+	Calculer
+	\begin{enumerate}
+		\item
+			\begin{equation}
+				\vcord{2, 1} + \vcord{3, 7}
+			\end{equation}
+		\item
+			\begin{equation}
+				3⋅\vcord{2, 1, -2, 0}
+			\end{equation}
+		\item
+			\begin{equation}
+				\frac{1}{2}⋅\left(\vcord{2, 4} + \vcord{3,6}\right)
+			\end{equation}
+		\item
+			\begin{equation}
+				0.2⋅\vcord{2, 4} + 0.8⋅\vcord{3,6}
+			\end{equation}
+	\end{enumerate}
+\end{frame}
+
 \begin{frame}{Interprétation}
     Bien entendu, l'hypothèse d'indépendance est fausse en général
     \begin{itemize}
@@ -686,7 +715,8 @@
 \end{frame}
 
 \begin{frame}[standout]
-    \textit{To deal with a $14$-dimensional space, visualize a $3$-D space and say `fourteen' to yourself very loudly. Everyone does it.}
+    To deal with a $\mathbf{14}$-dimensional space, visualize a $3$-D space and say `fourteen' to yourself very loudly. Everyone does it.
+	\vspace{\bigskipamount}
 
     Geoffrey Hinton
 \end{frame}
