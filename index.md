@@ -29,6 +29,7 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2019
 
 #### 2019-02-18
   - À lire → Poly jusqu'à 2.6 (inclus)
+  - - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture5.pdf)
 
 ## Liens utiles
 
