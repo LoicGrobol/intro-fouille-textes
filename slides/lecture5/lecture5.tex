@@ -356,17 +356,17 @@
     \begin{itemize}
         \item Combien de colonnes faut-il ?
 \only<2->{
-            \begin{itemize}
+            \begin{itemize}[<+->]
                 \item[→] $K×M^β$ (loi de Heaps)
                 \item Pour \emph{Ulysse}, environ \num{34000}
             \end{itemize}
         \item Il faut donc arriver à filtrer !
 			% TODO: déroulé progressif avec exemples de colonnes
             \begin{itemize}
-                \item Supprimer les mots vides (\emph{stop words}) : \emph{le}, \emph{à}, \emph{mais}…
+                \item Supprimer les \alert{mots vides} (\emph{stop words}) : \emph{le}, \emph{à}, \emph{mais}…
                 \item Ne conserver certaines catégories spécifiques à la tâche (noms, adjectifs…)
-                \item Supprimer les hapax (mots n'apparaissant qu'un seule fois)
-                \item[→] De façon générale, ne conserver qu'une bande de fréquence
+                \item Supprimer les \alert{hapax} (mots n'apparaissant qu'un seule fois)
+                \item[→] De façon générale, ne conserver qu'une \alert{bande de fréquence}
             \end{itemize}
 }
     \end{itemize}
@@ -448,7 +448,7 @@
 \begin{frame}{Mots}
     Pour réduire encore plus le nombre de colonnes
 	% TODO: déroulé progressif avec exemples de colonnes
-    \begin{itemize}
+    \begin{itemize}[<+->]
         \item Lemmatiser : \{\emph{est}, \emph{était}, \emph{suis}, \emph{êtes}, \emph{furent}…\} → \emph{est}
         \item Radicaliser : \{\emph{homme}, \emph{hommes}\} → \emph{homme}
         \item Fixer un lexique \emph{a priori}
@@ -457,6 +457,7 @@
             \end{itemize}
     \end{itemize}
 
+	\pause
     À l'inverse, pour plus de détails, on peut utiliser des $n$-grammes de mots
     \begin{itemize}
         \item[→] Représentation plus riche, mais amplifie le problème de quantité
@@ -465,13 +466,14 @@
 
 \begin{frame}{Traits linguistiques avancés}
     Si les ressource le permettent, on peut envisager d'autres attributs
-    \begin{itemize}
+    \begin{itemize}[<+->]
         \item Avec un étiqueteur morphosyntaxique : POS, $n$-grammes de POS
         \item Avec un parser : largeur/profondeur/taille moyenne des arbres/constituants, paires gouverneur-gouverné, paires nœud-relation…
         \item Avec des analyseurs sémantiques : rôles
         \item Avec des bases de connaissances : présence de certains concepts
         \item …
     \end{itemize}
+	\pause
     Mais on introduit alors des dépendances vis-à-vis des ressources, ce qui multiplie les causes d'erreurs.
 \end{frame}
 
@@ -484,36 +486,52 @@
 
 \section{Valuation des attributs}
 \begin{frame}[label=attrval]{Valuation des attributs}
-    Avoir choisi les attributs à utiliser pour une classification ne suffit pas : encore faut-il leur donner une valeur
+    Avoir choisi les attributs à utiliser pour une classification ne suffit pas : encore faut-il leur donner une \alert{valeur}
     \begin{description}[*]
-        \item[Booléenne] Vrai/Faux ($0$/$1$) suivant que l'attribut est ou n'est pas présent dans le document
-        \item[Occurrences] Le nombre $n_{i,j}$ de fois qu'apparaît l'attribut $a_j$ dans le document $t_i$
-        \item[Fréquences normalisées par ligne] (ici pour la norme $1$)
+        \item<+->[Booléenne] Vrai/Faux ($0$/$1$) suivant que l'attribut est ou n'est pas présent dans le document
+        \item<+->[Occurrences] Le nombre $n_{i,j}$ de fois qu'apparaît l'attribut $a_j$ dans le document $t_i$
+        \item<+->[Fréquences normalisées par ligne] (ici pour la norme $1$)
             \begin{equation}
                 \frac{\mathnode{freqfracnum}{n_{i,j}}}{\mathnode{freqfracden}{\sum_k n_{i,k}}}
             \end{equation}
     \end{description}
+	\pause
     \textbf{Note} : ici et dans la suite, on considère que toutes les colonnes sont de même nature
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{Notations}
-    \begin{itemize}
-        \item Les textes sont notés $t_1$, $t_2$, …, $t_m$
-        \item Les attributs sont notés $a_1$, $a_2$, …, $a_n$
-        \item La valeur du $j$-ème attribut pour le $i$-ème texte est notée $v_{i,j}$ (ligne, colonne)
-    \end{itemize}
+\begin{frame}[fragile]{Notations}
+	\begin{overprint}
+		\onslide<1>
+			\begin{figure}
+		        \begin{tabu} to 0.9\linewidth {X[m, c]|*{4}{X[m, c]}}
+		                    & je     & traque     & $…$ & kiwi\\
+		            \hline
+		            $t_1$   & $150$ & $12$ & $…$ & $0$\\
+		            $t_2$   & $2713$ & $20$ & $…$ & $0$\\
+		            $⋮$    & $⋮$      & $⋮$       &     & $⋮$\\
+		            $t_m$   & $1$ & $1$ & $…$ & $1$\\
+		         \end{tabu}
+		    \end{figure}
+		\onslide<2>
+			\begin{figure}
+		        \begin{tabu} to 0.9\linewidth {X[m, c]|*{4}{X[m, c]}}
+		                    & $a_1$     & $a_2$     & $…$ & $a_n$\\
+		            \hline
+		            $t_1$   & $v_{1,1}$ & $v_{1,2}$ & $…$ & $v_{1,n}$\\
+		            $t_2$   & $v_{2,1}$ & $v_{2,2}$ & $…$ & $v_{2,n}$\\
+		            $⋮$    & $⋮$      & $⋮$       &     & $⋮$\\
+		            $t_m$   & $v_{m,1}$ & $v_{m,2}$ & $…$ & $v_{m,n}$\\
+		         \end{tabu}
+		    \end{figure}
+	\end{overprint}
 
-	% TODO: version de la table avec textes et mots avant la version littrale
-    \begin{figure}
-        \begin{tabu} to 0.9\linewidth {X[m, c]|*{4}{X[m, c]}}
-                    & $a_1$     & $a_2$     & $…$ & $a_n$\\
-            \hline
-            $t_1$   & $v_{1,1}$ & $v_{1,2}$ & $…$ & $v_{1,n}$\\
-            $t_2$   & $v_{2,1}$ & $v_{2,2}$ & $…$ & $v_{2,n}$\\
-            $⋮$    & $⋮$      & $⋮$       &     & $⋮$\\
-            $t_m$   & $v_{m,1}$ & $v_{m,2}$ & $…$ & $v_{m,n}$\\
-         \end{tabu}
-    \end{figure}
+	\only<2>{
+		\begin{itemize}
+	        \item Les textes sont notés $t_1$, $t_2$, …, $t_m$
+	        \item Les attributs sont notés $a_1$, $a_2$, …, $a_n$
+	        \item La valeur du $j$-ème attribut pour le $i$-ème texte est notée $v_{i,j}$ (ligne, colonne)
+	    \end{itemize}
+	}
 \end{frame}
 
 % TODO: add exemples
@@ -521,7 +539,7 @@
 % TODO: ajouter une transition
 % TODO: add cites
 \begin{frame}{TF.IDF}
-    \only<-2>{On veut pouvoir pondérer l'importance d'un terme (mot, caractère, $n$-gramme…) en fonction de sa spécificité (au sens large) pour un document.}
+    \only<-2>{On veut pouvoir \alert{pondérer} l'importance d'un terme (mot, caractère, $n$-gramme…) en fonction de sa \alert{spécificité} (au sens large) pour un document.}
 
     \begin{itemize}
         \item \emph{\textbf{T}erm \textbf{F}requency $×$ \textbf{I}nverse \textbf{D}ocument \textbf{F}requency}
@@ -562,7 +580,7 @@
     \end{itemize}
     En pratique on fait même plus fort
     \begin{itemize}
-        \item Hypothèse d'indépendance : si $k≠ℓ$, $a_k$ et $a_ℓ$ sont indépendants
+        \item Hypothèse d'\alert{indépendance} : si $k≠ℓ$, $a_k$ et $a_ℓ$ sont indépendants
         \item On peut alors considérer chaque ligne comme un vecteur (ou un point…) d'un espace vectoriel
         \item Et accéder à la puissance de l'algèbre linéaire et de la géométrie vectorielle !
     \end{itemize}
@@ -802,8 +820,8 @@
             \begin{align}
                 \norm{\textcolor{highlight3}{t₂}-\textcolor{highlighta}{t₁}}
                     &= ∑_{k=1}^n\abs{v_{2,k}-v_{1,k}}\\
-                    &= \textcolor{highlight2}{\abs{v_{2,1}-v_{1,1}}}+\textcolor{highlight6}{\abs{v_{2,2}-v_{1,2}}}\\
-                    &= \textcolor{highlight2}{\abs{1-3}}+\textcolor{highlight6}{\abs{2-1}}\\
+                    &= \textcolor{highlight2}{\abs{v_{2,1}-v_{1,1}}}+\textcolor{highlight5}{\abs{v_{2,2}-v_{1,2}}}\\
+                    &= \textcolor{highlight2}{\abs{1-3}}+\textcolor{highlight5}{\abs{2-1}}\\
                     &= 2+1\\
                     &= \textcolor{highlight4}{3}
             \end{align}
@@ -827,7 +845,7 @@
                     \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, below right] {$t₁$};
                     \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t₂$};
                     \draw [<->, highlight2] (3, 2) -- (1, 2) node [midway, above] {$\abs{1-3}$};
-                    \draw[<->, highlight6] (3, 2) -- (3, 1)  node [midway, right] {$\abs{2-1}$};
+                    \draw[<->, highlight5] (3, 2) -- (3, 1)  node [midway, right] {$\abs{2-1}$};
                     \draw [<->, highlight4] (1, 2) --  (3, 1)  node [midway, below left] {$3$};
                 \end{tikzpicture}
                 \caption{Distance de Manhattan}
@@ -852,8 +870,8 @@
             \norm{\textcolor{highlight3}{t₂}-\textcolor{highlighta}{t₁}}₂
                 &= √{∑_{k=1}^n(v_{2,k}-v_{1,k})²}\\
                 &= √{\textcolor{highlight2}{(v_{2,1}-v_{1,1})}² +
-                     \textcolor{highlight6}{(v_{2,2}-v_{1,2})}²}\\
-                &= √{\textcolor{highlight2}{(1-3)}²+\textcolor{highlight6}{(2-1)}²}\\
+                     \textcolor{highlight5}{(v_{2,2}-v_{1,2})}²}\\
+                &= √{\textcolor{highlight2}{(1-3)}²+\textcolor{highlight5}{(2-1)}²}\\
                 &= √{2²+1²}\\
                 &= \textcolor{highlight4}{√{5}}
         \end{align}
@@ -876,7 +894,7 @@
                 \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, below right] {$t₁$};
                 \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t₂$};
                 \draw [->, highlight2] (3, 2) -- (1, 2)  node [midway, above] {$(1-3)$};
-                \draw[->, highlight6] (3, 2) -- (3, 1)  node [midway, right] {$(2-1)$};
+                \draw[->, highlight5] (3, 2) -- (3, 1)  node [midway, right] {$(2-1)$};
                 \draw [<->, highlight4] (1, 2) --  (3, 1)  node [midway, below left] {$√{5}$};
             \end{tikzpicture}
             \caption{Distance euclidienne}
@@ -901,10 +919,10 @@
                 &= \max_{1⩽k⩽n}\abs{v_{2,k}-v_{1,k}}\\
                 &= \max_{1⩽k⩽n}\mleft(
                     \textcolor{highlight2}{\abs{v_{2,1}-v_{1,1}}},
-                    \textcolor{highlight6}{\abs{v_{2,2}-v_{1,2}}}\mright)\\
+                    \textcolor{highlight5}{\abs{v_{2,2}-v_{1,2}}}\mright)\\
                 &= \max_{1⩽k⩽n}\mleft(
                     \textcolor{highlight2}{\abs{1-3}},
-                    \textcolor{highlight6}{\abs{2-1}}\mright)\\
+                    \textcolor{highlight5}{\abs{2-1}}\mright)\\
                 &= \max_{1⩽k⩽n}(2, 1)\\
                 &= \textcolor{highlight4}{2}
         \end{align}
@@ -927,7 +945,7 @@
                 \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, below right] {$t₁$};
                 \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t₂$};
                 \draw [->, highlight2] (3, 2) -- (1, 2)  node [midway, above] {$\abs{1-3}$};
-                \draw[->, highlight6] (3, 2) -- (3, 1)  node [midway, right] {$\abs{2-1}$};
+                \draw[->, highlight5] (3, 2) -- (3, 1)  node [midway, right] {$\abs{2-1}$};
                 \draw [<->, highlight4] (1, 2) --  (3, 1)  node [midway, below left] {$2$};
             \end{tikzpicture}
             \caption{Distance de Tchebychev}
