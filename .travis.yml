@@ -56,6 +56,7 @@ deploy:
       - slides/lecture3/lecture3.pdf
       - slides/lecture4/lecture4.pdf
       - slides/lecture5/lecture5.pdf
+      - slides/lecture6/lecture6.pdf
       - syllabus/syllabus.pdf
       - poly/poly.pdf
   skip_cleanup: true
