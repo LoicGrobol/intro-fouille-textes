@@ -91,7 +91,6 @@
 	\newunicodechar{√}{\sqrt}
 \usepackage{mleftright}
 
-
 \usepackage{tabu}
 \usepackage{booktabs}
 \usepackage{siunitx}
@@ -102,7 +101,6 @@
     \captionsetup{skip=1ex}
 \usepackage[iso]{datetime}
 
-\usepackage{csquotes}
 \usepackage{tikz}
 	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}}
     \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep = 0pt]{\node[#1] (#2) {$\displaystyle #3$};}}
@@ -195,6 +193,8 @@
 	\usemintedstyle{lovelace}
 	\setminted{autogobble, fontsize=\scriptsize, tabsize=2}
 	\setmintedinline{fontsize=auto}
+
+\usepackage{csquotes}
 
 \usepackage[style=authoryear, block=ragged, doi=false, isbn=false]{biblatex}
     \AtEveryBibitem{
@@ -313,21 +313,21 @@
 	\titlepage
 \end{frame}
 
-\begin{frame}{Exercice}
-    La tâche de \emph{résolution d'anaphores}\footnote{Ou en tout cas une version simplifiée} consiste à déterminer l'antécédent d'un pronom dans un texte.
-	\vspace{\bigskipamount}
-
-	\begin{overprint}
-		\onslide<2-3> \alert<3>{Le père d'Aino} est heureux de vous annoncer que \alert{sa} fille se marie dimanche prochain
-		\onslide<4-> Je n'ai pas pu faire rentrer \alert<5>{la poussette} dans \alert<6->{la valise} parce qu'\alert{elle} est trop \alt<4-5>{grande}{\textbf<6>{petite}}
-	\end{overprint}
-
-	\only<7>{
-		Reformuler cette tâche comme une combinaison de tâches élémentaires.
-	}
+\begin{frame}{Exemples de travail}
+	Donner trois représentations tabulaires (booléennes, occurrences, fréquences) fondées sur le vocabulaire du corpus suivant
+	\begin{enumerate}
+		\item « Le cinéma est un art, c’est aussi une industrie. »
+		\item « Personne, quand il est petit, ne veut être critique de cinéma. Mais ensuite, en France, tout le monde a un deuxième métier : critique de cinéma ! »
+		\item « Tout le monde a des rêves de Hollywood. »
+		\item « C’est la crise, l’économie de la France est menacée par la mondialisation. »
+		\item « En temps de crise, reconstruire l’industrie : tout un art ! »
+		\item « Quand une usine ferme, c’est que l’économie va mal. »
+	\end{enumerate}
 \end{frame}
 
-\begin{frame}{TF.IDF}
+\section{TF⋅IDF}
+
+\begin{frame}{TF⋅IDF}
     \only<-2>{On veut pouvoir \alert{pondérer} l'importance d'un terme (mot, caractère, $n$-gramme…) en fonction de sa \alert{spécificité} (au sens large) pour un document.}
 
     \begin{itemize}
@@ -354,7 +354,76 @@
     \end{itemize}
 \end{frame}
 
-% TODO: Slide sur la surprise, intro aux probas
+\begin{frame}{IDF, probabilités et surprise}
+	Dans un corpus de \num{1000} textes, \num{55} contiennent le mot \emph{kiwi}.
+	\pause
+	On choisit un texte au hasard sans en favoriser aucun. Serait-il surprenant que le texte choisi contienne le mot \emph{kiwi} ?
+\end{frame}
+
+\begin{frame}{Les maths en cinq secondes : probabilités}
+	objectif : on veut une mesure \alert{quantitative} du fait qu'un évènement dépendant du hasard (aléatoire) ait des chances de se produire. On appelle cette mesure \alert{probabilité} de l'évènement.
+	\pause
+	On impose que
+	\begin{itemize}
+		\item la probabilité d'un évènement soit un nombre compris entre \num{0} (pour un évènement impossible) et \num{1} (pour un évènement certain)
+		\item Si deux évènements sont \alert{incompatibles}, la probabilité qu'un des deux se produise est la somme de leurs probabilités respectives
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{IDF, probabilités et surprise}
+	Dans un corpus de \num{1000} textes, \num{55} contiennent le mot \emph{kiwi}.
+	\pause
+	On considère que les évènements $Aᵢ$ « avoir choisi le texte $i$ ».
+	\begin{enumerate}
+		\item Combien y a-t-il de $Aᵢ$ ?
+		\item Quelle est la probabilité qu'un des $Aᵢ$ qui se réalise ?
+		\item Pour un $i$ donné, quelle est la probabilité (notée $P(Aᵢ)$) de $Aᵢ$ ?
+		\item En déduire la probabilité que le texte choisi contienne le mot \emph{kiwi}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{IDF, probabilités et surprise}
+	La notion de \alert{surprise} vient de la théorie de l'information. La surprise d'un évènement $A$ mesure le caractère inattendu de la réalisation d'un évènement.
+
+	On la définit par
+	\begin{equation}
+		I(A) = -\log P(A)
+	\end{equation}
+
+	Intuitivement, plus la probabilité d'un évènement est faible, plus sa surprise est grande.
+\end{frame}
+
+\begin{frame}{Surprise}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[
+				title={Surprise : $y=-\log x$},
+				xlabel={$P(A)$},
+				ylabel={$I(A)$},
+				xmin=0, xmax=1, ymin=0,
+                width=0.9\textwidth,
+                height=0.8\textheight,
+			]
+                \addplot[highlighta, domain=0:1, samples=1001] {-ln(x)};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Suprise d'un évènement en fonction de sa probabilité}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{IDF}
+	On a pour le mot $m_j$
+	\begin{equation}
+		\IDF(m_j) = \log\mleft(\frac{m}{\#\compset{i}{n_{i,j}>0}}\mright) = -\log\mleft(\frac{\#\compset{i}{n_{i,j}>0}}{m}\mright)
+	\end{equation}
+
+	En déduire une interprétation de l$\IDF$ de \emph{kiwi} en terme de surprise
+\end{frame}
+
+\begin{frame}{Exercice}
+	Donner une représentation tabulaire du corpus d'exemple qui utilise les TF⋅IDF.
+\end{frame}
 
 \section{Représentations vectorielles et similarités}
 
@@ -566,6 +635,14 @@
             \caption{Exemple de travail}
     \end{figure}
 \end{columns}
+\end{frame}
+
+\begin{frame}{Exemple}
+	\begin{enumerate}
+		\item Représenter le corpus d'exemple sous forme tabulaire en utilisant comme attributs les fréquences de \emph{cinéma} et \emph{économie}
+		\item En déduire une représentation du corpus comme un ensemble de vecteurs du plan
+	\end{enumerate}
+	Pour la suite, choisir deux de ces vecteurs et calculer leur distance pour chacune des distances proposées.
 \end{frame}
 
 % TODO: overlay equation uncover ?
