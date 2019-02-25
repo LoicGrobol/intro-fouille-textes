@@ -114,6 +114,7 @@
 
     % Do evil things with soft path
     % From <https://tex.stackexchange.com/a/301364/8547>
+    % Græcum est, non legitur
     \makeatletter
         \def\@appendnamedsoftpath#1{%
             \pgfsyssoftpath@getcurrentpath\@temppatha
@@ -171,8 +172,7 @@
 
 \usepackage{minted}
 	\usemintedstyle{lovelace}
-	\setminted{autogobble, fontsize=\scriptsize, tabsize=2}
-	\setmintedinline{fontsize=auto}
+	\setminted{autogobble, tabsize=2}
 
 \usepackage[style=authoryear, block=ragged, doi=false, isbn=false]{biblatex}
     \AtEveryBibitem{
@@ -256,7 +256,7 @@
 \DeclareMathOperator*\argmax{argmax}
 
 % Easy column vectors \vcord{a,b,c} ou \vcord[;]{a;b;c}
-% Here be black magic
+% Græcum est, non legitur
 \ExplSyntaxOn
 	\NewDocumentCommand{\vcord}{O{,}m}{\vector_main:nnnn{p}{\\}{#1}{#2}}
 	\NewDocumentCommand{\tvcord}{O{,}m}{\vector_main:nnnn{psmall}{\\}{#1}{#2}}

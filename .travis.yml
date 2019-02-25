@@ -22,6 +22,8 @@ cache:
         - "slides/lecture4/_minted-lecture4"
         - "slides/lecture5/tikzpics/"
         - "slides/lecture5/_minted-lecture5"
+        - "slides/lecture6/tikzpics/"
+        - "slides/lecture6/_minted-lecture6"
         - "/tmp/texlive"
         - "$HOME/.texlive"
 
@@ -35,6 +37,7 @@ script:
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture3/lecture3.tex
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture4/lecture4.tex
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture5/lecture5.tex
+    - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture6/lecture6.tex
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape syllabus/syllabus.tex
 
 before_deploy:
