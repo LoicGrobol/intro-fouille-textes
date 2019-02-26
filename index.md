@@ -1,6 +1,7 @@
 ---
 title: Introduction à la fouille de textes — M1 pluriTAL 2019
 ---
+**2019-02-26 : [Les consignes pour les projets](projets.md) et [le script de vectorisation](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/vectorisation.py) sont en ligne**
 
   - **Où** Salle Benveniste, [ILPGA](http://www.ilpga.univ-paris3.f), [9 Rue des Bernardins, 75005 Paris](https://www.openstreetmap.org/way/55894044)
   - **Quand** Le lundi de 13h30 à 15h30 (voir aussi [le calendrier de Paris 3 pour les dates](http://www.univ-paris3.fr/le-calendrier-universitaire-116398.kjsp))
@@ -9,6 +10,7 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2019
 ## Documents et outils
 
   - [Syllabus](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/syllabus.pdf)
+  - [Consignes pour les projets](projets.md)
   - [Polycopié du cours](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/poly.pdf)
   - [Script de vectorisation](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/vectorisation.py) à lancer avec `python3 vectorisation.py chemin/du/corpus sortie.arff` où le corpus est un dossier contenant un sous-dossier par classe et chaque sous-dossier contient un fichier par document (avec l'extension `.txt`)
 
