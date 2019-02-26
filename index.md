@@ -6,10 +6,11 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2019
   - **Quand** Le lundi de 13h30 à 15h30 (voir aussi [le calendrier de Paris 3 pour les dates](http://www.univ-paris3.fr/le-calendrier-universitaire-116398.kjsp))
   - **Contact** Loïc Grobol [<loic.grobol@gmail.com>](mailto:loic.grobol@gmail.com)
 
-## Documents
+## Documents et outils
 
   - [Syllabus](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/syllabus.pdf)
   - [Polycopié du cours](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/poly.pdf)
+  - [Script de vectorisation](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/vectorisation.py) à lancer avec `python3 vectorisation.py chemin/du/corpus sortie.arff` où le corpus est un dossier contenant un sous-dossier par classe et chaque sous-dossier contient un fichier par document (avec l'extension `.txt`)
 
 ### Séances
 #### 2019-01-21 — Introduction et notion de tâche

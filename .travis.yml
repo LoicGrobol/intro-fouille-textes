@@ -59,6 +59,7 @@ deploy:
       - slides/lecture6/lecture6.pdf
       - syllabus/syllabus.pdf
       - poly/poly.pdf
+      - tools/vectorisation.py
   skip_cleanup: true
   on:
     repo: LoicGrobol/intro-fouille-textes
