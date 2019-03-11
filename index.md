@@ -32,11 +32,15 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2019
 
 #### 2019-02-18 – Représentation des attributs
   - À lire → Poly jusqu'à 2.6 (inclus)
-  - - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture5.pdf)
+  - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture5.pdf)
 
 #### 2019-02-25 — Modèles vectoriels
   - À lire → Poly jusqu'à 2.6 (inclus)
-  - - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture6.pdf)
+  - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture6.pdf)
+
+#### 2019-03-11 — Modèles vectoriels
+  - À lire → Poly jusqu'à 4.4 (non-inclus)
+  - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture7.pdf)
 
 ## Liens utiles
 

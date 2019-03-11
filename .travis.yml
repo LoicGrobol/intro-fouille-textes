@@ -42,7 +42,8 @@ script:
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture6/lecture6.tex
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture7/lecture7.tex
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape syllabus/syllabus.tex
-    - tar -czf "local/sample-data.tar.gz" data
+    _ mkdir -p _build
+    - tar -czf "_build/sample-data.tar.gz" data
 
 before_deploy:
     - echo "Deploying $RELEASE_FILES to GitHub releases"
@@ -64,7 +65,7 @@ deploy:
       - syllabus/syllabus.pdf
       - poly/poly.pdf
       - tools/vectorisation.py
-      - local/sample-data.tar.gz
+      - _build/sample-data.tar.gz
   skip_cleanup: true
   on:
     repo: LoicGrobol/intro-fouille-textes
