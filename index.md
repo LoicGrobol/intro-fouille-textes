@@ -1,8 +1,8 @@
 ---
 title: Introduction à la fouille de textes — M1 pluriTAL 2019
 ---
-**2019-03-11 : [Les données d'exemple](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/sample-data.tar.gz) pour le cours sont en ligne**
-**2019-02-26 : [Les consignes pour les projets](projets.md) et [le script de vectorisation](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/vectorisation.py) sont en ligne**
+  - **2019-03-11 : [Les données d'exemple](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/sample-data.tar.gz) pour le cours sont en ligne**
+  - **2019-02-26 : [Les consignes pour les projets](projets.md) et [le script de vectorisation](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/vectorisation.py) sont en ligne**
 
   - **Où** Salle Benveniste, [ILPGA](http://www.ilpga.univ-paris3.f), [9 Rue des Bernardins, 75005 Paris](https://www.openstreetmap.org/way/55894044)
   - **Quand** Le lundi de 13h30 à 15h30 (voir aussi [le calendrier de Paris 3 pour les dates](http://www.univ-paris3.fr/le-calendrier-universitaire-116398.kjsp))
