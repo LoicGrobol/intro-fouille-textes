@@ -1,0 +1,734 @@
+% Copyright © 2018, Loïc Grobol <loic.grobol@gmail.com>
+% This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (https://creativecommons.org/licenses/by/4.0/)
+
+\RequirePackage{xparse}
+\RequirePackage{shellesc}
+% Settings
+\NewDocumentCommand\myname{}{Loïc Grobol}
+\NewDocumentCommand\mylab{}{Lattice / ALMAnaCH}
+\NewDocumentCommand\pdftitle{}{Introduction à la fouille de textes}
+\NewDocumentCommand\mymail{}{loic.grobol@gmail.com}
+\NewDocumentCommand\titlepagetitle{}{\pdftitle}
+\NewDocumentCommand\titlepagesubtitle{}{Cours 7 : Classification et apprentissage artificiel}
+\NewDocumentCommand\docdate{}{2019-03-11}
+\NewDocumentCommand\conference{}{M1 Plurital}
+
+\documentclass[hyperref={unicode}, xcolor={svgnames}, french]{beamer}
+% Alternative navy blue for ⩽4 palettes
+\definecolor{highlighta}{RGB}{68, 118, 170}  % Navy blue
+
+% Colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf) v3.1
+% Bright scheme
+\definecolor{sronbrighttblue}{RGB}{68, 119, 170}
+\definecolor{sronbrightcyan}{RGB}{102, 204, 238}
+\definecolor{sronbrightgreen}{RGB}{34, 136, 51}
+\definecolor{sronbrightyellow}{RGB}{204, 187, 68}
+\definecolor{sronbrightred}{RGB}{238, 102, 119}
+\definecolor{sronbrightpurple}{RGB}{170, 51, 119}
+\definecolor{sronbrightgrey}{RGB}{187, 187, 187}
+
+\colorlet{highlight0}{sronbrighttblue}
+\colorlet{highlight1}{sronbrightcyan}
+\colorlet{highlight2}{sronbrightgreen}
+\colorlet{highlight3}{sronbrightyellow}
+\colorlet{highlight4}{sronbrightred}
+\colorlet{highlight5}{sronbrightpurple}
+\colorlet{highlight6}{sronbrightgrey}
+% Legacy highlights
+\definecolor{highlight7}{RGB}{136, 34, 85}    % Purple
+\definecolor{highlight8}{RGB}{170, 68, 153}   % Violet
+
+
+\usetheme[
+	sectionpage=progressbar,
+    subsectionpage=progressbar,
+	progressbar=frametitle,
+]{metropolis}
+	\colorlet{accent}{sronbrightgreen}
+	\setbeamercolor{frametitle}{bg=DarkSlateGrey}
+	\setbeamercolor{alerted text}{fg=accent}
+	\makeatletter
+		\setlength{\metropolis@progressinheadfoot@linewidth}{2pt}
+	\makeatother
+	% Avoid ugly whitespace below figures
+	% \makeatletter
+	% 	\renewenvironment{figure}[1][]{%
+	% 	\def\@captype{figure}%
+	% 	\par\centering}%
+	% 	{\par}
+	% \makeatother
+	% FIXME: not pretty and footnotes are still too big
+	\let\footnoterule\relax  % No footnote rule, push down footnote
+
+
+% Use non-standard fonts
+\usefonttheme{professionalfonts}
+\setsansfont[BoldFont={Fira Sans SemiBold}, ItalicFont={Fira Sans Book Italic}]{Fira Sans Book}
+\setmonofont[Scale=0.9]{Fira Mono}
+
+% Fix missing glyphs in Fira by delegating to polyglossia/babel
+\usepackage{newunicodechar}
+\newunicodechar{ }{~}   % U+202F NARROW NO-BREAK SPACE
+\newunicodechar{ }{ }  % U+2009 THIN SPACE
+
+% Notes on left screen
+% \usepackage{pgfpages}
+% \setbeameroption{show notes on second screen=left}
+
+
+\usepackage[french, english]{babel}
+\usepackage{amsfonts,amssymb}
+\usepackage{amsmath,amsthm}
+\usepackage{mathtools}	% AMS Maths service pack
+	\newtagform{brackets}{[}{]}	% Pour des lignes d'équation numérotées entre crochets
+	\mathtoolsset{showonlyrefs, showmanualtags, mathic}	% affiche les tags manuels (\tag et \tag*) et corrige le kerning des maths inline dans un bloc italique voir la doc de mathtools
+	\usetagform{brackets}	% Utilise le style de tags défini plus haut
+\usepackage{lualatex-math}
+
+\usepackage[math-style=french]{unicode-math}
+	\setmathfont{Libertinus Math}
+\usepackage{newunicodechar}
+	\newunicodechar{√}{\sqrt}
+\usepackage{mleftright}
+
+\usepackage{tabu}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{multicol}
+\usepackage{ccicons}
+\usepackage{bookmark}
+\usepackage{caption}
+    \captionsetup{skip=1ex}
+\usepackage[iso]{datetime}
+
+\usepackage{tikz}
+	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}}
+    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep = 0pt]{\node[#1] (#2) {$\displaystyle #3$};}}
+	\tikzset{
+		alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+		},
+        invisible/.style={opacity=0, fill opacity=0},
+		visible on/.style={alt={<#1>{}{invisible}}}
+	}
+    \usepackage{forest}
+    \usepackage{tkz-graph}
+    \usepackage[beamer, markings]{hf-tikz}
+    \usepackage{tikz-3dplot}
+    \usepackage{pgfplots}
+        % Due to pgfplots meddling with pgfkeys, we have to redefine alt here.
+        \pgfplotsset{
+    		alt/.code args={<#1>#2#3}{%
+    		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+    		},
+    	}
+        \pgfplotsset{compat=1.15}
+        \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}}
+
+    \usetikzlibrary{matrix}
+    \usetikzlibrary{shapes, shapes.geometric}
+    \usetikzlibrary{decorations.pathreplacing}
+	\usetikzlibrary{positioning, calc, intersections}
+    \usetikzlibrary{fit}
+    \usetikzlibrary{backgrounds}
+
+    % Do evil things with soft path
+    % From <https://tex.stackexchange.com/a/301364/8547>
+    \makeatletter
+        \def\@appendnamedsoftpath#1{%
+            \pgfsyssoftpath@getcurrentpath\@temppatha
+            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
+            \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb}%
+            \pgfsyssoftpath@setcurrentpath\@temppatha
+        }
+        \def\@appendnamedpathforactions#1{%
+            \pgfsyssoftpath@getcurrentpath\@temppatha
+            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
+            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb}%\usepackage{tikz-3dplot}
+
+            \let\tikz@actions@path\@temppatha
+        }
+
+        \tikzset{
+            use path for main/.code={%
+                \tikz@addmode{%
+                    \expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname
+                }%
+            },
+            append path for main/.code={%
+                \tikz@addmode{%
+                    \@appendnamedsoftpath{#1}%
+                }%
+            },
+            use path for actions/.code={%
+                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}%
+            },
+            append path for actions/.code={%
+                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions
+                \@appendnamedpathforactions{#1}}%
+            },
+            use path/.style={%
+                use path for main=#1,
+                use path for actions=#1,
+            },
+            append path/.style={%
+                append path for main=#1,
+                append path for actions=#1
+            }
+        }
+    \makeatother
+
+    % TikZ externalisation
+    \usetikzlibrary{external}
+    % Create the `tikzpics/` folder if it does not exist
+    \ShellEscape{mkdir -p tikzpics}
+    % Only externalise pictures on demand (to avoid messing up with metropolis theme)
+    \tikzset{
+        external/export=false,
+        external/prefix=tikzpics/
+    }
+    \tikzexternalize
+
+\usepackage{minted}
+	\usemintedstyle{lovelace}
+	\setminted{autogobble, fontsize=\scriptsize, tabsize=2}
+	\setmintedinline{fontsize=auto}
+
+\usepackage{csquotes}
+
+\usepackage[style=authoryear, block=ragged, doi=false, isbn=false]{biblatex}
+    \AtEveryBibitem{
+        \ifentrytype{online}
+        {} {
+            \iffieldequalstr{howpublished}{online}
+            {
+                \clearfield{howpublished}
+            } {
+                \clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}
+            }
+        }
+    }
+
+	\addbibresource{biblio.bib}
+
+% Compact bibliography style
+\setbeamertemplate{bibliography item}[text]
+
+\AtEveryBibitem{
+    \clearfield{series}
+    \clearfield{pages}
+    \clearlist{publisher}
+    \clearname{editor}
+    \clearlist{location}
+}
+\renewcommand*{\bibfont}{\tiny}
+
+\usepackage{hyperxmp}	% XMP metadata
+
+\usepackage[type={CC}, modifier={by}, version={4.0}]{doclicense}
+
+\usepackage{todonotes}
+\let\todox\todo
+\renewcommand\todo[1]{\todox[inline]{#1}}
+
+\title{\titlepagetitle}
+\subtitle{\titlepagesubtitle}
+\author{\textbf{\myname} (\mylab)}
+\institute{}
+\date{\tiny Version {\yyyymmdddate\today}T\currenttime}
+
+\titlegraphic{\ccby}
+
+% Tikz styles
+
+% Schémas de tâches
+\tikzset{
+    >=stealth,
+    hair lines/.style={line width = 0.05pt, lightgray},
+    data/.style={draw, ellipse},
+    program/.style={draw, rectangle},
+    accent on/.style={alt={<#1>{draw=accent, text=accent, thick}{draw}}},
+    true scale/.style={scale=#1, every node/.style={transform shape}},
+    highlight/.style={color=highlight#1}
+}
+
+% Styles des heatmap pour les moyennes
+\pgfplotsset{
+    meanheatmap/.style={
+        colorbar, colormap name=SRON,
+        view={0}{90},
+        samples=100,
+        domain=0:1,
+        min=0, max=1,
+        xlabel={$P$},
+        ylabel={$R$},
+    }
+}
+
+% Commands spécifiques
+\NewDocumentCommand\shorturl{ O{https} O{://} m }{%
+    \href{#1#2#3}{\nolinkurl{#3}}%
+}
+
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiterX\compset[2]{\lbrace}{\rbrace}{#1\,\delimsize|\,#2}
+\DeclarePairedDelimiterX\innprod[2]{\langle}{\rangle}{#1\,\delimsize|\,#2}
+
+\DeclareMathOperator*\argmax{argmax}
+
+% Easy column vectors \vcord{a,b,c} ou \vcord[;]{a;b;c}
+% Here be black magic
+\ExplSyntaxOn
+	\NewDocumentCommand{\vcord}{O{,}m}{\vector_main:nnnn{p}{\\}{#1}{#2}}
+	\NewDocumentCommand{\tvcord}{O{,}m}{\vector_main:nnnn{psmall}{\\}{#1}{#2}}
+	\seq_new:N\l__vector_arg_seq
+	\cs_new_protected:Npn\vector_main:nnnn #1 #2 #3 #4{
+		\seq_set_split:Nnn\l__vector_arg_seq{#3}{#4}
+		\begin{#1matrix}
+			\seq_use:Nnnn\l__vector_arg_seq{#2}{#2}{#2}
+		\end{#1matrix}
+	}
+\ExplSyntaxOff
+
+\DeclareMathOperator{\TF}{TF}
+\DeclareMathOperator{\IDF}{IDF}
+
+\ExplSyntaxOn
+    \DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
+\ExplSyntaxOff
+
+
+% ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████
+% ██   ██ ██    ██ ██      ██    ██ ████  ████ ██      ████   ██    ██
+% ██   ██ ██    ██ ██      ██    ██ ██ ████ ██ █████   ██ ██  ██    ██
+% ██   ██ ██    ██ ██      ██    ██ ██  ██  ██ ██      ██  ██ ██    ██
+% ██████   ██████   ██████  ██████  ██      ██ ███████ ██   ████    ██
+
+
+\begin{document}
+\pdfbookmark[2]{Title}{title}
+
+\begin{frame}[plain]
+	\titlepage
+\end{frame}
+
+\begin{frame}{Exemples de travail}
+	Donner trois représentations tabulaires (booléennes, occurrences, fréquences) fondées sur le vocabulaire du corpus suivant
+	\begin{enumerate}
+		\item « Le cinéma est un art, c’est aussi une industrie. »
+		\item « Personne, quand il est petit, ne veut être critique de cinéma. Mais ensuite, en France, tout le monde a un deuxième métier : critique de cinéma ! »
+		\item « Tout le monde a des rêves de Hollywood. »
+		\item « C’est la crise, l’économie de la France est menacée par la mondialisation. »
+		\item « En temps de crise, reconstruire l’industrie : tout un art ! »
+		\item « Quand une usine ferme, c’est que l’économie va mal. »
+	\end{enumerate}
+\end{frame}
+
+\section{Classification}
+
+\begin{frame}[label=classif,fragile]{Classification}
+    La \emph{classification} est la tâche consistant à \alert{répartir} des données dans un ensemble de classes.
+    \begin{itemize}
+        \item « Détecter les \textcolor{highlight8}{spams} dans un ensemble d'\textcolor{highlight4}{emails} »
+        \item « Repérer dans un ensemble de \textcolor{highlight4}{tweets} ceux qui sont \textcolor{highlight8}{sarcastiques} ou \textcolor{highlight8}{ironiques} »
+        \item « Classer un ensemble de \textcolor{highlight4}{textes} par \textcolor{highlight8}{genre littéraire} »
+    \end{itemize}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.80]
+            \node[data, highlight=4] (in) {Donnée};
+            \node[program, right=1cm of in, text width=15ex] (prog) {Programme de classification};
+            \node[data, right=1cm of prog, highlight=1] (out) {Classe};
+            \node[data, below=.6cm of prog, highlight=8] (res) {Classes possibles};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (res) -- (prog);
+        \end{tikzpicture}
+    \end{figure}
+    \begin{itemize}
+        \item Les \textcolor{highlight8}{classes} sont connus à l'avance
+        \item Chaque \textcolor{highlight4}{donnée} appartient à une et une seule \textcolor{highlight1}{classe}.
+    \end{itemize}
+\end{frame}
+
+\subsection{Principes généraux}
+\begin{frame}{Classification par règles expertes}
+    La façon traditionnelle de faire de la classification
+    \begin{itemize}
+        \item<+-> Faire écrire par des experts du domaine un ensemble de règles associant un exemple à une classe
+        \item<+-> Exemple : classification du sentiment
+			\begin{itemize}
+                \item Établir un lexique affectif mot → $±1$
+                \item Associer à chaque texte la somme des polarités de ses termes
+                \item Un texte est positif si la somme est positive, négatif sinon
+            \end{itemize}
+        \item<+-> Qu'en pensez-vous ?
+        \item<+-> Pour notre exemple de classification culture/société, comment faire ?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Classification par apprentissage automatique}
+    \begin{block}{Rappel}
+        Un \textcolor{highlight0}{programme d'apprentissage automatique} est un programme générant à partir d'\textcolor{highlight2}{exemples} traités par des humains un \textcolor{highlight4}{modèle} qui sert de ressource à un \textcolor{highlight5}{programme réalisant une tâche}.
+    \end{block}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[scale=0.9, every node/.style={transform shape}]
+            \node[data] (in) {Entrée};
+            \node[program, highlight=5, right=.75cm of in, text width=10ex] (prog) {Programme réalisant la tâche};
+            \node[data, right=.75cm of prog] (out) {Résultat};
+            \node[program, highlight=0, above=1cm of prog, text width=13ex] (progapp) {Programme d'apprentissage};
+            \node[data, highlight=4, right=.75cm of progapp] (mod) {Modèle};
+            \node[data, highlight=2, left=.75cm of progapp] (train) {Exemples};
+            \draw[->] (in) -- (prog);
+            \draw[->] (prog) -- (out);
+            \draw[->] (mod) |- ($(prog.north)+(0, 0.5cm)$) -| (prog.north);
+            \draw[->] (train) -- (progapp);
+            \draw[->] (progapp) -- (mod);
+        \end{tikzpicture}
+        \caption{Schéma d'une approche par apprentissage automatique}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Exemple : regression}
+    « Sachant que ma maison fait $s\,\si{m\square}$, en fonction du marché, quel prix puis-je en attendre ? »
+    \begin{description}
+        \item[Hypothèse] Il existe une fonction $f$ qui à la surface $x$ d'une maison associe son prix de vente
+        \item[Données] Le prix de vente de $8$ maisons et leurs surfaces respectives
+        \item[Objectif] Déterminer l'expression de $f$ et en déduire $f(s)$, le prix de vente de ma maison
+    \end{description}
+    \begin{itemize}
+        \item[→] Problème : $f$ pourrait avoir n'importe quelle forme !
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Choix d'une famille de fonctions}
+    Problème : $f$ pourrait avoir n'importe quelle forme !
+    \begin{itemize}
+        \item[→] On choisit une famille de fonctions et on y cherche celle qui semble le mieux correspondre à nos exemples
+        \item Par exemple avec des polynômes :
+            \begin{equation}
+                f(x) = a₀ + a₁x + a₂x²+ … + a_nx^n
+            \end{equation}
+        \item En général « correspondre » au sens des moindres carrés
+    \end{itemize}
+    \textbf{Vocabulaire} Le degré (fixé manuellement) est un \alert{hyperparamètre}, les coefficients $a_i$ appris automatiquement sont des \alert{paramètres}.
+    Déterminer les paramètres qui minimisent le coût (ici la distance entre le modèle est les exemple) est une tâche d'\alert{optimisation}.
+
+    Étant donné une surface, on peut alors donner le prix correspondant : on donc a appris à prédire les prix !
+\end{frame}
+
+\begin{frame}{Régression linéaire}
+    \vspace{-1\bigskipamount}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[
+				xmin=0, xmax=800,
+				ymin=0, ymax=600000,
+                width=\textwidth,
+                height=0.8\textheight,
+                xlabel={Surface},
+                ylabel={Prix},
+                title={Régression linéaire : $y=ax+b$},
+                scaled ticks=false,
+                ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}
+			]
+                \addplot[
+                    only marks
+                ] table [x index=0, y index=1, header=false, row sep=crcr]{
+                    150	200000\\
+                    155	210000\\
+                    160	250000\\
+                    170	300000\\
+                    200	310000\\
+                    260	350000\\
+                    300	400000\\
+                    600	405000\\
+                };
+                \addplot[highlighta, domain=0:800, samples=1001] {402.28*x+202807.17};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Polynôme de degré $1$ (linéaire)}
+    \end{figure}
+
+    Voir aussi \shorturl{ggbm.at/TagmZdxN}
+\end{frame}
+
+\begin{frame}{Régression quadratique}
+    \vspace{-1\bigskipamount}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[
+				xmin=0, xmax=800,
+				ymin=0, ymax=600000,
+                width=\textwidth,
+                height=0.8\textheight,
+                xlabel={Surface},
+                ylabel={Prix},
+                title={Régression quadratique : $y=ax²+bx+c$},
+                scaled ticks=false,
+                ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}
+			]
+                \addplot[
+                    only marks
+                ] table [x index=0, y index=1, header=false, row sep=crcr]{
+                    150	200000\\
+                    155	210000\\
+                    160	250000\\
+                    170	300000\\
+                    200	310000\\
+                    260	350000\\
+                    300	400000\\
+                    600	405000\\
+                };
+                \addplot[highlighta, domain=0:800, samples=1001] {-2.56*x^2+2319.29*x-64113.23};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Polynôme de degré $2$ (quadratique)}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Régression polynomiale}
+    \vspace{-1\bigskipamount}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[
+				xmin=0, xmax=800,
+				ymin=0, ymax=600000,
+				restrict y to domain=-1000:700000,
+				width=\textwidth,
+				height=0.8\textheight,
+				xlabel={Surface},
+				ylabel={Prix},
+				title={$y=a₀ + a₁x + a₂x²+ … + a₆x⁶$},
+				scaled ticks=false,
+				ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}
+            ]
+                \addplot[
+                    only marks
+                ] table [x index=0, y index=1, header=false, row sep=crcr]{
+                    150	200000\\
+                    155	210000\\
+                    160	250000\\
+                    170	300000\\
+                    200	310000\\
+                    260	350000\\
+                    300	400000\\
+                    600	405000\\
+                };
+                \addplot[highlighta, domain=100:310, samples at={100,101,...,311,311.1,311.15,311.18970915,311.19,311.2,...,312}] {9.133693238227375E-7*x^6-0.0015210072640020665*x^5+0.9901617434548338*x^4-326.9727250825201*x^3+58224.97189714596*x^2-5327933.125949258*x+196687335.202412};
+                \addplot[highlighta, domain=590:610, samples at={599.001,599.002,...,599.945,599.9455,599.945526073,599.9456,599.95,599.96,...,600,600.00005,...,610}] {9.133693238227375E-7*x^6-0.0015210072640020665*x^5+0.9901617434548338*x^4-326.9727250825201*x^3+58224.97189714596*x^2-5327933.125949258*x+196687335.202412};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Polynôme de degré $6$}\label{fig|overfit}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Surapprentissage}
+    La figure \ref{fig|overfit} est un exemple de cas de \alert{surapprentisage} (\emph{overfitting})
+    \begin{itemize}
+        \item Avoir choisi le degré $6$ permet de passer exactement par tous les points d'entraînement
+        \item Mais le modèle est très mauvais !
+    \end{itemize}
+    Comment trouver un modèle \emph{vraiment} bon ?
+    \begin{itemize}
+        \item En limitant le nombre de paramètres
+        \item En limitant la précision des paramètres
+        \item Par le choix des hyperparamètres
+        \item En utilisant un ensemble de développement
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{« Apprentissage » ?}
+    Ce qu'on appelle \emph{apprendre} pour une machine consiste à transformer des exemples $(x_i, y_i)$ en règle $f: x⟼y$. Soit
+    \begin{itemize}
+        \item Étant donné un espace de recherche $F$
+        \item Étant donnée une mesure de qualité $q$ sur $F$
+        \item Trouver $f∈F$ qui maximise $q$
+    \end{itemize}
+    En général $F$ est paramétré par des nombre $a₁,…,a_n$ et on se ramène ainsi à chercher leurs valeurs pour que $q(f_{a₁,…,a_n})$ soit maximal.
+\end{frame}
+
+\begin{frame}{« Automatique » ?}
+    Il reste encore à l'humain à
+    \begin{enumerate}[<alert@+>]
+        \item\label{item|searchspace} Choisir un espace de recherche adapté
+        \item\label{item|loss} Choisir une mesure de qualité adaptée
+        \item\label{item|optim} Choisir une procédure d'optimisation adaptée
+    \end{enumerate}
+    \only<1-3>{En tenant compte}
+
+    \begin{overprint}
+    \onslide<1>
+        Pour \ref{item|searchspace},
+        \begin{itemize}
+            \item De l'expressivité du modèle et de son adéquation au problème
+            \item De la lisibilité du résultat
+        \end{itemize}
+    \onslide<2>
+        Pour \ref{item|loss},
+        \begin{itemize}
+            \item De l'adéquation aux données d'apprentissage
+            \item La généralisabilité (éviter le surapprentissage)
+            \item La simplicité : rasoir d'Ockham
+        \end{itemize}
+    \onslide<3>
+        Pour \ref{item|optim},
+        \begin{itemize}
+            \item De l'incrémentalité
+            \item Du temps de calcul
+        \end{itemize}
+        On verra dans la suite que ces trois choix sont souvent dépendants.
+    \onslide<4>
+        \begin{itemize}
+            \item Il n'y a pas de recette miracle qui marche à chaque fois : « \emph{There is no free lunch} »
+            \item On devrait peut-être parler d'apprentissage \emph{artificiel} plutôt qu'\emph{automatique} cf \emph{Machine Learning}
+        \end{itemize}
+    \end{overprint}
+\end{frame}
+
+\begin{frame}{Plan des réjouissances}
+    On présente dans la suite plusieurs techniques classiques de classification par apprentissage automatique suivant avec pour chacune
+    \begin{itemize}
+        \item Espace de recherche
+        \item Hyperparamètres
+        \item Technique de recherche
+        \item Propriétés et usages
+    \end{itemize}
+\end{frame}
+
+% ███████ ███████ ██████   ██████  ██████
+%    ███  ██      ██   ██ ██    ██ ██   ██
+%   ███   █████   ██████  ██    ██ ██████
+%  ███    ██      ██   ██ ██    ██ ██   ██
+% ███████ ███████ ██   ██  ██████  ██   ██
+
+\subsection{Algorithme de la classe majoritaire}
+\begin{frame}{Algorithme de la classe majoritaire}
+    \textbf{Dans Weka} classifiers > rules > ZeroR
+
+    \textbf{Espace de recherche} Ensemble des fonctions constantes
+
+    Autrement dit : on renvoie toujours la même classe quelle que soit l'entrée.
+
+    \textbf{Hyperparamètres} Aucun !
+
+    \textbf{Technique de recherche} On choisit la fonction qui renvoie la classe majoritaire dans l'ensemble d'apprentissage.
+\end{frame}
+
+\begin{frame}{Propriétés}
+    \begin{itemize}
+        \item Très rapide en apprentissage comme en test
+        \item Très peu performant
+            \begin{itemize}
+                \item[→] Dans le meilleur des cas (si les classes sont déséquilibrées) on fait un peu mieux que le hasard
+            \end{itemize}
+    \end{itemize}
+    Il s'agit plutôt d'une \emph{baseline} : un système sérieux devrait en principe faire mieux.
+\end{frame}
+
+% ██   ██      ███    ██ ███    ██
+% ██  ██       ████   ██ ████   ██
+% █████  █████ ██ ██  ██ ██ ██  ██
+% ██  ██       ██  ██ ██ ██  ██ ██
+% ██   ██      ██   ████ ██   ████
+
+\subsection{$k$-plus proches voisins}
+
+\begin{frame}{$k$-plus proches voisins}
+    \textbf{Dans Weka} classifiers > lazy > lBk
+
+    \textbf{Espace de recherche} Le singleton $\{f\}$, où $f$ est la fonction qui à un exemple $x$ associe la classe majoritaire dans l'ensemble des $k$ données d'entraînement les plus proches de $x$.
+
+    En général on utilise la distance euclidienne ou le coefficient d'overlap (pour des vecteurs booléens)
+
+    \textbf{Hyperparamètres} $k$, un entier \only<2>{
+        \begin{itemize}
+            \item Plus petit que le nombre d'exemples d'apprentissages
+            \item Idéalement non-multiple du nombre de classes
+        \end{itemize}}
+
+    \textbf{Technique de recherche} Aucune !
+\end{frame}
+
+% TODO: improve this
+\begin{frame}[fragile]{Exemple}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+
+            \draw[->] (-0.5,0) -- (5.25, 0);
+            \foreach \x in {1,...,5}
+                \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+
+            \draw[->] (0, -0.5) -- (0, 4.25);
+            \foreach \y in {1,...,4}
+                \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+            \draw (0, 0) node[below left] {\footnotesize $0$};
+
+            \foreach \x/\y/\c in {2/1/highlight6,4/0/highlight6,1/0/highlight6,2/3/highlight6,0/3/highlighta,1/2/highlighta,0/2/highlighta}{
+                \path[fill=\c] (\x, \y) circle[radius=3pt];
+            }
+
+            \foreach \ex/\ey [count=\i from 1] in {1/3,1/1,3/2} {
+                \path[fill=highlight3, visible on=\i] (\ex, \ey) circle[radius=3pt];
+            }
+        \end{tikzpicture}
+        \caption{Exemple de classification : $k$-NN}
+    \end{figure}
+    \only<3>{}
+\end{frame}
+
+\begin{frame}{Propriétés}
+    \begin{itemize}
+        \item Aucune recherche → apprentissage immédiat
+        \item Coût en opération : Taille de l'ensemble d'entraînement $×$ coût d'un calcul de distance
+        \item Pour être efficace : ensemble d'entraînement suffisamment dense
+            \begin{itemize}
+                \item[→] D'où sa faible utilisation en pratique en fouille de texte (à part comme baseline)
+            \end{itemize}
+        \item Fréquemment utilisé pour des moteurs de recommandation
+    \end{itemize}
+\end{frame}
+
+%  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
+% ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
+% ███████ ██████  ██████  █████   ██ ██  ██ ██   ██ ██   ███
+% ██   ██ ██      ██      ██      ██  ██ ██ ██   ██ ██  ██ ██
+% ██   ██ ██      ██      ███████ ██   ████ ██████  ██ ██   ██
+
+\appendix
+\pgfkeys{/metropolis/inner/sectionpage=simple}  % Avoid random errors with section page progressbar
+\section{Annexes}
+\pdfbookmark[2]{Remerciements}{acknowledgements}
+\begin{frame}{Remerciements}
+    Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017fouille} \parencite{tellier2017fouille} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
+\end{frame}
+
+\pdfbookmark[2]{Références}{references}
+\begin{frame}[allowframebreaks]{References}
+    \printbibliography[heading=none]
+\end{frame}
+
+\pdfbookmark[2]{Licence}{licence}
+\begin{frame}{Licence}
+    \begin{center}
+        {\huge \ccby}
+        \vfill
+        This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
+
+        Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
+        \vfill
+        © 2019, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
+
+        \shorturl[http]{lattice.cnrs.fr/Grobol-Loic}
+    \end{center}
+\end{frame}
+
+\end{document}
