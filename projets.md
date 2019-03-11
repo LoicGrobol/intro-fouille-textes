@@ -21,7 +21,7 @@ Le rendu devra comporter :
   - **Les expériences réalisées**
     - Précisez les réglages des paramètres et le mode de calcul des performances. Vos expériences doivent être **reproductibles**
     - Vous devez tester au moins deux algorithmes de classification parmi ceux vu en cours et au moins un des trois principaux (J48, Naive Bayes et SVM)
-    - Évidemment, rien ne vous enmpêche d'utiliser des algoritmes que nous n'avons pas vu en cours…
+    - Évidemment, rien ne vous empêche d'utiliser des algoritmes que nous n'avons pas vu en cours…
   - Les résultats des expériences et une discussion de ces résultats
 
 - Les données utilisées (ou un échantillon si le volume est important)
@@ -41,7 +41,8 @@ Pour constituer vos corpus de travail
 
 - Des ressources linguistiques exploitables librement et facilement sont disponibles sur
   - [Ortolang](https://www.ortolang.fr/)
-  - [Clarin](https://lindat.mff.cuni.cz/repository/xmlui/) . Vous pouvez aussi aller voir du côté de l'API twitter pour récupérer des données (qui ne sont pas nécessairement uniquement linguistiques)
+  - [Clarin](https://lindat.mff.cuni.cz/repository/xmlui/).
+  - Vous pouvez aussi aller voir du côté de l'API twitter pour récupérer des données (qui ne sont pas nécessairement uniquement linguistiques)
 - [Wikisource](https://fr.wikisource.org) et évidemment [Wikipédia](https://fr.wikisource.org) proposent des textes sous licences libres comportant déjà des métadonnées
 - Vous pouvez réaliser des aspirations de sites webs avec [Gromoteur](http://gromoteur.ilpga.fr/). Les corpus de presse se prêtent bien aux tâches de classification
 - Si les corpus de tweets vous intéressent, n'hésitez pas à regarder du côté de l'API Twitter
@@ -54,7 +55,7 @@ Pour constituer vos corpus de travail
   - N'héistez pas à adapter ce script pour l'adapter à vos besoins : une meilleure segmentation, un calcul des fréquences relatives ou des TF⋅IDF…
 
 - Si programmer ne vous effraie pas, allez voir du côté de [scikit-learn](https://scikit-learn.org) qui propose des versions faciles à utiliser des algorithmes vu en cours.
-- Si vous voulez réaliser des traitements linguistiques plus sophistiqués sur vos données, allez voi [spacy](https://spacy.io), [nltk](https://www.nltk.org) ou [CoreNLP](https://stanfordnlp.github.io/CoreNLP). Évidemment, n'utilisez pas les classifieurs de documents déjà inclus directement comme entrée de vos classifieurs à vous…
+- Si vous voulez réaliser des traitements linguistiques plus sophistiqués sur vos données, allez voir [spacy](https://spacy.io), [nltk](https://www.nltk.org) ou [CoreNLP](https://stanfordnlp.github.io/CoreNLP). Évidemment, n'utilisez pas les classifieurs de documents déjà inclus directement comme entrée de vos classifieurs à vous…
 
 ## Exemples de sujets
 
