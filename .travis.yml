@@ -24,6 +24,8 @@ cache:
         - "slides/lecture5/_minted-lecture5"
         - "slides/lecture6/tikzpics/"
         - "slides/lecture6/_minted-lecture6"
+        - "slides/lecture7/tikzpics/"
+        - "slides/lecture7/_minted-lecture6"
         - "/tmp/texlive"
         - "$HOME/.texlive"
 
@@ -38,7 +40,9 @@ script:
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture4/lecture4.tex
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture5/lecture5.tex
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture6/lecture6.tex
+    - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture7/lecture7.tex
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape syllabus/syllabus.tex
+    - tar -czf "local/sample-data.tar.gz" data
 
 before_deploy:
     - echo "Deploying $RELEASE_FILES to GitHub releases"
@@ -60,6 +64,7 @@ deploy:
       - syllabus/syllabus.pdf
       - poly/poly.pdf
       - tools/vectorisation.py
+      - local/sample-data.tar.gz
   skip_cleanup: true
   on:
     repo: LoicGrobol/intro-fouille-textes
