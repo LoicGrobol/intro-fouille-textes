@@ -62,7 +62,7 @@ deploy:
       - slides/lecture4/lecture4.pdf
       - slides/lecture5/lecture5.pdf
       - slides/lecture6/lecture6.pdf
-      - slides/lecture6/lecture7.pdf
+      - slides/lecture7/lecture7.pdf
       - syllabus/syllabus.pdf
       - poly/poly.pdf
       - tools/vectorisation.py
