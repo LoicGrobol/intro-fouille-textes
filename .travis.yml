@@ -72,4 +72,4 @@ deploy:
     repo: LoicGrobol/intro-fouille-textes
     branch:
         - master
-        - stable
+        - stableb

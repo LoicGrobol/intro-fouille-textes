@@ -1,8 +1,9 @@
 #!/bin/bash
-if [ -z "$TRAVIS_TAG" ]
+git config --local user.name "Loïc Grobol"
+git config --local user.email "loic.grobol@gmail.com"
+if [ $TRAVIS_BRANCH == 'master' ]
 then
-    git config --local user.name "Loïc Grobol"
-    git config --local user.email "loic.grobol@gmail.com"
-    export TRAVIS_TAG=latest
-    git tag -f $TRAVIS_TAG
+    git tag -f latest
+elif [ $TRAVIS_BRANCH == 'stableb' ]
+    git tag -f stable
 fi
