@@ -5,6 +5,7 @@ dist: xenial
 branches:
     except:
         - latest
+        - stable
         - gh-pages
 
 python:
