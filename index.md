@@ -44,6 +44,9 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2019
   - À lire → Poly jusqu'à 4.4 (non-inclus)
   - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture7.pdf)
 
+#### 2019-03-18 — Arbres de décision
+  - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture8.pdf)
+
 ## Liens utiles
 
   - [Le site du projet Weka](https://www.cs.waikato.ac.nz/ml/weka/)
