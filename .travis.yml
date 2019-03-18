@@ -28,6 +28,8 @@ cache:
         - "slides/lecture6/_minted-lecture6"
         - "slides/lecture7/tikzpics/"
         - "slides/lecture7/_minted-lecture6"
+        - "slides/lecture8/tikzpics/"
+        - "slides/lecture8/_minted-lecture6"
         - "/tmp/texlive"
         - "$HOME/.texlive"
 
@@ -43,6 +45,7 @@ script:
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture5/lecture5.tex
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture6/lecture6.tex
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture7/lecture7.tex
+    - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture8/lecture8.tex
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape syllabus/syllabus.tex
     - mkdir -p _build
     - tar -czf "_build/sample-data.tar.gz" data
@@ -65,6 +68,7 @@ deploy:
       - slides/lecture5/lecture5.pdf
       - slides/lecture6/lecture6.pdf
       - slides/lecture7/lecture7.pdf
+      - slides/lecture8/lecture8.pdf
       - syllabus/syllabus.pdf
       - poly/poly.pdf
       - tools/vectorisation.py
