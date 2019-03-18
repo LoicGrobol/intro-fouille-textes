@@ -381,20 +381,97 @@
 \end{frame}
 
 \begin{frame}{Arbre de décision}
-    Modèle de prise de décision déterministe par succession de choix.: $k$-NN
+    Modèle de prise de décision déterministe
     \begin{figure}
         \tikzset{external/export=true}
         \begin{forest}
             for tree={draw, l sep=2em, s sep=3em}
+            [{fouille de textes ?},ellipse
+				[{dormir},edge label={node[midway,left] {oui}}]
+				[{écouter},edge label={node[midway,right] {non}}]
+            ]
+        \end{forest}
+        \caption{Prise de décision standard en M1 PluriTAL}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Arbre de décision}
+    Modèle de prise de décision déterministe par succession de choix
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{forest}
+            for tree={draw, l sep=2em, s sep=3em}
+            [{fouille de textes ?},ellipse
+				[semaine,ellipse,edge label={node[midway,left] {oui}}
+					[{écouter},edge label={node[midway,left] {$⩽3$}}]
+					[{dormir},edge label={node[midway,right] {$>3$}}]
+				]
+				[{écouter},edge label={node[midway,right] {non}}]
+            ]
+	    \end{forest}
+	    \caption{Prise de décision standard en M1 PluriTAL}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Arbre de décision}
+    Modèle de prise de décision déterministe par succession de choix (pas nécessairement binaires)
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{forest}
+            for tree={draw, l sep=2em, s sep=3em}
+            [{fouille de textes ?},ellipse
+				[semaine,ellipse,edge label={node[midway,left] {oui}}
+					[{écouter},edge label={node[midway,left] {$⩽3$}}]
+					[{dormir},edge label={node[midway] {$∈[4,9]$}}]
+					[{écouter},edge label={node[midway,right] {$>10$}}]
+				]
+				[{écouter},edge label={node[midway,right] {non}}]
+            ]
+	    \end{forest}
+	    \caption{Prise de décision standard en M1 PluriTAL}
+	\end{figure}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Exercice}
+	Construire un arbre de décision pour les données suivantes
+	\vspace{-\bigskipamount}
+	\begin{table}
+		\small
+		\begin{tabu} to .9\linewidth {*{6}{c}}
+			No  & outlook  & humidity & windy & play\\
+			\hline
+			1 & sunny & high & false & no\\
+			2 & sunny & high & true & no\\
+			3 & overcast & high & false & yes\\
+			4 & rainy & high & false & yes\\
+			5 & rainy & high & false & yes\\
+			6 & rainy & low & true & no\\
+			7 & overcast & low & true & yes\\
+			8 & sunny & high & false & no\\
+			9 & sunny & low & false & yes\\
+			10 & rainy & high & false & yes\\
+			11 & sunny & high & low & yes\\
+			12 & overcast & high & true & yes\\
+			13 & overcast & low & false & yes\\
+			14 & rainy & high & true & no\\
+		\end{tabu}
+	\end{table}
+\end{frame}
+
+\begin{frame}[fragile]
+	\begin{figure}
+        \tikzset{external/export=true}
+        \begin{forest}
+            for tree={draw, l sep=2em, s sep=3em}
             [outlook,ellipse
-                [humidity,ellipse,edge label={node[midway,left] {=sunny}}
-                    [yes,edge label={node[midway,left] {$⩽75$}}]
-                    [no,edge label={node[midway,right] {$>75$}}]
+                [humidity,ellipse,edge label={node[midway,left] {sunny}}
+                    [yes,edge label={node[midway,left] {low}}]
+                    [no,edge label={node[midway,right] {high}}]
                 ]
-                [yes,edge label={node[midway] {=overcast}}]
-                [windy,ellipse,edge label={node[midway,right] {=rainy}}
-                    [yes,edge label={node[midway,left] {=true}}]
-                    [no,edge label={node[midway,right] {=false}}]
+                [yes,edge label={node[midway] {overcast}}]
+                [windy,ellipse,edge label={node[midway,right] {rainy}}
+                    [yes,edge label={node[midway,left] {true}}]
+                    [no,edge label={node[midway,right] {false}}]
                 ]
             ]
         \end{forest}
@@ -408,7 +485,7 @@
         \begin{minted}{python}
             def classify(outlook, humidity, windy):
                 if outlook == "sunny":
-                    if humidity <= 75:
+                    if humidity == "low":
                         return "yes"
                     else:
                         return "no"
@@ -422,20 +499,6 @@
         \end{minted}
         \caption{Code correspondant à l'arbre précédent}
     \end{figure}
-\end{frame}
-
-\begin{frame}[fragile=singleslide]{Exercice}
-	Construire un arbre de décision pour les données suivantes
-	\begin{table}
-		\begin{tabu} to .9\linewidth {*{5}{c}}
-			\texttt{t}  & spirou  & fantasio & gaston & classe\\
-			\hline
-			\texttt{1}  & oui      & oui		& non	& T. et J.\\
-			\texttt{2}  & oui      & non	& non	& T. et J.\\
-			\texttt{3}  & non      & oui	& oui	& Franquin\\
-			\texttt{4}  & oui      & oui	& oui	& Franquin\\
-		\end{tabu}
-	\end{table}
 \end{frame}
 
 \begin{frame}{Technique d'apprentissage}
