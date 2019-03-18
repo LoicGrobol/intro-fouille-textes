@@ -313,19 +313,53 @@
 	\titlepage
 \end{frame}
 
-\begin{frame}{Exemples de travail}
-	Mettre le corpus suivant sous forme tabulaire, en utilisant comme attributs les occurrences de noms ayant trait au \emph{cinéma} ou à l'\emph{économie} puis le représenter dans le plan
-	{\small
-		\begin{enumerate}
-			\item « Le cinéma est un art, c’est aussi une industrie. »
-			\item « Personne, quand il est petit, ne veut être critique de cinéma. Mais ensuite, en France, tout le monde a un deuxième métier : critique de cinéma ! »
-			\item « Tout le monde a des rêves de Hollywood. »
-			\item « Pendant la crise, l’usine à rêves Hollywood critique le cynisme de l’industrie. »
-			\item « C’est la crise, l’économie de la France est menacée par la mondialisation. »
-			\item « En temps de crise, reconstruire l’industrie : tout un art ! »
-			\item « Quand une usine ferme, c’est que l’économie va mal. »
-		\end{enumerate}
-	}
+\begin{frame}[fragile]{Exercice}
+	Étant donnée la représentation tabulaire suivante d'un corpus, attribuez les classes manquantes par l'heuristique des $k$-plus proches voisins
+	\begin{figure}
+		\begin{tabu} to .9\linewidth {*{4}{c}}
+			\texttt{t}  & \texttt{wug} & \texttt{neurone} & \texttt{classe}\\
+			\hline
+			\texttt{1}  & \texttt{3}      & \texttt{2}	& linguistique\\
+			\texttt{2}  & \texttt{1}      & \texttt{0}	& linguistique\\
+			\texttt{3}  & \texttt{0}      & \texttt{2}	& linguistique\\
+			\texttt{4}  & \texttt{2}      & \texttt{1}	& linguistique\\
+			\texttt{5}  & \texttt{4}      & \texttt{4}	& informatique\\
+			\texttt{6}  & \texttt{1}      & \texttt{3}	& informatique\\
+			\texttt{7}  & \texttt{1}      & \texttt{2}	& informatique\\
+			\texttt{8}  & \texttt{2}      & \texttt{2}	& ?\\
+			\texttt{9}  & \texttt{1}      & \texttt{4}	& ?\\
+			\texttt{10}  & \texttt{3}      & \texttt{1}	& ?\\
+		\end{tabu}
+	\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Exercice}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+
+            \draw[->] (-0.5,0) -- (5.25, 0);
+            \foreach \x in {1,...,5}
+                \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+
+            \draw[->] (0, -0.5) -- (0, 4.25);
+            \foreach \y in {1,...,4}
+                \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+            \draw (0, 0) node[below left] {\footnotesize $0$};
+
+            \foreach \x/\y/\c in {3/2/highlight4,1/0/highlight4,0/2/highlight4,2/1/highlight4,4/4/highlighta,1/3/highlighta,1/2/highlighta}{
+                \path[fill=\c] (\x, \y) circle[radius=3pt];
+            }
+
+            \foreach \ex/\ey [count=\i from 1] in {2/2,1/4,3/1} {
+                \path[fill=highlight6, visible on=2] (\ex, \ey) circle[radius=3pt];
+            }
+        \end{tikzpicture}
+        \caption{Représentation du corpus dans le plan}
+    \end{figure}
+    \only<2>{}
 \end{frame}
 
 
@@ -340,7 +374,7 @@
 \end{frame}
 
 \begin{frame}{Arbre de décision}
-    Modèle de prise de décision déterministe par succession de choix.
+    Modèle de prise de décision déterministe par succession de choix.: $k$-NN
     \begin{figure}
         \tikzset{external/export=true}
         \begin{forest}
