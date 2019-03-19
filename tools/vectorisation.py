@@ -8,9 +8,10 @@ import sys
 from collections import Counter
 
 
-def _process(class_dirs, mots_vides, boolean=False, lexicon=None):
+def _process(class_dirs, mots_vides, boolean=False, lexicon=None, characters=False):
     contents = {
-        d.name: [bag_of_words(f, mots_vides) for f in files] for d, files in class_dirs
+        d.name: [bag_of_words(f, mots_vides, characters) for f in files]
+        for d, files in class_dirs
     }
     if lexicon is None:
         lexicon = sorted(
@@ -38,10 +39,12 @@ def nettoyage(texte):
     return texte
 
 
-def bag_of_words(nom_fichier, mots_vides):
+def bag_of_words(nom_fichier, mots_vides, characters=False):
     with open(nom_fichier) as fichier:
         text = fichier.read()
     text = nettoyage(text)
+    if characters:
+        return Counter(w for w in text if w and not w.isspace() and w not in mots_vides)
     return Counter(
         l
         for w in filter(None, re.split(r"[\s\.]+", text))
@@ -58,7 +61,12 @@ def vec(bow, lexicon, boolean):
 
 
 def process(
-    corpus_path, out_path=None, boolean=False, fichier_mots_vides=None, lexicon=None
+    corpus_path,
+    out_path=None,
+    boolean=False,
+    fichier_mots_vides=None,
+    lexicon=None,
+    characters=False,
 ):
     dossier = pathlib.Path(corpus_path)
     if out_path is None:
@@ -77,7 +85,9 @@ def process(
         for d in dossier.iterdir()
         if d.is_dir and not d.name.startswith(".")
     )
-    lexicon, class_names, rows = _process(class_dirs, mots_vides, boolean, lexicon)
+    lexicon, class_names, rows = _process(
+        class_dirs, mots_vides, boolean, lexicon, characters=characters
+    )
 
     # Écriture des donnees au format .arff dans la variable `sortie`
     sortie = ["@relation corpus"]
@@ -136,10 +146,20 @@ def main_entry_point(argv=None):
             action="store_true",
             help="Utiliser des représentations booléennes",
         )
+        parser.add_argument(
+            "--character",
+            action="store_true",
+            help="Segmenter par caractère (par exemple pour les langues logographiques)",
+        )
 
         args = parser.parse_args(argv)
         return process(
-            args.corpus_path, args.out_path, args.boolean, args.mots_vides, args.lexicon
+            args.corpus_path,
+            args.out_path,
+            args.boolean,
+            args.mots_vides,
+            args.lexicon,
+            characters=args.character,
         )
 
     # Legacy interactive mode
