@@ -450,7 +450,7 @@
 			8 & sunny & high & false & no\\
 			9 & sunny & low & false & yes\\
 			10 & rainy & high & false & yes\\
-			11 & sunny & high & low & yes\\
+			11 & sunny & low & true & yes\\
 			12 & overcast & high & true & yes\\
 			13 & overcast & low & false & yes\\
 			14 & rainy & high & true & no\\
@@ -458,6 +458,7 @@
 	\end{table}
 \end{frame}
 
+% TODO: iterative construction with returning to the table to explain
 \begin{frame}[fragile]
 	\begin{figure}
         \tikzset{external/export=true}
@@ -506,7 +507,7 @@
 
     \begin{itemize}
         \item<+-> Il suffit d'énumérer tous les attributs jusqu'à avoir généré toutes les combinaisons existantes
-        \item<+->[→] Surapprentissage !
+        \item<+->[→] Surapprentissage ! % TODO: noter que le problème c'est bien d'avoir un arbre trop profond, suggérer un hard cur sur la profondeur
     \end{itemize}
 	\itpause
     Comment faire pour avoir un arbre bon, mais pas trop profond ?
