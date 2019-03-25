@@ -321,7 +321,7 @@
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Exercice}
-	Étant donnée la représentation tabulaire suivante d'un corpus, attribuez les classes manquantes par en construisant puis appliquant un arbre de décisions
+	Étant donnée la représentation tabulaire suivante d'un corpus, attribuez les classes manquantes en construisant puis appliquant un arbre de décisions
 	\begin{table}
 		\begin{tabu} to .9\linewidth {*{4}{c}}
 			\texttt{t}  & \texttt{wug} & \texttt{neurone} & \texttt{classe}\\
@@ -349,6 +349,7 @@
 
 \section{\emph{Naïve Bayes}}
 
+% TODO: moyen fluide, peut-être un peu plus d'exmples et des exos à chaque étape
 \begin{frame}[fragile]{Les maths en cinq secondes : probabilités conditionnelles}
     On lance un dé à six faces équilibré. On note
     \begin{description}
@@ -493,7 +494,7 @@
 	\itpause
 
 	\begin{block}{Indépendance (définition)}
-		On dit que deux évènement $A$ et $B$ sont indépendants si le fait que $B$ se réalise n'a aucune influence sur la probabilité de $A$.
+		On dit que deux évènements $A$ et $B$ sont indépendants si le fait que $B$ se réalise n'a aucune influence sur la probabilité de $A$.
 
 		Formellement: $P(A|B)=P(A)$.
 	\end{block}
@@ -556,6 +557,9 @@
 
     \textbf{Technique de recherche} En générale : formule explicite étant donné l'ensemble d'apprentissage
 \end{frame}
+
+% TODO: exemples
+% TODO: usages courants, avantages et inconvénients de NB
 
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
