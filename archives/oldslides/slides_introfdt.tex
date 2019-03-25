@@ -3238,157 +3238,157 @@ Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
     Des extensions plus performantes, mais moins simples existent (\emph{random forest}…)
 \end{frame}
 
-%
-% % ██████   █████  ██    ██ ███████ ███████
-% % ██   ██ ██   ██  ██  ██  ██      ██
-% % ██████  ███████   ████   █████   ███████
-% % ██   ██ ██   ██    ██    ██           ██
-% % ██████  ██   ██    ██    ███████ ███████
-%
-% \lecture{Introduction à la fouille de textes}{2018-03-26}
-% \subsection{\emph{Naïve Bayes}}
-%
-% \begin{frame}{\emph{Naïve Bayes}}
-%     \textbf{Dans Weka} classifiers > bayes > NaiveBayes
-%
-%     \textbf{Espace de recherche} Ensemble des fonctions de la forme
-%     \begin{equation}
-%         x ⟼ \argmax_k p(C_k | x)
-%     \end{equation}
-%     avec
-%     \begin{equation}
-%         p(C_k | x) = p(C_k) × p(x₁ | C_k) × … × p(x_n | C_k)
-%     \end{equation}
-%
-%     \textbf{Technique de recherche} En générale : formule explicite étant donné l'ensemble d'apprentissage
-% \end{frame}
-%
-% \begin{frame}[fragile]{Les maths en cinq secondes : probabilités conditionnelles}
-%     On lance un dé à six faces équilibré. On note
-%     \begin{description}
-%         \item[A] « le résultat est inférieur ou égal à $4$ »
-%         \item[B] « le résultat est supérieur ou égal à $3$ »
-%     \end{description}
-%     \begin{columns}
-%     \alt<1>{\column{\textwidth}}{\column{0.45\textwidth}}
-%         \begin{figure}
-%             \tikzset{external/export=true}
-%             \begin{tikzpicture}[
-%                     hfit/.style={rounded corners, inner sep=0pt},
-%                     vfit/.style={rounded corners, inner sep=0pt}
-%                 ]
-%                 \matrix[matrix of nodes, column sep=1em, row sep=1em] (m) {
-%                     $1$   & $2$\\
-%                     $3$   & $4$\\
-%                     $5$   & $6$\\
-%                 };
-%
-%                 \node[fit=(m), inner sep=1em, draw, label=above right:$Ω$] (O) {};
-%                 \node[fit=(m-1-2)(m-1-2)(m-2-1)(m-2-2), hfit, draw, fill=highlighta, fill opacity=0.5, label=above:$A$] (A) {};
-%                 \node[fit=(m-2-1)(m-3-2), vfit, draw, fill=highlight6, fill opacity=0.5, label=below:$B$] (B) {};
-%             \end{tikzpicture}
-%             \caption{Univers}
-%         \end{figure}
-%     \only<2-3>{\column{0.45\textwidth}
-%         On a
-%         \begin{align}
-%             P(A) &= \alt<1-2>{\phantom{\frac{4}{6}=\frac{2}{3}}}{\frac{4}{6}=\frac{2}{3}}\\
-%             P(B) &= \alt<1-2>{\phantom{\frac{4}{6}=\frac{2}{3}}}{\frac{4}{6}=\frac{2}{3}}
-%         \end{align}
-%     }
-%     \end{columns}
-% \end{frame}
-%
-% \begin{frame}[fragile]{Les maths en cinq secondes : probabilités conditionnelles}
-%     On note
-%     \vspace{-1\smallskipamount}
-%     \begin{itemize}
-%         \item $P(A|B)$ \alt<1>{la probabilité que $A$ se réalise sachant que $B$ se réalise}{la probabilité que le résultat soit inférieur ou égal à $4$ sachant qu'il est supérieur ou égal à $3$}
-%         \item $P(B|A)$ \alt<1>{la probabilité que $B$ se réalise sachant que $A$ se réalise}{la probabilité que le résultat soit supérieur ou égal à $3$ sachant qu'il est inférieur ou égal à $4$}
-%     \end{itemize}
-%     \vspace{-1\bigskipamount}
-%     \begin{columns}
-%     \alt<1-2>{\column{\textwidth}}{\column{0.45\textwidth}}
-%         \begin{figure}
-%             \tikzset{external/export=true}
-%             \begin{tikzpicture}[
-%                     hfit/.style={rounded corners, inner sep=0pt},
-%                     vfit/.style={rounded corners, inner sep=0pt},
-%                     true scale=0.8
-%                 ]
-%                 \matrix[matrix of nodes, column sep=1em, row sep=1em] (m) {
-%                     $1$   & $2$\\
-%                     $3$   & $4$\\
-%                     $5$   & $6$\\
-%                 };
-%
-%                 \node[fit=(m), inner sep=1em, draw, label=above right:$Ω$] (O) {};
-%                 \node[fit=(m-1-2)(m-1-2)(m-2-1)(m-2-2), hfit, draw, fill=highlighta, fill opacity=0.5, label=above:$A$] (A) {};
-%                 \node[fit=(m-2-1)(m-3-2), vfit, draw, fill=highlight6, fill opacity=0.5, label=below:$B$] (B) {};
-%             \end{tikzpicture}
-%             \caption{Univers}
-%         \end{figure}
-%     \only<3->{\column{0.45\textwidth}
-%         On a
-%         \begin{align}
-%             P(A|B) &= \alt<1-3>{\phantom{\frac{2}{3}}}{\frac{2}{4}=\frac{1}{2}}\\
-%             P(B|A) &= \alt<1-3>{\phantom{\frac{1}{2}}}{\frac{2}{4}=\frac{1}{2}}
-%         \end{align}
-%     }
-%     \end{columns}
-%     \vspace{-1\bigskipamount}
-%     \only<5>{
-%         \begin{itemize}
-%             \item Dans le cas général, on a $P(X|Y) = \frac{P(X∩Y)}{P(Y)}$
-%             \item $X$ et $Y$ sont \emph{indépendants} si $P(X|Y)=P(X)$, soit $P(X)P(Y)=P(X∩Y)$
-%         \end{itemize}
-%     %TODO: add exemples d'evt indépendants
-%     }
-% \end{frame}
-%
-% \begin{frame}{Les maths en cinq secondes : théorème de Bayes}
-%     On a
-%     \begin{align}
-%         P(X|Y)
-%             &= \frac{P(X∩Y)}{P(Y)}\\
-%             &= \frac{\frac{P(X∩Y)}{P(X)}×P(X)}{P(Y)}\\
-%             &= \frac{P(Y|X)×P(X)}{P(Y)}
-%     \end{align}
-%     \begin{block}{Théorème de Bayes}
-%         Pour tous évènements $X$ et $Y$ de probabilités non-nulles,
-%         \begin{equation}
-%             P(X|Y)=\frac{P(Y|X)×P(X)}{P(Y)}
-%         \end{equation}
-%     \end{block}
-% \end{frame}
-%
-% \begin{frame}{Naïve Bayes : technique}
-%     Soit un document $d$ à catégoriser.
-%     On lui attribue la classe $C$ telle que $P(C|d)$ est maximale.
-%
-%     Pour une classe donnée $C$, on a par le théorème de Bayes
-%     \begin{equation}
-%         P(C|d) = \frac{P(d|C)×P(C)}{P(d)}
-%     \end{equation}
-%     $P(d)$ ne dépend pas de $C$, il reste donc à maximiser $P(d|C)×P(C)$.
-% \end{frame}
-%
-% \begin{frame}{Naïve Bayes : technique}
-%     Si on représente les documents par des sacs de mots, $d$ est un vecteur $(x₁, …, x_n)$.
-%     Donc
-%     \begin{equation}
-%         P(d|C) = P((x₁, …, x_n)|C)
-%     \end{equation}
-%
-%     Et en supposant que les $x_i$ sont indépendants (« Naïve »)
-%     \begin{equation}
-%         P(d|C) = P(x₁|C)×…×P(x_n|C)
-%     \end{equation}
-%
-%     Il reste à choisir comment déterminer $P(C)$ et les $P(x_i|C)$.
-% \end{frame}
-% % TODO: example slides. Do it, it is **very** easy to get confused about it at blackboard
-%
+
+% ██████   █████  ██    ██ ███████ ███████
+% ██   ██ ██   ██  ██  ██  ██      ██
+% ██████  ███████   ████   █████   ███████
+% ██   ██ ██   ██    ██    ██           ██
+% ██████  ██   ██    ██    ███████ ███████
+
+\lecture{Introduction à la fouille de textes}{2018-03-26}
+\subsection{\emph{Naïve Bayes}}
+
+\begin{frame}{\emph{Naïve Bayes}}
+    \textbf{Dans Weka} classifiers > bayes > NaiveBayes
+
+    \textbf{Espace de recherche} Ensemble des fonctions de la forme
+    \begin{equation}
+        x ⟼ \argmax_k p(C_k | x)
+    \end{equation}
+    avec
+    \begin{equation}
+        p(C_k | x) = p(C_k) × p(x₁ | C_k) × … × p(x_n | C_k)
+    \end{equation}
+
+    \textbf{Technique de recherche} En générale : formule explicite étant donné l'ensemble d'apprentissage
+\end{frame}
+
+\begin{frame}[fragile]{Les maths en cinq secondes : probabilités conditionnelles}
+    On lance un dé à six faces équilibré. On note
+    \begin{description}
+        \item[A] « le résultat est inférieur ou égal à $4$ »
+        \item[B] « le résultat est supérieur ou égal à $3$ »
+    \end{description}
+    \begin{columns}
+    \alt<1>{\column{\textwidth}}{\column{0.45\textwidth}}
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[
+                    hfit/.style={rounded corners, inner sep=0pt},
+                    vfit/.style={rounded corners, inner sep=0pt}
+                ]
+                \matrix[matrix of nodes, column sep=1em, row sep=1em] (m) {
+                    $1$   & $2$\\
+                    $3$   & $4$\\
+                    $5$   & $6$\\
+                };
+
+                \node[fit=(m), inner sep=1em, draw, label=above right:$Ω$] (O) {};
+                \node[fit=(m-1-2)(m-1-2)(m-2-1)(m-2-2), hfit, draw, fill=highlighta, fill opacity=0.5, label=above:$A$] (A) {};
+                \node[fit=(m-2-1)(m-3-2), vfit, draw, fill=highlight6, fill opacity=0.5, label=below:$B$] (B) {};
+            \end{tikzpicture}
+            \caption{Univers}
+        \end{figure}
+    \only<2-3>{\column{0.45\textwidth}
+        On a
+        \begin{align}
+            P(A) &= \alt<1-2>{\phantom{\frac{4}{6}=\frac{2}{3}}}{\frac{4}{6}=\frac{2}{3}}\\
+            P(B) &= \alt<1-2>{\phantom{\frac{4}{6}=\frac{2}{3}}}{\frac{4}{6}=\frac{2}{3}}
+        \end{align}
+    }
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Les maths en cinq secondes : probabilités conditionnelles}
+    On note
+    \vspace{-1\smallskipamount}
+    \begin{itemize}
+        \item $P(A|B)$ \alt<1>{la probabilité que $A$ se réalise sachant que $B$ se réalise}{la probabilité que le résultat soit inférieur ou égal à $4$ sachant qu'il est supérieur ou égal à $3$}
+        \item $P(B|A)$ \alt<1>{la probabilité que $B$ se réalise sachant que $A$ se réalise}{la probabilité que le résultat soit supérieur ou égal à $3$ sachant qu'il est inférieur ou égal à $4$}
+    \end{itemize}
+    \vspace{-1\bigskipamount}
+    \begin{columns}
+    \alt<1-2>{\column{\textwidth}}{\column{0.45\textwidth}}
+        \begin{figure}
+            \tikzset{external/export=true}
+            \begin{tikzpicture}[
+                    hfit/.style={rounded corners, inner sep=0pt},
+                    vfit/.style={rounded corners, inner sep=0pt},
+                    true scale=0.8
+                ]
+                \matrix[matrix of nodes, column sep=1em, row sep=1em] (m) {
+                    $1$   & $2$\\
+                    $3$   & $4$\\
+                    $5$   & $6$\\
+                };
+
+                \node[fit=(m), inner sep=1em, draw, label=above right:$Ω$] (O) {};
+                \node[fit=(m-1-2)(m-1-2)(m-2-1)(m-2-2), hfit, draw, fill=highlighta, fill opacity=0.5, label=above:$A$] (A) {};
+                \node[fit=(m-2-1)(m-3-2), vfit, draw, fill=highlight6, fill opacity=0.5, label=below:$B$] (B) {};
+            \end{tikzpicture}
+            \caption{Univers}
+        \end{figure}
+    \only<3->{\column{0.45\textwidth}
+        On a
+        \begin{align}
+            P(A|B) &= \alt<1-3>{\phantom{\frac{2}{3}}}{\frac{2}{4}=\frac{1}{2}}\\
+            P(B|A) &= \alt<1-3>{\phantom{\frac{1}{2}}}{\frac{2}{4}=\frac{1}{2}}
+        \end{align}
+    }
+    \end{columns}
+    \vspace{-1\bigskipamount}
+    \only<5>{
+        \begin{itemize}
+            \item Dans le cas général, on a $P(X|Y) = \frac{P(X∩Y)}{P(Y)}$
+            \item $X$ et $Y$ sont \emph{indépendants} si $P(X|Y)=P(X)$, soit $P(X)P(Y)=P(X∩Y)$
+        \end{itemize}
+    %TODO: add exemples d'evt indépendants
+    }
+\end{frame}
+
+\begin{frame}{Les maths en cinq secondes : théorème de Bayes}
+    On a
+    \begin{align}
+        P(X|Y)
+            &= \frac{P(X∩Y)}{P(Y)}\\
+            &= \frac{\frac{P(X∩Y)}{P(X)}×P(X)}{P(Y)}\\
+            &= \frac{P(Y|X)×P(X)}{P(Y)}
+    \end{align}
+    \begin{block}{Théorème de Bayes}
+        Pour tous évènements $X$ et $Y$ de probabilités non-nulles,
+        \begin{equation}
+            P(X|Y)=\frac{P(Y|X)×P(X)}{P(Y)}
+        \end{equation}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Naïve Bayes : technique}
+    Soit un document $d$ à catégoriser.
+    On lui attribue la classe $C$ telle que $P(C|d)$ est maximale.
+
+    Pour une classe donnée $C$, on a par le théorème de Bayes
+    \begin{equation}
+        P(C|d) = \frac{P(d|C)×P(C)}{P(d)}
+    \end{equation}
+    $P(d)$ ne dépend pas de $C$, il reste donc à maximiser $P(d|C)×P(C)$.
+\end{frame}
+
+\begin{frame}{Naïve Bayes : technique}
+    Si on représente les documents par des sacs de mots, $d$ est un vecteur $(x₁, …, x_n)$.
+    Donc
+    \begin{equation}
+        P(d|C) = P((x₁, …, x_n)|C)
+    \end{equation}
+
+    Et en supposant que les $x_i$ sont indépendants (« Naïve »)
+    \begin{equation}
+        P(d|C) = P(x₁|C)×…×P(x_n|C)
+    \end{equation}
+
+    Il reste à choisir comment déterminer $P(C)$ et les $P(x_i|C)$.
+\end{frame}
+% TODO: example slides. Do it, it is **very** easy to get confused about it at blackboard
+
 % % ███████ ██    ██ ███    ███
 % % ██      ██    ██ ████  ████
 % % ███████ ██    ██ ██ ████ ██
