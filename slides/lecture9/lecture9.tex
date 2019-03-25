@@ -422,15 +422,36 @@
         \end{align}
     }
     \end{columns}
-    \vspace{-1\bigskipamount}
-    \only<5>{
-        \begin{itemize}
-            \item Dans le cas général, on a $P(X|Y) = \frac{P(X∩Y)}{P(Y)}$
-            \item $X$ et $Y$ sont \emph{indépendants} si $P(X|Y)=P(X)$, soit $P(X)P(Y)=P(X∩Y)$
-        \end{itemize}
-    %TODO: add exemples d'evt indépendants
-    }
+    \only<5>{Dans le cas général, on a $P(X|Y) = \frac{P(X∩Y)}{P(Y)}$}
 \end{frame}
+
+\begin{frame}{Les maths en cinq secondes : indépendance}
+	On lance deux dés à \num{6} faces l'un après l'autre
+
+	\begin{itemize}
+		\item<+-> Quelle est la probabilité que le premier dé donne un résultat pair ?
+		\item<+-> Si je sais que le premier dé a donné un résultat pair, quelle est la probabilité que le deuxième dé donne \num{6} ?
+	\end{itemize}
+	\itpause
+
+	\begin{block}{Indépendance (définition)}
+		On dit que deux évènement $A$ et $B$ sont indépendants si le fait que $B$ se réalise n'a aucune influence sur la probabilité de $A$.
+
+		Formellement: $P(A|B)=P(A)$.
+	\end{block}
+\end{frame}
+
+
+\begin{frame}{Les maths en cinq secondes : indépendance}
+	Les assertions suivantes sont équivalentes
+	\begin{enumerate}[<+->]
+		\item $A$ et $B$ sont indépendants
+		\item $P(A|B)=P(A)$
+		\item $P(B|A)=P(B)$
+		\item $P(A∩B) = P(A)×P(B)$
+	\end{enumerate}
+\end{frame}
+
 
 \begin{frame}{Les maths en cinq secondes : théorème de Bayes}
     On a
