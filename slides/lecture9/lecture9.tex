@@ -425,6 +425,64 @@
     \only<5>{Dans le cas général, on a $P(X|Y) = \frac{P(X∩Y)}{P(Y)}$}
 \end{frame}
 
+\begin{frame}<1>[label=naivebayes]{\emph{Naïve Bayes}}
+    Soit un document $d$ à catégoriser.
+    On lui attribue la classe $C$ telle que $P(C|d)$ est maximale.
+
+	\only<-2>{
+		Problème: Comment estimer cette probabilité ?
+	}
+
+	\uncover<2->{
+	    Pour une classe donnée $C$, on a par le théorème de Bayes
+	    \begin{equation}
+	        P(C|d) = \frac{P(d|C)×P(C)}{P(d)}
+	    \end{equation}
+	}
+
+	\uncover<3->{
+	    $P(d)$ ne dépend pas de $C$, il s'agit donc de maximiser $P(d|C)×P(C)$.
+	}
+
+	\uncover<4->{
+		Problème: Comment estimer ces probabilités ?
+	}
+\end{frame}
+
+\begin{frame}{Les maths en cinq secondes : théorème de Bayes}
+    On a
+    \begin{align}
+        P(X|Y)
+            &= \frac{P(X∩Y)}{P(Y)}\\
+            &= \frac{\frac{P(X∩Y)}{P(X)}×P(X)}{P(Y)}\\
+            &= \frac{P(Y|X)×P(X)}{P(Y)}
+    \end{align}
+    \begin{block}{Théorème de Bayes}
+        Pour tous évènements $X$ et $Y$ de probabilités non-nulles,
+        \begin{equation}
+            P(X|Y)=\frac{P(Y|X)×P(X)}{P(Y)}
+        \end{equation}
+    \end{block}
+\end{frame}
+
+\againframe<1-3>{naivebayes}
+
+\begin{frame}{Probabilité d'une classe}
+	Problème : estimer $P(C)$.
+
+	\pause
+	Facile : Si on a un échantillon (corpus) suffisamment grand, la probabilité d'une classe peut être estimée par sa fréquence empirique. Autrement dit
+
+	\pause
+
+	\begin{equation}
+		P(C) ≈ \frac{\text{Nombre de documents de la classe $C$}}{\text{Nombre de documents du corpus}}
+	\end{equation}
+
+	\pause
+	Il reste à estimer $P(d|C)$.
+\end{frame}
+
 \begin{frame}{Les maths en cinq secondes : indépendance}
 	On lance deux dés à \num{6} faces l'un après l'autre
 
@@ -453,34 +511,7 @@
 \end{frame}
 
 
-\begin{frame}{Les maths en cinq secondes : théorème de Bayes}
-    On a
-    \begin{align}
-        P(X|Y)
-            &= \frac{P(X∩Y)}{P(Y)}\\
-            &= \frac{\frac{P(X∩Y)}{P(X)}×P(X)}{P(Y)}\\
-            &= \frac{P(Y|X)×P(X)}{P(Y)}
-    \end{align}
-    \begin{block}{Théorème de Bayes}
-        Pour tous évènements $X$ et $Y$ de probabilités non-nulles,
-        \begin{equation}
-            P(X|Y)=\frac{P(Y|X)×P(X)}{P(Y)}
-        \end{equation}
-    \end{block}
-\end{frame}
-
-\begin{frame}{\emph{Naïve Bayes}}
-    Soit un document $d$ à catégoriser.
-    On lui attribue la classe $C$ telle que $P(C|d)$ est maximale.
-
-    Pour une classe donnée $C$, on a par le théorème de Bayes
-    \begin{equation}
-        P(C|d) = \frac{P(d|C)×P(C)}{P(d)}
-    \end{equation}
-    $P(d)$ ne dépend pas de $C$, il reste donc à maximiser $P(d|C)×P(C)$.
-\end{frame}
-
-\begin{frame}{Naïve Bayes : technique}
+\begin{frame}{Probabilité d'un document}
     Si on représente les documents par des sacs de mots, $d$ est un vecteur $(x₁, …, x_n)$.
     Donc
     \begin{equation}
@@ -492,9 +523,24 @@
         P(d|C) = P(x₁|C)×…×P(x_n|C)
     \end{equation}
 
-    Il reste à choisir comment déterminer $P(C)$ et les $P(x_i|C)$.
+    Il reste à choisir comment déterminer les $P(x_i|C)$.
 \end{frame}
-% TODO: example slides. Do it, it is **very** easy to get confused about it at blackboard
+
+\begin{frame}{Probabilité d'un attribut}
+	Problème : estimer $P(x_i|C)$.
+
+	\pause
+	Facile : Si on a un échantillon (classe) suffisamment grand, la probabilité d'un attribut peut être estimée par sa fréquence empirique. Autrement dit
+
+	\pause
+
+	\begin{equation}
+		P(x_i|C) ≈ \frac{\text{Nombre de documents $C$ qui possèdent le trait $x_i$}}{\text{Nombre de documents de $C$}}
+	\end{equation}
+
+	\pause
+	Et on a terminé !
+\end{frame}
 
 \begin{frame}{\emph{Naïve Bayes}}
     \textbf{Dans Weka} classifiers > bayes > NaiveBayes
