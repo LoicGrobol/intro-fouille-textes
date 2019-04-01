@@ -341,6 +341,384 @@
 \end{frame}
 
 
+% ███████ ██    ██ ███    ███
+% ██      ██    ██ ████  ████
+% ███████ ██    ██ ██ ████ ██
+%      ██  ██  ██  ██  ██  ██
+% ███████   ████   ██      ██
+\section{SVM}
+
+% TODO: cite
+\begin{frame}<1-2>[label=SVMmain]{SVM}
+    \emph{Support Vector Machines} : \emph{machines à vecteurs de support} ou \emph{Séparateur à Vaste Marge}
+
+    \textbf{Dans Weka} classifiers > functions > SMO
+    \pause
+
+    \textbf{Espace de recherche} Ensemble des hyperplans affines de $ℝ^n$, où $n$ est le nombre d'attributs.
+    \pause
+
+    \textbf{Technique de recherche}
+    \begin{itemize}
+        \item Traditionnellement : problème d'optimisation quadratique
+        \item Plus récemment : descente de sous-gradient, descente de gradient par coordonnées
+        \begin{itemize}
+            \item[→] Linéaire ou quasi-linéaire (au moins en pratique)
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Hyperplans}
+    Dans un espace de dimension $n$, un \alert<1>{hyperplan} est un espace de dimension $n-1$
+    \begin{overprint}
+        \onslide<1>
+            \begin{itemize}
+                \item En dimension $3$, les hyperplans sont les \alert{plans}
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \tdplotsetmaincoords{70}{110}
+                        \begin{tikzpicture}[tdplot_main_coords]
+                            \node[coordinate] at (0, 0, 0) (O) {};
+                            \draw[->] (O) -- (2, 0, 0);
+                            \draw[->] (O) -- (0, 2, 0);
+                            \draw (O) -- (0, 0, 1) node[coordinate] (passthrough) {};
+                            \filldraw[draw=highlighta, fill=highlighta!30, fill opacity=0.75] (3, -3, 1) -- (3, 3, 1) -- (-3, 3, 1)  -- (-3, -3, 1) --cycle;
+                            \draw[->] (passthrough) -- + (0, 0, 1);
+                        \end{tikzpicture}
+                        \caption{Hyperplan en dimension $3$}
+                    \end{figure}
+                \end{itemize}
+        \onslide<2>
+            \begin{itemize}
+                \item En dimension $2$, les hyperplans sont les \alert{droites}
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \begin{tikzpicture}
+                            \node[coordinate] at (0, 0) (O) {};
+                            \draw[->] (-3, 0) -- (3, 0);
+                            \draw[->] (0, -2) -- (0, 2);
+
+                            \draw[highlighta] (-3, -2) -- (3, 1);
+                        \end{tikzpicture}
+                        \caption{Hyperplan en dimension $2$}
+                    \end{figure}
+            \end{itemize}
+        \onslide<3>
+            \begin{itemize}
+                \item En dimension $1$, les hyperplans sont les \alert{points}
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \begin{tikzpicture}
+                            \node[coordinate] at (0, 0) (O) {};
+                            \draw (-3, 0) -- (3, 0);
+
+                            \fill[highlighta] (1, 0) circle[radius=2pt];
+                        \end{tikzpicture}
+                        \caption{Hyperplan en dimension $1$}
+                    \end{figure}
+            \end{itemize}
+    \end{overprint}
+\end{frame}
+
+\begin{frame}[fragile]{Propriétés des hyperplans}
+    Les hyperplans séparent les espaces en demi-espaces
+    \begin{overprint}
+        \onslide<1-3>
+            \begin{itemize}
+                \item En dimension $3$ : demi-espaces
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \tdplotsetmaincoords{70}{110}
+                        \begin{tikzpicture}[tdplot_main_coords]
+                            \node[coordinate] at (0, 0, 0) (O) {};
+                            \draw[->] (O) -- (2, 0, 0);
+                            \draw[->] (O) -- (0, 2, 0);
+                            \draw (O) -- (0, 0, 1) node[coordinate] (passthrough) {};
+
+                            % Lower half-plane
+                            \begin{scope}[draw=highlight5, fill=highlight5!30, fill opacity=0.75, visible on=3]
+                                \filldraw (3, -3, -1) -- (3, 3, -1) -- (-3, 3, -1)  -- (-3, -3, -1) -- cycle;
+                                \filldraw (-3, 3, -1) -- (-3, -3, -1) -- (-3, -3, 1) -- (-3, 3, 1) -- cycle;
+                                \filldraw (3, -3, -1) -- (-3, -3, -1) -- (-3, -3, 1) -- (3, -3, 1) -- cycle;
+                                \filldraw (3, -3, -1) -- (3, 3, -1) -- (3, 3, 1) -- (3, -3, 1) -- cycle;
+                                \filldraw  (3, 3, -1) -- (-3, 3, -1) --  (-3, 3, 1) -- (3, 3, 1) -- cycle;
+                            \end{scope}
+
+                            \path[draw=highlighta, fill=highlighta!30, fill opacity=0.75] (3, -3, 1) -- (3, 3, 1) -- (-3, 3, 1)  -- (-3, -3, 1) -- cycle;
+                            \draw[->] (passthrough) -- + (0, 0, 1);
+
+                            % Upper half-plane
+                            \begin{scope}[draw=highlight5, fill=highlight5!30, fill opacity=0.75, visible on=2]
+                                \filldraw (3, -3, 2) -- (3, 3, 2) -- (-3, 3, 2)  -- (-3, -3, 2) -- cycle;
+                                \filldraw (-3, 3, 2) -- (-3, -3, 2) -- (-3, -3, 1) -- (-3, 3, 1) -- cycle;
+                                \filldraw (3, -3, 2) -- (-3, -3, 2) -- (-3, -3, 1) -- (3, -3, 1) -- cycle;
+                                \filldraw (3, -3, 2) -- (3, 3, 2) -- (3, 3, 1) -- (3, -3, 1) -- cycle;
+                                \filldraw  (3, 3, 2) -- (-3, 3, 2) --  (-3, 3, 1) -- (3, 3, 1) -- cycle;
+                            \end{scope}
+                        \end{tikzpicture}
+                        \caption{Demi-espaces en dimension $3$}
+                    \end{figure}
+                \end{itemize}
+        \onslide<4-6>
+            \begin{itemize}
+                \item En dimension $2$ : demi-plans
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \begin{tikzpicture}
+                            \node[coordinate] at (0, 0) (O) {};
+                            \draw[->] (-3, 0) -- (3, 0);
+                            \draw[->] (0, -2) -- (0, 2);
+
+                            \path[draw=highlight5, fill=highlight5!30, fill opacity=0.75, visible on=5] (-3, -2) -- (3, 1) -- (3, 2) -- (-3, 2) -- cycle;
+                            \path[draw=highlight5, fill=highlight5!30, fill opacity=0.75, visible on=6] (-3, -2) -- (3, 1) -- (3, -2) -- (-3, -2) -- cycle;
+
+                            \draw[highlighta] (-3, -2) -- (3, 1);
+                        \end{tikzpicture}
+                        \caption{Demi-espaces en dimension $2$}
+                    \end{figure}
+            \end{itemize}
+        \onslide<7-9>
+            \begin{itemize}
+                \item En dimension $1$ : demi-droites
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \begin{tikzpicture}
+                            \node[coordinate] at (0, 0) (O) {};
+                            \draw (-3, 0) -- (3, 0);
+                            \draw[highlight5, visible on=8] (1,0) -- (3, 0);
+                            \draw[highlight5, visible on=9] (1,0) -- (-3, 0);
+                            \fill[highlighta] (1, 0) circle[radius=2pt];
+                        \end{tikzpicture}
+                        \caption{Demi-espaces en dimension $1$}
+                    \end{figure}
+            \end{itemize}
+        \onslide<10-13>
+            Cette propriété permet de construire des classifieurs
+            \begin{figure}
+                \tikzset{external/export=true}
+                \begin{tikzpicture}
+                    \draw[->] (-0.5,0) -- (5.25, 0);
+                    \draw[->] (0, -0.5) -- (0, 4.25);
+
+                    \foreach \x/\y/\c in {2/1/6,4/0/6,1/0/6,2/3/a,0/3/a,1/2/a,0/2/a}{
+                        \path[alt=<10-12>{fill=highlight5}{fill=highlight\c}] (\x, \y) circle[radius=3pt];
+                    }
+
+                    \path[fill=highlighta!30, fill opacity=0.5] (-0.5, -0.5)  -- (4.25, 4.25) -- (-0.5, 4.25) -- cycle;
+                    \path[fill=highlight6!30, fill opacity=0.5] (-0.5, -0.5)  -- (5.25, -0.5) -- (5.25, 4.25) -- (4.25, 4.25) -- cycle;
+                    \draw[highlight3,] (-0.5, -0.5)  -- (4.25, 4.25);
+                \end{tikzpicture}
+                \caption{Classification \only<13>{linéaire} en dimension $2$}
+            \end{figure}
+            \only<13>{On parle de \alert{classifieur linéaire}.}
+    \end{overprint}
+\end{frame}
+
+% TODO: figs
+\begin{frame}{Classifieurs linéaires}
+    Le principe des classifieurs linéaire est donc, étant donné un problème à deux classes
+    \begin{itemize}
+        \item Trouver un hyperplan qui sépare l'espace des attributs en demi-espaces contenant chacun tous les exemples d'entraînement d'une seule classe
+        \item On classe les exemples de test dans la classe correspondant à leur demi-espace
+    \end{itemize}
+
+    Cela suppose de résoudre deux problèmes
+    \begin{itemize}
+        \item Existe-t-il un tel hyperplan ? (on dit dans ce cas que le problème est \emph{linéairement séparable})
+        \item S'il en existe un, il en existe en général une infinité
+            \begin{itemize}
+                \item[→] Lequel choisir ?
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Notion de marge}
+    \only<1-7>{
+        Intuitivement, pour espérer qu'un classifieur linéaire généralise bien, il faut qu'il sépare les classes le plus largement possible.
+    }
+    \begin{overprint}
+        \onslide<1-3>
+            \begin{figure}
+                \tikzset{external/export=true}
+                \begin{tikzpicture}
+                    \path[clip] (-0.5, -0.5) rectangle (5.25, 4.25);
+                    \draw[->] (-0.5,0) -- (5.25, 0);
+                    \draw[->] (0, -0.5) -- (0, 4.25);
+
+                    \foreach \x/\y/\c in {2/1/6,4/0/6,1/0/6,2/3/a,0/3/a,1/2/a,0/2/a}{
+                        \path[fill=highlight\c] (\x, \y) circle[radius=3pt];
+                    }
+
+                    \begin{scope}[domain=-0.5:5.25]
+                        \draw[highlight7, visible on=1] plot (\x, 1+0.75*\x);
+                        \draw[highlight7, visible on=2]  plot (\x, \x-1);
+                        \draw[highlight3, visible on=3] plot (\x, \x);
+                    \end{scope}
+                \end{tikzpicture}
+                \caption{Largeurs de séparation d'hyperplans}
+            \end{figure}
+        \onslide<4-7>
+            \vspace{-1\bigskipamount}
+            \begin{columns}
+                \column{0.45\textwidth}
+                    \begin{figure}
+                        \tikzset{external/export=true}
+                        \begin{tikzpicture}[true scale=0.7]
+                            \path[clip] (-0.5, -0.5) rectangle (5.25, 4.25);
+                            \draw[->] (-0.5,0) -- (5.25, 0);
+                            \draw[->] (0, -0.5) -- (0, 4.25);
+
+                            \foreach \x/\y/\c in {2/1/6,4/0/6,1/0/6,2/3/a,0/3/a,1/2/a,0/2/a}{
+                                \path[fill=highlight\c] (\x, \y) circle[radius=3pt];
+                            }
+
+                            \begin{scope}[domain=-0.5:5.25]
+                                \draw[dashed, visible on={5-}] plot (\x, \x+1);
+                                \draw[dashed, visible on={5-}]  plot (\x, \x-1);
+                                \draw[highlight3, alt=<{4-5,7}>{}{opacity=0}] plot (\x, \x) node[right] {$H$};
+                            \end{scope}
+
+                            \draw[<->, visible on=6] (1, 2) -- (2, 1) node[midway, above right] {$M(H)$};
+                        \end{tikzpicture}
+                        \caption{Marge d'un hyperplan}
+                    \end{figure}
+                \column{0.45\textwidth}
+                    \begin{block}{Définition (marge)}
+                        Soit deux classes, $C$ et $C'$, on appelle \emph{marge} d'un hyperplan séparateur $H$ le nombre
+                        \begin{equation}
+                            M(H) = \min_{x∈C}d(x, H) + \min_{x'∈C'}d(x', H)
+                        \end{equation}
+                    \end{block}
+            \end{columns}
+            On choisit $H$ pour lequel $M(H)$ est maximale sur l'ensemble d'entraînement.
+            \begin{itemize}
+                \item[→] D'où \emph{séparateur à \alert{vaste marge}}.
+            \end{itemize}
+    \end{overprint}
+\end{frame}
+
+\begin{frame}{Vecteurs de support}
+    Les points $x$ et $x'$ pour lesquels les minima sont atteints sont appelés \textcolor{highlight7}{vecteurs de support}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.7]
+            \path[clip] (-0.5, -0.5) rectangle (5.25, 4.25);
+            \draw[->] (-0.5,0) -- (5.25, 0);
+            \draw[->] (0, -0.5) -- (0, 4.25);
+
+            \foreach \x/\y/\c in {4/0/6,1/0/6,0/3/a,0/2/a}{
+                \path[fill=highlight\c] (\x, \y) circle[radius=3pt];
+            }
+
+            \foreach \x/\y/\c in {2/1/6,1/0/6,2/3/a,1/2/a}{
+                \path[fill=highlight\c] (\x, \y) circle[radius=3pt];
+                \draw[highlight7] (\x, \y) circle[radius=5pt];
+            }
+
+            \begin{scope}[domain=-0.5:5.25]
+                \draw[dashed] plot (\x, \x+1);
+                \draw[dashed]  plot (\x, \x-1);
+                \draw[highlight3] plot (\x, \x) node[right] {$H$};
+            \end{scope}
+        \end{tikzpicture}
+        \caption{Vecteurs de support}
+    \end{figure}
+    On peut montrer que $H$ ne dépend que de la position des vecteurs de support.
+\end{frame}
+
+\againframe<3>{SVMmain}
+
+% TODO: figs
+\begin{frame}{Problèmes non-séparables}
+    En général, les problèmes réels ne sont pas linéairement séparables.
+    Plusieurs méthodes existent pour y adapter les SVM.
+    \begin{description}
+        \item[Marge douce] Modifier la définition de \emph{marge} pour tenir compte des exemples mal classés
+        \item[\emph{Kernel trick}] Transformer le problème en un problème équivalent mais linéairement séparable
+    \end{description}
+\end{frame}
+
+\begin{frame}{Marge douce}
+    On remplace la fonction de marge $M$ par une fonction de la forme
+    \begin{equation}
+        L(H) = M(H) - C(H)
+    \end{equation}
+    où $C(H)$ est une pénalité pour les exemples mal classés par $H$.
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.7]
+            \path[clip] (-0.5, -0.5) rectangle (5.25, 4.25);
+            \draw[->] (-0.5,0) -- (5.25, 0);
+            \draw[->] (0, -0.5) -- (0, 4.25);
+
+            \foreach \x/\y/\c in {2/1/6,4/0/6,1/0/6,2/3/a,0/3/a,1/2/a,0/2/a}{
+                \path[fill=highlight\c] (\x, \y) circle[radius=3pt];
+            }
+            \path[fill=highlight6, visible on={2-}] (1, 3) circle[radius=3pt];
+
+            \begin{scope}[domain=-0.5:5.25]
+                \draw[highlight3, visible on=3] plot (\x, \x+1) node[right] {$H$};
+            \end{scope}
+        \end{tikzpicture}
+        \caption{Hyperplan à marge douce maximale}
+    \end{figure}
+    \only<3>{
+        \vspace{-\bigskipamount}
+        On choisit comme précédemment l'hyperplan $H$ qui maximise $L(H)$.
+    }
+\end{frame}
+
+\begin{frame}[fragile]{\emph{Kernel trick}}
+    L'\emph{astuce du noyau} consiste à transformer un problème non-linéairement séparable en un problème linéairement séparable dans un espace de dimension supérieure.
+
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[x=0.4cm, y=0.2cm]
+            \draw[->] (65, 0) -- (90, 0);
+            \draw[->, visible on={2-}] (65, 0) -- (65, 13);
+
+            \begin{scope}[domain=65:90]
+                \path[clip] (64, -0.5) rectangle (92, 12);
+                \draw[highlight7, visible on={3-5}] plot (\x, {0.1*(\x-78)^2}) node [pos=0, right] {$y=ax²+bx+c$};
+                \draw[highlight3, visible on={6-}] plot (\x, {-0.1*\x+11.61});
+            \end{scope}
+
+            \foreach \x/\c [count=\i] in {68/6,69/6,70/6,73/a,74/a,76/a,80/a,82/a,85/6,86/6} {
+                \path[fill=highlight\c, visible on={1-4}] (\x, 0) node (base\i) {} circle[radius=3pt];
+                \path[fill=highlight\c, visible on={4-}] (\x, {0.1*(\x-78)^2})  node (raised\i) {} circle[radius=3pt];
+                \draw[->, visible on=4] (base\i) -- (raised\i);
+            }
+        \end{tikzpicture}
+        \caption{Hyperplan séparateur en dimension supérieure}
+    \end{figure}
+    \vspace{-1\bigskipamount}
+    \begin{overprint}
+        \onslide<6>
+            \begin{itemize}
+                \item Les \emph{noyaux} en question sont des fonctions qui permettent d'éviter d'avoir à calculer explicitement les transformations pour passer en dimension supérieure.
+            \end{itemize}
+        \onslide<7>
+            \begin{itemize}
+                \item En réalité, le problème en dimension supérieure est souvent lui aussi non-linéairement séparable, et on combine en général le \emph{kernel trick} avec une marge douce.
+            \end{itemize}
+    \end{overprint}
+\end{frame}
+
+\begin{frame}{Propriétés}
+    Les SVM sont des modèles très efficaces, qui jusqu'à récemment étaient systématiquement les plus performants.
+    \begin{itemize}
+        \item Une fois l'apprentissage fait, la classification est très rapide
+        \item Les modèles sont peu gourmands en mémoire
+        \item Les modèles marchent mieux que les autres modèles présentés (en général)
+    \end{itemize}
+    Avec quelques inconvénients
+    \begin{itemize}
+        \item Les modèles sont difficilement interprétables
+        \item Le choix d'un noyau tient plus de l'artisanat que de la science
+        \item Les algorithmes classiques ne permettent pas d'apprentissage incrémental.
+    \end{itemize}
+\end{frame}
+
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
 % ███████ ██████  ██████  █████   ██ ██  ██ ██   ██ ██   ███
