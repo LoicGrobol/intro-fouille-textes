@@ -77,8 +77,17 @@ def process(
         with open(fichier_mots_vides) as in_stream:
             mots_vides = set(l.strip() for l in in_stream)
     if lexicon is not None:
-        with open(fichier_mots_vides) as in_stream:
-            lexicon = sorted(set(l.strip() for l in in_stream))
+        with open(lexicon) as in_stream:
+            if lexicon.endswith(".arff"):
+                lexicon = sorted(
+                    set(
+                        re.search(r"'(.*)'", l).group(1)
+                        for l in in_stream
+                        if l.startswith("@attribute")
+                    )
+                )
+            else:
+                lexicon = sorted(set(l.strip() for l in in_stream))
     # Chaque sous-dossier (non-caché) du dossier principal est une étiquette de classe
     class_dirs = (
         (d, sorted(d.glob("*.txt")))
@@ -103,7 +112,7 @@ def process(
         fichier_sortie.write("\n".join(sortie))
         fichier_sortie.write("\n")
 
-    print("fichier-resultat.arff produit !")
+    print(f"{out_path} produit !")
 
 
 def main_entry_point(argv=None):
@@ -139,7 +148,7 @@ def main_entry_point(argv=None):
             metavar="fichier_lexique",
             type=str,
             default=None,
-            help="Un fichier contenant un lexique (un mot par ligne)",
+            help="Un fichier contenant un lexique (un mot par ligne ou arff)",
         )
         parser.add_argument(
             "--boolean",
