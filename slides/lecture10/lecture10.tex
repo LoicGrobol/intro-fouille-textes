@@ -324,55 +324,13 @@
 	\titlepage
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{Exercice}
-	Étant donnée la représentation tabulaire suivante d'un corpus, attribuez les classes manquantes en construisant puis appliquant un arbre de décisions
-	\begin{table}
-		\begin{tabu} to .9\linewidth {*{4}{c}}
-			\texttt{t}  & \texttt{wug} & \texttt{neurone} & \texttt{classe}\\
-			\hline
-			\texttt{1}  & \texttt{3}      & \texttt{2}	& linguistique\\
-			\texttt{2}  & \texttt{1}      & \texttt{0}	& linguistique\\
-			\texttt{3}  & \texttt{0}      & \texttt{2}	& linguistique\\
-			\texttt{4}  & \texttt{2}      & \texttt{1}	& linguistique\\
-			\texttt{5}  & \texttt{4}      & \texttt{4}	& informatique\\
-			\texttt{6}  & \texttt{1}      & \texttt{3}	& informatique\\
-			\texttt{7}  & \texttt{1}      & \texttt{2}	& informatique\\
-			\texttt{8}  & \texttt{2}      & \texttt{2}	& ?\\
-			\texttt{9}  & \texttt{1}      & \texttt{4}	& ?\\
-			\texttt{10}  & \texttt{3}      & \texttt{1}	& ?\\
-		\end{tabu}
-	\end{table}
-\end{frame}
-
-
 % ███████ ██    ██ ███    ███
 % ██      ██    ██ ████  ████
 % ███████ ██    ██ ██ ████ ██
 %      ██  ██  ██  ██  ██  ██
 % ███████   ████   ██      ██
-\section{SVM}
 
-% TODO: cite
-\begin{frame}<1-2>[label=SVMmain]{SVM}
-    \emph{Support Vector Machines} : \emph{machines à vecteurs de support} ou \emph{Séparateur à Vaste Marge}
-
-    \textbf{Dans Weka} classifiers > functions > SMO
-    \pause
-
-    \textbf{Espace de recherche} Ensemble des hyperplans affines de $ℝ^n$, où $n$ est le nombre d'attributs.
-    \pause
-
-    \textbf{Technique de recherche}
-    \begin{itemize}
-        \item Traditionnellement : problème d'optimisation quadratique
-        \item Plus récemment : descente de sous-gradient, descente de gradient par coordonnées
-        \begin{itemize}
-            \item[→] Linéaire ou quasi-linéaire (au moins en pratique)
-        \end{itemize}
-    \end{itemize}
-\end{frame}
-
-\subsection{Les maths en cinq secondes : hyperplans}
+\section{Les maths en cinq secondes : hyperplans}
 \begin{frame}[fragile]{Hyperplans}
     Dans un espace de dimension $n$, un \alert<1>{hyperplan} est un espace de dimension $n-1$
     \begin{overprint}
@@ -500,7 +458,7 @@
     \end{overprint}
 \end{frame}
 
-\subsection{Classifieurs linéaires}
+\section{Classifieurs linéaires}
 
 \begin{frame}{Classifieurs linéaires}
 	La propriété de séparation des hyperplans permet de construire des classifieurs
@@ -636,7 +594,26 @@
     On peut montrer que $H$ ne dépend que de la position des vecteurs de support.
 \end{frame}
 
-\againframe<3>{SVMmain}
+% TODO: cite
+\begin{frame}{SVM}
+    \emph{Support Vector Machines} : \emph{machines à vecteurs de support} ou \emph{Séparateur à Vaste Marge}
+
+    \textbf{Dans Weka} classifiers > functions > SMO
+    \pause
+
+    \textbf{Espace de recherche} Ensemble des hyperplans affines de $ℝ^n$, où $n$ est le nombre d'attributs.
+    \pause
+
+    \textbf{Technique de recherche}
+    \begin{itemize}
+        \item Traditionnellement : problème d'optimisation quadratique
+        \item Plus récemment : descente de sous-gradient, descente de gradient par coordonnées
+        \begin{itemize}
+            \item[→] Linéaire ou quasi-linéaire (au moins en pratique)
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
 
 \subsection{Raffinements}
 % TODO: figs
