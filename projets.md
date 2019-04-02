@@ -48,14 +48,42 @@ Pour constituer vos corpus de travail
 - Si les corpus de tweets vous intéressent, n'hésitez pas à regarder du côté de l'API Twitter
 
 ## Outils
+### Script de vectorisation
+Un [script de vectorisation](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/vectorisation.py) basique vous est fourni pour générer des fichiers ARFF.
+Il se lance avec
 
-- Un [script de vectorisation](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/vectorisation.py) pour générer des fichiers Weka
-  - À lancer avec `python3 vectorisation.py chemin/du/corpus sortie.arff`
-  - Le corpus est un dossier contenant un sous-dossier par classe et chaque sous-dossier contient un fichier par document (avec l'extension `.txt`)
-  - N'héistez pas à adapter ce script pour l'adapter à vos besoins : une meilleure segmentation, un calcul des fréquences relatives ou des TF⋅IDF…
+```bash
+python3 vectorisation.py chemin/du/corpus chemin/du/fichier/de/sortie
+```
+Où `chemin/du/corpus` est le chemin vers un dossier contenant un sous-dossier par classe, chaque sous-dossier contenant un fichier par document de cette classe (avec l'extension `.txt`).
+Par exemple
+```
+mon_corpus
+├── culture
+│   ├── t1.txt
+│   ├── t2.txt
+│   ├── t3.txt
+│   └── t4.txt
+└── societe
+    ├── t5.txt
+    ├── t6.txt
+    └── t7.txt
+```
 
+Pour vectoriser un corpus en utilisant le même vocabulaire qu'un corpus déjà vectorisé, par exemple pour vectoriser le corpus de test à partir du corpus d'entraînement, utilisez l'option `--lexicon` comme ceci
+
+```bash
+python3 vectorisation.py --lexicon chemin/vers/entrainement.arff chemin/du/corpus chemin/du/fichier/de/sortie
+```
+
+Vous pouvez aussi voir le détail des options disponibles en lançant `vectorisation.py --help`.
+
+N'hésitez pas à adapter ce script pour l'adapter à vos besoins : une meilleure segmentation, un calcul des fréquences relatives ou des TF⋅IDF…
+
+### Autres resources
 - Si programmer ne vous effraie pas, allez voir du côté de [scikit-learn](https://scikit-learn.org) qui propose des versions faciles à utiliser des algorithmes vu en cours.
-- Si vous voulez réaliser des traitements linguistiques plus sophistiqués sur vos données, allez voir [spacy](https://spacy.io), [nltk](https://www.nltk.org) ou [CoreNLP](https://stanfordnlp.github.io/CoreNLP). Évidemment, n'utilisez pas les classifieurs de documents déjà inclus directement comme entrée de vos classifieurs à vous…
+- Si vous voulez réaliser des traitements linguistiques plus sophistiqués sur vos données, allez voir [spacy](https://spacy.io), [nltk](https://www.nltk.org) ou [CoreNLP](https://stanfordnlp.github.io/CoreNLP).
+  Évidemment, n'utilisez pas les classifieurs de documents déjà inclus directement comme entrée de vos classifieurs à vous…
 
 ## Exemples de sujets
 
