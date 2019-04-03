@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 
 import argparse
+import ast
 import pathlib
 import re
 import sys
@@ -81,9 +82,14 @@ def process(
             if lexicon.endswith(".arff"):
                 lexicon = sorted(
                     set(
-                        re.search(r"'(.*)'", l).group(1)
+                        word
                         for l in in_stream
                         if l.startswith("@attribute")
+                        # unescape (quoted) string
+                        for word in (
+                            ast.literal_eval((re.search(r"'.*'", l).group(0))),
+                        )
+                        if word != "xClasse"
                     )
                 )
             else:
