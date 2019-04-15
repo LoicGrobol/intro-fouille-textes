@@ -53,7 +53,7 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2019
 #### 2019-04-01 — *SVM*
   - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture10.pdf)
 
-#### 2019-04-15 — *Réseaux de neurones*
+#### 2019-04-15 — Réseaux de neurones
   - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture11.pdf)
 
 ## Liens utiles
