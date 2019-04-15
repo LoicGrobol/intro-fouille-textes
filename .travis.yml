@@ -83,6 +83,7 @@ deploy:
       - slides/lecture11/lecture11.pdf
       - syllabus/syllabus.pdf
       - exos/exam2017.pdf
+      - exos/exam-2018-04.pdf
       - poly/poly.pdf
       - tools/vectorisation.py
       - _build/sample-data.tar.gz
