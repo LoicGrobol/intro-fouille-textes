@@ -57,8 +57,8 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2019
 
 #### 2019-04-15 — Réseaux de neurones
   - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture11.pdf)
-  - [Sujet examen 2017](ttps://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/exam2017.pdf)
-  - [Sujet examen 2018](ttps://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/exam-2018-04.pdf)
+  - [Sujet examen 2017](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/exam2017.pdf)
+  - [Sujet examen 2018](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/exam-2018-04.pdf)
 
 ## Liens utiles
 
