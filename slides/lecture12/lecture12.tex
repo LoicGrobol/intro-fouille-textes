@@ -616,7 +616,7 @@
 	Si on sait qu'un déterminant est souvent suivi par un nom, on peut raisonnablement faire l'hypothèse que \emph{coqui} est un nom\only<4>{\footnote{\tiny Et on aura raison : \emph{eleutherodactylus coqui} est une charmante grenouille arboricole portoricaine.}}.
 \end{frame}
 
-\subsection{HMM}
+\subsection{Modèles de Markov Cachés}
 \begin{frame}{HMM}
 	La façon la plus simple de tenir compte de la structuration des étiquettes : utiliser un \alert{\textit{\textbf{H}idden \textbf{M}arkov \textbf{M}odel}}.
 
@@ -649,18 +649,68 @@
 	Comme pour Naïve Bayes, il suffit de maximiser $P(X|Y)×P(Y)$.
 \end{frame}
 
-\begin{frame}{Formalisme}
-	Maximiser $P(X|Y)×P(Y)$ :
-	\begin{itemize}
-		\item $P(X|Y)$
-	\end{itemize}
+\begin{frame}{Probabilité d'émission}
+	On appelle $P(X|Y)$ \alert{probabilité d'émission}.
+
+	Comme pour Naïve Bayes, comme il est peu probable qu'on ait rencontré suffisamment de fois $X$ dans notre corpus pour pouvoir l'estimer, on va devoir faire une hypothèse d'indépendance en supposant que
+	\begin{equation}
+		P(X|Y) = P(x₁|y₁) × … × P(x_n|y_n)
+	\end{equation}
+	soit pour notre exemple
+	\begin{equation}
+		P(\text{Le}, …, \text{content}|\text{DET}, …, \text{ADJ}) = P(\text{Le}|\text{DET}) × … × P(\text{content}|\text{ADJ})
+	\end{equation}
 \end{frame}
 
-\subsection{MEMM/CRF}
-% Ajout features sur l'étiquette précédente
-% Greedy decoding
-% Entraînement
-% Viterbi
+\begin{frame}{Probabilité de transition}
+	On appelle $P(Y)$ la \alert{probabilité de transition}.
+	Il s'agit de la probabilité de la séquence d'étiquettes indépendamment du contexte.
+	Dans notre exemple
+	\begin{equation}
+		P(Y) = P(DET, ADJ, N, V, ADJ)
+	\end{equation}
+
+	Là encore, il est en général peu probable qu'on l'ait rencontrée assez de fois pour estimer sa probabilité, mais supposer l'indépendance nous fait perdre l'information qu'on voulait conserver : \alert{la structuration}.
+\end{frame}
+
+% TODO: frame pour expliquer
+% P(Y)
+% 	&= P(y₁)×P((yᵢ)_{i>1}|y₁)
+% 	&= P(y₁)×P(y₂|y₁)×P((yᵢ)_{i>2}|y₁,y₂)
+% 	…
+
+% TODO: figure
+\begin{frame}{Hypothèse de Markov}
+	Pour permettre d'estimer $P(Y)$, on va supposer que la probabilité de chaque étiquette ne dépend que de celle qui précède, ce qui donne\footnote{Avec une notation abominable.}
+	\begin{equation}
+		P(Y) = P(y₁)×P(y₂|y₁)×P(y₃|y₂)×…×P(y_{n-1}|y_n)
+	\end{equation}
+	Or on sait estimer $P(y|y')$ : il suffit de compter dans le corpus le nombre d'occurrences de $(y',y)$ et de $y'$ et d'appliquer la définition.
+\end{frame}
+
+\begin{frame}{Inférence}
+	Les simplifications précédentes permettent d'apprendre facilement le modèle : il reste à le mettre en action.
+
+	Sous ces hypothèses, il existe plusieurs façon de déterminer une séquence d'étiquettes probables pour une séquence de mots
+
+	Des méthodes simples et inexactes
+	\begin{itemize}
+		\item Heuristique gloutonne
+		\item \emph{Beam search}
+	\end{itemize}
+
+	Une méthode un peu plus sophistiquée (et plus lente) mais exacte : l'algorithme de Viterbi.
+\end{frame}
+
+\begin{frame}[standout]
+	La suite au tableau
+\end{frame}
+
+% \subsection{MEMM/CRF}
+% Plus facile d'ajouter des features
+% Plus coûteux à entraîner
+% Inférence : Viterbi ou (rarement) beam search
+% La différence entre les deux est uniquement de l'entraînement lors de l'optimisation des poids des features 
 
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
