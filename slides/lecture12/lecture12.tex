@@ -1,0 +1,619 @@
+% Copyright © 2018, Loïc Grobol <loic.grobol@gmail.com>
+% This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (https://creativecommons.org/licenses/by/4.0/)
+
+\RequirePackage{xparse}
+\RequirePackage{shellesc}
+% Settings
+\NewDocumentCommand\myname{}{Loïc Grobol}
+\NewDocumentCommand\mylab{}{Lattice / ALMAnaCH}
+\NewDocumentCommand\pdftitle{}{Introduction à la fouille de textes}
+\NewDocumentCommand\mymail{}{loic.grobol@gmail.com}
+\NewDocumentCommand\titlepagetitle{}{\pdftitle}
+\NewDocumentCommand\titlepagesubtitle{}{Cours 12 : Modèles d'étiquetage}
+\NewDocumentCommand\docdate{}{2019-04-30}
+\NewDocumentCommand\conference{}{M1 Plurital}
+
+\documentclass[hyperref={unicode}, xcolor={svgnames}, french]{beamer}
+% Alternative navy blue for ⩽4 palettes
+\definecolor{highlighta}{RGB}{68, 118, 170}  % Navy blue
+
+% Colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf) v3.1
+% Bright scheme
+\definecolor{sronbrighttblue}{RGB}{68, 119, 170}
+\definecolor{sronbrightcyan}{RGB}{102, 204, 238}
+\definecolor{sronbrightgreen}{RGB}{34, 136, 51}
+\definecolor{sronbrightyellow}{RGB}{204, 187, 68}
+\definecolor{sronbrightred}{RGB}{238, 102, 119}
+\definecolor{sronbrightpurple}{RGB}{170, 51, 119}
+\definecolor{sronbrightgrey}{RGB}{187, 187, 187}
+
+\colorlet{highlight0}{sronbrighttblue}
+\colorlet{highlight1}{sronbrightred}
+\colorlet{highlight2}{sronbrightgreen}
+\colorlet{highlight3}{sronbrightyellow}
+\colorlet{highlight4}{sronbrightcyan}
+\colorlet{highlight5}{sronbrightpurple}
+\colorlet{highlight6}{sronbrightgrey}
+% Legacy highlights
+\definecolor{highlight7}{RGB}{136, 34, 85}    % Purple
+\definecolor{highlight8}{RGB}{170, 68, 153}   % Violet
+
+
+\usetheme[
+	sectionpage=progressbar,
+    subsectionpage=progressbar,
+	progressbar=frametitle,
+]{metropolis}
+	\colorlet{accent}{sronbrightgreen}
+	\setbeamercolor{frametitle}{bg=DarkSlateGrey}
+	\setbeamercolor{alerted text}{fg=accent}
+	\makeatletter
+		\setlength{\metropolis@progressinheadfoot@linewidth}{2pt}
+	\makeatother
+	% Avoid ugly whitespace below figures
+	% \makeatletter
+	% 	\renewenvironment{figure}[1][]{%
+	% 	\def\@captype{figure}%
+	% 	\par\centering}%
+	% 	{\par}
+	% \makeatother
+	% FIXME: not pretty and footnotes are still too big
+	\let\footnoterule\relax  % No footnote rule, push down footnote
+
+
+% Use non-standard fonts
+\usefonttheme{professionalfonts}
+	\setsansfont[
+		BoldFont={Fira Sans SemiBold},
+		ItalicFont={Fira Sans Italic},
+		BoldItalicFont={Fira Sans Bold Italic},
+	]{Fira Sans Book}
+\setmonofont[Scale=0.9]{Fira Mono}
+
+% Fix missing glyphs in Fira by delegating to polyglossia/babel
+\usepackage{newunicodechar}
+\newunicodechar{ }{~}   % U+202F NARROW NO-BREAK SPACE
+\newunicodechar{ }{ }  % U+2009 THIN SPACE
+
+% Notes on left screen
+% \usepackage{pgfpages}
+% \setbeameroption{show notes on second screen=left}
+
+
+\usepackage[french, english]{babel}
+\usepackage{amsfonts,amssymb}
+\usepackage{amsmath,amsthm}
+\usepackage{mathtools}	% AMS Maths service pack
+	\newtagform{brackets}{[}{]}	% Pour des lignes d'équation numérotées entre crochets
+	\mathtoolsset{showonlyrefs, showmanualtags, mathic}	% affiche les tags manuels (\tag et \tag*) et corrige le kerning des maths inline dans un bloc italique voir la doc de mathtools
+	\usetagform{brackets}	% Utilise le style de tags défini plus haut
+\usepackage{lualatex-math}
+
+\usepackage[math-style=french]{unicode-math}
+	\setmathfont{Libertinus Math}
+\usepackage{newunicodechar}
+	\newunicodechar{√}{\sqrt}
+\usepackage{mleftright}
+
+\usepackage{tabu}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{multicol}
+\usepackage{ccicons}
+\usepackage{bookmark}
+\usepackage{caption}
+    \captionsetup{skip=1ex}
+\usepackage[iso]{datetime}
+
+\usepackage{tikz}
+	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}}
+    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep = 0pt]{\node[#1] (#2) {$\displaystyle #3$};}}
+	\tikzset{
+		alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+		},
+        invisible/.style={opacity=0, fill opacity=0},
+		visible on/.style={alt={<#1>{}{invisible}}}
+	}
+    \usepackage{forest}
+    \usepackage{tkz-graph}
+    \usepackage[beamer, markings]{hf-tikz}
+    \usepackage{tikz-3dplot}
+    \usepackage{pgfplots}
+        % Due to pgfplots meddling with pgfkeys, we have to redefine alt here.
+        \pgfplotsset{
+    		alt/.code args={<#1>#2#3}{%
+    		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+    		},
+    	}
+        \pgfplotsset{compat=1.15}
+        \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}}
+
+    \usetikzlibrary{matrix}
+    \usetikzlibrary{shapes, shapes.geometric}
+    \usetikzlibrary{decorations.pathreplacing}
+	\usetikzlibrary{positioning, calc, intersections}
+    \usetikzlibrary{fit}
+    \usetikzlibrary{backgrounds}
+
+    % Do evil things with soft path
+    \makeatletter
+        \def\@appendnamedsoftpath#1{%
+            \pgfsyssoftpath@getcurrentpath\@temppatha
+            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
+            \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb}%
+            \pgfsyssoftpath@setcurrentpath\@temppatha
+        }
+        \def\@appendnamedpathforactions#1{%
+            \pgfsyssoftpath@getcurrentpath\@temppatha
+            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
+            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb}%\usepackage{tikz-3dplot}
+
+            \let\tikz@actions@path\@temppatha
+        }
+
+        \tikzset{
+            use path for main/.code={%
+                \tikz@addmode{%
+                    \expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname
+                }%
+            },
+            append path for main/.code={%
+                \tikz@addmode{%
+                    \@appendnamedsoftpath{#1}%
+                }%
+            },
+            use path for actions/.code={%
+                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}%
+            },
+            append path for actions/.code={%
+                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions
+                \@appendnamedpathforactions{#1}}%
+            },
+            use path/.style={%
+                use path for main=#1,
+                use path for actions=#1,
+            },
+            append path/.style={%
+                append path for main=#1,
+                append path for actions=#1
+            }
+        }
+    \makeatother
+
+    % TikZ externalisation
+    \usetikzlibrary{external}
+    % Create the `tikzpics/` folder if it does not exist
+    \ShellEscape{mkdir -p tikzpics}
+    % Only externalise pictures on demand (to avoid messing up with metropolis theme)
+    \tikzset{
+        external/export=false,
+        external/prefix=tikzpics/
+    }
+    \tikzexternalize
+
+\usepackage{minted}
+	\usemintedstyle{lovelace}
+	\setminted{autogobble, tabsize=2}
+	\setmintedinline{fontsize=auto}
+
+\usepackage{csquotes}
+
+\usepackage[style=authoryear, block=ragged, doi=false, isbn=false]{biblatex}
+    \AtEveryBibitem{
+        \ifentrytype{online}
+        {} {
+            \iffieldequalstr{howpublished}{online}
+            {
+                \clearfield{howpublished}
+            } {
+                \clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}
+            }
+        }
+    }
+
+	\addbibresource{biblio.bib}
+
+% Compact bibliography style
+\setbeamertemplate{bibliography item}[text]
+
+\AtEveryBibitem{
+    \clearfield{series}
+    \clearfield{pages}
+    \clearlist{publisher}
+    \clearname{editor}
+    \clearlist{location}
+}
+\renewcommand*{\bibfont}{\tiny}
+
+\usepackage{hyperxmp}	% XMP metadata
+
+\usepackage[type={CC}, modifier={by}, version={4.0}]{doclicense}
+
+\usepackage{todonotes}
+\let\todox\todo
+\renewcommand\todo[1]{\todox[inline]{#1}}
+
+\title{\titlepagetitle}
+\subtitle{\titlepagesubtitle}
+\author{\textbf{\myname} (\mylab)}
+\institute{}
+\date{\tiny Version {\yyyymmdddate\today}T\currenttime}
+
+\titlegraphic{\ccby}
+
+% Tikz styles
+
+% Schémas de tâches
+\tikzset{
+    >=stealth,
+    hair lines/.style={line width = 0.05pt, lightgray},
+    data/.style={draw, ellipse},
+    program/.style={draw, rectangle},
+    accent on/.style={alt={<#1>{draw=accent, text=accent, thick}{draw}}},
+    true scale/.style={scale=#1, every node/.style={transform shape}},
+    highlight/.style={color=highlight#1}
+}
+
+% Styles des heatmap pour les moyennes
+\pgfplotsset{
+    meanheatmap/.style={
+        colorbar, colormap name=SRON,
+        view={0}{90},
+        samples=100,
+        domain=0:1,
+        min=0, max=1,
+        xlabel={$P$},
+        ylabel={$R$},
+    }
+}
+
+% Commands spécifiques
+\NewDocumentCommand\shorturl{ O{https} O{://} m }{%
+    \href{#1#2#3}{\nolinkurl{#3}}%
+}
+
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiterX\compset[2]{\lbrace}{\rbrace}{#1\,\delimsize|\,#2}
+\DeclarePairedDelimiterX\innprod[2]{\langle}{\rangle}{#1\,\delimsize|\,#2}
+
+\DeclareMathOperator*\argmax{argmax}
+
+% Easy column vectors \vcord{a,b,c} ou \vcord[;]{a;b;c}
+% Here be black magic
+\ExplSyntaxOn
+	\NewDocumentCommand{\vcord}{O{,}m}{\vector_main:nnnn{p}{\\}{#1}{#2}}
+	\NewDocumentCommand{\tvcord}{O{,}m}{\vector_main:nnnn{psmall}{\\}{#1}{#2}}
+	\seq_new:N\l__vector_arg_seq
+	\cs_new_protected:Npn\vector_main:nnnn #1 #2 #3 #4{
+		\seq_set_split:Nnn\l__vector_arg_seq{#3}{#4}
+		\begin{#1matrix}
+			\seq_use:Nnnn\l__vector_arg_seq{#2}{#2}{#2}
+		\end{#1matrix}
+	}
+\ExplSyntaxOff
+
+\DeclareMathOperator{\TF}{TF}
+\DeclareMathOperator{\IDF}{IDF}
+
+\ExplSyntaxOn
+    \DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
+\ExplSyntaxOff
+
+
+% Fixes for pauses after an unveiled list
+\newcommand{\itpause}{%
+	\addtocounter{beamerpauses}{-1}%
+	\pause
+}
+
+
+% ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████
+% ██   ██ ██    ██ ██      ██    ██ ████  ████ ██      ████   ██    ██
+% ██   ██ ██    ██ ██      ██    ██ ██ ████ ██ █████   ██ ██  ██    ██
+% ██   ██ ██    ██ ██      ██    ██ ██  ██  ██ ██      ██  ██ ██    ██
+% ██████   ██████   ██████  ██████  ██      ██ ███████ ██   ████    ██
+
+
+\begin{document}
+\pdfbookmark[2]{Title}{title}
+
+\begin{frame}[plain]
+	\titlepage
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Rappel}
+	\begin{quote}
+		L'\emph{annotation} ou \emph{étiquetage} est la tâche consistant à attribuer une étiquette à chaque élément d'un ensemble \alert{structuré}
+	\end{quote}
+	\begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+                Le  & petit & chat  & est & content\\
+                DET & ADJ   & NC    & V   & ADJ\\
+            };
+            \foreach \x in {1, ..., 5}
+                \draw[->] (m-1-\x) -- (m-2-\x);
+        \end{tikzpicture}
+        \caption{\emph{Part Of Speech Tagging}}
+    \end{figure}
+	Ici on parlera essentiellement de l'étiquetage de \alert{séquences}.
+\end{frame}
+
+\section{Représenter les données}
+\begin{frame}[fragile=singleslide]{Formats}
+	On a une tâche de fouille de textes à réaliser
+
+	\begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+                Le  & petit & chat  & est & content\\
+                DET & ADJ   & NC    & V   & ADJ\\
+            };
+            \foreach \x in {1, ..., 5}
+                \draw[->] (m-1-\x) -- (m-2-\x);
+        \end{tikzpicture}
+        \caption{\emph{Part Of Speech Tagging}}
+    \end{figure}
+
+	La première chose à faire est de représenter les données du problèmes sous forme lisible par la machine.
+\end{frame}
+
+\begin{frame}[fragile]{Format CoNLL}
+	\begin{columns}
+		\column{0.45\textwidth}
+			\begin{figure}
+				\begin{minted}{text}
+					Le	DET
+					petit	ADJ
+					chat	N
+					est	V
+					content	ADJ
+
+					Vive	V
+					le	DET
+					TAL	N
+				\end{minted}
+			\end{figure}
+		\column{0.45\textwidth}
+			\begin{itemize}
+				\item Un mot par ligne
+				\item Colonnes séparées par des tabulateurs
+				\item \alert{Séquences séparées par des lignes vides}
+			\end{itemize}
+	\end{columns}
+	Est-ce un format tabulaire au sens habituel ?
+\end{frame}
+
+\begin{frame}[fragile]{Indépendance des lignes}
+	% This because of the fragility of pygments' parser
+	\tikzset{
+		squarearound/.style={draw={#1}, line width=2pt, inner sep=3pt},
+	}
+	\begin{columns}
+		\column{0.45\textwidth}
+			\begin{figure}
+				\begin{minted}[escapeinside=||]{text}
+					Le	DET
+					petit	|\textnode[squarearound=highlight0]{petitadj}{ADJ}|
+					chat	N
+					est	V
+					content	ADJ
+				\end{minted}
+			\end{figure}
+		\column{0.45\textwidth}
+			\begin{figure}
+				\begin{minted}[escapeinside=||]{text}
+					Le	DET
+					petit	|\textnode[squarearound=highlight1]{petitn}{N}|
+					mange	V
+					la	DET
+					crêpe	N
+				\end{minted}
+			\end{figure}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Du format}
+	Ce \alert{n'est pas} un format tabulaire au sens précédent de ce cours.
+
+	\begin{itemize}
+		\item Les lignes ne sont pas indépendantes
+		\item L'ordre des lignes compte
+	\end{itemize}
+
+	En revanche
+	\begin{itemize}
+		\item Les \alert{blocs} sont indépendants
+		\item Leur ordre n'est pas significatif
+	\end{itemize}
+
+	Moralment, les blocs sont donc ici l'équivalent des lignes des fichiers tabulaires
+\end{frame}
+
+\begin{frame}[fragile]{Contexte}
+	La non-indépendances des lignes d'un même bloc fait que pour prédire une étiquette, il vaut tenir compte du \alert{contexte}.
+
+	\begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[
+			faded/.style={black!30},
+		]
+			\matrix (mat) [
+				matrix of nodes,
+				column sep=2em,
+				row sep=1em,
+				nodes={align=left, anchor=base west},
+			]{
+				|[alt=<-2>{faded}{}]| Le & |[faded]| DET\\
+				petit & \alt<1>{?}{ADJ}\\
+				|[alt=<1>{faded}{}]| chat & |[faded]| N\\
+				|[alt=<-2>{faded}{}]| est & |[faded]| V\\
+				|[alt=<-2>{faded}{}]| content & |[faded]| ADJ\\
+			};
+			\draw[->] (mat-2-1) -- (mat-2-2);
+			\draw[->, visible on={2-}] (mat-3-1) -- (mat-2-2);
+			\foreach \i in {1,4,5}
+				\draw[->, visible on=3] (mat-\i-1) -- (mat-2-2);
+		\end{tikzpicture}
+	\end{figure}
+	\only<3>{Mais l'intégralité du contexte n'est pas toujours utile.}
+\end{frame}
+
+\begin{frame}[fragile]{Contexte}
+	En général on ne tient compte pour chaque étiquette que d'une partie du contexte.
+
+	Par exemple le mot d'avant et le mot d'après
+	\begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[
+			faded/.style={black!30},
+		]
+			\matrix (mat) [
+				matrix of nodes,
+				row sep=1em,
+				column sep=2em,
+				column 1/.style={align=right, anchor=base east},
+				column 2/.style={align=left, anchor=base west},
+			]{
+				Le &  DET\\
+				petit & ADJ\\
+				chat &  N\\
+				$⋮$ & $⋮$\\
+			};
+			\draw[->, visible on=1] (mat-1-1) -- (mat-1-2);
+			\draw[->, visible on=1] (mat-2-1) -- (mat-1-2);
+
+			\draw[->, visible on=2] (mat-1-1) -- (mat-2-2);
+			\draw[->, visible on=2] (mat-2-1) -- (mat-2-2);
+			\draw[->, visible on=2] (mat-3-1) -- (mat-2-2);
+
+			\draw[->, visible on=3] (mat-2-1) -- (mat-3-2);
+			\draw[->, visible on=3] (mat-3-1) -- (mat-3-2);
+		\end{tikzpicture}
+	\end{figure}
+	\only<3>{}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Features contextuelles}
+	D'un point de vue apprentissage, « tenir compte du contexte » signifie utiliser les mots du contexte comme \alert{features}.
+
+	Dans un format tabulaire, les dépendances considérées donnent donc
+	\begin{table}
+		\begin{tabu} to .9\textwidth {cccc}
+			[0]	& [-1]	& [1]	& label\\
+			\midrule
+			Le	& \mintinline{text}{<s>}	& petit	& DET\\
+			petit	& Le	& chat	& ADJ\\
+			chat	& petit	& est	& N\\
+			content	& chat	& \mintinline{text}{</s>}	& ADJ
+		\end{tabu}
+	\end{table}
+
+	\begin{itemize}
+		\item Les lignes sont bien indépendantes
+		\item Les features sont des position relative : pour une étiquette donnée, le mot précédent a l'indice $-1$, le mot à étiqueter $0$, le mot suivant $1$ et ainsi de suite.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Patrons de features}
+	On ne se limite pas aux formes pour déterminer une étiquette
+	\vspace{-\smallskipamount}
+	\begin{table}
+		\begin{tabu} to .9\textwidth {ccc}
+			Les	& le	& DET\\
+			enfants	& enfant	& N\\
+			sont	& est	& V\\
+			pénibles & pénible	& ADJ
+		\end{tabu}
+	\end{table}
+	\vspace{-\smallskipamount}
+	Dans ce cas les features sont précisées en deux dimensions :
+	\begin{table}
+		\begin{tabu} to .9\textwidth {ccc}
+			\mintinline{text}{[0, 0]}	& \mintinline{text}{[1, 1]}	& label\\
+			\midrule
+			Les	& le 	& DET\\
+			enfants	& enfant 	& ADJ\\
+			sont	& est 	& N\\
+			pénibles	& \mintinline{text}{</s>}	& ADJ
+		\end{tabu}
+	\end{table}
+	\vspace{-1.5\smallskipamount}
+	Ici \mintinline{text}{[1, 1]} désigne la valeur de la colonne $1$ pour la ligne suivant l'étiquette.
+\end{frame}
+
+
+\section{Modèles d'étiquetage}
+\subsection{Classification indépendante}
+\begin{frame}[fragile]{Principe}
+	On a vu qu'en utilisant des patrons, on pouvait ramener la structure des entrée (les mots) à des features.
+
+	\begin{table}
+		\begin{tabu} to .9\textwidth {cccc}
+			\mintinline{text}{[[0, 0]}	& \mintinline{text}{[[-1, 0]}	& \mintinline{text}{[[1, 0]}	& label\\
+			\midrule
+			petit	& Le	& chat	& ADJ\\
+			Le	& \mintinline{text}{<s>}	& petit	& DET\\
+			content	& chat	& \mintinline{text}{</s>}	& ADJ\\
+			chat	& petit	& est	& N
+		\end{tabu}
+	\end{table}
+
+	À partir de là, on peut simplement prédire les étiquettes avec un classifieur.
+\end{frame}
+
+\begin{frame}{Avec Naïve Bayes}
+	\textbf{Rappel} Avec Naïve Bayes on classifie un exemple $X$ dans la classe $C$ qui maximise $s(C,X)$ avec
+	\begin{equation}
+		s(C,X) = P(C) × P(x₁|C) × … × P(x_n|C)
+	\end{equation}
+	où les $xᵢ$ sont les features de $X$.
+\end{frame}
+% Utilisation des features
+% Décodage classif
+\subsection{MEMM/CRF}
+% Ajout features sur l'étiquette précédente
+% Greedy decoding
+% Entraînement
+% Viterbi
+
+
+%  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
+% ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
+% ███████ ██████  ██████  █████   ██ ██  ██ ██   ██ ██   ███
+% ██   ██ ██      ██      ██      ██  ██ ██ ██   ██ ██  ██ ██
+% ██   ██ ██      ██      ███████ ██   ████ ██████  ██ ██   ██
+
+\appendix
+\pgfkeys{/metropolis/inner/sectionpage=simple}  % Avoid random errors with section page progressbar
+\section{Annexes}
+\pdfbookmark[2]{Remerciements}{acknowledgements}
+\begin{frame}{Remerciements}
+    Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017fouille} \parencite{tellier2017fouille} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
+\end{frame}
+
+\pdfbookmark[2]{Références}{references}
+\begin{frame}[allowframebreaks]{References}
+    \printbibliography[heading=none]
+\end{frame}
+
+\pdfbookmark[2]{Licence}{licence}
+\begin{frame}{Licence}
+    \begin{center}
+        {\huge \ccby}
+        \vfill
+        This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
+
+        Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
+        \vfill
+        © 2019, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
+
+        \shorturl[http]{lattice.cnrs.fr/Grobol-Loic}
+    \end{center}
+\end{frame}
+
+\end{document}
