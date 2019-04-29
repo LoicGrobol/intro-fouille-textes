@@ -710,7 +710,9 @@
 % Plus facile d'ajouter des features
 % Plus coûteux à entraîner
 % Inférence : Viterbi ou (rarement) beam search
-% La différence entre les deux est uniquement de l'entraînement lors de l'optimisation des poids des features 
+% Différence : MEMM normalise sur les états, CRF sur les séquences
+% Csq : e.g. CRF capable de passer par une transition de proba 0 si
+% elle donne une grosse proba pour la suite
 
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
