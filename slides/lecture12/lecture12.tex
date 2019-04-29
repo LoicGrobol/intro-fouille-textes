@@ -90,7 +90,7 @@
 \usepackage{lualatex-math}
 
 \usepackage[math-style=french]{unicode-math}
-	\setmathfont{Libertinus Math}
+	\setmathfont[Scale=1.1]{Libertinus Math}
 \usepackage{newunicodechar}
 	\newunicodechar{√}{\sqrt}
 \usepackage{mleftright}
@@ -572,9 +572,90 @@
 		s(C,X) = P(C) × P(x₁|C) × … × P(x_n|C)
 	\end{equation}
 	où les $xᵢ$ sont les features de $X$.
+
+	Par exemple pour notre exemple $X = (\text{petit}, \text{Le}, \text{chat})$
+	\begin{equation}
+		\begin{aligned}
+			s(\text{ADJ}, X)
+				&= P(\text{ADJ})\\
+				&× P([0,0]=\text{petit}|\text{ADJ})\\
+				&× P([-1,0]=\text{Le}|\text{ADJ})\\
+				&× P([1,0]=\text{chat}|\text{ADJ})
+		\end{aligned}
+	\end{equation}
 \end{frame}
-% Utilisation des features
-% Décodage classif
+
+\begin{frame}{Apprentissage et inférence}
+	\textbf{Apprentissage} À partir d'un corpus d'entraînement, on peut estimer les probabilités avec des Statistiques basiques.
+
+	\textbf{Inférence}
+	\begin{itemize}
+		\item On considère chaque mot à annoter indépendamment
+		\item On affecte à chacun l'étiquette qui a le meilleur score
+	\end{itemize}
+
+	\begin{itemize}
+		\item Avantage : c'est très simple et très rapide
+		\item Inconvénient : c'est souvent un peu trop idiot
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Les problèmes}
+	Outre les défauts habituels de Naïve Bayes, le plus gros problème :
+
+	\pause
+
+	{\only<2>{\huge} \textbf{On oublie la structuration des étiquettes}}
+
+	\pause
+
+	Par exemple, comment étiqueter la séquence « Le coqui » si on a jamais rencontré ce mot ?
+
+	\pause
+
+	Si on sait qu'un déterminant est souvent suivi par un nom, on peut raisonnablement faire l'hypothèse que \emph{coqui} est un nom\only<4>{\footnote{\tiny Et on aura raison : \emph{eleutherodactylus coqui} est une charmante grenouille arboricole portoricaine.}}.
+\end{frame}
+
+\subsection{HMM}
+\begin{frame}{HMM}
+	La façon la plus simple de tenir compte de la structuration des étiquettes : utiliser un \alert{\textit{\textbf{H}idden \textbf{M}arkov \textbf{M}odel}}.
+
+	Moralement, il s'agit d'ajouter au modèle Naïve Bayes qu'on vient de voir une dépendance entre étiquettes.
+\end{frame}
+
+\begin{frame}{Formalisme}
+	Pour simplifier, on va considérer qu'on utilise les formes comme seules features.
+
+	\begin{itemize}
+		\item On considère la séquence de mots : $X=(x₁, …, x_n)$
+			\begin{itemize}
+				\item[→] (Le, petit, chat, est, content)
+			\end{itemize}
+		\item On cherche à déterminer la séquence d'étiquettes $Y=(y₁, …, y_n)$ qui maximise la probabilité $P(Y|X)$
+			\begin{itemize}
+				\item[→] (DET, ADJ, N, V, ADJ)
+			\end{itemize}
+	\end{itemize}
+
+	La différence avec précédemment c'est qu'ici on optimise sur toute la séquence et pas mot par mot.
+
+	\pause
+
+	D'après le théorème de Bayes, on a
+	\begin{equation}
+		P(Y|X) = \frac{P(X|Y)×P(Y)}{P(X)}
+	\end{equation}
+
+	Comme pour Naïve Bayes, il suffit de maximiser $P(X|Y)×P(Y)$.
+\end{frame}
+
+\begin{frame}{Formalisme}
+	Maximiser $P(X|Y)×P(Y)$ :
+	\begin{itemize}
+		\item $P(X|Y)$
+	\end{itemize}
+\end{frame}
+
 \subsection{MEMM/CRF}
 % Ajout features sur l'étiquette précédente
 % Greedy decoding
