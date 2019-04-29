@@ -63,7 +63,12 @@
 
 % Use non-standard fonts
 \usefonttheme{professionalfonts}
-\setsansfont[BoldFont={Fira Sans SemiBold}, ItalicFont={Fira Sans Book Italic}]{Fira Sans Book}
+\usefonttheme{professionalfonts}
+	\setsansfont[
+		BoldFont={Fira Sans SemiBold},
+		ItalicFont={Fira Sans Italic},
+		BoldItalicFont={Fira Sans Bold Italic},
+	]{Fira Sans Book}
 \setmonofont[Scale=0.9]{Fira Mono}
 
 % Fix missing glyphs in Fira by delegating to polyglossia/babel
@@ -442,7 +447,7 @@
 	}
 
 	\uncover<3->{
-	    $P(d)$ ne dépend pas de $C$, il s'agit donc de maximiser $P(d|C)×P(C)$.
+	    $P(d)$ ne dépend pas de $C$, il s'agit donc de maximiser $s(C,d)=P(d|C)×P(C)$.
 	}
 
 	\uncover<4->{
@@ -548,11 +553,11 @@
 
     \textbf{Espace de recherche} Ensemble des fonctions de la forme
     \begin{equation}
-        x ⟼ \argmax_k p(C_k | x)
+        x ⟼ \argmax_k s(C_k | x)
     \end{equation}
     avec
     \begin{equation}
-        p(C_k | x) = p(C_k) × p(x₁ | C_k) × … × p(x_n | C_k)
+        s(C_k, x) = P(C_k) × P(x₁ | C_k) × … × P(x_n | C_k)
     \end{equation}
 
     \textbf{Technique de recherche} En générale : formule explicite étant donné l'ensemble d'apprentissage
