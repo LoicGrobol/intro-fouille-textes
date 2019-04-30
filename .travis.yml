@@ -58,6 +58,7 @@ script:
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture10/lecture10.tex
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture11/lecture11.tex
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape slides/lecture12/lecture12.tex
+    - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape exam/2018-04/exam-2018-04.tex
     - latexmk -lualatex -file-line-error -cd -interaction=nonstopmode -halt-on-error -shell-escape syllabus/syllabus.tex
     - mkdir -p _build
     - tar -czf "_build/sample-data.tar.gz" data
@@ -85,9 +86,9 @@ deploy:
       - slides/lecture10/lecture10.pdf
       - slides/lecture11/lecture11.pdf
       - slides/lecture12/lecture12.pdf
+      - exam/2018-04/exam-2018-04.pdf
       - syllabus/syllabus.pdf
       - exos/exam2017.pdf
-      - exos/exam-2018-04.pdf
       - poly/poly.pdf
       - tools/vectorisation.py
       - _build/sample-data.tar.gz

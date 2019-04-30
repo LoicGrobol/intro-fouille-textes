@@ -1,0 +1,199 @@
+\RequirePackage{xparse}
+% Settings
+\NewDocumentCommand\myname{}{Loïc Grobol}
+\NewDocumentCommand\mylab{}{Lattice, ALMAnaCH}
+\NewDocumentCommand\pdftitle{}{Introduction à la fouille de textes : examen final}
+\NewDocumentCommand\mymail{}{loic.grobol@gmail.com}
+\NewDocumentCommand\titlepagetitle{}{\pdftitle}
+\NewDocumentCommand\docdate{}{23 avril 2018}
+\NewDocumentCommand\pageheadertitle{}{\pdftitle}
+
+
+\documentclass[a4paper, 11pt]{article}
+\usepackage[hmargin=2cm, vmargin=1.5cm]{geometry}
+\usepackage[subtle]{savetrees}
+% \setlength\parindent{0pt}
+\setlength\parskip{.2em}
+
+\usepackage{polyglossia}
+    \setmainlanguage{french}
+    \setotherlanguage{english}
+
+    % PATCH: fix spacing in monospaced text
+    \usepackage{xpatch}
+    \makeatletter
+        \xapptocmd\ttfamily{\nofrench@punctuation}{}{}
+    \makeatother
+
+
+\usepackage{fontspec}
+    \setmainfont{Libertinus Serif}
+    \setsansfont{Libertinus Sans}
+
+\usepackage{booktabs}
+\usepackage{csquotes}
+\usepackage{titleps}
+\usepackage{titling}
+\usepackage{tabu}
+\usepackage[totpages,user]{zref}
+
+% ## Packages with a specific loading order
+
+% ### Load after math packages
+\usepackage[math-style=french]{unicode-math}
+	\setmathfont{Libertinus Math}
+
+% Generally load after everything else
+\usepackage{hyperxmp}
+\usepackage[unicode]{hyperref}
+\hypersetup{
+    pdftitle={\pdftitle},	% informations apparaissant dans
+    pdfauthor={\myname <\mymail>},	% dans les informations du document
+    pdfcopyright={Copyright © \the\year, \myname},
+    pdfcontactemail={\mymail},
+}
+
+
+% ## Style and metadata
+% ### Page style
+
+\newpagestyle{main}[\small]{
+	\sethead{}{\ifnum\thepage>1 {\pageheadertitle}\fi}{}
+	\setfoot{}{\ifnum\ztotpages>1 {\thepage\ /\ztotpages}\fi}{}
+}
+\pagestyle{main}
+
+% ### Metadata
+
+\title{\titlepagetitle}
+\author{\myname <\mymail>}
+\date{\docdate}
+
+\begin{document}
+{
+   \begin{center}
+      \large{M1 PluriTAL}\par
+      \vspace{1em}
+      \huge\textbf{Introduction à la fouille de textes}\par
+      \vspace{0.5em}
+      \LARGE\textit{Examen final}\par
+      \vspace{0.5em}
+      \Large\thedate
+   \end{center}
+}
+
+Durée de l'examen : deux heures
+
+Tous les documents non-électroniques sont autorisés.
+
+\section{Classification par apprentissage automatique}
+On dispose d'un ensemble de textes représentés par deux attributs que l'on souhaite ranger dans deux classes distinctes notées $+$ et $-$.
+Des exemples déjà classés sont fournis dans le tableau suivant :
+
+\begin{center}
+\begin{tabu} to 0.6\linewidth {*{4}{X[c]}}
+    \toprule
+    \textbf{Identifiant} & \textbf{Attribut 1} & \textbf{Attribut 2} & \textbf{Classe}\\
+    \midrule
+    $1$ & $1$ & $4$ & $+$\\
+    $2$ & $2$ & $1$ & $-$\\
+    $3$ & $3$ & $5$ & $+$\\
+    $4$ & $4$ & $4$ & $+$\\
+    $5$ & $4$ & $1$ & $-$\\
+    $6$ & $6$ & $2$ & $-$\\
+    $7$ & $7$ & $5$ & $-$\\
+    \bottomrule
+\end{tabu}
+\end{center}
+
+\begin{enumerate}
+    \item Dessiner dans un repère cartésien à $2$ dimensions les points représentant chacun de ces textes (en mettant des symboles $+$ et $-$ sur votre figure).
+    \item Expliquer ce que donnera sur ces exemples l'application de chacun des algorithmes d'apprentissage automatique de classifieurs suivants :
+        \begin{enumerate}
+            \item L'algorithme de la classe majoritaire
+            \item Un algorithme de construction d'un arbre de décision
+                (construire un arbre qui classe correctement tous les exemples, plusieurs solutions sont possibles, deux niveaux dans l'arbre suffisent)
+            \item Un algorithme de SVM (dessiner un séparateur crédible sur la figure)
+        \end{enumerate}
+    \item Classer à l'aide des trois classifieurs construits précédemment les nouvelles donné!:es suivantes
+        \begin{center}
+        \begin{tabu} to 0.5\linewidth {*{3}{X[c]}}
+            \toprule
+            \textbf{Identifiant} & \textbf{Attribut 1} & \textbf{Attribut 2}\\
+            \midrule
+            $8$ & $2$ & $3$\\
+            $9$ & $2$ & $2$\\
+            $10$ & $5$ & $1$\\
+            $11$ & $6$ & $5$\\
+            $12$ & $7$ & $1$\\
+            \bottomrule
+        \end{tabu}
+        \end{center}
+
+    \item Sachant que parmi ces nouvelles données, $8$, $9$ et $10$ appartiennent en fait à la classe $+$ et $11$ et $12$ à la classe $-$
+        \begin{enumerate}
+            \item Donner les matrices de confusion obtenues par les classifieurs construits précédemment pour ces nouvelles données
+            \item En déduire la précision, le rappel et la F-mesure de ces algorithmes pour la classe $+$ sur ces données
+        \end{enumerate}
+\end{enumerate}
+
+\section{Identification de tâches}
+La tâche d'\emph{annotation sémantique} est une extension de la tâche de détection des entité nommées qui consiste à lier des entités d'une base de connaissances avec leurs mentions dans un texte.
+Par exemple, un système d'annotation sémantique doit être capable de lier la phrase
+\begin{displayquote}
+    Madame Curie est la seule personne à avoir été récompensée d'un prix Nobel dans deux domaines scientifiques distincts.
+\end{displayquote}
+avec les entrées « Marie Skłodowska-Curie » et « prix Nobel » de sa base de connaissances mais pas avec les entrées « Pierre Curie » ou « Irène Joliot-Curie ».
+
+\begin{enumerate}
+    \item Reformuler la tâche d'annotation sémantique comme un enchaînement de tâches élémentaires de la fouille de textes vues en cours (plusieurs solutions sont possibles, deux tâches distinctes suffisent)
+    \item Suggérer des ressources pertinentes pour un système d'annotation sémantique
+\end{enumerate}
+
+
+\section{Extraction d'information}
+On désire tester différentes méthodes pour apprendre à extraire automatiquement des noms complets de réalisateurs de cinéma, en distinguant leur nom et leur prénom, afin de les ranger dans deux champs distincts d'une base de données.
+Pour cela, on dispose des exemples suivants, dans lesquels les mots \underline{soulignés} sont
+les \emph{prénoms} et les mots \textbf{en gras} sont les \emph{noms de famille} à extraire
+
+\begin{enumerate}
+    \item\label{ex|extr|expl1} Le film de \underline{Lars} \textbf{von Trier}, « Melancolia », a été bien accueilli au Festival de Cannes
+    \item Tout le monde attend le prochain film de \textbf{Wong} \underline{Kar Wai}.
+    \item \underline{Francis Ford} \textbf{Coppola} est un des rares réalisateurs à avoir obtenu deux palmes d'or
+    \item L'intégralité des films de \underline{Jacques} \textbf{Demy} sont sortis en DVD.
+\end{enumerate}
+
+Pour extraire ces noms et prénoms, on propose d'appliquer une méthode de classification aux \emph{séparateurs entre mots}, c'est-à-dire les espaces et les ponctuations (qui sont supprimées du texte initial) séparant deux mots ainsi que le début et la fin d'un texte.
+Par exemple, dans la phrase \ref{ex|extr|expl1}, en représentant les séparateurs entre mots par des barres verticales, on obtient :
+
+{
+    | Le | film | de | \underline{Lars} | \textbf{von | Trier} | Melancolia | a | été | bien | accueilli | au | Festival | de | Cannes |
+}
+
+\begin{enumerate}
+    \item Proposer un ensemble de classes dans lesquelles ranger les séparateurs, qui permettront d'extraire correctement les informations souhaitées.
+
+    \item Si on veut utiliser un programme d'apprentissage automatique pour distinguer ces séparateurs, il faut les transformer en vecteurs.
+        Pour chaque séparateur, on suppose que les attributs choisis sont : la catégorie du mot deux places avant, la catégorie du mot précédent, la catégorie du mot suivant et la catégorie du mot deux places après.
+        Les catégories possibles des mots sont : \texttt{DET}, \texttt{NC}, \texttt{NP} (pour « nom propre », identifiés uniquement parce ce qu'ils sont inconnus d'un dictionnaire et débutent par  une majuscule), \texttt{V}, \texttt{PREP}, \texttt{ADJ}…
+        Donner, pour chacune de vos classes de  séparateurs, un exemple d'une donnée dans cette représentation.
+
+    \item D'après la régularité des données, quelle classe sera la plus facile à apprendre ?
+
+    \item Une autre solution pour extraire ces noms et prénoms est d'\emph{annoter} les textes, en associant à chacun des mots une étiquette.
+        Définir un jeu d'étiquettes permettant de résoudre la tâche  qui nous préoccupe et annoter chacune des phrases fournies en exemples avec ce jeu d'étiquettes.
+\end{enumerate}
+
+\section{Questions diverses}
+Les questions suivantes sont indépendantes
+\begin{enumerate}
+    \item Si on ne se préoccupe pas de la précision d'un système de recherche d'information, comment peut-on s'assurer simplement que son rappel soit maximal ?
+    \item Quand un classifieur utilise l'algorithme de la classe majoritaire, quel est son rappel pour les classes non-majoritaires ? Peut-on donner sa précision pour ces classes ? Justifier.
+    \item On considère un corpus de deux textes, $t₁$ et $t₂$
+        \begin{enumerate}
+            \item Dans quelle situation la forme \emph{mange} a-t-elle un indice TF⋅IDF non-nul pour $t₁$ et nul pour $t₂$ ?
+            \item On suppose que l'on se trouve dans la situation de la question précédente. Est-il possible qu'en lemmatisant le corpus, le lemme \emph{manger} ait un indice TF⋅IDF nul pour $t₁$ \textbf{et} pour $t₂$ ? Justifier.
+        \end{enumerate}
+\end{enumerate}
+
+\end{document}
