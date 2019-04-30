@@ -60,6 +60,9 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2019
   - [Sujet examen 2017](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/exam2017.pdf)
   - [Sujet examen 2018](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/exam-2018-04.pdf)
 
+#### 2019-04-30 — Compléments sur l'étiquetage
+  - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture12.pdf)
+
 ## Liens utiles
 
   - [Le site du projet Weka](https://www.cs.waikato.ac.nz/ml/weka/)
