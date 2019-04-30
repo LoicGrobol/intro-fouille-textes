@@ -308,6 +308,13 @@
 	\pause
 }
 
+\nocite{
+	collinsLogLinearModelsMEMMs,
+	neubig2019TutorialProgrammingNatural,
+	jurafsky2008SpeechLanguageProcessing,
+	lafferty2001ConditionalRandomFields
+}
+
 
 % ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████
 % ██   ██ ██    ██ ██      ██    ██ ████  ████ ██      ████   ██    ██
@@ -526,19 +533,20 @@
 		\begin{tabu} to .9\textwidth {ccc}
 			Les	& le	& DET\\
 			enfants	& enfant	& N\\
-			sont	& est	& V\\
+			sont	& être	& V\\
 			pénibles & pénible	& ADJ
 		\end{tabu}
 	\end{table}
 	\vspace{-\smallskipamount}
 	Dans ce cas les features sont précisées en deux dimensions :
+	% FIXME: ce tableau est faux
 	\begin{table}
 		\begin{tabu} to .9\textwidth {ccc}
 			\mintinline{text}{[0, 0]}	& \mintinline{text}{[1, 1]}	& label\\
 			\midrule
-			Les	& le 	& DET\\
-			enfants	& enfant 	& ADJ\\
-			sont	& est 	& N\\
+			Les	& enfant 	& DET\\
+			enfants	& être 	& ADJ\\
+			sont	& pénible 	& N\\
 			pénibles	& \mintinline{text}{</s>}	& ADJ
 		\end{tabu}
 	\end{table}
@@ -554,7 +562,7 @@
 
 	\begin{table}
 		\begin{tabu} to .9\textwidth {cccc}
-			\mintinline{text}{[[0, 0]}	& \mintinline{text}{[[-1, 0]}	& \mintinline{text}{[[1, 0]}	& label\\
+			\mintinline{text}{[0, 0]}	& \mintinline{text}{[-1, 0]}	& \mintinline{text}{[1, 0]}	& label\\
 			\midrule
 			petit	& Le	& chat	& ADJ\\
 			Le	& \mintinline{text}{<s>}	& petit	& DET\\
@@ -797,7 +805,6 @@
 % Csq : e.g. CRF capable de passer par une transition de proba 0 si
 % elle donne une grosse proba pour la suite
 
-
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
 % ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
 % ███████ ██████  ██████  █████   ██ ██  ██ ██   ██ ██   ███
@@ -807,14 +814,14 @@
 \appendix
 \pgfkeys{/metropolis/inner/sectionpage=simple}  % Avoid random errors with section page progressbar
 \section{Annexes}
-\pdfbookmark[2]{Remerciements}{acknowledgements}
-\begin{frame}{Remerciements}
-    Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017fouille} \parencite{tellier2017fouille} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
-\end{frame}
-
 \pdfbookmark[2]{Références}{references}
 \begin{frame}[allowframebreaks]{References}
     \printbibliography[heading=none]
+\end{frame}
+
+\pdfbookmark[2]{Remerciements}{acknowledgements}
+\begin{frame}{Remerciements}
+    Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017IntroductionFouilleTextes} \parencite{tellier2017IntroductionFouilleTextes} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
 \end{frame}
 
 \pdfbookmark[2]{Licence}{licence}
