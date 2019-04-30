@@ -575,13 +575,13 @@
 
 	Par exemple pour notre exemple $X = (\text{petit}, \text{Le}, \text{chat})$
 	\begin{equation}
-		\begin{aligned}
+		\begin{split}
 			s(\text{ADJ}, X)
 				&= P(\text{ADJ})\\
 				&× P([0,0]=\text{petit}|\text{ADJ})\\
 				&× P([-1,0]=\text{Le}|\text{ADJ})\\
 				&× P([1,0]=\text{chat}|\text{ADJ})
-		\end{aligned}
+		\end{split}
 	\end{equation}
 \end{frame}
 
@@ -603,17 +603,24 @@
 \begin{frame}{Les problèmes}
 	Outre les défauts habituels de Naïve Bayes, le plus gros problème :
 
-	\pause
+	\vspace{\bigskipamount}
+	\begin{overprint}
+		\onslide<2>
+			\begin{center}
+				\Huge
+				\textbf{On oublie la structuration des étiquettes}
+			\end{center}
+		\onslide<3->
+			\begin{center}
+				\textbf{On oublie la structuration des étiquettes}
+			\end{center}
 
-	{\only<2>{\huge} \textbf{On oublie la structuration des étiquettes}}
+			Par exemple, comment étiqueter la séquence « Le coqui » si on a jamais rencontré ce mot ?
 
-	\pause
-
-	Par exemple, comment étiqueter la séquence « Le coqui » si on a jamais rencontré ce mot ?
-
-	\pause
-
-	Si on sait qu'un déterminant est souvent suivi par un nom, on peut raisonnablement faire l'hypothèse que \emph{coqui} est un nom\only<4>{\footnote{\tiny Et on aura raison : \emph{eleutherodactylus coqui} est une charmante grenouille arboricole portoricaine.}}.
+			\visible<4>{
+				Si on sait qu'un déterminant est souvent suivi par un nom, on peut raisonnablement faire l'hypothèse que \emph{coqui} est un nom\only<4>{\footnote{\tiny Et on aura raison : \emph{eleutherodactylus coqui} est une charmante grenouille arboricole portoricaine.}}.
+			}
+	\end{overprint}
 \end{frame}
 
 \subsection{Modèles de Markov Cachés}
@@ -709,14 +716,20 @@
 \begin{frame}{Features}
 	On peut bien sûr améliorer ce modèle en prenant en compte plus de features que simplement les formes.
 
-	En faisant comme pour Naïve Bayes l'hypothèse que les features sont indépendantes, ça revient à considérer des probabilités d'émission composites, avec par exemple
+	En supposant encore que les features sont indépendantes, ça revient à considérer des probabilités d'émission composites :
 
 	\begin{equation}
-		P([0,0]=\text{petit}, [-1,0]=\text{Le}|ADJ) = ([0,0]=\text{petit}|ADJ)×P([-1,0]=\text{Le}|ADJ)
+		\begin{split}
+			P([0,0]{=}\text{petit}&, [-1,0]{=}\text{Le}|ADJ) =\\
+				& P([0,0]{=}\text{petit}|ADJ) × P([-1,0]{=}\text{Le}|ADJ)
+		\end{split}
 	\end{equation}
 
 	Cependant ce n'est pas le cadre le plus sympathique pour travailler.
-	En partie parce que l'hypothèse d'indépendance devient vite difficilement soutenable et qu'on aimerait pouvoir donner des features composites.
+	\begin{itemize}
+		\item L'hypothèse d'indépendance est vite gênante
+		\item[→] On aimerait pouvoir utiliser des features composites
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{HMM}
