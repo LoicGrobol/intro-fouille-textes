@@ -19,23 +19,37 @@
     \setmainlanguage{french}
     \setotherlanguage{english}
 
-
 \usepackage{fontspec}
     \setmainfont{Libertinus Serif}
     \setsansfont{Libertinus Sans}
 
+\usepackage{amsmath,amsthm}
+\usepackage{mathtools}	% AMS Maths service pack
+	\newtagform{brackets}{[}{]}	% Pour des lignes d'équation numérotées entre crochets
+	\mathtoolsset{showonlyrefs, showmanualtags, mathic}	% affiche les tags manuels (\tag et \tag*) et corrige le kerning des maths inline dans un bloc italique voir la doc de mathtools
+	\usetagform{brackets}	% Utilise le style de tags défini plus haut
+\usepackage{lualatex-math}
+\usepackage[math-style=french]{unicode-math}
+	\setmathfont{Libertinus Math}
+\usepackage{newunicodechar}
+	\newunicodechar{√}{\sqrt}
+\usepackage{mleftright}
+
+\usepackage{enumitem}
 \usepackage{booktabs}
 \usepackage{csquotes}
 \usepackage{titleps}
 \usepackage{titling}
 \usepackage{tabu}
 \usepackage[totpages,user]{zref}
+\usepackage{verse}
+
+\usepackage{tikz}
+    \usetikzlibrary{matrix}
+    \usetikzlibrary{shapes, shapes.geometric}
+    \usetikzlibrary{decorations.pathreplacing}
 
 % ## Packages with a specific loading order
-
-% ### Load after math packages
-\usepackage[math-style=french]{unicode-math}
-	\setmathfont{Libertinus Math}
 
 % Generally load after everything else
 \usepackage{hyperxmp}
@@ -85,4 +99,208 @@
 
 Durée de l'examen : deux heures
 
+
+\section{Classification automatique des vainqueurs}
+On veut analyser automatiquement des textes journalistiques portant
+sur les résultats de l'Euro de football. On considère les phrases suivantes :
+
+\begin{enumerate}[label=\alph*.]
+    \item Le Real Madrid bat sur son terrain le Borussia Dortmund mais échoue à se qualifier pour la finale.
+    \item Malgré ses vedettes et ses supporters, Barcelona se fait  écraser par le Bayern de Munich sur son terrain.
+    \item Lille, battue par Toulouse, est distancée.
+    \item L'équipe du Paris St-Germain doit attendre attendre encore une journée de championnat avant de dépasser définitivement Marseille.
+    \item L'Olympique de Marseille domine Bastia 2-1.
+\end{enumerate}
+
+Les questions suivantes portent sur l'ensemble des phrases précédentes.
+\begin{enumerate}
+    \item On souhaite tout d'abord extraire automatiquement les noms des équipes concernées.
+        Pour cela, on associe à chaque mot de chaque phrase une étiquette.
+        Choisir des noms pour ces étiquettes et étiqueter une phrase de votre choix avec elles.
+    \item Pour chaque phrase contenant deux noms distincts d'équipe, on souhaite déterminer
+        automatiquement si c'est la première équipe citée qui a gagné ou si c'est la deuxième.
+        Quelle tâche doit-on réaliser ?
+    \item Si on souhaite réaliser la tâche précédente par apprentissage automatique, une
+        représentation en sac de mots habituelle en utilisant les lemmes des mots présents dans les
+        phrases risque de ne pas être efficace du tout : pourquoi ?
+        Proposer des attributs (ou propriétés à mettre en colonne) à prendre en compte pour aider au
+        mieux les techniques d'apprentissage automatique à réaliser cette tâche.
+    \item On imagine que les deux seuls attributs que l'on garde (même si c'est sûrement
+        insuffisant en réalité) sont les positions en nombre de mots du début des deux noms
+        d'équipes dans la phrase, auquel on ajoute une étiquette qui signifie soit qu'on est dans
+        le cas où c'est la première équipe qui gagne, soit dans l'autre cas.
+        Donner la représentation de chaque phrase dans cet espace à deux dimensions (plus celle de
+        la classe), telle qu'on la fournirait à un logiciel comme Weka.
+    \item Dessiner sur un repère cartésien à deux dimensions la position des points qui
+        représentent les textes dans la représentation de la question précédente, en prenant une
+        couleur ou un symbole différent pour chaque classe.
+    \item Donner un arbre de décision simple qui classe correctement les exemples, en justifiant
+        la position des séparateurs sur le dessin.
+    \item Dessiner un séparateur SVM qui classe correctement les exemples.
+\end{enumerate}
+
+\section{Identification de tâches}
+Les systèmes « Question/Réponse » (« \emph{Question Answering} » en anglais) sont des programmes
+capables de répondre à une question quelconque en langage naturel (LN), en fournissant une réponse
+prise dans un corpus de textes de référence ou sur le Web, comme sur le schéma suivant
+
+\begin{center}
+    \begin{tikzpicture}
+        \node[ellipse] (in) {Question en LN};
+        \node[right=1cm of in, text width=10ex] (prog) {Système QR};
+        \node[ellipse, right=1cm of prog] (out) {Réponse en LN};
+        \node[ellipse, below=1cm of prog] (res) {Corpus de textes};
+        \draw[->] (in) -- (prog);
+        \draw[->] (prog) -- (out);
+        \draw[->] (res) -- (prog);
+    \end{tikzpicture}
+\end{center}
+
+Par exemple, à la question : « Qui a tué Lee Harvey Oswald ? » (le tueur de Kennedy, qui a été
+lui-même assassiné avant son procès), le système doit répondre « Jack Ruby ».
+
+De tels systèmes ne sont capables de répondre qu'à des questions « factuelles », c'est-à-dire
+correspondant à un champ unique d'un formulaire, mais le domaine de la question peut en principe
+être quelconque.
+La plupart des systèmes actuels procèdent de la manière suivante : analyse de la question pour
+savoir sur quel domaine elle porte et quels sont ses mots importants, puis utilisation d'un moteur
+de recherche pour récupérer un ensemble de documents pertinents et recherche de la réponse dans ces
+documents (en tenant compte aussi du résultat de l'analyse de la question).
+
+En général, on obtient ainsi un grand nombre de réponses possibles, (par exemple « Ruby », « J. Ruby
+», « Kennedy », « JFK », « J.F. Kennedy » etc.), on les regroupe entre elles en paquets et on
+choisit le plus représenté.
+
+\begin{enumerate}
+    \item Reformuler l'explication précédente en expliquant la succession des tâches mises en œuvre
+        dans un tel système.
+    \item Expliquer pourquoi, avec un tel système, on risque d'obtenir la réponse « Kennedy » comme
+        réponse à la question « Qui a tué Lee Harvey Oswald ? ».
+\end{enumerate}
+
+Quelques systèmes (par exemple celui du portail Orange) procèdent d'une autre manière, en tenant à
+jour une base de données encyclopédique (par exemple au format RDF du web sémantique), et en
+transformant la question en une requête dans un langage formel adapté au format de stockage (par
+exemple SPARQL).
+
+\begin{enumerate}[resume*]
+    \item Quelle tâche doit être mise en œuvre pour alimenter la base de données encyclopédique (à
+        partir, par exemple, du site Wikipedia). Aura-t-on ainsi la même réponse à la question ?
+\end{enumerate}
+
+\section{Précision et/ou rappel…}
+\begin{enumerate}
+    \item Vous devez écrire rapidement un programme pour extraire les noms propres de personnes dans
+        des textes bruts provenant d'articles de journaux d'actualité, \emph{sans faire appel à de
+        l'apprentissage automatique} mais en ayant le droit de faire appel à des ressources externes
+        simples (listes trouvées sur Internet, par exemple). Expliquer comment vous écririez un tel
+        programme (très simple) dans les deux cas suivants :
+        \begin{enumerate}
+            \item On veut que le programme ait une excellente précision, quel
+              que soit son rappel
+            \item On veut que le programme ait un excellent rappel, quelle que
+              soit sa précision
+        \end{enumerate}
+        Dans les deux cas, expliquer pourquoi votre programme sera efficace
+        pour l'une des deux mesures et pas pour l'autre.
+    \item Pour un programme d'apprentissage automatique quelconque sur un problème à trois classes
+        notées $A$, $B$ et $C$, on obtient la matrice de confusion suivante
+
+        \begin{center}
+            \begin{tikzpicture}[
+                table/.style={
+                    matrix of nodes,
+                    row sep=-\pgflinewidth,
+                    column sep=-\pgflinewidth,
+                    nodes={draw, text width=3ex, align=center},
+                    text depth=0.25ex,
+                    text height=1em,
+                    nodes in empty cells
+                },
+            ]
+                \matrix (conf) [table]{
+                        & A    & B    &  C\\
+                    A   & $5$  & $1$  & $0$\\
+                    B   & $3$  & $7$  & $1$\\
+                    C   & $0$  & $2$  & $9$\\
+                };
+
+                \draw [decorate, decoration={brace, amplitude=1em}, yshift=-3ex]
+                    (conf-1-2.north west) -- (conf-1-4.north east)
+                    node [midway, above=2ex] {Classes prédites};
+                \draw [decorate, decoration={brace, amplitude=1em, mirror}, xshift=-3ex]
+                    (conf-2-1.north west) -- (conf-4-1.south west)
+                    node [midway, left=2ex, rotate=90, anchor=south] {Vraies classes};
+            \end{tikzpicture}
+        \end{center}
+
+        Calculer la précision et le rappel de chaque classe A, B et C sur cet exemple.
+\end{enumerate}
+
+\section{Transformation de textes en vecteurs}
+On donne en annexe le texte d'un poème célèbre de Charles Baudelaire.
+On suppose qu'on ne garde comme mots servant à représenter un texte en vecteur que quelques noms
+communs courants (présents ou non dans le texte) à savoir, par ordre alphabétique : \emph{ciel},
+\emph{cœur}, \emph{fleur}, \emph{jour}, \emph{nuit}, \emph{soleil}, \emph{temps}, \emph{valse}.
+\begin{enumerate}
+    \item On suppose que le texte est segmenté, mis en minuscules et lemmatisé. Donner la
+        représentation du poème dans l'espace défini par ces mots dans les cas suivants :
+        \begin{itemize}
+            \item la représentation est booléenne
+            \item la réprésentation est en nombre d'occurrences
+        \end{itemize}
+    \item On donne dans le tableau ci-dessous la représentation de 4 autres textes dans ce même
+        espace, où chaque case du tableau compte le nombre d'occurrences du mot dans le texte :
+
+        \begin{center}
+        \begin{tabu}{|c|c|c|c|c|c|c|c|c|}
+            \hline
+            \textbf{texte} & ciel & cœur & fleur & jour & nuit & soleil & temps & valse\\
+            \hline
+            texte 1 & 3 & 0 & 0 & 4 & 6 & 5 & 2 & 0\\
+            texte 2 & 2 & 2 & 1 & 3 & 0 & 1 & 1 & 0 \\
+            texte 3 &  0 & 2 & 1 & 1 & 2 & 0 & 0 & 0\\
+            texte 4 & 1 & 1 & 1 & 2 & 3 & 2 & 1 & 3 \\
+            \hline
+        \end{tabu}
+        \end{center}
+
+        \begin{enumerate}
+            \item Donner la représentation TF⋅IDF du poème, sachant que la valeur d'IDF n'est calculée qu'à partir des textes 1 à 4.
+            \item Les textes 1 et 2 appartiennent à une classe C1 tandis que les textes 3 et 4 appartiennent à une classe C2. A quelle classe sera rattaché le poème par l'algorithme Naive Bayes fondé sur la représentation en nombre d'occurrences ?
+        \end{enumerate}
+    \item
+\end{enumerate}
+
+\section*{Annexe}
+\begin{verse}
+Harmonie du soir\\!
+
+Voici venir les temps où vibrant sur sa tige\\
+Chaque fleur s'évapore ainsi qu'un encensoir ;\\
+Les sons et les parfums tournent dans l'air du soir ;\\
+Valse mélancolique et langoureux vertige !\\!
+
+Chaque fleur s'évapore ainsi qu'un encensoir ;\\
+Le violon frémit comme un cœur qu'on afflige ;\\
+Valse mélancolique et langoureux vertige !\\
+Le ciel est triste et beau comme un grand reposoir.\\!
+
+Le violon frémit comme un cœur qu'on afflige,\\
+Un cœur tendre, qui hait le néant vaste et noir !\\
+Le ciel est triste et beau comme un grand reposoir ;\\
+Le soleil s'est noyé dans son sang qui se fige.\\!
+
+Un cœur tendre, qui hait le néant vaste et noir,\\
+Du passé lumineux recueille tout vestige !\\
+Le soleil s'est noyé dans son sang qui se fige…\\
+Ton souvenir en moi luit comme un ostensoir !\\!
+\end{verse}
+
+\begin{align}
+    \log(1) &= 0\\
+    \log\mleft(\frac{4}{3}\mright) &≈ 0.29\\
+    \log(2) &≈ 0.69\\
+    \log(4) &≈ 1.39
+\end{align}
 \end{document}
