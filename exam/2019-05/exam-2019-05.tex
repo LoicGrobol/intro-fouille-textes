@@ -1,0 +1,88 @@
+\RequirePackage{xparse}
+% Settings
+\NewDocumentCommand\myname{}{Loïc Grobol}
+\NewDocumentCommand\mylab{}{Lattice, ALMAnaCH}
+\NewDocumentCommand\pdftitle{}{Introduction à la fouille de textes : examen final}
+\NewDocumentCommand\mymail{}{loic.grobol@gmail.com}
+\NewDocumentCommand\titlepagetitle{}{\pdftitle}
+\NewDocumentCommand\docdate{}{2 mai 2019}
+\NewDocumentCommand\pageheadertitle{}{\pdftitle}
+
+
+\documentclass[a4paper, 11pt]{article}
+\usepackage[hmargin=2cm, vmargin=1.5cm]{geometry}
+\usepackage[subtle]{savetrees}
+% \setlength\parindent{0pt}
+\setlength\parskip{.2em}
+
+\usepackage{polyglossia}
+    \setmainlanguage{french}
+    \setotherlanguage{english}
+
+
+\usepackage{fontspec}
+    \setmainfont{Libertinus Serif}
+    \setsansfont{Libertinus Sans}
+
+\usepackage{booktabs}
+\usepackage{csquotes}
+\usepackage{titleps}
+\usepackage{titling}
+\usepackage{tabu}
+\usepackage[totpages,user]{zref}
+
+% ## Packages with a specific loading order
+
+% ### Load after math packages
+\usepackage[math-style=french]{unicode-math}
+	\setmathfont{Libertinus Math}
+
+% Generally load after everything else
+\usepackage{hyperxmp}
+\usepackage[unicode]{hyperref}
+\hypersetup{
+    colorlinks,
+    breaklinks,
+    pdfdisplaydoctitle,
+    unicode,
+    pdftitle={\pdftitle},
+    pdfauthor={\myname},
+    pdflang={fr},
+    pdfcontactemail={\mymail},
+}
+
+
+% ## Style and metadata
+% ### Page style
+
+\newpagestyle{main}[\small]{
+	\sethead{}{\ifnum\thepage>1 {\pageheadertitle}\fi}{}
+	\setfoot{}{\ifnum\ztotpages>1 {\thepage\ /\ztotpages}\fi}{}
+}
+\pagestyle{main}
+
+% ### License
+\usepackage[type={CC}, modifier={by}, version={4.0}]{doclicense}
+
+% ### Metadata
+
+\title{\titlepagetitle}
+\author{\myname <\mymail>}
+\date{\docdate}
+
+\begin{document}
+{
+   \begin{center}
+      \large{M1 PluriTAL}\par
+      \vspace{1em}
+      \huge\textbf{Introduction à la fouille de textes}\par
+      \vspace{0.5em}
+      \LARGE\textit{Examen final}\par
+      \vspace{0.5em}
+      \Large\thedate
+   \end{center}
+}
+
+Durée de l'examen : deux heures
+
+\end{document}
