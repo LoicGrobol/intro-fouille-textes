@@ -48,6 +48,13 @@
     \usetikzlibrary{matrix}
     \usetikzlibrary{shapes, shapes.geometric}
     \usetikzlibrary{decorations.pathreplacing}
+    \usetikzlibrary{positioning, calc, intersections}
+    \tikzset{
+        >=stealth,
+        hair lines/.style={line width = 0.05pt, lightgray},
+        data/.style={draw, ellipse},
+        program/.style={draw, rectangle},
+    }
 
 % ## Packages with a specific loading order
 
@@ -146,10 +153,10 @@ prise dans un corpus de textes de référence ou sur le Web, comme sur le schém
 
 \begin{center}
     \begin{tikzpicture}
-        \node[ellipse] (in) {Question en LN};
-        \node[right=1cm of in, text width=10ex] (prog) {Système QR};
-        \node[ellipse, right=1cm of prog] (out) {Réponse en LN};
-        \node[ellipse, below=1cm of prog] (res) {Corpus de textes};
+        \node[data] (in) {Question en LN};
+        \node[program, right=1cm of in, text width=10ex] (prog) {Système QR};
+        \node[data, right=1cm of prog] (out) {Réponse en LN};
+        \node[data, below=1cm of prog] (res) {Corpus de textes};
         \draw[->] (in) -- (prog);
         \draw[->] (prog) -- (out);
         \draw[->] (res) -- (prog);
@@ -269,7 +276,6 @@ communs courants (présents ou non dans le texte) à savoir, par ordre alphabét
             \item Donner la représentation TF⋅IDF du poème, sachant que la valeur d'IDF n'est calculée qu'à partir des textes 1 à 4.
             \item Les textes 1 et 2 appartiennent à une classe C1 tandis que les textes 3 et 4 appartiennent à une classe C2. A quelle classe sera rattaché le poème par l'algorithme Naive Bayes fondé sur la représentation en nombre d'occurrences ?
         \end{enumerate}
-    \item
 \end{enumerate}
 
 \section*{Annexe}
