@@ -706,7 +706,33 @@
 	La suite au tableau
 \end{frame}
 
-% \subsection{MEMM/CRF}
+\begin{frame}{Features}
+	On peut bien sûr améliorer ce modèle en prenant en compte plus de features que simplement les formes.
+
+	En faisant comme pour Naïve Bayes l'hypothèse que les features sont indépendantes, ça revient à considérer des probabilités d'émission composites, avec par exemple
+
+	\begin{equation}
+		P([0,0]=\text{petit}, [-1,0]=\text{Le}|ADJ) = ([0,0]=\text{petit}|ADJ)×P([-1,0]=\text{Le}|ADJ)
+	\end{equation}
+
+	Cependant ce n'est pas le cadre le plus sympathique pour travailler.
+	En partie parce que l'hypothèse d'indépendance devient vite difficilement soutenable et qu'on aimerait pouvoir donner des features composites.
+\end{frame}
+
+\begin{frame}{HMM}
+	On peut penser aux modèles de Markov cachés comme un équivalent de Naïve Bayes pour l'étiquetage, avec les mêmes avantages
+	\begin{itemize}
+		\item Faciles et rapides pour l'entraînement et l'inférence
+		\item Étonnamment efficace même pour peu de données
+	\end{itemize}
+	Et les mêmes inconvénients
+	\begin{itemize}
+		\item Interprétabilité limitée avec beaucop de features
+		\item Les hypothèses d'indépendance simplifient parfois trop le problème.
+	\end{itemize}
+\end{frame}
+
+\subsection{MEMM/CRF}
 % Plus facile d'ajouter des features
 % Plus coûteux à entraîner
 % Inférence : Viterbi ou (rarement) beam search
