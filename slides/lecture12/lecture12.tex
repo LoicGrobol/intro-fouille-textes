@@ -745,7 +745,51 @@
 	\end{itemize}
 \end{frame}
 
-\subsection{MEMM/CRF}
+\subsection{MEMM et CRF}
+\begin{frame}{MEMM}
+	Les \alert{\textit{\textbf{M}aximum \textbf{E}ntropy \textbf{M}arkov \textbf{M}odels}} sont une reformulation des HMM où on modélise directement la probabilité $P(Y|X)$ en définissant manuellement ses composantes.
+
+	Comme pour les HMM, on travaille sous l'hypothèse que les étiquettes sont émises suivant un processus Markovien, c'est à dire qu'une étiquette ne dépend directement que de l'étiquette précédente.
+\end{frame}
+
+\begin{frame}{Forme du modèle}
+	On écrit comme précédemment
+
+	\begin{equation}
+		P(y₁,…y_n|X) = ∏P(yᵢ|y₁,…, y_{i-1}, X)
+	\end{equation}
+
+	Soit, avec l'hypothèse de \alert{Markov}
+
+	\begin{equation}
+		P(y₁,…y_n|X) = ∏P(yᵢ|y_{i-1}, X)
+	\end{equation}
+\end{frame}
+
+\begin{frame}{Forme des probabilités}
+	On modélise les probabilités comme
+	\begin{equation}
+		P(yᵢ|y_{i-1}, X) = \frac{e^{ϕ(yᵢ, y_{i-1}, X)}}{∑_c e^{ϕ(c, y_{i-1}, X)}}
+	\end{equation}
+	Avec
+	\begin{equation}
+		ϕ(yᵢ, y_{i-1}, X) = \sum_k w_k  ϕ_k(yᵢ, y_{i-1}, X)
+	\end{equation}
+	Où
+	\begin{itemize}
+		\item Les $ϕ_k$ sont des features définies manuellement (souvent binaires)
+		\item Les $w_k$ sont des poids appris
+	\end{itemize}
+
+	On parle de modèle \alert{log-linéaire}.
+\end{frame}
+
+\begin{frame}{Inférence}
+	L'inférence avec un MEMM se fait exactement comme avec un HMM : on a des probas de transition, donc on peut soit appliquer une heuristique rapide soit Viterbi.
+
+	L'apprentissage, c'est une autre paire de manches…
+\end{frame}
+
 % Plus facile d'ajouter des features
 % Plus coûteux à entraîner
 % Inférence : Viterbi ou (rarement) beam search
