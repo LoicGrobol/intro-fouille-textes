@@ -9,16 +9,19 @@
     \setmainlanguage{french}
     \setotherlanguage{english}
 
-    % PATCH: fix spacing in monospaced text
-    \usepackage{xpatch}
-    \makeatletter
-        \xapptocmd\ttfamily{\nofrench@punctuation}{}{}
-    \makeatother
-
 \usepackage{csquotes}
 
 \usepackage{fontspec}
-    \setmainfont{Libertinus Serif}
+    \setmainfont[
+        UprightFont={* Regular},
+        ItalicFont={* Italic},
+        BoldFont={* Bold},
+        BoldItalicFont={* Bold Italic},
+    ]{Libertinus Serif}[Renderer=Harfbuzz]
+    \setsansfont{Libertinus Sans}[Renderer=Harfbuzz]
+    \setmonofont{Fira Mono}[Scale=MatchLowercase,Renderer=Harfbuzz]
+    \newfontfamily\fallbackfont{Deja Vu Sans}[Renderer=Harfbuzz]
+    % \newfontfamily\emojifont{Noto Color Emoji}[Renderer=Harfbuzz]
 
 \usepackage{xurl}
 \usepackage{hyperref}
@@ -60,7 +63,7 @@
 
 \begin{description}
     \item[Où] Salle Benveniste, ILPGA, 9 Rue des Bernardins, 75005 Paris
-    \item[Quand] Le lundi de 13h30 à 15h30 (voir le calendrier de Paris 3 pour les dates)
+    \item[Quand] Le jeudi de 13h00 à 15h (voir le calendrier de Paris 3 pour les dates)
     \item[Email] \href{mailto:loic.grobol@gmail.com}{\texttt{loic.grobol@gmail.com}}
     \item[Web] \url{https://loicgrobol.github.io/intro-fouille-textes/}
 \end{description}
@@ -98,6 +101,6 @@ En contrôle continu :
 \begin{itemize}
     \item Le polycopié du cours (indispensable) :  \url{https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/poly.pdf}
     \item Le site du projet Weka : \url{https://www.cs.waikato.ac.nz/ml/weka/}
-    \item La page web de l'an dernier : \url{https://loicgrobol.github.io/intro-fouille-textes/archives/2018}
+    \item La page web de l'an dernier : \url{https://loicgrobol.github.io/intro-fouille-textes/archives/2019}
 \end{itemize}
 \end{document}
