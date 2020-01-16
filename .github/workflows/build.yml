@@ -20,4 +20,4 @@ jobs:
           extra_system_packages: python3-pygments
       - name: Output all logs
         if: failure()
-        run: for f in "**/*.log"; do cat "$f"; done;
+        run: for f in **/*.log; do cat "$f"; done;
