@@ -12,7 +12,7 @@ jobs:
       uses: dante-ev/latex-action@v0.2.0
       with:
         # The root LaTeX file to be compiled
-        working_directory: slides/lecture-01/
+        working_directory: /github/workspace/slides/lecture-01/
         root_file: lecture-01.tex
         args: "-lualatex-latexoption=-shell-escape -latexoption=-file-line-error -latexoption=-interaction=haltonerror"
         extra_system_packages: python3-pygments
