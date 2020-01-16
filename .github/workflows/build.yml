@@ -8,7 +8,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
     - name: LaTeX compilation
       uses: dante-ev/latex-action@v0.2.0
       with:
@@ -17,3 +16,4 @@ jobs:
         # The working directory for the latex compiler to be invoked
         # Extra arguments to be passed to the latex compiler
         args: -lualatex -file-line-error -halt-on-error -shell-escape
+        extra_packages: "py-pygments"
