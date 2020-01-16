@@ -1,47 +1,85 @@
-% Copyright © 2018, Loïc Grobol <loic.grobol@gmail.com>
+% Copyright © 2019, Loïc Grobol <loic.grobol@gmail.com>
 % This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (https://creativecommons.org/licenses/by/4.0/)
 
 \RequirePackage{xparse}
 \RequirePackage{shellesc}
 % Settings
-\NewDocumentCommand\myname{}{Loïc Grobol}
-\NewDocumentCommand\mylab{}{Lattice / ALMAnaCH}
-\NewDocumentCommand\pdftitle{}{Introduction à la fouille de textes}
-\NewDocumentCommand\mymail{}{loic.grobol@gmail.com}
-\NewDocumentCommand\titlepagetitle{}{\pdftitle}
-\NewDocumentCommand\docdate{}{2019-01-21}
-\NewDocumentCommand\conference{}{M1 Plurital}
+\newcommand\myname{Loïc Grobol}
+\newcommand\mylab{Lattice / LLF}
+\newcommand\pdftitle{Introduction à la fouille de textes}
+\newcommand\mymail{loic.grobol@gmail.com}
+\newcommand\titlepagetitle{\pdftitle}
+\newcommand\titlepagesubtitle{Cours 1 : Introduction et tâches}
+\newcommand\docdate{2020-01-16}
+\newcommand\conference{M1 Plurital}
 
-\documentclass[hyperref={unicode}, xcolor={svgnames}, french]{beamer}
-\usetheme[sectionpage=progressbar,
-          subsectionpage=progressbar,
-          progressbar=frametitle]{metropolis}
-    \definecolor{accent}{RGB}{51, 34, 136}
-    \setbeamercolor{alerted text}{fg=accent}
-    \makeatletter
-        \setlength{\metropolis@progressinheadfoot@linewidth}{1pt}
-    \makeatother
-    % FIXME: not pretty and footnotes are still too big
-    \let\footnoterule\relax  % No footnote rule, push down footnote
-
-% TODO: update these to the last version
-% 9-Highlights colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf)
-\definecolor{highlight0}{RGB}{51, 34, 136}    % Deep blue
-\definecolor{highlight1}{RGB}{136, 204, 238}  % Clear blue
-\definecolor{highlight2}{RGB}{68, 170, 153}   % Teal
-\definecolor{highlight3}{RGB}{17, 119, 51}    % Forest green
-\definecolor{highlight4}{RGB}{153, 153, 51}   % Khaki
-\definecolor{highlight5}{RGB}{221, 204, 119}  % Beige
-\definecolor{highlight6}{RGB}{204, 102, 119}  % Pink
-\definecolor{highlight7}{RGB}{136, 34, 85}    % Purple
-\definecolor{highlight8}{RGB}{170, 68, 153}   % Violet
-
+\RequirePackage{hyperxmp}
+\documentclass[xcolor={svgnames}, french]{beamer}
+\hypersetup{
+    pdftitle={\pdftitle},
+    pdfauthor={\myname},
+    pdfcontactemail={\mymail},
+    colorlinks,
+    breaklinks,
+    hypertexnames=true,
+    pdfdisplaydoctitle,
+    pdflang={fr},
+    keeppdfinfo,
+}
 % Alternative navy blue for ⩽4 palettes
 \definecolor{highlighta}{RGB}{68, 118, 170}  % Navy blue
 
+% Colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf) v3.1
+% Bright scheme
+\definecolor{sronbrighttblue}{RGB}{68, 119, 170}
+\definecolor{sronbrightcyan}{RGB}{102, 204, 238}
+\definecolor{sronbrightgreen}{RGB}{34, 136, 51}
+\definecolor{sronbrightyellow}{RGB}{204, 187, 68}
+\definecolor{sronbrightred}{RGB}{238, 102, 119}
+\definecolor{sronbrightpurple}{RGB}{170, 51, 119}
+\definecolor{sronbrightgrey}{RGB}{187, 187, 187}
+
+\colorlet{highlight0}{sronbrighttblue}
+\colorlet{highlight1}{sronbrightred}
+\colorlet{highlight2}{sronbrightgreen}
+\colorlet{highlight3}{sronbrightyellow}
+\colorlet{highlight4}{sronbrightcyan}
+\colorlet{highlight5}{sronbrightpurple}
+\colorlet{highlight6}{sronbrightgrey}
+% Legacy highlights
+\definecolor{highlight7}{RGB}{136, 34, 85}    % Purple
+\definecolor{highlight8}{RGB}{170, 68, 153}   % Violet
+
+
+\usetheme[
+	sectionpage=progressbar,
+    subsectionpage=progressbar,
+	progressbar=frametitle,
+]{metropolis}
+	\colorlet{accent}{sronbrightgreen}
+	\setbeamercolor{frametitle}{bg=DarkSlateGrey}
+	\setbeamercolor{alerted text}{fg=accent}
+	\makeatletter
+		\setlength{\metropolis@progressinheadfoot@linewidth}{2pt}
+	\makeatother
+	% Avoid ugly whitespace below figures
+	% \makeatletter
+	% 	\renewenvironment{figure}[1][]{%
+	% 	\def\@captype{figure}%
+	% 	\par\centering}%
+	% 	{\par}
+	% \makeatother
+	% FIXME: not pretty and footnotes are still too big
+	\let\footnoterule\relax  % No footnote rule, push down footnote
+
+
 % Use non-standard fonts
 \usefonttheme{professionalfonts}
-\setsansfont[BoldFont={Fira Sans SemiBold}, ItalicFont={Fira Sans Book Italic}]{Fira Sans Book}
+	\setsansfont[
+		BoldFont={Fira Sans SemiBold},
+		ItalicFont={Fira Sans Italic},
+		BoldItalicFont={Fira Sans Bold Italic},
+	]{Fira Sans Book}
 \setmonofont[Scale=0.9]{Fira Mono}
 
 % Fix missing glyphs in Fira by delegating to polyglossia/babel
@@ -64,11 +102,10 @@
 \usepackage{lualatex-math}
 
 \usepackage[math-style=french]{unicode-math}
-	\setmathfont{Libertinus Math}
+	\setmathfont[Scale=1.1]{Libertinus Math}
 \usepackage{newunicodechar}
 	\newunicodechar{√}{\sqrt}
 \usepackage{mleftright}
-
 
 \usepackage{tabu}
 \usepackage{booktabs}
@@ -80,10 +117,9 @@
     \captionsetup{skip=1ex}
 \usepackage[iso]{datetime}
 
-\usepackage{csquotes}
 \usepackage{tikz}
 	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}}
-    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep = 0pt]{\node[#1] (#2) {$\displaystyle #3$};}}
+    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep = 0pt]{\node[#1] (#2) {\(\displaystyle #3\)};}}
 	\tikzset{
 		alt/.code args={<#1>#2#3}{%
 		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
@@ -113,8 +149,6 @@
     \usetikzlibrary{backgrounds}
 
     % Do evil things with soft path
-    % From <https://tex.stackexchange.com/a/301364/8547>
-    % Græcum est, non legitur
     \makeatletter
         \def\@appendnamedsoftpath#1{%
             \pgfsyssoftpath@getcurrentpath\@temppatha
@@ -173,6 +207,9 @@
 \usepackage{minted}
 	\usemintedstyle{lovelace}
 	\setminted{autogobble, tabsize=2}
+	\setmintedinline{fontsize=auto}
+
+\usepackage{csquotes}
 
 \usepackage[style=authoryear, block=ragged, doi=false, isbn=false]{biblatex}
     \AtEveryBibitem{
@@ -187,7 +224,7 @@
         }
     }
 
-	\addbibresource{biblio.bib}
+	\addbibresource{../biblio.bib}
 
 % Compact bibliography style
 \setbeamertemplate{bibliography item}[text]
@@ -203,17 +240,17 @@
 
 \usepackage{hyperxmp}	% XMP metadata
 
-\usepackage[type={CC},modifier={by},version={4.0}]{doclicense}
+\usepackage[type={CC}, modifier={by}, version={4.0}]{doclicense}
 
 \usepackage{todonotes}
 \let\todox\todo
 \renewcommand\todo[1]{\todox[inline]{#1}}
 
 \title{\titlepagetitle}
-\subtitle{Cours 1 : \docdate}
+\subtitle{\titlepagesubtitle}
 \author{\textbf{\myname} (\mylab)}
 \institute{}
-\date{\footnotesize Version {\yyyymmdddate\today}T\currenttime}
+\date{\tiny Version {\yyyymmdddate\today}T\currenttime}
 
 \titlegraphic{\ccby}
 
@@ -256,7 +293,7 @@
 \DeclareMathOperator*\argmax{argmax}
 
 % Easy column vectors \vcord{a,b,c} ou \vcord[;]{a;b;c}
-% Græcum est, non legitur
+% Here be black magic
 \ExplSyntaxOn
 	\NewDocumentCommand{\vcord}{O{,}m}{\vector_main:nnnn{p}{\\}{#1}{#2}}
 	\NewDocumentCommand{\tvcord}{O{,}m}{\vector_main:nnnn{psmall}{\\}{#1}{#2}}
@@ -277,6 +314,13 @@
 \ExplSyntaxOff
 
 
+% Fixes for pauses after an unveiled list
+\newcommand{\itpause}{%
+	\addtocounter{beamerpauses}{-1}%
+	\pause
+}
+
+
 % ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████
 % ██   ██ ██    ██ ██      ██    ██ ████  ████ ██      ████   ██    ██
 % ██   ██ ██    ██ ██      ██    ██ ██ ████ ██ █████   ██ ██  ██    ██
@@ -295,7 +339,7 @@
 \begin{frame}{Informations pratiques}
     \begin{description}[*]
         \item[Où] Salle Benveniste, ILPGA, 9 Rue des Bernardins, 75005 Paris
-        \item[Quand] Le lundi de 13h30 à 15h30 (voir le calendrier de Paris 3 pour les dates)
+        \item[Quand] Le jeudi de 13h00 à 15h00 (voir le calendrier de Paris 3 pour les dates)
         \item[Contact] \shorturl[mailto][:]{loic.grobol@gmail.com}
         \item[Web] {\shorturl{loicgrobol.github.io/intro-fouille-textes}}
     \end{description}
@@ -389,7 +433,7 @@
     \end{itemize}
     Et cette tendance se généralise depuis à l'ensemble des domaines de l'informatique.
 
-    À lire : \citetitle{church2011pendulum} \parencite{church2011pendulum}
+    À lire : \citetitle{church2011PendulumSwungToo} \parencite{church2011PendulumSwungToo}
 \end{frame}
 
 \begin{frame}{La fouille de textes}
@@ -558,7 +602,7 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Données tabulaires}
+\begin{frame}<-2>{Données tabulaires}
     \begin{figure}
         \includegraphics<1>[width=\textwidth, height=0.75\textheight, keepaspectratio]{pics/tab_weka.png}
         \includegraphics<2>[width=\textwidth, height=0.4\textheight, keepaspectratio]{pics/tab_weka.png}
@@ -566,7 +610,7 @@
     \end{figure}
     \alt<1>{
         \vspace{-1\baselineskip}
-        {\tiny Exemple Weka \texttt{weater.numeric} : peut-on jouer au tennis aujourd'hui ?}
+        {\tiny Exemple Weka \mintinline{text}{weater.numeric} : peut-on jouer au tennis aujourd'hui ?}
     }{
         C'est le type de données traditionnellement utilisé en fouille de données
         \begin{itemize}
@@ -592,7 +636,7 @@
         \caption{Exemple de texte brut}
     \end{figure}
     \vskip0pt plus 1fill
-    {\tiny Extrait du corpus ANCOR \parencite{muzerelle2013ANCOR}}
+    {\tiny Extrait du corpus ANCOR \parencite{muzerelle2013ANCORPremierCorpus}}
 \end{frame}
 
 \begin{frame}{Textes bruts}
@@ -816,7 +860,7 @@
 \end{frame}
 
 \begin{frame}{Quelques exemples}
-    Quelques exemples de programmes issus d'apprentissage automatique
+    Quelques exemples de programmes issus d'apprentissage artificiel
     \begin{itemize}
         \item SEM (POS tagging, chunking, détection d'entités nommées)
             \begin{itemize}
@@ -834,7 +878,7 @@
             \begin{itemize}
                 \item[→] \shorturl{huggingface.co/hmtl/}
             \end{itemize}
-        \item @picdescbot (description d'images en langage naturel\footnote{Encore plus fort : \citetitle{alishahi2017encoding} \parencite{alishahi2017encoding}}
+        \item @picdescbot (description d'images en langage naturel\footnote{Encore plus fort : \citetitle{alishahi2017EncodingPhonologyRecurrent} \parencite{alishahi2017EncodingPhonologyRecurrent}}
             \begin{itemize}
                 \item[→] \shorturl{twitter.com/picdescbot}
             \end{itemize}
@@ -852,7 +896,7 @@
 \section{Annexes}
 \pdfbookmark[2]{Remerciements}{acknowledgements}
 \begin{frame}{Remerciements}
-    Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017fouille} \parencite{tellier2017fouille} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
+    Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017IntroductionFouilleTextes} \parencite{tellier2017IntroductionFouilleTextes} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
 \end{frame}
 
 \pdfbookmark[2]{Références}{references}
