@@ -15,8 +15,8 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2020
 
 ### Séances
 
-#### 2019-01-21 — Introduction et notion de tâche
-- [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture1.pdf)
+#### 2020-01-16 — Introduction et notion de tâche
+- [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-01.pdf)
 
 ## Liens utiles
 
