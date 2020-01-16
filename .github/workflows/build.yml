@@ -1,4 +1,4 @@
-name: CI
+name: build
 
 on: [push]
 
@@ -13,8 +13,7 @@ jobs:
       uses: dante-ev/latex-action@v0.2.0
       with:
         # The root LaTeX file to be compiled
-        root_file: /slides/lecture-01/lecture-01.tex
+        root_file: slides/lecture-01/lecture-01.tex
         # The working directory for the latex compiler to be invoked
         # Extra arguments to be passed to the latex compiler
         args: -lualatex -file-line-error -halt-on-error -shell-escape
-        # Install extra packages by apt-get
