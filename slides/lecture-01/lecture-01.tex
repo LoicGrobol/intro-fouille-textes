@@ -13,20 +13,18 @@
 \newcommand\docdate{2020-01-16}
 \newcommand\conference{M1 Plurital}
 
-\RequirePackage{hyperxmp}
+% \RequirePackage{hyperxmp}  % Results in a complex failure with beamer + tikzexternal (2020-01-17)
 \documentclass[xcolor={svgnames}, french]{beamer}
 \hypersetup{
     pdftitle={\pdftitle},
     pdfauthor={\myname},
-    pdfcontactemail={\mymail},
+    % pdfcontactemail={\mymail},  % hyperxmp
     breaklinks,
     hypertexnames=true,
     pdfdisplaydoctitle,
     pdflang={fr},
-    keeppdfinfo,
+    % keeppdfinfo,  % hyperxmp
 }
-% Alternative navy blue for ⩽4 palettes
-\definecolor{highlighta}{RGB}{68, 118, 170}  % Navy blue
 
 % Colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf) v3.1
 % Bright scheme
@@ -38,6 +36,7 @@
 \definecolor{sronbrightpurple}{RGB}{170, 51, 119}
 \definecolor{sronbrightgrey}{RGB}{187, 187, 187}
 
+
 \colorlet{highlight0}{sronbrighttblue}
 \colorlet{highlight1}{sronbrightred}
 \colorlet{highlight2}{sronbrightgreen}
@@ -46,6 +45,7 @@
 \colorlet{highlight5}{sronbrightpurple}
 \colorlet{highlight6}{sronbrightgrey}
 % Legacy highlights
+\definecolor{highlighta}{RGB}{68, 118, 170}  % Navy blue
 \definecolor{highlight7}{RGB}{136, 34, 85}    % Purple
 \definecolor{highlight8}{RGB}{170, 68, 153}   % Violet
 
@@ -137,7 +137,7 @@
     		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
     		},
     	}
-        \pgfplotsset{compat=1.15}
+        \pgfplotsset{compat=1.16}
         \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}}
 
     \usetikzlibrary{matrix}
