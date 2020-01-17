@@ -21,3 +21,23 @@ jobs:
       - name: Output all logs
         if: failure()
         run: find . -iname "*.log" | while read -r file; do echo "LOG:$file" & cat "$file"; done
+      - name: Update unstable release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: latest
+          draft: false
+          prerelease: true
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: slides/lecture-01/lecture-01.pdf
+          asset_name: lecture-01.zip
+          asset_content_type: application/x-pdf
