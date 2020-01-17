@@ -20,4 +20,4 @@ jobs:
           extra_system_packages: python3-pygments
       - name: Output all logs
         if: failure()
-        run: find . -name "*.log" -exec cat {} +
+        run: find . -iname "*.log" | while read -r file; do echo "LOG:$file" & cat "$file"; done
