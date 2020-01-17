@@ -10,7 +10,7 @@
 \newcommand\mymail{loic.grobol@gmail.com}
 \newcommand\titlepagetitle{\pdftitle}
 \newcommand\titlepagesubtitle{Cours 1 : Introduction et tâches}
-\newcommand\docdate{2020-01-16}
+\newcommand\docdate{2020-01-16}  % chktex 8
 \newcommand\conference{M1 Plurital}
 
 % \RequirePackage{hyperxmp}  % Results in a complex failure with beamer + tikzexternal (2020-01-17)
@@ -74,11 +74,7 @@
 
 % Use non-standard fonts
 \usefonttheme{professionalfonts}
-	\setsansfont[
-		BoldFont={Fira Sans SemiBold},
-		ItalicFont={Fira Sans Italic},
-		BoldItalicFont={Fira Sans Bold Italic},
-	]{Fira Sans Book}
+    \setsansfont[BoldFont={* Semibold}]{Fira Sans}
 \setmonofont[Scale=0.9]{Fira Mono}
 
 % Fix missing glyphs in Fira by delegating to polyglossia/babel
@@ -95,7 +91,8 @@
 \usepackage{amsfonts,amssymb}
 \usepackage{amsmath,amsthm}
 \usepackage{mathtools}	% AMS Maths service pack
-	\newtagform{brackets}{[}{]}	% Pour des lignes d'équation numérotées entre crochets
+    % Pour des lignes d'équation numérotées entre crochets
+	\newtagform{brackets}{[}{]} % chktex 9
 	\mathtoolsset{showonlyrefs, showmanualtags, mathic}	% affiche les tags manuels (\tag et \tag*) et corrige le kerning des maths inline dans un bloc italique voir la doc de mathtools
 	\usetagform{brackets}	% Utilise le style de tags défini plus haut
 \usepackage{lualatex-math}
@@ -117,8 +114,8 @@
 \usepackage[iso]{datetime}
 
 \usepackage{tikz}
-	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}}
-    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep = 0pt]{\node[#1] (#2) {\(\displaystyle #3\)};}}
+	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}} % chktex 36
+    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep = 0pt]{\node[#1] (#2) {\(\displaystyle #3\)};}} % chktex 36
 	\tikzset{
 		alt/.code args={<#1>#2#3}{%
 		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
@@ -138,8 +135,7 @@
     		},
     	}
         \pgfplotsset{compat=1.16}
-        \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}}
-
+        \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}} % chktex 36
     \usetikzlibrary{matrix}
     \usetikzlibrary{shapes, shapes.geometric}
     \usetikzlibrary{decorations.pathreplacing}
@@ -149,24 +145,24 @@
 
     % Do evil things with soft path
     \makeatletter
-        \def\@appendnamedsoftpath#1{%
-            \pgfsyssoftpath@getcurrentpath\@temppatha
-            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
-            \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb}%
-            \pgfsyssoftpath@setcurrentpath\@temppatha
+        \def\@appendnamedsoftpath#1{% chktex 21
+            \pgfsyssoftpath@getcurrentpath\@temppatha % chktex 21 chktex 1
+            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 41 chktex 21
+            \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb} % chktex 41 chktex 21
+            \pgfsyssoftpath@setcurrentpath\@temppatha % chktex 21 chktex 1
         }
-        \def\@appendnamedpathforactions#1{%
-            \pgfsyssoftpath@getcurrentpath\@temppatha
-            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
-            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb}%\usepackage{tikz-3dplot}
+        \def\@appendnamedpathforactions#1{% chktex 21
+            \pgfsyssoftpath@getcurrentpath\@temppatha % chktex 1 chktex 21
+            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
+            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb} % chktex 21 chktex 41
 
-            \let\tikz@actions@path\@temppatha
+            \let\tikz@actions@path\@temppatha  % chktex 21 chktex 1
         }
 
         \tikzset{
             use path for main/.code={%
                 \tikz@addmode{%
-                    \expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname
+                    \expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
                 }%
             },
             append path for main/.code={%
@@ -175,10 +171,10 @@
                 }%
             },
             use path for actions/.code={%
-                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}%
+                \expandafter\def\expandafter\tikz@preactions\expandafter {\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}% chktex 21 chktex 41
             },
             append path for actions/.code={%
-                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions
+                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions % chktex 21 chktex 41 chktex 1
                 \@appendnamedpathforactions{#1}}%
             },
             use path/.style={%
@@ -201,7 +197,7 @@
         external/export=false,
         external/prefix=tikzpics/
     }
-    \tikzexternalize
+    \tikzexternalize % chktex 1
 
 \usepackage{minted}
 	\usemintedstyle{lovelace}
@@ -242,7 +238,7 @@
 \usepackage[type={CC}, modifier={by}, version={4.0}]{doclicense}
 
 \usepackage{todonotes}
-\let\todox\todo
+\let\todox\todo % chktex 1
 \renewcommand\todo[1]{\todox[inline]{#1}}
 
 \title{\titlepagetitle}
@@ -274,8 +270,8 @@
         samples=100,
         domain=0:1,
         min=0, max=1,
-        xlabel={$P$},
-        ylabel={$R$},
+        xlabel={\(P\)},
+        ylabel={\(R\)},
     }
 }
 
@@ -293,7 +289,7 @@
 
 % Easy column vectors \vcord{a,b,c} ou \vcord[;]{a;b;c}
 % Here be black magic
-\ExplSyntaxOn
+\ExplSyntaxOn % chktex 1
 	\NewDocumentCommand{\vcord}{O{,}m}{\vector_main:nnnn{p}{\\}{#1}{#2}}
 	\NewDocumentCommand{\tvcord}{O{,}m}{\vector_main:nnnn{psmall}{\\}{#1}{#2}}
 	\seq_new:N\l__vector_arg_seq
@@ -303,20 +299,20 @@
 			\seq_use:Nnnn\l__vector_arg_seq{#2}{#2}{#2}
 		\end{#1matrix}
 	}
-\ExplSyntaxOff
+\ExplSyntaxOff % chktex 1
 
 \DeclareMathOperator{\TF}{TF}
 \DeclareMathOperator{\IDF}{IDF}
 
-\ExplSyntaxOn
+\ExplSyntaxOn % chktex 1
     \DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
-\ExplSyntaxOff
+\ExplSyntaxOff % chktex 1
 
 
 % Fixes for pauses after an unveiled list
 \newcommand{\itpause}{%
 	\addtocounter{beamerpauses}{-1}%
-	\pause
+	\pause % chktex 1
 }
 
 
@@ -331,10 +327,10 @@
 \pdfbookmark[2]{Title}{title}
 
 \begin{frame}[plain]
-	\titlepage
+	\titlepage % chktex 1
 \end{frame}
 
-\lecture{Introduction à la fouille de textes}{2019-01-21}
+\lecture{\titlepagesubtitle}{\docdate}
 \begin{frame}{Informations pratiques}
     \begin{description}[*]
         \item[Où] Salle Benveniste, ILPGA, 9 Rue des Bernardins, 75005 Paris
@@ -877,7 +873,7 @@
             \begin{itemize}
                 \item[→] \shorturl{huggingface.co/hmtl/}
             \end{itemize}
-        \item @picdescbot (description d'images en langage naturel\footnote{Encore plus fort : \citetitle{alishahi2017EncodingPhonologyRecurrent} \parencite{alishahi2017EncodingPhonologyRecurrent}}
+        \item @picdescbot (description d'images en langage naturel\footnote{Encore plus fort : \citetitle{alishahi2017EncodingPhonologyRecurrent} \parencite{alishahi2017EncodingPhonologyRecurrent}})
             \begin{itemize}
                 \item[→] \shorturl{twitter.com/picdescbot}
             \end{itemize}
