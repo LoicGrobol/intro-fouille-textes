@@ -20,7 +20,9 @@ jobs:
           extra_system_packages: python3-pygments
       - name: Output all logs
         if: failure()
-        run: find . -iname "*.log" | while read -r file; do echo "LOG:$file" & cat "$file"; done
+        run: |
+          | find . -iname "*.log" | while read -r file; do echo "LOG:$file" & cat "$file"; done
+          | exit 1
       - name: Update unstable release
         id: create_release
         uses: actions/create-release@v1.0.0
@@ -39,5 +41,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: slides/lecture-01/lecture-01.pdf
-          asset_name: lecture-01.zip
+          asset_name: lecture-01.pdf
           asset_content_type: application/x-pdf
