@@ -21,7 +21,7 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2020
 ## Liens utiles
 
 - [Le site du projet Weka](https://www.cs.waikato.ac.nz/ml/weka/)
-- [La page du cours de l'an dernier](/archives/2019)
+- [La page du cours de l'an dernier](archives/2019)
 - [Site du master Plurital](http://plurital.org)
 
 ## Twittographie
