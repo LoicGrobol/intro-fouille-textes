@@ -16,7 +16,17 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2020
 ### Séances
 
 #### 2020-01-16 — Introduction et notion de tâche
+
 - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-01.pdf)
+
+#### 2020-01-16 — Annulé
+
+Cours annulé pour cause de grève.
+Pour la prochaine fois (histoire de gagner du temps et de rattraper un peu le retard):
+
+- Lire le poly jusqu'à la page 20 (i.e. jusqu'à la section 2.3.2 « La Classification » incluse)
+- Imaginer un système de RI très simple qui permettrait à un utilisateur de trouver dans une base de
+  recettes de cuisine les recettes qu'il peut réaliser à partir du contenu de son frigo
 
 ## Liens utiles
 
