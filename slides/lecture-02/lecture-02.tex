@@ -1,46 +1,80 @@
-% Copyright © 2018, Loïc Grobol <loic.grobol@gmail.com>
+% Copyright © 2019, Loïc Grobol <loic.grobol@gmail.com>
 % This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (https://creativecommons.org/licenses/by/4.0/)
 
 \RequirePackage{xparse}
 \RequirePackage{shellesc}
 % Settings
-\NewDocumentCommand\myname{}{Loïc Grobol}
-\NewDocumentCommand\mylab{}{Lattice / ALMAnaCH}
-\NewDocumentCommand\pdftitle{}{Introduction à la fouille de textes}
-\NewDocumentCommand\mymail{}{loic.grobol@gmail.com}
-\NewDocumentCommand\titlepagetitle{}{\pdftitle}
-\NewDocumentCommand\docdate{}{2019-01-28}
-\NewDocumentCommand\conference{}{M1 Plurital}
+\newcommand\myname{Loïc Grobol}
+\newcommand\mylab{Lattice / LLF}
+\newcommand\pdftitle{Introduction à la fouille de textes}
+\newcommand\mymail{loic.grobol@gmail.com}
+\newcommand\titlepagetitle{\pdftitle}
+\newcommand\titlepagesubtitle{Cours 2 : Évaluation, Recherche d'informations et classification}
+\newcommand\docdate{2020-01-30}  % chktex 8
+\newcommand\conference{M1 Plurital}
 
-\documentclass[hyperref={unicode}, xcolor={svgnames}, french]{beamer}
-\usetheme[sectionpage=progressbar,
-          subsectionpage=progressbar,
-          progressbar=frametitle]{metropolis}
-    \definecolor{accent}{RGB}{51, 34, 136}
-    \setbeamercolor{alerted text}{fg=accent}
-    \makeatletter
-        \setlength{\metropolis@progressinheadfoot@linewidth}{1pt}
-    \makeatother
-    % FIXME: not pretty and footnotes are still too big
-    \let\footnoterule\relax  % No footnote rule, push down footnote
+% \RequirePackage{hyperxmp}  % Results in a complex failure with beamer + tikzexternal (2020-01-17)
+\documentclass[xcolor={svgnames}, french]{beamer}
+\hypersetup{
+    pdftitle={\pdftitle},
+    pdfauthor={\myname},
+    % pdfcontactemail={\mymail},  % hyperxmp
+    breaklinks,
+    hypertexnames=true,
+    pdfdisplaydoctitle,
+    pdflang={fr},
+    % keeppdfinfo,  % hyperxmp
+}
 
-% 9-Highlights colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf)
-\definecolor{highlight0}{RGB}{51, 34, 136}    % Deep blue
-\definecolor{highlight1}{RGB}{136, 204, 238}  % Clear blue
-\definecolor{highlight2}{RGB}{68, 170, 153}   % Teal
-\definecolor{highlight3}{RGB}{17, 119, 51}    % Forest green
-\definecolor{highlight4}{RGB}{153, 153, 51}   % Khaki
-\definecolor{highlight5}{RGB}{221, 204, 119}  % Beige
-\definecolor{highlight6}{RGB}{204, 102, 119}  % Pink
+% Colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf) v3.1
+% Bright scheme
+\definecolor{sronbrighttblue}{RGB}{68, 119, 170}
+\definecolor{sronbrightcyan}{RGB}{102, 204, 238}
+\definecolor{sronbrightgreen}{RGB}{34, 136, 51}
+\definecolor{sronbrightyellow}{RGB}{204, 187, 68}
+\definecolor{sronbrightred}{RGB}{238, 102, 119}
+\definecolor{sronbrightpurple}{RGB}{170, 51, 119}
+\definecolor{sronbrightgrey}{RGB}{187, 187, 187}
+
+
+\colorlet{highlight0}{sronbrighttblue}
+\colorlet{highlight1}{sronbrightred}
+\colorlet{highlight2}{sronbrightgreen}
+\colorlet{highlight3}{sronbrightyellow}
+\colorlet{highlight4}{sronbrightcyan}
+\colorlet{highlight5}{sronbrightpurple}
+\colorlet{highlight6}{sronbrightgrey}
+% Legacy highlights
+\definecolor{highlighta}{RGB}{68, 118, 170}  % Navy blue
 \definecolor{highlight7}{RGB}{136, 34, 85}    % Purple
 \definecolor{highlight8}{RGB}{170, 68, 153}   % Violet
 
-% Alternative navy blue for ⩽4 palettes
-\definecolor{highlighta}{RGB}{68, 118, 170}  % Navy blue
+
+\usetheme[
+	sectionpage=progressbar,
+    subsectionpage=progressbar,
+	progressbar=frametitle,
+]{metropolis}
+	\colorlet{accent}{sronbrightgreen}
+	\setbeamercolor{frametitle}{bg=DarkSlateGrey}
+	\setbeamercolor{alerted text}{fg=accent}
+	\makeatletter
+		\setlength{\metropolis@progressinheadfoot@linewidth}{2pt}
+	\makeatother
+	% Avoid ugly whitespace below figures
+	% \makeatletter
+	% 	\renewenvironment{figure}[1][]{%
+	% 	\def\@captype{figure}%
+	% 	\par\centering}%
+	% 	{\par}
+	% \makeatother
+	% FIXME: not pretty and footnotes are still too big
+	\let\footnoterule\relax  % No footnote rule, push down footnote
+
 
 % Use non-standard fonts
 \usefonttheme{professionalfonts}
-\setsansfont[BoldFont={Fira Sans SemiBold}, ItalicFont={Fira Sans Book Italic}]{Fira Sans Book}
+    \setsansfont[BoldFont={* Semibold}]{Fira Sans}
 \setmonofont[Scale=0.9]{Fira Mono}
 
 % Fix missing glyphs in Fira by delegating to polyglossia/babel
@@ -57,17 +91,17 @@
 \usepackage{amsfonts,amssymb}
 \usepackage{amsmath,amsthm}
 \usepackage{mathtools}	% AMS Maths service pack
-	\newtagform{brackets}{[}{]}	% Pour des lignes d'équation numérotées entre crochets
+    % Pour des lignes d'équation numérotées entre crochets
+	\newtagform{brackets}{[}{]} % chktex 9
 	\mathtoolsset{showonlyrefs, showmanualtags, mathic}	% affiche les tags manuels (\tag et \tag*) et corrige le kerning des maths inline dans un bloc italique voir la doc de mathtools
 	\usetagform{brackets}	% Utilise le style de tags défini plus haut
 \usepackage{lualatex-math}
 
 \usepackage[math-style=french]{unicode-math}
-	\setmathfont{Libertinus Math}
+	\setmathfont[Scale=1.1]{Libertinus Math}
 \usepackage{newunicodechar}
 	\newunicodechar{√}{\sqrt}
 \usepackage{mleftright}
-
 
 \usepackage{tabu}
 \usepackage{booktabs}
@@ -79,10 +113,9 @@
     \captionsetup{skip=1ex}
 \usepackage[iso]{datetime}
 
-\usepackage{csquotes}
 \usepackage{tikz}
-	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}}
-    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep = 0pt]{\node[#1] (#2) {$\displaystyle #3$};}}
+	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}} % chktex 36
+    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep = 0pt]{\node[#1] (#2) {\(\displaystyle #3\)};}} % chktex 36
 	\tikzset{
 		alt/.code args={<#1>#2#3}{%
 		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
@@ -101,9 +134,8 @@
     		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
     		},
     	}
-        \pgfplotsset{compat=1.15}
-        \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}}
-
+        \pgfplotsset{compat=1.16}
+        \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}} % chktex 36
     \usetikzlibrary{matrix}
     \usetikzlibrary{shapes, shapes.geometric}
     \usetikzlibrary{decorations.pathreplacing}
@@ -112,26 +144,25 @@
     \usetikzlibrary{backgrounds}
 
     % Do evil things with soft path
-    % From <https://tex.stackexchange.com/a/301364/8547>
     \makeatletter
-        \def\@appendnamedsoftpath#1{%
-            \pgfsyssoftpath@getcurrentpath\@temppatha
-            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
-            \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb}%
-            \pgfsyssoftpath@setcurrentpath\@temppatha
+        \def\@appendnamedsoftpath#1{% chktex 21
+            \pgfsyssoftpath@getcurrentpath\@temppatha % chktex 21 chktex 1
+            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 41 chktex 21
+            \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb} % chktex 41 chktex 21
+            \pgfsyssoftpath@setcurrentpath\@temppatha % chktex 21 chktex 1
         }
-        \def\@appendnamedpathforactions#1{%
-            \pgfsyssoftpath@getcurrentpath\@temppatha
-            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
-            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb}%\usepackage{tikz-3dplot}
+        \def\@appendnamedpathforactions#1{% chktex 21
+            \pgfsyssoftpath@getcurrentpath\@temppatha % chktex 1 chktex 21
+            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
+            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb} % chktex 21 chktex 41
 
-            \let\tikz@actions@path\@temppatha
+            \let\tikz@actions@path\@temppatha  % chktex 21 chktex 1
         }
 
         \tikzset{
             use path for main/.code={%
                 \tikz@addmode{%
-                    \expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname
+                    \expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
                 }%
             },
             append path for main/.code={%
@@ -140,10 +171,10 @@
                 }%
             },
             use path for actions/.code={%
-                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}%
+                \expandafter\def\expandafter\tikz@preactions\expandafter {\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}% chktex 21 chktex 41
             },
             append path for actions/.code={%
-                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions
+                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions % chktex 21 chktex 41 chktex 1
                 \@appendnamedpathforactions{#1}}%
             },
             use path/.style={%
@@ -166,12 +197,14 @@
         external/export=false,
         external/prefix=tikzpics/
     }
-    \tikzexternalize
+    \tikzexternalize % chktex 1
 
 \usepackage{minted}
 	\usemintedstyle{lovelace}
-	\setminted{autogobble, fontsize=\scriptsize, tabsize=2}
+	\setminted{autogobble, tabsize=2}
 	\setmintedinline{fontsize=auto}
+
+\usepackage{csquotes}
 
 \usepackage[style=authoryear, block=ragged, doi=false, isbn=false]{biblatex}
     \AtEveryBibitem{
@@ -186,7 +219,7 @@
         }
     }
 
-	\addbibresource{biblio.bib}
+	\addbibresource{../biblio.bib}
 
 % Compact bibliography style
 \setbeamertemplate{bibliography item}[text]
@@ -202,17 +235,17 @@
 
 \usepackage{hyperxmp}	% XMP metadata
 
-\usepackage[type={CC},modifier={by},version={4.0}]{doclicense}
+\usepackage[type={CC}, modifier={by}, version={4.0}]{doclicense}
 
 \usepackage{todonotes}
-\let\todox\todo
+\let\todox\todo % chktex 1
 \renewcommand\todo[1]{\todox[inline]{#1}}
 
 \title{\titlepagetitle}
-\subtitle{Cours 2 : \docdate}
+\subtitle{\titlepagesubtitle}
 \author{\textbf{\myname} (\mylab)}
 \institute{}
-\date{\footnotesize Version {\yyyymmdddate\today}T\currenttime}
+\date{\tiny Version {\yyyymmdddate\today}T\currenttime}
 
 \titlegraphic{\ccby}
 
@@ -237,8 +270,8 @@
         samples=100,
         domain=0:1,
         min=0, max=1,
-        xlabel={$P$},
-        ylabel={$R$},
+        xlabel={\(P\)},
+        ylabel={\(R\)},
     }
 }
 
@@ -256,7 +289,7 @@
 
 % Easy column vectors \vcord{a,b,c} ou \vcord[;]{a;b;c}
 % Here be black magic
-\ExplSyntaxOn
+\ExplSyntaxOn % chktex 1
 	\NewDocumentCommand{\vcord}{O{,}m}{\vector_main:nnnn{p}{\\}{#1}{#2}}
 	\NewDocumentCommand{\tvcord}{O{,}m}{\vector_main:nnnn{psmall}{\\}{#1}{#2}}
 	\seq_new:N\l__vector_arg_seq
@@ -266,14 +299,21 @@
 			\seq_use:Nnnn\l__vector_arg_seq{#2}{#2}{#2}
 		\end{#1matrix}
 	}
-\ExplSyntaxOff
+\ExplSyntaxOff % chktex 1
 
 \DeclareMathOperator{\TF}{TF}
 \DeclareMathOperator{\IDF}{IDF}
 
-\ExplSyntaxOn
+\ExplSyntaxOn % chktex 1
     \DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
-\ExplSyntaxOff
+\ExplSyntaxOff % chktex 1
+
+
+% Fixes for pauses after an unveiled list
+\newcommand{\itpause}{%
+	\addtocounter{beamerpauses}{-1}%
+	\pause % chktex 1
+}
 
 
 % ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████
@@ -287,7 +327,7 @@
 \pdfbookmark[2]{Title}{title}
 
 \begin{frame}[plain]
-	\titlepage
+	\titlepage % chktex 1
 \end{frame}
 
 % ███████ ██    ██  █████  ██      ██    ██  █████  ████████ ██  ██████  ███    ██
