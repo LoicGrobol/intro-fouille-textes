@@ -465,27 +465,48 @@
 
 % WARNING: Here be dragons
 \begin{frame}[fragile]{Évaluation : préliminaires}
+    \colorlet{retournes}{highlight4}
+    \colorlet{pertinents}{highlight2}
+    \colorlet{VP}{highlight3}
+    \colorlet{VN}{highlight2}
+    \colorlet{FN}{highlight4}
+    \colorlet{FP}{highlight8}
     \begin{figure}
         \tikzset{external/export=true}
-        \begin{tikzpicture}[fill opacity=0.5, text opacity=1,
-                            alt=<1>{true scale=0.9}{true scale=0.75}]
+        \begin{tikzpicture}[
+            fill opacity=0.5,
+            text opacity=1,
+            alt=<1>{true scale=0.9}{true scale=0.75},
+        ]
             \draw[name path=D]
                 (-6,-2) rectangle (6,2)
                 node [above left] {$D$ : ensemble de tous les documents};
-            \draw[alt={<1,6>{fill=highlight2, text=highlight2}{}}, name path=P]
+            \draw[
+                alt={<1,6>{fill=pertinents, text=pertinents}{}},
+                name path=P,
+            ]
                 (-1, 0) circle [x radius=2, y radius=1, rotate=30]
                 node[below left=1.3 and .15] {$P$ : documents pertinents};
-            \draw[alt={<1,6>{fill=highlight4, text=highlight4}{}}, name path=R]
+            \draw[
+                alt={<1,6>{fill=retournes, text=retournes}{}},
+                name path=R,
+            ]
                 (1, 0) circle [x radius=2, y radius=1.5]
                 node[above right=1.5 and 0.1] {$R$ : documents retournés};
             \begin{scope}[alt=<2-4>{even odd rule}{}]
-                \clip[alt=<2-3>{use path=P}{use path=R},
-                      alt=<3-5>{append path=D}{}];
+                \clip[
+                    alt=<2-3>{use path=P}{use path=R},
+                    alt=<3-5>{append path=D}{},
+                ];
                 \only<5>{\clip[use path=P, append path=D];}
-                \path[alt={<2,5>{fill=highlight3}{}},
-                      alt={<3,4>{fill=highlight6}{}},
-                      alt=<2-3>{use path=R}{use path=P},
-                      alt=<5>{use path=D}];
+                \path[
+                    alt={<2>{fill=VP}{}},
+                    alt={<3>{fill=FP}{}},
+                    alt={<4>{fill=FN}{}},
+                    alt={<5>{fill=VN}{}},
+                    alt=<2-3>{use path=R}{use path=P},
+                    alt=<5>{use path=D}
+                ];
             \end{scope}
         \end{tikzpicture}
         \caption{Représentation de l'ensemble des documents}
@@ -494,11 +515,11 @@
         On définit les indicateurs suivants
         \begin{tabu}{|*{3}{X[m,c]|}}
             \hline
-                & \uncover<2,3,6>{\textcolor{highlight4}{Retournés}}   & \uncover<4,5,6>{Non-retournés}\\
+                & \uncover<2,3,6>{\textcolor{retournes}{Retournés}}   & \uncover<4,5,6>{Non-retournés}\\
             \hline
-            \uncover<2,4,6>{\textcolor{highlight2}{Pertinents}}    & \uncover<2,6>{\textcolor{highlight3}{Vrais positifs $P∩R$}}    & \uncover<4,6>{\textcolor{highlight6}{Faux négatifs $P\smallsetminus R$}}\\
+            \uncover<2,4,6>{\textcolor{pertinents}{Pertinents}}    & \uncover<2,6>{\textcolor{VP}{Vrais positifs $P∩R$}}    & \uncover<4,6>{\textcolor{FN}{Faux négatifs $P\smallsetminus R$}}\\
             \hline
-            \uncover<3,5,6>{Non-pertinents}    & \uncover<3,6>{\textcolor{highlight6}{Faux positifs $R\smallsetminus P$}} & \uncover<5,6>{\textcolor{highlight3}{Vrais négatifs $D\smallsetminus(P∪R)$}}\\
+            \uncover<3,5,6>{Non-pertinents}    & \uncover<3,6>{\textcolor{FP}{Faux positifs $R\smallsetminus P$}} & \uncover<5,6>{\textcolor{VN}{Vrais négatifs $D\smallsetminus(P∪R)$}}\\
             \hline
         \end{tabu}
     }
@@ -642,28 +663,39 @@
 \end{frame}
 
 \begin{frame}[fragile=singleslide]
-    \begin{columns}
-        \column{0.45\textwidth}
-            \begin{figure}
-                \tikzset{external/export=true}
-                \begin{tikzpicture}
-                    \begin{axis}[meanheatmap]
-                        \addplot3[surf, shader=interp]
-                            {(x*y*(1+0.5^2))/(y+x*0.5^2)};
-                    \end{axis}
-                \end{tikzpicture}
-            \caption{$F_β$ ($β=0.5$)}
-            \end{figure}
-        \column{0.45\textwidth}
-            L'idée est de pondérer la moyenne harmonique
-            \begin{align}
-                F_{λ, μ}(P, R)
-                    &= \frac{λ+μ}{\frac{λ}{P}+\frac{μ}{R}}\\
-                    &= (λ+μ) \frac{P×R}{λP + μR}\\
-                    &= \frac{λ+μ}{μ} \frac{P×R}{\underbrace{\frac{λ}{μ}}_{β²}P + R}\\
-                    &= (1+β²)\frac{P×R}{β²P + R}
-            \end{align}
-    \end{columns}
+    % \begin{columns}
+    %     \column{0.45\textwidth}
+    %         \begin{figure}
+    %             \tikzset{external/export=true}
+    %             \begin{tikzpicture}
+    %                 \begin{axis}[
+    %                     meanheatmap,
+    %                     width=\linewidth,
+    %                 ]
+    %                     \addplot3[surf, shader=interp]
+    %                         {(x*y*(1+0.5^2))/(y+x*0.5^2)};
+    %                 \end{axis}
+    %             \end{tikzpicture}
+    %         \caption{$F_β$ ($β=0.5$)}
+    %         \end{figure}
+    %     \column{0.45\textwidth}
+    %         L'idée est de pondérer la moyenne harmonique
+    %         \begin{align}
+    %             F_{λ, μ}(P, R)
+    %                 &= \frac{λ+μ}{\frac{λ}{P}+\frac{μ}{R}}\\
+    %                 &= (λ+μ) \frac{P×R}{λP + μR}\\
+    %                 &= \frac{λ+μ}{μ} \frac{P×R}{\underbrace{\frac{λ}{μ}}_{β²}P + R}\\
+    %                 &= (1+β²)\frac{P×R}{β²P + R}
+    %         \end{align}
+    % \end{columns}
+    L'idée est de pondérer la moyenne harmonique
+    \begin{align}
+        F_{λ, μ}(P, R)
+            &= \frac{λ+μ}{\frac{λ}{P}+\frac{μ}{R}}\\
+            &= (λ+μ) \frac{P×R}{λP + μR}\\
+            &= \frac{λ+μ}{μ} \frac{P×R}{\underbrace{\frac{λ}{μ}}_{β²}P + R}\\
+            &= (1+β²)\frac{P×R}{β²P + R}
+    \end{align}
     La F-mesure est simplement le cas $β=1$.
 \end{frame}
 
