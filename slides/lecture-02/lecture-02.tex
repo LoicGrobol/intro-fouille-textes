@@ -115,7 +115,7 @@
 
 \usepackage{tikz}
 	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}} % chktex 36
-    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep = 0pt]{\node[#1] (#2) {\(\displaystyle #3\)};}} % chktex 36
+    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {\(\displaystyle #3\)};}} % chktex 36
 	\tikzset{
 		alt/.code args={<#1>#2#3}{%
 		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
@@ -465,12 +465,12 @@
 
 % WARNING: Here be dragons
 \begin{frame}[fragile]{Évaluation : préliminaires}
-    \colorlet{retournes}{highlight4}
-    \colorlet{pertinents}{highlight2}
-    \colorlet{VP}{highlight3}
-    \colorlet{VN}{highlight2}
-    \colorlet{FN}{highlight4}
-    \colorlet{FP}{highlight8}
+    \colorlet{retournes}{sronbrightblue}
+    \colorlet{pertinents}{sronbrightpurple}
+    \colorlet{VP}{sronbrightgreen}
+    \colorlet{VN}{sronbrightgreen}
+    \colorlet{FN}{sronbrightred}
+    \colorlet{FP}{sronbrightred}
     \begin{figure}
         \tikzset{external/export=true}
         \begin{tikzpicture}[
@@ -838,7 +838,7 @@
 \section{Annexes}
 \pdfbookmark[2]{Remerciements}{acknowledgements}
 \begin{frame}{Remerciements}
-    Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017fouille} \parencite{tellier2017fouille} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
+    Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017IntroductionFouilleTextes} \parencite{tellier2017IntroductionFouilleTextes} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
 \end{frame}
 
 \pdfbookmark[2]{Références}{references}
