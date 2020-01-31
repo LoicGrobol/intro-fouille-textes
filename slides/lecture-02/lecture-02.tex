@@ -28,7 +28,7 @@
 
 % Colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf) v3.1
 % Bright scheme
-\definecolor{sronbrighttblue}{RGB}{68, 119, 170}
+\definecolor{sronbrightblue}{RGB}{68, 119, 170}
 \definecolor{sronbrightcyan}{RGB}{102, 204, 238}
 \definecolor{sronbrightgreen}{RGB}{34, 136, 51}
 \definecolor{sronbrightyellow}{RGB}{204, 187, 68}
@@ -37,7 +37,7 @@
 \definecolor{sronbrightgrey}{RGB}{187, 187, 187}
 
 
-\colorlet{highlight0}{sronbrighttblue}
+\colorlet{highlight0}{sronbrightblue}
 \colorlet{highlight1}{sronbrightred}
 \colorlet{highlight2}{sronbrightgreen}
 \colorlet{highlight3}{sronbrightyellow}
@@ -505,7 +505,7 @@
                     alt={<4>{fill=FN}{}},
                     alt={<5>{fill=VN}{}},
                     alt=<2-3>{use path=R}{use path=P},
-                    alt=<5>{use path=D}
+                    alt=<5>{use path=D},
                 ];
             \end{scope}
         \end{tikzpicture}
@@ -513,7 +513,7 @@
     \end{figure}
     \only<2->{
         On définit les indicateurs suivants
-        \begin{tabu}{|*{3}{X[m,c]|}}
+        \begin{tabu}{|l|*{2}{X[m,c]|}}
             \hline
                 & \uncover<2,3,6>{\textcolor{retournes}{Retournés}}   & \uncover<4,5,6>{Non-retournés}\\
             \hline

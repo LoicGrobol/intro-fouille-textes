@@ -2,6 +2,12 @@
 title: Introduction à la fouille de textes — M1 pluriTAL 2020
 ---
 
+## Nouvelles
+
+- **2020-01-31** les cours des 6 et 13 février 2020 auront lieu en salle Rousselot
+
+## Infos pratiques
+
 - **Où** Salle Benveniste, [ILPGA](http://www.ilpga.univ-paris3.f), [9 Rue des Bernardins, 75005
   Paris](https://www.openstreetmap.org/way/55894044)
 - **Quand** Le jeudi de 13h00 à 15h00 (voir aussi [le calendrier de Paris 3 pour les
@@ -26,14 +32,22 @@ Cours annulé pour cause de grève.
 Pour la prochaine fois (histoire de gagner du temps et de rattraper un peu le retard):
 
 - Lire le poly jusqu'à la page 20 (i.e. jusqu'à la section 2.3.2 « La Classification » incluse)
-- Imaginer un système de RI très simple qui permettrait à un utilisateur de trouver dans une base de
-  recettes de cuisine les recettes qu'il peut réaliser à partir du contenu de son frigo
 
 #### 2020-01-16 — Apprentissage, évaluation, RI et classification
 
 - [Slides 1](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-01.pdf)
   (à partir de la slide 26, p 36 dans le pdf)
 - [Slides 2](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-02.pdf)
+
+Pour la prochaine fois :
+
+- Finir l'exercice de calcul de PRF du slide 2
+- Imaginer un système de RI très simple qui permettrait à un utilisateur de trouver dans une base de
+  recettes de cuisine les recettes qu'il peut réaliser à partir du contenu de son frigo
+- Lire le poly jusqu'à 2.3.3 « L'annotation » inclus
+
+**Attention, la séance prochaine aura lieu dans la salle Rousselot**
+
 
 ## Liens utiles
 
