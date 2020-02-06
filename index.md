@@ -48,6 +48,10 @@ Pour la prochaine fois :
 
 **Attention, la séance prochaine aura lieu dans la salle Rousselot**
 
+#### 2020-02-06 — Étiquetage, RI, combinaisons et réprésentation des données
+
+- [Slides 1](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-03.pdf)
+- [Slides 2](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-04.pdf)
 
 ## Liens utiles
 
