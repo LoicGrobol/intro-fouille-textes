@@ -54,7 +54,8 @@ Pour la prochaine fois :
 
 #### 2020-02-13 — Décomposition en tâches élémentaires, représentation des données et propriétés statistiques
 
-- [Slides 2](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-04.pdf)
+- [Slides 1](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-04.pdf)
+- [Slides 2](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-05.pdf)
 
 ## Liens utiles
 
