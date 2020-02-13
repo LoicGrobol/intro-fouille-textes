@@ -48,9 +48,12 @@ Pour la prochaine fois :
 
 **Attention, la séance prochaine aura lieu dans la salle Rousselot**
 
-#### 2020-02-06 — Étiquetage, RI, combinaisons et représentation des données
+#### 2020-02-06 — Étiquetage, RI et relations entre tâches
 
-- [Slides 1](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-03.pdf)
+- [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-03.pdf)
+
+#### 2020-02-13 — Décomposition en tâches élémentaires, représentation des données et propriétés statistiques
+
 - [Slides 2](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-04.pdf)
 
 ## Liens utiles

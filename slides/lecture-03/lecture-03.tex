@@ -9,7 +9,7 @@
 \newcommand\pdftitle{Introduction à la fouille de textes}
 \newcommand\mymail{loic.grobol@gmail.com}
 \newcommand\titlepagetitle{\pdftitle}
-\newcommand\titlepagesubtitle{Cours 3 : Annotation et extraction d'informations}
+\newcommand\titlepagesubtitle{Cours 3 : Annotation, extraction d'informations et relations entre tâches}
 \newcommand\docdate{2020-02-36}  % chktex 8
 \newcommand\conference{M1 Plurital}
 
@@ -595,6 +595,148 @@
                 \item Pour les tâches comprenant une composante de localisation (NER, Argument Zoning), on peut appliquer des pondérations différentes à extraction et localisation
             \end{itemize}
     \end{itemize}
+\end{frame}
+
+\begin{frame}{Exercice}
+    Une requête dans un moteur de recherche renvoie \num{27} documents. Parmi ceux-ci, \num{13} sont pertinents pour cette requête. Une étude du corpus montre que parmi ses \num{1024} documents, \num{15} étaient pertinents pour cette requête.
+    \begin{itemize}
+        \item Déterminer les nombres de vrais positifs, vrais négatifs, faux positifs et faux négatifs
+        \item Déterminer la précision, le rappel et la $F$-mesure associées
+        \item Mêmes questions pour un corpus de taille \num{2713}
+    \end{itemize}
+\end{frame}
+
+% ██████  ███████ ██       █████  ████████ ██  ██████  ███    ██ ███████
+% ██   ██ ██      ██      ██   ██    ██    ██ ██    ██ ████   ██ ██
+% ██████  █████   ██      ███████    ██    ██ ██    ██ ██ ██  ██ ███████
+% ██   ██ ██      ██      ██   ██    ██    ██ ██    ██ ██  ██ ██      ██
+% ██   ██ ███████ ███████ ██   ██    ██    ██  ██████  ██   ████ ███████
+
+
+\section{Relations entre tâches}
+\begin{frame}<1>[label=taskrel]{Relations entre tâches}
+    Les tâches présentées précédemment sont \alert{élémentaires} au sens où on peut y \alert{réduire} la plupart des tâches de la fouille de texte.
+
+    Cependant ces tâches ne sont pas complètement indépendantes les unes des autres \emph{via} des \alert{reformulations}.
+\end{frame}
+
+\begin{frame}[fragile]{La RI comme classification}
+    On peut voir la RI comme un problème de \alert{classification binaire}
+    \vspace{-\bigskipamount}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[true scale=0.75]
+            \node[data, alt=<2>{highlight=0}] (in) {Requête};
+            \node[program, right=1.5cm of in, text width=13ex, visible on=2] (prog) {Programme de classification};
+            \node[data, below=1.5cm of prog, alt=<2>{highlight=1}] (res) {Corpus};
+            \node[data, right=3.5cm of prog, text width=10ex] (out) {Documents pertinents};
+            \draw
+                ($(prog.north west)+(-1cm, 1.25cm)$)
+                -- ($(prog.north east)+(3cm, 1.25cm)$)
+                -- ($(prog.south east)+(3cm, -1.25cm)$)
+                -- ($(prog.south west)+(-1cm, -1.25cm)$)
+                -- cycle;
+            \alt<1> {
+                \node (ri) at (prog) {Programme de RI};
+                \draw[->] (in.east) -- ($(prog.west)-(1cm, 0)$);
+                \draw[->] (res.north) -- ($(prog.south)-(0, 1.25cm)$);
+                \draw[->] ($(prog.east)+(3cm, 0)$) -- (out);
+            }{
+                \node[anchor=north west] (ri) at ($(prog.north west)+(-0.9cm, 1.15cm)$) {Programme de RI};
+                \draw[->] (in.east) -- ($(prog.west)-(0.75cm, 0)$) |- ($(prog.south)-(0, 0.5cm)$) -- (prog.south);
+                \draw[->] (res.north) -- ($(prog.south)-(0, 1cm)$) -| ($(prog.west)-(0.5cm, 0)$) -- (prog.west);
+                \node[data, right=0.5cm of prog.east, highlight=3] (clas) {Classes};
+                \draw[->] (prog) -- (clas) -- (out);
+            }
+        \end{tikzpicture}
+        \caption{La RI comme une classification}
+    \end{figure}
+    \vspace{-\bigskipamount}
+    \only<2>{
+        \begin{itemize}
+            \item On répartit les documents entre les \textcolor{highlight3}{classes} « pertinent » et « non-pertinent »
+            \item \textcolor{highlight0}{La requête} devient une ressource et \textcolor{highlight1}{le corpus} une entrée
+        \end{itemize}
+    }
+\end{frame}
+
+\begin{frame}{L'annotation comme classification}
+    Plusieurs stratégies sont envisageables pour conserver l'information de structure
+    \begin{itemize}
+        \item Voir la suite des étiquettes d'une séquence comme une seule classe.
+        \item Étiqueter par classifications successives en utilisant à chaque étape l'ensemble des étiquettes précédentes comme information pour choisir l'étiquette suivante.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{L'annotation comme une suite de classifications}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[
+                row 2 column 1/.style={visible on={1,2,6}},
+                row 2 column 2/.style={visible on={2,3,6}},
+                row 2 column 3/.style={visible on={3,4,6}},
+                row 2 column 4/.style={visible on={4,5,6}},
+                row 2 column 5/.style={visible on={5-}},
+            ]
+            \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+                Le  & petit & chat  & est & content\\
+                DET & ADJ   & NC    & V   & ADJ\\
+            };
+            \foreach \x in {1, ..., 5}
+                \draw[->, visible on={\x,6}] (m-1-\x) -- (m-2-\x);
+        \end{tikzpicture}
+        \caption{\emph{Part Of Speech Tagging} comme une suite de classifications}
+    \end{figure}
+    \only<6>{}
+\end{frame}
+
+\begin{frame}[fragile]{EI comme annotation}
+    \begin{figure}
+        \begin{overprint}
+            \onslide<1>
+                \tikzset{external/export=true}
+                \begin{tikzpicture}
+                    \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+                        En & 2019 & la & France & gagne & à & l' & Eurovision\\
+                        O & D & O & C & O & O & O & E\\
+                    };
+                    \foreach \x in {1, ..., 8}
+                        \draw[->] (m-1-\x) -- (m-2-\x);
+                \end{tikzpicture}
+            \onslide<2>
+                \tikzset{external/export=true}
+                \begin{tikzpicture}
+                    \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+                        En & 2019 & la & France & gagne & à & l' & Eurovision\\
+                        O & B-D & B-C & I-C & O & O & B-E & I-E\\\\
+                    };
+                    \foreach \x in {1, ..., 8}
+                        \draw[->] (m-1-\x) -- (m-2-\x);
+                \end{tikzpicture}
+            \onslide<3>
+                \tikzset{external/export=true}
+                \begin{tikzpicture}
+                    \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+                        En & 2019 & la & France & gagne & à & l' & Eurovision\\
+                        O & U-D & B-C & L-C & O & O & B-E & L-E\\\\
+                    };
+                    \foreach \x in {1, ..., 8}
+                        \draw[->] (m-1-\x) -- (m-2-\x);
+                \end{tikzpicture}
+        \end{overprint}
+        \caption{\emph{EI} comme une annotation}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Exercice}
+    \begin{enumerate}
+        \item Donner la suite d'étiquettes correspondant au parenthésage suivant : (Le volcan Eyjafjallajökull)\textsubscript{P} est (entré en éruption)\textsubscript{E} (hier)\textsubscript{D} à (15h30)\textsubscript{T}
+            \begin{enumerate}
+                \item En BIO
+                \item En BILOU
+            \end{enumerate}
+        \item Donner une phrase qui correspond à la suite d'étiquettes de chunking \texttt{B-N I-N I-N I-V I-Adj}
+    \end{enumerate}
 \end{frame}
 
 
