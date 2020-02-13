@@ -4,6 +4,7 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2020
 
 ## Nouvelles
 
+- **2020-02-13** les [consignes pour les projets 2020](projets.md) sont disponibles
 - **2020-01-31** les cours des 6 et 13 février 2020 auront lieu en salle Rousselot
 
 ## Infos pratiques
@@ -56,6 +57,7 @@ Pour la prochaine fois :
 
 - [Slides 1](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-04.pdf)
 - [Slides 2](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-05.pdf)
+- [consignes pour les projets](projets.md)
 
 ## Liens utiles
 
