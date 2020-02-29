@@ -61,7 +61,7 @@ Pour la prochaine fois :
 
 #### 2020-02-27 — TF⋅IDF et représentations vectorielles
 
-**Cours annulé**, comme le sera celui du 2020-03-05 en raison de l'opération [« la journée où l'université et la recherche s'arrête »](http://www.universiteouverte.org/), vous êtes encouragé⋅e⋅s à participer aux ateliers et débats organisés entre autres à Paris 3.
+**Cours annulé**, comme le sera celui du 2020-03-05 en raison de l'opération [« la journée où l'université et la recherche s'arrêtent »](http://www.universiteouverte.org/), vous êtes encouragé⋅e⋅s à participer aux ateliers et débats organisés entre autres à Paris 3.
 
 Prenez quand même le temps de lire les slides ci-dessous d'ici-là pour préparer la suite du cours.
 
