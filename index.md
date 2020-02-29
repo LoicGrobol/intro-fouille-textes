@@ -57,13 +57,23 @@ Pour la prochaine fois :
 
 - [Slides 1](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-04.pdf)
 - [Slides 2](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-05.pdf)
-- [consignes pour les projets](projets.md)
+- [Consignes pour les projets](projets.md)
 
 ## Liens utiles
 
 - [Le site du projet Weka](https://www.cs.waikato.ac.nz/ml/weka/)
 - [La page du cours de l'an dernier](archives/2019)
 - [Site du master Plurital](http://plurital.org)
+
+#### 2020-02-27 — TF⋅IDF et représentations vectorielles
+
+**Cours annulé**, comme le sera celui du 2020-03-05 en raison de l'opération [« la journée où l'université et la recherche s'arrête »](http://www.universiteouverte.org/), vous êtes encouragé⋅e⋅s à participer aux ateliers et débats organisés entre autres à Paris 3.
+
+Prenez quand même le temps de lire les slides ci-dessous d'ici-là pour préparer la suite du cours.
+
+- [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-06.pdf)
+
+Lecture : finir le chapitre 2 du poly.
 
 ## Twittographie
 

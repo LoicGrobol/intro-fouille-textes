@@ -1,25 +1,34 @@
-% Copyright © 2018, Loïc Grobol <loic.grobol@gmail.com>
+%% Copyright © 2019, Loïc Grobol <loic.grobol@gmail.com>
 % This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (https://creativecommons.org/licenses/by/4.0/)
 
 \RequirePackage{xparse}
 \RequirePackage{shellesc}
 % Settings
-\NewDocumentCommand\myname{}{Loïc Grobol}
-\NewDocumentCommand\mylab{}{Lattice / ALMAnaCH}
-\NewDocumentCommand\pdftitle{}{Introduction à la fouille de textes}
-\NewDocumentCommand\mymail{}{loic.grobol@gmail.com}
-\NewDocumentCommand\titlepagetitle{}{\pdftitle}
-\NewDocumentCommand\titlepagesubtitle{}{Cours 6 : TF.IDF et représentations vectorielles}
-\NewDocumentCommand\docdate{}{2019-02-25}
-\NewDocumentCommand\conference{}{M1 Plurital}
+\newcommand\myname{Loïc Grobol}
+\newcommand\mylab{Lattice / LLF}
+\newcommand\pdftitle{Introduction à la fouille de textes}
+\newcommand\mymail{loic.grobol@gmail.com}
+\newcommand\titlepagetitle{\pdftitle}
+\newcommand\titlepagesubtitle{Cours 6 : TF⋅IDF et représentations vectorielles}
+\newcommand\docdate{2020-02-27}  % chktex 8
+\newcommand\conference{M1 Plurital}
 
-\documentclass[hyperref={unicode}, xcolor={svgnames}, french]{beamer}
-% Alternative navy blue for ⩽4 palettes
-\definecolor{highlighta}{RGB}{68, 118, 170}  % Navy blue
+% \RequirePackage{hyperxmp}  % Results in a complex failure with beamer + tikzexternal (2020-01-17)
+\documentclass[xcolor={svgnames}, french]{beamer}
+\hypersetup{
+    pdftitle={\pdftitle},
+    pdfauthor={\myname},
+    % pdfcontactemail={\mymail},  % hyperxmpAnnotation
+    breaklinks,
+    hypertexnames=true,
+    pdfdisplaydoctitle,
+    pdflang={fr},
+    % keeppdfinfo,  % hyperxmp
+}
 
 % Colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf) v3.1
 % Bright scheme
-\definecolor{sronbrighttblue}{RGB}{68, 119, 170}
+\definecolor{sronbrightblue}{RGB}{68, 119, 170}
 \definecolor{sronbrightcyan}{RGB}{102, 204, 238}
 \definecolor{sronbrightgreen}{RGB}{34, 136, 51}
 \definecolor{sronbrightyellow}{RGB}{204, 187, 68}
@@ -27,14 +36,16 @@
 \definecolor{sronbrightpurple}{RGB}{170, 51, 119}
 \definecolor{sronbrightgrey}{RGB}{187, 187, 187}
 
-\colorlet{highlight0}{sronbrighttblue}
-\colorlet{highlight1}{sronbrightcyan}
+
+\colorlet{highlight0}{sronbrightblue}
+\colorlet{highlight1}{sronbrightred}
 \colorlet{highlight2}{sronbrightgreen}
 \colorlet{highlight3}{sronbrightyellow}
-\colorlet{highlight4}{sronbrightred}
+\colorlet{highlight4}{sronbrightcyan}
 \colorlet{highlight5}{sronbrightpurple}
 \colorlet{highlight6}{sronbrightgrey}
 % Legacy highlights
+\definecolor{highlighta}{RGB}{68, 118, 170}  % Navy blue
 \definecolor{highlight7}{RGB}{136, 34, 85}    % Purple
 \definecolor{highlight8}{RGB}{170, 68, 153}   % Violet
 
@@ -63,7 +74,7 @@
 
 % Use non-standard fonts
 \usefonttheme{professionalfonts}
-\setsansfont[BoldFont={Fira Sans SemiBold}, ItalicFont={Fira Sans Book Italic}]{Fira Sans Book}
+    \setsansfont[BoldFont={* Semibold}]{Fira Sans}
 \setmonofont[Scale=0.9]{Fira Mono}
 
 % Fix missing glyphs in Fira by delegating to polyglossia/babel
@@ -80,13 +91,14 @@
 \usepackage{amsfonts,amssymb}
 \usepackage{amsmath,amsthm}
 \usepackage{mathtools}	% AMS Maths service pack
-	\newtagform{brackets}{[}{]}	% Pour des lignes d'équation numérotées entre crochets
+    % Pour des lignes d'équation numérotées entre crochets
+	\newtagform{brackets}{[}{]} % chktex 9
 	\mathtoolsset{showonlyrefs, showmanualtags, mathic}	% affiche les tags manuels (\tag et \tag*) et corrige le kerning des maths inline dans un bloc italique voir la doc de mathtools
 	\usetagform{brackets}	% Utilise le style de tags défini plus haut
 \usepackage{lualatex-math}
 
 \usepackage[math-style=french]{unicode-math}
-	\setmathfont{Libertinus Math}
+	\setmathfont[Scale=1.1]{Libertinus Math}
 \usepackage{newunicodechar}
 	\newunicodechar{√}{\sqrt}
 \usepackage{mleftright}
@@ -102,8 +114,8 @@
 \usepackage[iso]{datetime}
 
 \usepackage{tikz}
-	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}}
-    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep = 0pt]{\node[#1] (#2) {$\displaystyle #3$};}}
+	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}} % chktex 36
+    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {\(\displaystyle #3\)};}} % chktex 36
 	\tikzset{
 		alt/.code args={<#1>#2#3}{%
 		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
@@ -122,9 +134,8 @@
     		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
     		},
     	}
-        \pgfplotsset{compat=1.15}
-        \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}}
-
+        \pgfplotsset{compat=1.16}
+        \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}} % chktex 36
     \usetikzlibrary{matrix}
     \usetikzlibrary{shapes, shapes.geometric}
     \usetikzlibrary{decorations.pathreplacing}
@@ -133,26 +144,25 @@
     \usetikzlibrary{backgrounds}
 
     % Do evil things with soft path
-    % From <https://tex.stackexchange.com/a/301364/8547>
     \makeatletter
-        \def\@appendnamedsoftpath#1{%
-            \pgfsyssoftpath@getcurrentpath\@temppatha
-            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
-            \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb}%
-            \pgfsyssoftpath@setcurrentpath\@temppatha
+        \def\@appendnamedsoftpath#1{% chktex 21
+            \pgfsyssoftpath@getcurrentpath\@temppatha % chktex 21 chktex 1
+            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 41 chktex 21
+            \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb} % chktex 41 chktex 21
+            \pgfsyssoftpath@setcurrentpath\@temppatha % chktex 21 chktex 1
         }
-        \def\@appendnamedpathforactions#1{%
-            \pgfsyssoftpath@getcurrentpath\@temppatha
-            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname
-            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb}%\usepackage{tikz-3dplot}
+        \def\@appendnamedpathforactions#1{% chktex 21
+            \pgfsyssoftpath@getcurrentpath\@temppatha % chktex 1 chktex 21
+            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
+            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb} % chktex 21 chktex 41
 
-            \let\tikz@actions@path\@temppatha
+            \let\tikz@actions@path\@temppatha  % chktex 21 chktex 1
         }
 
         \tikzset{
             use path for main/.code={%
                 \tikz@addmode{%
-                    \expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname
+                    \expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
                 }%
             },
             append path for main/.code={%
@@ -161,10 +171,10 @@
                 }%
             },
             use path for actions/.code={%
-                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}%
+                \expandafter\def\expandafter\tikz@preactions\expandafter {\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}% chktex 21 chktex 41
             },
             append path for actions/.code={%
-                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions
+                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions % chktex 21 chktex 41 chktex 1
                 \@appendnamedpathforactions{#1}}%
             },
             use path/.style={%
@@ -187,11 +197,11 @@
         external/export=false,
         external/prefix=tikzpics/
     }
-    \tikzexternalize
+    \tikzexternalize % chktex 1
 
 \usepackage{minted}
 	\usemintedstyle{lovelace}
-	\setminted{autogobble, fontsize=\scriptsize, tabsize=2}
+	\setminted{autogobble, tabsize=2}
 	\setmintedinline{fontsize=auto}
 
 \usepackage{csquotes}
@@ -209,7 +219,7 @@
         }
     }
 
-	\addbibresource{biblio.bib}
+	\addbibresource{../biblio.bib}
 
 % Compact bibliography style
 \setbeamertemplate{bibliography item}[text]
@@ -228,7 +238,7 @@
 \usepackage[type={CC}, modifier={by}, version={4.0}]{doclicense}
 
 \usepackage{todonotes}
-\let\todox\todo
+\let\todox\todo % chktex 1
 \renewcommand\todo[1]{\todox[inline]{#1}}
 
 \title{\titlepagetitle}
@@ -260,8 +270,8 @@
         samples=100,
         domain=0:1,
         min=0, max=1,
-        xlabel={$P$},
-        ylabel={$R$},
+        xlabel={\(P\)},
+        ylabel={\(R\)},
     }
 }
 
@@ -279,7 +289,7 @@
 
 % Easy column vectors \vcord{a,b,c} ou \vcord[;]{a;b;c}
 % Here be black magic
-\ExplSyntaxOn
+\ExplSyntaxOn % chktex 1
 	\NewDocumentCommand{\vcord}{O{,}m}{\vector_main:nnnn{p}{\\}{#1}{#2}}
 	\NewDocumentCommand{\tvcord}{O{,}m}{\vector_main:nnnn{psmall}{\\}{#1}{#2}}
 	\seq_new:N\l__vector_arg_seq
@@ -289,14 +299,21 @@
 			\seq_use:Nnnn\l__vector_arg_seq{#2}{#2}{#2}
 		\end{#1matrix}
 	}
-\ExplSyntaxOff
+\ExplSyntaxOff % chktex 1
 
 \DeclareMathOperator{\TF}{TF}
 \DeclareMathOperator{\IDF}{IDF}
 
-\ExplSyntaxOn
+\ExplSyntaxOn % chktex 1
     \DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
-\ExplSyntaxOff
+\ExplSyntaxOff % chktex 1
+
+
+% Fixes for pauses after an unveiled list
+\newcommand{\itpause}{%
+	\addtocounter{beamerpauses}{-1}%
+	\pause % chktex 1
+}
 
 
 % ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████
@@ -310,11 +327,12 @@
 \pdfbookmark[2]{Title}{title}
 
 \begin{frame}[plain]
-	\titlepage
+	\titlepage % chktex 1
 \end{frame}
 
+% TODO: mieux choisir les exemples pour avoir un tableau moins creux et plus de trucs intéressants à dire sur les différentes représentations
 \begin{frame}{Exemples de travail}
-	Donner trois représentations tabulaires (booléennes, occurrences, fréquences) fondées sur le vocabulaire du corpus suivant et ne prenant en compte que les noms.
+	Donner trois représentations tabulaires (booléennes, occurrences, fréquences) fondées sur le vocabulaire du corpus suivant et ne prenant en compte que les mots \emph{France}, \emph{art}, \emph{cinéma} et \emph{économie}.
 	\begin{enumerate}
 		\item « Le cinéma est un art, c’est aussi une industrie. »
 		\item « Personne, quand il est petit, ne veut être critique de cinéma. Mais ensuite, en France, tout le monde a un deuxième métier : critique de cinéma ! »
@@ -323,6 +341,62 @@
 		\item « En temps de crise, reconstruire l’industrie : tout un art ! »
 		\item « Quand une usine ferme, c’est que l’économie va mal. »
 	\end{enumerate}
+\end{frame}
+
+
+\begin{frame}[fragile]{Exemples de travail}
+    \begin{figure}
+        \caption{Représentation tabulaire par \emph{occurences}}
+        \begin{tabu} to \linewidth {l*{4}{X[c]}}
+            \toprule
+            \# & France & cinéma & art & économie\\
+            \midrule
+            1 & 0 & 1 & 1 & 0\\
+            2 & 1 & 2 & 0 & 0\\
+            3 & 0 & 0 & 0 & 0\\
+            4 & 1 & 0 & 0 & 1\\
+            5 & 0 & 0 & 1 & 0\\
+            6 & 0 & 0 & 0 & 1\\
+            \hline
+            \bottomrule
+        \end{tabu}
+    \end{figure}
+\end{frame}
+
+\begin{frame}<-2>[fragile]{Exemples de travail}
+    \begin{figure}
+        \caption{Représentation tabulaire \emph{booléenne}}
+        \begin{tabu} to \linewidth {l*{4}{X[c]}}
+            \toprule
+            \# & France & cinéma & art & économie\\
+            \midrule
+            1 & 0 & 1 & 1 & 0\\
+            2 & 1 & 1 & 0 & 0\\
+            3 & 0 & 0 & 0 & 0\\
+            4 & 1 & 0 & 0 & 1\\
+            5 & 0 & 0 & 1 & 0\\
+            6 & 0 & 0 & 0 & 1\\
+            \bottomrule
+        \end{tabu}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Exemples de travail}
+    \begin{figure}
+        \caption{Représentation tabulaire par \emph{fréquences relatives}}
+        \begin{tabu} to \linewidth {l*{4}{X[c]}}
+            \toprule
+            \# & France & cinéma & art & économie\\
+            \midrule
+            1 & 0 & 0.11 & 0.11 & 0\\
+            2 & 0.04 & 0.08 & 0 & 0\\
+            3 & 0 & 0 & 0 & 0\\
+            4 & 0.07 & 0 & 0 & 0.07\\
+            5 & 0 & 0 & 0.1 & 0\\
+            6 & 0 & 0 & 0 & 0.09\\
+            \bottomrule
+        \end{tabu}
+    \end{figure}
 \end{frame}
 
 \section{TF⋅IDF}
@@ -356,12 +430,14 @@
 
 \begin{frame}{IDF, probabilités et surprise}
 	Dans un corpus de \num{1000} textes, \num{55} contiennent le mot \emph{kiwi}.
-	\pause
+    \pause
+
 	On choisit un texte au hasard sans en favoriser aucun. Serait-il surprenant que le texte choisi contienne le mot \emph{kiwi} ?
 \end{frame}
 
 \begin{frame}{Les maths en cinq secondes : probabilités}
-	objectif : on veut une mesure \alert{quantitative} du fait qu'un évènement dépendant du hasard (aléatoire) ait des chances de se produire. On appelle cette mesure \alert{probabilité} de l'évènement.
+    Objectif : on veut une mesure \alert{quantitative} du fait qu'un évènement dépendant du hasard (aléatoire) ait des chances de se produire. On appelle cette mesure \alert{probabilité} de l'évènement.
+    
 	\pause
 	On impose que
 	\begin{itemize}
@@ -372,13 +448,14 @@
 
 \begin{frame}{IDF, probabilités et surprise}
 	Dans un corpus de \num{1000} textes, \num{55} contiennent le mot \emph{kiwi}.
-	\pause
-	On considère que les évènements $Aᵢ$ « avoir choisi le texte $i$ ».
+    \pause
+    
+	On considère les évènements $Aᵢ$ « avoir choisi le texte $i$ ».
 	\begin{enumerate}
-		\item Combien y a-t-il de $Aᵢ$ ?
-		\item Quelle est la probabilité qu'un des $Aᵢ$ qui se réalise ?
-		\item Pour un $i$ donné, quelle est la probabilité (notée $P(Aᵢ)$) de $Aᵢ$ ?
-		\item En déduire la probabilité que le texte choisi contienne le mot \emph{kiwi}
+		\item Combien y a-t-il de $Aᵢ$ ?  \only<2>{→ \num{1000}}
+		\item Quelle est la probabilité qu'au moins un des $Aᵢ$ se réalise ?  \only<2>{→ \num{1}}
+		\item Pour un $i$ donné, quelle est la probabilité (notée $P(Aᵢ)$) de $Aᵢ$ ?  \only<2>{→ \(\frac{1}{1000}\)}
+		\item En déduire la probabilité que le texte choisi contienne le mot \emph{kiwi}  \only<2>{→ \(\frac{55}{1000}\)}
 	\end{enumerate}
 \end{frame}
 
@@ -415,15 +492,15 @@
 \begin{frame}{IDF}
 	On a pour le mot $m_j$
 	\begin{equation}
-		\IDF(m_j) = \log\mleft(\frac{m}{\#\compset{i}{n_{i,j}>0}}\mright) = -\log\mleft(\frac{\#\compset{i}{n_{i,j}>0}}{m}\mright)
+		\IDF(m_j) = \log\mleft(\frac{m}{\#\compset{i}{n_{i,j}>0}}\mright) = -\log\mleft(\frac{\#\compset{i}{n_{i,j}>0}}{m}\mright) = I(…)
 	\end{equation}
 
-	En déduire une interprétation de l$\IDF$ de \emph{kiwi} en terme de surprise
+	Autrement dit : l'\(\IDF\) du mot \emph{kiwi} est la surprise de l'événement \enquote{un texte choisi au hasard dans le corpus contient le mot \emph{kiwi}}.
 \end{frame}
 
-\begin{frame}{Exercice}
-	Donner une représentation tabulaire du corpus d'exemple qui utilise les TF⋅IDF.
-\end{frame}
+% \begin{frame}{Exercice}
+% 	Donner une représentation tabulaire du corpus d'exemple qui utilise les TF⋅IDF.
+% \end{frame}
 
 \section{Représentations vectorielles et similarités}
 % TODO: toute cette partie est à refaire
@@ -676,9 +753,9 @@
             \tikzset{external/export=true}
             \begin{tikzpicture}[background rectangle/.style={fill=gray}, show background rectangle, true scale=0.7]
                 \draw [xstep=1, ystep=1, line width=5pt, white] (0, 0) grid (5.1, 5.1);
-                \draw[highlighta, line width=2pt] (0, 0) -| (5, 5);
-                \draw[highlight6, line width=2pt] (0, 0) |- (5, 5);
-                \draw[highlight2, line width=2pt] (0, 0) -| (1, 1) -| (2, 2) -| (3, 3) -| (4, 4) -| (5, 5);
+                \draw[sronbrightpurple, line width=2pt] (0, 0) -| (5, 5);
+                \draw[sronbrightgrey, line width=2pt] (0, 0) |- (5, 5);
+                \draw[sronbrightred, line width=2pt] (0, 0) -| (1, 1) -| (2, 2) -| (3, 3) -| (4, 4) -| (5, 5);
                 \draw[highlight4, line width=2pt] (0, 0) |- (2, 3) -| (5, 5);
                 \fill[highlight3] (0, 0) circle [radius=2pt];
                 \fill[highlight3] (5, 5) circle [radius=2pt];
