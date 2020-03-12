@@ -84,7 +84,6 @@ Lecture : finir le chapitre 2 du poly.
 - [Slides SVM](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-10.pdf)
 
 
-
 ## Liens utiles
 
 - [Le site du projet Weka](https://www.cs.waikato.ac.nz/ml/weka/)
