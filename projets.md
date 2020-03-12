@@ -7,7 +7,7 @@ constitué
 
 ## Consignes
 
-- Projet à rendre le ?? mai *au plus tsrd* par mail à loic.grobol@gmail.com
+- Projet à rendre le ?? mai *au plus tard* par mail à [loic.grobol@gmail.com](mailto:loic.grobol@gmail.com)
   - En cas de problème, contactez moi **avant**
 - Projet collectif, par groupe de 2
   - Si c'est un problème pour vous, venez me voir et on en discute
@@ -47,8 +47,13 @@ Pour nous faciliter la vie à toustes
 - Le compte-rendu doit être au format pdf et le nom de fichier doit être
   `<Prénom1>_<Nom1>-<Prénom2>_<Nom2>-fdt2020.pdf`, par exemple
   `Loïc_Grobol-William_Labov-fdt2020.pdf`.
+
+  Pour éviter les éventuels problèmes d'encodage ou de plateformes, merci d'utiliser une version de vos noms et prénoms en alphabet latin (désolé)
 - Votre rendu doit être contenu entièrement dans une archive au format zip, 7zip ou tar+gz, nommée
   avec le format `<Prénom1>_<Nom1>-<Prénom2>_<Nom2>-fdt2020.zip` (avec l'extension qui convient)
+
+  Assurez-vous que tous vos fichiers textes sont encodés en utf-8.
+
 
 ## Conseils
 
