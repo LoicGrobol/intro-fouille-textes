@@ -71,13 +71,17 @@ Prenez quand même le temps de lire les slides ci-dessous d'ici-là pour prépar
 
 Lecture : finir le chapitre 2 du poly.
 
-## 2020-03-12 — Aprentissage artificiel et Weka
+## 2020-03-12 — Aprentissage artificiel et classification pratique
 
 - [Données
   d'exemple](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/sample-data.tar.gz)
 - [Script de
   vectorisation](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/vectorisation.py)
-- [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-07.pdf)
+
+- [Slides apprentissage et classification](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-07.pdf)
+- [Slides arbres de décision](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-08.pdf)
+- [Slides Naïve Bayes](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-09.pdf)
+- [Slides SVM](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-10.pdf)
 
 
 
