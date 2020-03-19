@@ -112,7 +112,7 @@ habituel du cours (soit le jeudi de 13h à 15h). Je reste bien évidemment dispo
 [<loic.grobol@gmail.com>](mailto:loic.grobol@gmail.com) comme précédemment.
 
 Je vous tiendrai au courant des modalités d'évaluation (probablement un DM sur le modèle des examens
-des années précédentes), **mais** quelles ques soient finalement les décisions des établissements
+des années précédentes), **mais** quelles que soient finalement les décisions des établissements
 sur les notes plancher, toutes les personnes qui me rendront un document — quel qu'il soit, peu
 importe sa longueur et sa qualité — sont assurées d'avoir au moins 14/20 à ce cours.
 
