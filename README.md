@@ -53,3 +53,5 @@ Attribution 4.0 International
 - [`texlive.profile`](texlive.profile) © LaTeX3 Project distribué comme
   [l'original](https://github.com/latex3/latex3/blob/master/support/texlive.profile) au titre de la
   [LaTeX Project Public Licence](https://github.com/latex3/latex3/blob/master/LICENSE)
+- [`assignment/example.pdf`](assignment/example.pdf) ∘ Marine Delaborde, distribué avec
+  l'autorisation de l'autrice.

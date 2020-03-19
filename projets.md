@@ -101,7 +101,7 @@ Où `chemin/du/corpus` est le chemin vers un dossier contenant un sous-dossier p
 sous-dossier contenant un fichier par document de cette classe (avec l'extension `.txt`). Par
 exemple
 
-```
+```text
 mon_corpus
 ├── culture
 │   ├── t1.txt
@@ -114,12 +114,11 @@ mon_corpus
     └── t7.txt
 ```
 
-Pour vectoriser un corpus en utilisant le même vocabulaire qu'un corpus déjà vectorisé, par exemple
-pour vectoriser le corpus de test à partir du corpus d'entraînement, utilisez l'option `--lexicon`
-comme ceci
+Pour vectoriser un corpus en utilisant un vocabulaire prédéfini (par exemple pour vectoriser le
+corpus de test à partir du corpus d'entraînement), utilisez l'option `--lexicon` comme ceci
 
 ```bash
-python3 vectorisation.py --lexicon chemin/vers/entrainement.arff chemin/du/corpus chemin/du/fichier/de/sortie
+python3 vectorisation.py --lexicon chemin/vers/train.arff chemin/vers/corpus/test chemin/du/fichier/de/sortie
 ```
 
 Vous pouvez aussi voir le détail des options disponibles en lançant `vectorisation.py --help`.
@@ -144,3 +143,7 @@ calcul des fréquences relatives ou des TF⋅IDF…
 - Classer des textes de chansons par auteur
 - Identifier les textes issus de sites classés comme sectaires par la Miviludes
 - Retrouver la catégorie (sport ou cinéma) d'articles du journal en ligne *Le Monde*
+
+Un exemple de dossier complet est [disponible](assignment/example.pdf) pour vous donner une idée de
+ce qui est attendu. **Il ne s'agit que d'un exemple et vous êtes parfaitement libre de présenter vos
+résultats autrement, de faire des expériences différentes…**
