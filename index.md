@@ -106,7 +106,7 @@ graves que ce cours !) c'est
 Je mettrai probablement en ligne d'autres documents, comme des slides sur des parties plus avancées
 du programme et des exercices corrigés.
 
-Je suis disponible sur le serveur Discord mis en place pour le M1 (https://discord.gg/kzCjrVs) aux
+Je suis disponible sur le serveur Discord mis en place pour le M1 (<https://discord.gg/kzCjrVs>) aux
 horaires de bureau et en particulier je me consacre à répondre à vos questions sur l'horaire
 habituel du cours (soit le jeudi de 13h à 15h). Je reste bien évidemment disponible par email à
 [<loic.grobol@gmail.com>](mailto:loic.grobol@gmail.com) comme précédemment.
