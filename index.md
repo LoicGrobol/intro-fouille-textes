@@ -71,7 +71,7 @@ Prenez quand même le temps de lire les slides ci-dessous d'ici-là pour prépar
 
 Lecture : finir le chapitre 2 du poly.
 
-## 2020-03-12 — Aprentissage artificiel et classification pratique
+## 2020-03-12 — Aprentissage artificiel et classification pratique
 
 - [Données
   d'exemple](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/sample-data.tar.gz)
@@ -83,13 +83,48 @@ Lecture : finir le chapitre 2 du poly.
 - [Slides Naïve Bayes](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-09.pdf)
 - [Slides SVM](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-10.pdf)
 
+## 2020-03-19 → Fin du semestre
+
+Compte-tenu des circonstances, il faut s'attendre à ce que le confinement actuel dure bien au delà
+de la fin du semestre.
+
+L'objectif pour vous (dans la mesure de vos possibilités ! Il y a en ce moment des choses plus
+graves que ce cours !) c'est
+
+- Finir de lire le poly
+- Lire les slides sur les algos de classification
+  - [Slides apprentissage et
+    classification](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-07.pdf)
+  - [Slides arbres de
+    décision](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-08.pdf)
+  - [Slides Naïve
+    Bayes](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-09.pdf)
+  - [Slides
+    SVM](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-10.pdf)
+- Avancer sur les projets
+
+Je mettrai probablement en ligne d'autres documents, comme des slides sur des parties plus avancées
+du programme et des exercices corrigés.
+
+Je suis disponible sur le serveur Discord mis en place pour le M1 (https://discord.gg/kzCjrVs) aux
+horaires de bureau et en particulier je me consacre à répondre à vos questions sur l'horaire
+habituel du cours (soit le jeudi de 13h à 15h). Je reste bien évidemment disponible par email à
+[<loic.grobol@gmail.com>](mailto:loic.grobol@gmail.com) comme précédemment.
+
+Je vous tiendrai au courant des modalités d'évaluation (probablement un DM sur le modèle des examens
+des années précédentes), **mais** quelles ques soient finalement les décisions des établissements
+sur les notes plancher, toutes les personnes qui me rendront un document — quel qu'il soit, peu
+importe sa longueur et sa qualité — sont assurées d'avoir au moins 14/20 à ce cours.
+
+Si vous pouvez travailler pour ce cours, tant mieux, si vous ne pouvez pas, ce n'est pas grave !
+Dans tous les cas vous ne travaillerez pas pour une note ou une validation mais pour votre
+instruction.
 
 ## Liens utiles
 
 - [Le site du projet Weka](https://www.cs.waikato.ac.nz/ml/weka/)
 - [La page du cours de l'an dernier](archives/2019)
 - [Site du master Plurital](http://plurital.org)
-
 
 ## Twittographie
 
