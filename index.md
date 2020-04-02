@@ -4,6 +4,7 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2020
 
 ## Nouvelles
 
+- **2020-04-02** La date de rendu des projets 2020 est fixée au **1er mai**
 - **2020-02-13** les [consignes pour les projets 2020](projets.md) sont disponibles
 - **2020-01-31** les cours des 6 et 13 février 2020 auront lieu en salle Rousselot
 
