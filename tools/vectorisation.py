@@ -33,7 +33,7 @@ def _process(class_dirs, mots_vides, boolean=False, lexicon=None, characters=Fal
 
 
 def nettoyage(texte):
-    texte = re.sub(r"[&%!?\|\"{\(\[|_\)\]},\.;/:§»«”“‘…–—−]", "", texte)
+    texte = re.sub(r"[&%!?\|\"{\(\[|_\)\]},\.;/:§»«”“‘…–—−\\]", "", texte)
     texte = re.sub(r"\d", "", texte)
     texte = texte.replace("’", "'")
     texte = texte.replace("'", "' ")
@@ -48,7 +48,7 @@ def bag_of_words(nom_fichier, mots_vides, characters=False):
         return Counter(w for w in text if w and not w.isspace() and w not in mots_vides)
     return Counter(
         l
-        for w in filter(None, re.split(r"[\s\.]+", text))
+        for w in filter(None, re.split(r"\s+", text))
         for l in (w.lower(),)
         if l not in mots_vides
     )
