@@ -26,14 +26,15 @@ Le rendu devra comporter :
 - Un compte-rendu traitant les points suivants :
   - Les objectifs du projet
   - Les données et ressources utilisées (origine, format, statut juridique) et les traitements
-    opérés sur celles-ci
+    opérés sur celles-ci. Pensez à donner un résumé du nombre de documents par classe et à préciser
+    la taille des documents sur lesquels vous travaillez.
   - La méthodologie (comment vous vous êtes réparti le travail, comment vous avez identifié les
     problèmes et les avez résolus, différentes étapes du projet…)
   - **Les expériences réalisées**
     - Précisez les réglages des paramètres et le mode de calcul des performances. Vos expériences
       doivent être **reproductibles**
-    - Vous devez tester au moins deux algorithmes de classification parmi ceux vu en cours et au
-      moins un des trois principaux (J48, Naive Bayes et SVM)
+    - Vous devez tester au moins deux des trois principaux algorithmes de classification vus en
+      cours (J48, Naive Bayes et SVM)
     - Évidemment, rien ne vous empêche d'utiliser des algoritmes que nous n'avons pas vu en cours…
   - Les résultats des expériences et une discussion de ces résultats
 - Les données utilisées (ou un échantillon si le volume est important)

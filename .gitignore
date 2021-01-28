@@ -1,6 +1,8 @@
 ## Repo specific
 ### local folder
 local
+.vscode
+.mypy_cache
 
 ### dist
 _build

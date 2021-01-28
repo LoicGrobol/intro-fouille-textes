@@ -18,12 +18,12 @@ Contenus pour le cours « Introduction à la fouille de textes » du master 
 ## Liens utiles
 
 - [Le site du projet Weka](https://www.cs.waikato.ac.nz/ml/weka/)
-- [La page du cours de l'an dernier](archives/2019)
+- [La page du cours de l'an dernier](archives/2020)
 - [Site du master Plurital](http://plurital.org)
 
 ## Licences <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png"/></a>
 
-Copyright © 2019 Loïc Grobol [\<loic.grobol@gmail.com\>](mailto:loic.grobol@gmail.com)
+Copyright © 2021 Loïc Grobol [\<loic.grobol@gmail.com\>](mailto:loic.grobol@gmail.com)
 
 Sauf indication contraire, les fichiers présents dans ce dépôt sont distribués selon les termes de
 la licence [Creative Commons Attribution 4.0
