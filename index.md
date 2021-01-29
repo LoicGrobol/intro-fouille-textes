@@ -4,11 +4,12 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2021
 
 ## Nouvelles
 
+- Sauf problème, les prochains cours seront intégralement sur le serveur Discord du master pluriTAL. Si vous ne pouvez pas à accéder, écrivez-moi à [<loic.grobol@gmail.com>](mailto:loic.grobol@gmail.com)
 - Premier cours le 2021-01-28 de 13h à 15h sur <http://meet.google.com/tbb-hecp-jce>
 
 ## Infos pratiques
 
-- **Où** Google Meet <http://meet.google.com/tbb-hecp-jce>
+- **Où** serveur Discord du master PluriTAL
 - **Quand** Le jeudi de 13h00 à 15h00 (voir aussi [le calendrier de Paris 3 pour les
   dates](http://www.univ-paris3.fr/le-calendrier-universitaire-116398.kjsp))
 - **Contact** Loïc Grobol [<loic.grobol@gmail.com>](mailto:loic.grobol@gmail.com)
@@ -22,7 +23,8 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2021
 
 #### 2021-01-28 — Introduction et notion de tâche
 
-- [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-01.pdf)
+- [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-01.pdf) (jusqu'à la slide 26)
+- Correspondance poly: jusqu'à la page 12, à lire pour la prochaine fois
 
 ## Twittographie
 
