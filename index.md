@@ -26,6 +26,11 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2021
 - [Slides](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-01.pdf) (jusqu'à la slide 26)
 - Correspondance poly: jusqu'à la page 12, à lire pour la prochaine fois
 
+#### 2021-02-04 — Apprentisage, évaluation et RI
+
+- [Slides 1](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-01.pdf)
+- [Slides 2](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-02.pdf)
+
 ## Twittographie
 
 Non-exhaustive

@@ -207,31 +207,29 @@
 \usepackage{csquotes}
 
 \usepackage[style=authoryear, block=ragged, doi=false, isbn=false]{biblatex}
-    \AtEveryBibitem{
-        \ifentrytype{online}
-        {} {
-            \iffieldequalstr{howpublished}{online}
-            {
-                \clearfield{howpublished}
-            } {
-                \clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}
-            }
-        }
-    }
+	\AtEveryBibitem{
+		\ifentrytype{online}
+		{} {
+			\iffieldequalstr{howpublished}{online}
+			{
+				\clearfield{howpublished}
+			} {
+				\clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}
+			}
+		}
+	}
 
 	\addbibresource{../biblio.bib}
 
-% Compact bibliography style
-\setbeamertemplate{bibliography item}[text]
-
 \AtEveryBibitem{
-    \clearfield{series}
-    \clearfield{pages}
-    \clearlist{publisher}
-    \clearname{editor}
-    \clearlist{location}
+	\clearfield{series}
+	\clearfield{pages}
+	% \clearlist{publisher}
+	\clearname{editor}
+	% \clearlist{location}
 }
 \renewcommand*{\bibfont}{\tiny}
+
 
 \usepackage{hyperxmp}	% XMP metadata
 
