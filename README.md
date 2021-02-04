@@ -2,7 +2,6 @@ Introduction à la fouille de textes
 ===================================
 
 [![License: CC BY 4.0](https://licensebuttons.net/l/by/4.0/80x15.png)](https://creativecommons.org/licenses/by/4.0/)
-[![Build Status](https://travis-ci.org/LoicGrobol/intro-fouille-textes.svg?branch=master)](https://travis-ci.org/LoicGrobol/intro-fouille-textes)
 
 Contenus pour le cours « Introduction à la fouille de textes » du master [Plurital](http://plurital.org).
 
