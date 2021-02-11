@@ -16,14 +16,14 @@
 % \RequirePackage{hyperxmp}  % Results in a complex failure with beamer + tikzexternal (2020-01-17)
 \documentclass[xcolor={svgnames}, french]{beamer}
 \hypersetup{
-    pdftitle={\pdftitle},
-    pdfauthor={\myname},
-    % pdfcontactemail={\mymail},  % hyperxmp
-    breaklinks,
-    hypertexnames=true,
-    pdfdisplaydoctitle,
-    pdflang={fr},
-    % keeppdfinfo,  % hyperxmp
+	pdftitle={\pdftitle},
+	pdfauthor={\myname},
+	% pdfcontactemail={\mymail},  % hyperxmp
+	breaklinks,
+	hypertexnames=true,
+	pdfdisplaydoctitle,
+	pdflang={fr},
+	% keeppdfinfo,  % hyperxmp
 }
 
 % Colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf) v3.1
@@ -52,7 +52,7 @@
 
 \usetheme[
 	sectionpage=progressbar,
-    subsectionpage=progressbar,
+	subsectionpage=progressbar,
 	progressbar=frametitle,
 ]{metropolis}
 	\colorlet{accent}{sronbrightgreen}
@@ -74,7 +74,7 @@
 
 % Use non-standard fonts
 \usefonttheme{professionalfonts}
-    \setsansfont[BoldFont={* Semibold}]{Fira Sans}
+	\setsansfont[BoldFont={* Semibold}]{Fira Sans}
 \setmonofont[Scale=0.9]{Fira Mono}
 
 % Fix missing glyphs in Fira by delegating to polyglossia/babel
@@ -91,7 +91,7 @@
 \usepackage{amsfonts,amssymb}
 \usepackage{amsmath,amsthm}
 \usepackage{mathtools}	% AMS Maths service pack
-    % Pour des lignes d'équation numérotées entre crochets
+	% Pour des lignes d'équation numérotées entre crochets
 	\newtagform{brackets}{[}{]} % chktex 9
 	\mathtoolsset{showonlyrefs, showmanualtags, mathic}	% affiche les tags manuels (\tag et \tag*) et corrige le kerning des maths inline dans un bloc italique voir la doc de mathtools
 	\usetagform{brackets}	% Utilise le style de tags défini plus haut
@@ -106,98 +106,111 @@
 \usepackage{tabu}
 \usepackage{booktabs}
 \usepackage{siunitx}
+	\sisetup{
+		binary-units=true,
+		detect-all,
+		detect-inline-weight=math,
+		group-separator=\text{\,},
+	}
+	\DeclareSIUnit{\quantity}{\relax}
+	\DeclareSIUnit{\words}{words}
+	\DeclareSIUnit{\sentences}{sentences}
+	% Needed for italics and bold numbers in siunitx S-aligned columns
+	\usepackage{siunitx}
+	\robustify\itshape
+	\robustify\bfseries
 \usepackage{multicol}
 \usepackage{ccicons}
 \usepackage{bookmark}
 \usepackage{caption}
-    \captionsetup{skip=1ex}
+	\captionsetup{skip=1ex}
 \usepackage[iso]{datetime}
 
 \usepackage{tikz}
 	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}} % chktex 36
-    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {\(\displaystyle #3\)};}} % chktex 36
+	\NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {\(\displaystyle #3\)};}} % chktex 36
 	\tikzset{
 		alt/.code args={<#1>#2#3}{%
 		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
 		},
-        invisible/.style={opacity=0, fill opacity=0},
+		invisible/.style={opacity=0, fill opacity=0},
 		visible on/.style={alt={<#1>{}{invisible}}}
 	}
-    \usepackage{forest}
-    \usepackage{tkz-graph}
-    \usepackage[beamer, markings]{hf-tikz}
-    \usepackage{tikz-3dplot}
-    \usepackage{pgfplots}
-        % Due to pgfplots meddling with pgfkeys, we have to redefine alt here.
-        \pgfplotsset{
-    		alt/.code args={<#1>#2#3}{%
-    		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
-    		},
-    	}
-        \pgfplotsset{compat=1.16}
-        \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}} % chktex 36
-    \usetikzlibrary{matrix}
-    \usetikzlibrary{shapes, shapes.geometric}
-    \usetikzlibrary{decorations.pathreplacing}
+	\usepackage{forest}
+	\usepackage{tkz-graph}
+	\usepackage[beamer, markings]{hf-tikz}
+	\usepackage{tikz-3dplot}
+	\usepackage{pgfplots}
+		% Due to pgfplots meddling with pgfkeys, we have to redefine alt here.
+		\pgfplotsset{
+			alt/.code args={<#1>#2#3}{%
+			\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+			},
+		}
+		\pgfplotsset{compat=1.16}
+		\pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}} % chktex 36
+	\usetikzlibrary{matrix}
+	\usetikzlibrary{shapes, shapes.geometric}
+	\usetikzlibrary{decorations.pathreplacing}
 	\usetikzlibrary{positioning, calc, intersections}
-    \usetikzlibrary{fit}
-    \usetikzlibrary{backgrounds}
+	\usetikzlibrary{fit}
+	\usetikzlibrary{backgrounds}
 
-    % Do evil things with soft path
-    \makeatletter
-        \def\@appendnamedsoftpath#1{% chktex 21
-            \pgfsyssoftpath@getcurrentpath\@temppatha % chktex 21 chktex 1
-            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 41 chktex 21
-            \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb} % chktex 41 chktex 21
-            \pgfsyssoftpath@setcurrentpath\@temppatha % chktex 21 chktex 1
-        }
-        \def\@appendnamedpathforactions#1{% chktex 21
-            \pgfsyssoftpath@getcurrentpath\@temppatha % chktex 1 chktex 21
-            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
-            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb} % chktex 21 chktex 41
+	% Do evil things with soft path
+	\makeatletter
+		\def\@appendnamedsoftpath#1{% chktex 21
+			\pgfsyssoftpath@getcurrentpath\@temppatha % chktex 21 chktex 1
+			\expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 41 chktex 21
+			\expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb} % chktex 41 chktex 21
+			\pgfsyssoftpath@setcurrentpath\@temppatha % chktex 21 chktex 1
+		}
+		\def\@appendnamedpathforactions#1{% chktex 21
+			\pgfsyssoftpath@getcurrentpath\@temppatha % chktex 1 chktex 21
+			\expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
+			\expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb} % chktex 21 chktex 41
 
-            \let\tikz@actions@path\@temppatha  % chktex 21 chktex 1
-        }
+			\let\tikz@actions@path\@temppatha  % chktex 21 chktex 1
+		}
 
-        \tikzset{
-            use path for main/.code={%
-                \tikz@addmode{%
-                    \expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
-                }%
-            },
-            append path for main/.code={%
-                \tikz@addmode{%
-                    \@appendnamedsoftpath{#1}%
-                }%
-            },
-            use path for actions/.code={%
-                \expandafter\def\expandafter\tikz@preactions\expandafter {\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}% chktex 21 chktex 41
-            },
-            append path for actions/.code={%
-                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions % chktex 21 chktex 41 chktex 1
-                \@appendnamedpathforactions{#1}}%
-            },
-            use path/.style={%
-                use path for main=#1,
-                use path for actions=#1,
-            },
-            append path/.style={%
-                append path for main=#1,
-                append path for actions=#1
-            }
-        }
-    \makeatother
+		\tikzset{
+			use path for main/.code={%
+				\tikz@addmode{%
+					\expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
+				}%
+			},
+			append path for main/.code={%
+				\tikz@addmode{%
+					\@appendnamedsoftpath{#1}%
+				}%
+			},
+			use path for actions/.code={%
+				\expandafter\def\expandafter\tikz@preactions\expandafter {\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}% chktex 21 chktex 41
+			},
+			append path for actions/.code={%
+				\expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions % chktex 21 chktex 41 chktex 1
+				\@appendnamedpathforactions{#1}}%
+			},
+			use path/.style={%
+				use path for main=#1,
+				use path for actions=#1,
+			},
+			append path/.style={%
+				append path for main=#1,
+				append path for actions=#1
+			}
+		}
+	\makeatother
 
-    % TikZ externalisation
-    \usetikzlibrary{external}
-    % Create the `tikzpics/` folder if it does not exist
-    \ShellEscape{mkdir -p tikzpics}
-    % Only externalise pictures on demand (to avoid messing up with metropolis theme)
-    \tikzset{
-        external/export=false,
-        external/prefix=tikzpics/
-    }
-    \tikzexternalize % chktex 1
+	% TikZ externalisation
+	\usetikzlibrary{external}
+	% Create the `tikzpics/` folder if it does not exist
+	\ShellEscape{mkdir -p tikzpics}
+	% Only externalise pictures on demand (to avoid messing up with metropolis theme)
+	\tikzset{
+		external/export=false,
+		external/prefix=tikzpics/
+	}
+	\tikzexternalize % chktex 1
 
 \usepackage{minted}
 	\usemintedstyle{lovelace}
@@ -251,31 +264,31 @@
 
 % Schémas de tâches
 \tikzset{
-    >=stealth,
-    hair lines/.style={line width = 0.05pt, lightgray},
-    data/.style={draw, ellipse},
-    program/.style={draw, rectangle},
-    accent on/.style={alt={<#1>{draw=accent, text=accent, thick}{draw}}},
-    true scale/.style={scale=#1, every node/.style={transform shape}},
-    highlight/.style={color=highlight#1}
+	>=stealth,
+	hair lines/.style={line width = 0.05pt, lightgray},
+	data/.style={draw, ellipse},
+	program/.style={draw, rectangle},
+	accent on/.style={alt={<#1>{draw=accent, text=accent, thick}{draw}}},
+	true scale/.style={scale=#1, every node/.style={transform shape}},
+	highlight/.style={color=highlight#1}
 }
 
 % Styles des heatmap pour les moyennes
 \pgfplotsset{
-    meanheatmap/.style={
-        colorbar, colormap name=SRON,
-        view={0}{90},
-        samples=100,
-        domain=0:1,
-        min=0, max=1,
-        xlabel={\(P\)},
-        ylabel={\(R\)},
-    }
+	meanheatmap/.style={
+		colorbar, colormap name=SRON,
+		view={0}{90},
+		samples=100,
+		domain=0:1,
+		min=0, max=1,
+		xlabel={\(P\)},
+		ylabel={\(R\)},
+	}
 }
 
 % Commands spécifiques
 \NewDocumentCommand\shorturl{ O{https} O{://} m }{%
-    \href{#1#2#3}{\nolinkurl{#3}}%
+	\href{#1#2#3}{\nolinkurl{#3}}%
 }
 
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}
@@ -303,7 +316,7 @@
 \DeclareMathOperator{\IDF}{IDF}
 
 \ExplSyntaxOn % chktex 1
-    \DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
+	\DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
 \ExplSyntaxOff % chktex 1
 
 
@@ -337,78 +350,78 @@
 \section{Évaluation}
 
 \begin{frame}{Évaluation}
-    Objectif : comparer \alert{objectivement} des programmes réalisant une même tâche
-    \begin{itemize}
-        \item Doit se faire avec exactement les mêmes données
-            \begin{itemize}
-                \item Ressources et entrées !
-            \end{itemize}
-        \item[→] Établissement de données de référence \alert{\textit{Gold Standard}}
-            \begin{itemize}
-                \item[→] MetaTreebank Universal Dependencies \shorturl[http]{universaldependencies.org}
-                \item[→] OntoNotes \shorturl{catalog.ldc.upenn.edu/LDC2013T19}
-            \end{itemize}
-        \item On met ensuite en concurrence les programmes sur ces données → challenge/shared task
-            \begin{itemize}
-                \item[→] CoNLL 2018 \shorturl[http]{universaldependencies.org/conll18}
-                \item[→] \alert{DEFT} \shorturl{deft.limsi.fr}
-            \end{itemize}
-    \end{itemize}
+	Objectif : comparer \alert{objectivement} des programmes réalisant une même tâche
+	\begin{itemize}
+		\item Doit se faire avec exactement les mêmes données
+			\begin{itemize}
+				\item Ressources et entrées !
+			\end{itemize}
+		\item[→] Établissement de données de référence \alert{\textit{Gold Standard}}
+			\begin{itemize}
+				\item[→] MetaTreebank Universal Dependencies \shorturl[http]{universaldependencies.org}
+				\item[→] OntoNotes \shorturl{catalog.ldc.upenn.edu/LDC2013T19}
+			\end{itemize}
+		\item On met ensuite en concurrence les programmes sur ces données → challenge/shared task
+			\begin{itemize}
+				\item[→] CoNLL 2018 \shorturl[http]{universaldependencies.org/conll18}
+				\item[→] \alert{DEFT} \shorturl{deft.limsi.fr}
+			\end{itemize}
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{\textit{Train} et \textit{test}}
-    L'évaluation d'un système ne se fait pas sur le jeu de données utilisées pour l'entraînement
-    \begin{itemize}
-        \item<+-> Sinon une simple mémorisation suffit !
-        \item<+-> On sépare le \textit{Gold Standard} en une partie \alert{\textit{train}} et une partie \alert{\textit{test}}
-        \item<.-> Dans le cas d'une campagne d'évaluation, le \textit{test} est souvent tenu secret
-            \begin{itemize}
-                \item[→] Voir par exemple la \textit{shared task CoNLL 2017 pour un exemple sophistiqué}
-            \end{itemize}
-        \item<.->[→] Valable y compris pour les programmes non-appris !
-        \item<.-> On ajoute aussi parfois un ensemble dit « de développement »
-        \item<.-> Classiquement \SI{80}{\percent}/\SI{10}{\percent}/\SI{10}{\percent}
-    \end{itemize}
+	L'évaluation d'un système ne se fait pas sur le jeu de données utilisées pour l'entraînement
+	\begin{itemize}
+		\item<+-> Sinon une simple mémorisation suffit !
+		\item<+-> On sépare le \textit{Gold Standard} en une partie \alert{\textit{train}} et une partie \alert{\textit{test}}
+		\item<.-> Dans le cas d'une campagne d'évaluation, le \textit{test} est souvent tenu secret
+			\begin{itemize}
+				\item[→] Voir par exemple la \textit{shared task CoNLL 2017 pour un exemple sophistiqué}
+			\end{itemize}
+		\item<.->[→] Valable y compris pour les programmes non-appris !
+		\item<.-> On ajoute aussi parfois un ensemble dit « de développement »
+		\item<.-> Classiquement \SI{80}{\percent}/\SI{10}{\percent}/\SI{10}{\percent}
+	\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Validation croisée}
-    Le découpage train/dev/test ajoute de l'objectivité et est facile à mettre en œuvre mais
-    \begin{itemize}
-        \item Il prive d'une partie des données → sous-performance
-        \item Il induit un \alert{biais} lié au découpage si celui-ci est fixe
-    \end{itemize}
+	Le découpage train/dev/test ajoute de l'objectivité et est facile à mettre en œuvre mais
+	\begin{itemize}
+		\item Il prive d'une partie des données → sous-performance
+		\item Il induit un \alert{biais} lié au découpage si celui-ci est fixe
+	\end{itemize}
 
-    Pour y limiter cet effet, on utilise parfois la méthode de \alert{validation croisée}
-    \begin{itemize}
-        \item<1-> On découpe le corpus en $n$ parties de taille égales
-        \item<2-> On utilise $n-1$ parties comme \textcolor{highlighta}{\textit{train}} et la dernière comme \textcolor{highlight6}{\textit{test}}
-        \item<3-> On répète l'opération pour les $n$ combinaisons possibles
-        \item<12-> On retient comme évaluation globale une moyenne des résultats
-    \end{itemize}
-    \begin{center}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}[scale=0.7]
-            \foreach \x in {2, ..., 11}
-                \draw[alt=<\x>{fill=highlight6}{{alt=<1,12>{}{fill=highlighta}}}]
-                    (\x-2, 0) -- ++(1, 0) -- ++(0, 1) -- ++(-1, 0) -- ++(0, -1) -- cycle;
-        \end{tikzpicture}
-    \end{center}
+	Pour y limiter cet effet, on utilise parfois la méthode de \alert{validation croisée}
+	\begin{itemize}
+		\item<1-> On découpe le corpus en $n$ parties de taille égales
+		\item<2-> On utilise $n-1$ parties comme \textcolor{highlighta}{\textit{train}} et la dernière comme \textcolor{highlight6}{\textit{test}}
+		\item<3-> On répète l'opération pour les $n$ combinaisons possibles
+		\item<12-> On retient comme évaluation globale une moyenne des résultats
+	\end{itemize}
+	\begin{center}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}[scale=0.7]
+			\foreach \x in {2, ..., 11}
+				\draw[alt=<\x>{fill=highlight6}{{alt=<1,12>{}{fill=highlighta}}}]
+					(\x-2, 0) -- ++(1, 0) -- ++(0, 1) -- ++(-1, 0) -- ++(0, -1) -- cycle;
+		\end{tikzpicture}
+	\end{center}
 \end{frame}
 
 \begin{frame}{Tâches élémentaires}
-    Parmi l'ensemble des tâches, possible, certaines paraissent plus naturellement \alert{élémentaires}
-    \begin{itemize}
-        \item Par leur relative \alert{simplicité} de description
-        \item Par leur capacité, en se \alert{combinant}, à décrire une grande partie des autres tâches
-    \end{itemize}
+	Parmi l'ensemble des tâches, possible, certaines paraissent plus naturellement \alert{élémentaires}
+	\begin{itemize}
+		\item Par leur relative \alert{simplicité} de description
+		\item Par leur capacité, en se \alert{combinant}, à décrire une grande partie des autres tâches
+	\end{itemize}
 
-    Il s'agit de
-        \begin{itemize}
-            \item la recherche d'information (RI)
-            \item la classification
-            \item l'annotation
-            \item l'extraction d'information (EI)
-        \end{itemize}
+	Il s'agit de
+		\begin{itemize}
+			\item la recherche d'information (RI)
+			\item la classification
+			\item l'annotation
+			\item l'extraction d'information (EI)
+		\end{itemize}
 \end{frame}
 
 % ██████  ██
@@ -421,281 +434,281 @@
 \section{Recherche d'information}
 
 \begin{frame}[fragile=singleslide]{Recherche d'information}
-    La \emph{Recherche d'Information} est la tâche consistant à trouver dans un corpus des documents \alert{pertinents} étant donnée une requête
-    \begin{itemize}
-        \item « Trouver dans le catalogue d'une bibliothèque de ouvrages qui traitent de l'art macabre au XVème siècle »
-        \item « Trouver un site internet qui vend des ordinateurs portable sans système d'exploitation »
-    \end{itemize}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}[true scale=0.80]
-            \node[data, highlight=4] (in) {Requête};
-            \node[program, right=1cm of in, text width=15ex] (prog) {Programme de RI};
-            \node[data, right=1cm of prog] (out) {documents};
-            \node[data, below=.6cm of prog, highlight=1] (res) {Corpus};
-            \draw[->] (in) -- (prog);
-            \draw[->] (prog) -- (out);
-            \draw[->] (res) -- (prog);
-        \end{tikzpicture}
-    \end{figure}
-    \vskip-1ex
-    \begin{itemize}
-        \item Le \textcolor{highlight1}{corpus} est une ressource obligatoire
-        \item La \textcolor{highlight4}{requête} n'est \emph{pas} faite en langage fortement structuré (type SPARQL)
-    \end{itemize}
+	La \emph{Recherche d'Information} est la tâche consistant à trouver dans un corpus des documents \alert{pertinents} étant donnée une requête
+	\begin{itemize}
+		\item « Trouver dans le catalogue d'une bibliothèque de ouvrages qui traitent de l'art macabre au XVème siècle »
+		\item « Trouver un site internet qui vend des ordinateurs portable sans système d'exploitation »
+	\end{itemize}
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}[true scale=0.80]
+			\node[data, highlight=4] (in) {Requête};
+			\node[program, right=1cm of in, text width=15ex] (prog) {Programme de RI};
+			\node[data, right=1cm of prog] (out) {documents};
+			\node[data, below=.6cm of prog, highlight=1] (res) {Corpus};
+			\draw[->] (in) -- (prog);
+			\draw[->] (prog) -- (out);
+			\draw[->] (res) -- (prog);
+		\end{tikzpicture}
+	\end{figure}
+	\vskip-1ex
+	\begin{itemize}
+		\item Le \textcolor{highlight1}{corpus} est une ressource obligatoire
+		\item La \textcolor{highlight4}{requête} n'est \emph{pas} faite en langage fortement structuré (type SPARQL)
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{Domaines d'application}
-    Globalement tous les \alert{moteurs de recherche}
-    \begin{itemize}
-        \item Web : Qwant, Duckduckgo, Framabee, Google…
-        \item Site : tous les sites avec une fonction de recherche (e.g. sites marchands)
-        \item Documentaires : en bibliothèques, archives…
-        \item …
-    \end{itemize}
-    Mais aussi les détecteurs de similarité
-    \begin{itemize}
-        \item Détection de plagiat e.g.\ Compilatio (\shorturl{compilatio.net})
-        \item Détection de doublons e.g.\ sur le réseau StackExchange
-    \end{itemize}
-    Note : avoir défini précisément ce que « pertinent » veut dire n'est pas forcément nécessaire ! Il suffit d'avoir défini un \textit{Gold}.
+	Globalement tous les \alert{moteurs de recherche}
+	\begin{itemize}
+		\item Web : Qwant, Duckduckgo, Framabee, Google…
+		\item Site : tous les sites avec une fonction de recherche (e.g. sites marchands)
+		\item Documentaires : en bibliothèques, archives…
+		\item …
+	\end{itemize}
+	Mais aussi les détecteurs de similarité
+	\begin{itemize}
+		\item Détection de plagiat e.g.\ Compilatio (\shorturl{compilatio.net})
+		\item Détection de doublons e.g.\ sur le réseau StackExchange
+	\end{itemize}
+	Note : avoir défini précisément ce que « pertinent » veut dire n'est pas forcément nécessaire ! Il suffit d'avoir défini un \textit{Gold}.
 \end{frame}
 
 % WARNING: Here be dragons
 \begin{frame}[fragile]{Évaluation : préliminaires}
-    \colorlet{retournes}{sronbrightblue}
-    \colorlet{pertinents}{sronbrightpurple}
-    \colorlet{VP}{sronbrightgreen}
-    \colorlet{VN}{sronbrightgreen}
-    \colorlet{FN}{sronbrightred}
-    \colorlet{FP}{sronbrightred}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}[
-            fill opacity=0.5,
-            text opacity=1,
-            alt=<1>{true scale=0.9}{true scale=0.75},
-        ]
-            \draw[name path=D]
-                (-6,-2) rectangle (6,2)
-                node [above left] {$D$ : ensemble de tous les documents};
-            \draw[
-                alt={<1,6>{fill=pertinents, text=pertinents}{}},
-                name path=P,
-            ]
-                (-1, 0) circle [x radius=2, y radius=1, rotate=30]
-                node[below left=1.3 and .15] {$P$ : documents pertinents};
-            \draw[
-                alt={<1,6>{fill=retournes, text=retournes}{}},
-                name path=R,
-            ]
-                (1, 0) circle [x radius=2, y radius=1.5]
-                node[above right=1.5 and 0.1] {$R$ : documents retournés};
-            \begin{scope}[alt=<2-4>{even odd rule}{}]
-                \clip[
-                    alt=<2-3>{use path=P}{use path=R},
-                    alt=<3-5>{append path=D}{},
-                ];
-                \only<5>{\clip[use path=P, append path=D];}
-                \path[
-                    alt={<2>{fill=VP}{}},
-                    alt={<3>{fill=FP}{}},
-                    alt={<4>{fill=FN}{}},
-                    alt={<5>{fill=VN}{}},
-                    alt=<2-3>{use path=R}{use path=P},
-                    alt=<5>{use path=D},
-                ];
-            \end{scope}
-        \end{tikzpicture}
-        \caption{Représentation de l'ensemble des documents}
-    \end{figure}
-    \only<2->{
-        On définit les indicateurs suivants
-        \begin{tabu}{|l|*{2}{X[m,c]|}}
-            \hline
-                & \uncover<2,3,6>{\textcolor{retournes}{Retournés}}   & \uncover<4,5,6>{Non-retournés}\\
-            \hline
-            \uncover<2,4,6>{\textcolor{pertinents}{Pertinents}}    & \uncover<2,6>{\textcolor{VP}{Vrais positifs $P∩R$}}    & \uncover<4,6>{\textcolor{FN}{Faux négatifs $P\smallsetminus R$}}\\
-            \hline
-            \uncover<3,5,6>{Non-pertinents}    & \uncover<3,6>{\textcolor{FP}{Faux positifs $R\smallsetminus P$}} & \uncover<5,6>{\textcolor{VN}{Vrais négatifs $D\smallsetminus(P∪R)$}}\\
-            \hline
-        \end{tabu}
-    }
+	\colorlet{retournes}{sronbrightblue}
+	\colorlet{pertinents}{sronbrightpurple}
+	\colorlet{VP}{sronbrightgreen}
+	\colorlet{VN}{sronbrightgreen}
+	\colorlet{FN}{sronbrightred}
+	\colorlet{FP}{sronbrightred}
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}[
+			fill opacity=0.5,
+			text opacity=1,
+			alt=<1>{true scale=0.9}{true scale=0.75},
+		]
+			\draw[name path=D]
+				(-6,-2) rectangle (6,2)
+				node [above left] {$D$ : ensemble de tous les documents};
+			\draw[
+				alt={<1,6>{fill=pertinents, text=pertinents}{}},
+				name path=P,
+			]
+				(-1, 0) circle [x radius=2, y radius=1, rotate=30]
+				node[below left=1.3 and .15] {$P$ : documents pertinents};
+			\draw[
+				alt={<1,6>{fill=retournes, text=retournes}{}},
+				name path=R,
+			]
+				(1, 0) circle [x radius=2, y radius=1.5]
+				node[above right=1.5 and 0.1] {$R$ : documents retournés};
+			\begin{scope}[alt=<2-4>{even odd rule}{}]
+				\clip[
+					alt=<2-3>{use path=P}{use path=R},
+					alt=<3-5>{append path=D}{},
+				];
+				\only<5>{\clip[use path=P, append path=D];}
+				\path[
+					alt={<2>{fill=VP}{}},
+					alt={<3>{fill=FP}{}},
+					alt={<4>{fill=FN}{}},
+					alt={<5>{fill=VN}{}},
+					alt=<2-3>{use path=R}{use path=P},
+					alt=<5>{use path=D},
+				];
+			\end{scope}
+		\end{tikzpicture}
+		\caption{Représentation de l'ensemble des documents}
+	\end{figure}
+	\only<2->{
+		On définit les indicateurs suivants
+		\begin{tabu}{|l|*{2}{X[m,c]|}}
+			\hline
+				& \uncover<2,3,6>{\textcolor{retournes}{Retournés}}   & \uncover<4,5,6>{Non-retournés}\\
+			\hline
+			\uncover<2,4,6>{\textcolor{pertinents}{Pertinents}}    & \uncover<2,6>{\textcolor{VP}{Vrais positifs $P∩R$}}    & \uncover<4,6>{\textcolor{FN}{Faux négatifs $P\smallsetminus R$}}\\
+			\hline
+			\uncover<3,5,6>{Non-pertinents}    & \uncover<3,6>{\textcolor{FP}{Faux positifs $R\smallsetminus P$}} & \uncover<5,6>{\textcolor{VN}{Vrais négatifs $D\smallsetminus(P∪R)$}}\\
+			\hline
+		\end{tabu}
+	}
 \end{frame}
 
 \begin{frame}{Évaluation}
-    Les mesures d'évaluations usuelles rendent compte de façon synthétique du tableau précédent pour une expérience de RI
-    \begin{description}
-        \item[La précision] $P=\frac{VP}{VP+FP}$ « combien de documents retournés sont réellement pertinents ? »
-        \item[Le rappel] $R=\frac{VP}{VP+FN}$ « parmi les documents pertinents, combien ont été trouvés ? »
-        \item[La F-mesure] $F=2×\frac{P×R}{P+R}$ est la moyenne harmonique\footnote{Exactement $F=\frac{2}{\frac{1}{P}+\frac{1}{R}}=2×\frac{P×R}{P+R}$} des deux précédentes
-    \end{description}
-    {\tiny Le \emph{F} n'a a priori pas de signification particulière. Voir \textcite{sasaki2007TruthFmeasure} pour un bref historique}.
+	Les mesures d'évaluations usuelles rendent compte de façon synthétique du tableau précédent pour une expérience de RI
+	\begin{description}
+		\item[La précision] $P=\frac{VP}{VP+FP}$ « combien de documents retournés sont réellement pertinents ? »
+		\item[Le rappel] $R=\frac{VP}{VP+FN}$ « parmi les documents pertinents, combien ont été trouvés ? »
+		\item[La F-mesure] $F=2×\frac{P×R}{P+R}$ est la moyenne harmonique\footnote{Exactement $F=\frac{2}{\frac{1}{P}+\frac{1}{R}}=2×\frac{P×R}{P+R}$} des deux précédentes
+	\end{description}
+	{\tiny Le \emph{F} n'a \emph{a priori} pas de signification particulière. Voir \textcite{sasaki2007TruthFmeasure} pour un bref historique}.
 \end{frame}
 
 \begin{frame}[fragile]{Exemples}
-    Déterminer $P$, $R$ et $F$ dans les cas suivants
-    \begin{itemize}
-        \item<1,2> $VP=100$, $VN=50$, $FP=20$, $FN=15$
-        \item $VP=1$, $VN=0$, $FP=1$, $FN=1$
-        \item \mbox{}\\
-            {
-                \tikzset{external/export=true}
-                \begin{tikzpicture}[fill opacity=0.5, true scale=0.7, text opacity=1]
-                    \draw[name path=D]
-                        (-6,-2) rectangle (6,2)
-                        node [above left] {$D$};
-                    \draw[fill=highlight2, text=highlight2]
-                        (-1.5, -0.25) node[text=black] {$15$} circle [x radius=2.5, y radius=1, rotate=20]
-                        node[below left=1.1 and .15] {$P$ };
-                    \draw[fill=highlight4, text=highlight4]
-                        (1.5, 0) node[text=black] {$10$ }circle [x radius=2.5, y radius=1.7]
-                        node[above right=1.5 and 0.5] {$R$};
-                    \node at (0, 0) {$40$};
-                    \node at (5.5, 1.5) {$2713$};
-                \end{tikzpicture}
-            }
-    \end{itemize}
+	Déterminer $P$, $R$ et $F$ dans les cas suivants
+	\begin{itemize}
+		\item<1,2> $VP=100$, $VN=50$, $FP=20$, $FN=15$
+		\item $VP=1$, $VN=0$, $FP=1$, $FN=1$
+		\item \mbox{}\\
+			{
+				\tikzset{external/export=true}
+				\begin{tikzpicture}[fill opacity=0.5, true scale=0.7, text opacity=1]
+					\draw[name path=D]
+						(-6,-2) rectangle (6,2)
+						node [above left] {$D$};
+					\draw[fill=highlight2, text=highlight2]
+						(-1.5, -0.25) node[text=black] {$15$} circle [x radius=2.5, y radius=1, rotate=20]
+						node[below left=1.1 and .15] {$P$ };
+					\draw[fill=highlight4, text=highlight4]
+						(1.5, 0) node[text=black] {$10$ }circle [x radius=2.5, y radius=1.7]
+						node[above right=1.5 and 0.5] {$R$};
+					\node at (0, 0) {$40$};
+					\node at (5.5, 1.5) {$2713$};
+				\end{tikzpicture}
+			}
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{Exemple}
-    Pour la requête « achat en ligne de canards », un moteur de recherche renvoie \num{60} pages. Parmi celles-ci, on voit que \num{17} sont pertinentes.
+	Pour la requête « achat en ligne de canards », un moteur de recherche renvoie \num{60} pages. Parmi celles-ci, on voit que \num{17} sont pertinentes.
 
-    Quelle sont la précision, le rappel et la F-mesure du moteur de recherche pour cette requête ?
+	Quelle sont la précision, le rappel et la F-mesure du moteur de recherche pour cette requête ?
 \end{frame}
 
 \begin{frame}{Questions}
-    \begin{enumerate}
-        \item $P$, $R$ et $F$ dépendent-elles de la taille de $D$ ?
-        \item Donner une méthode pour avoir à coup sûr $R=1$
-        \item Donner une méthode pour avoir à coup sûr $P=1$
-        \item Dans ces cas, que vaut $F$ ? Et que vaudrait la moyenne arithmétique de $P$ et $R$.
-    \end{enumerate}
+	\begin{enumerate}
+		\item $P$, $R$ et $F$ dépendent-elles de la taille de $D$ ?
+		\item Donner une méthode pour avoir à coup sûr $R=1$
+		\item Donner une méthode pour avoir à coup sûr $P=1$
+		\item Dans ces cas, que vaut $F$ ? Et que vaudrait la moyenne arithmétique de $P$ et $R$.
+	\end{enumerate}
 \end{frame}
 
 \begin{frame}[fragile]{Aparté : moyennes}
-    \begin{onlyenv}<1>
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}
-                \begin{axis}[meanheatmap]
-                    \addplot3[surf, shader=interp]
-                    {(x+y)/2};
-                \end{axis}
-            \end{tikzpicture}
-            \caption{Moyenne arithmétique de $P$ et $R$ : $\frac{P+R}{2}$}
-        \end{figure}
-    \end{onlyenv}
-    \begin{onlyenv}<2>
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}
-                \begin{axis}[meanheatmap]
-                    \addplot3[surf, shader=interp]
-                        {max(x, y)};
-                \end{axis}
-            \end{tikzpicture}
-            \caption{Maximum de $P$ et $R$ : $\max(P, R)$}
-        \end{figure}
-    \end{onlyenv}
-    \begin{onlyenv}<3>
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}
-                \begin{axis}[meanheatmap]
-                    \addplot3[surf, shader=interp]
-                        {min(x, y)};
-                \end{axis}
-            \end{tikzpicture}
-        \caption{Minimum de $P$ et $R$ : $\min(P, R)$}
-        \end{figure}
-    \end{onlyenv}
-    \begin{onlyenv}<4>
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}
-                \begin{axis}[meanheatmap]
-                    \addplot3[surf, shader=interp]
-                    {(2*x*y)/(x+y)};
-                \end{axis}
-            \end{tikzpicture}
-            \caption{Moyenne harmonique de \(P\) et \(R\) : \(\frac{1}{\frac{1}{P}+\frac{1}{R}}=\frac{2×P×R}{P+R}\)}
-        \end{figure}
-    \end{onlyenv}
-    \begin{onlyenv}<5>
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}
-                \begin{axis}[meanheatmap]
-                    \addplot3[surf, shader=interp]
-                        {(sqrt(x*y))};
-                \end{axis}
-            \end{tikzpicture}
-        \caption{Moyenne géométrique de $P$ et $R$ : $√{P×R}$}
-        \end{figure}
-    \end{onlyenv}
-    \begin{onlyenv}<6>
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}
-                \begin{axis}[meanheatmap]
-                    \addplot3[surf, shader=interp]
-                        {sqrt((x*x+y*y)/2)};
-                \end{axis}
-            \end{tikzpicture}
-        \caption{Moyenne quadratique de $P$ et $R$ : $√{\frac{P²+R²}{2}}$}
-        \end{figure}
-    \end{onlyenv}
+	\begin{onlyenv}<1>
+		\begin{figure}
+			\tikzset{external/export=true}
+			\begin{tikzpicture}
+				\begin{axis}[meanheatmap]
+					\addplot3[surf, shader=interp]
+					{(x+y)/2};
+				\end{axis}
+			\end{tikzpicture}
+			\caption{Moyenne arithmétique de $P$ et $R$ : $\frac{P+R}{2}$}
+		\end{figure}
+	\end{onlyenv}
+	\begin{onlyenv}<2>
+		\begin{figure}
+			\tikzset{external/export=true}
+			\begin{tikzpicture}
+				\begin{axis}[meanheatmap]
+					\addplot3[surf, shader=interp]
+						{max(x, y)};
+				\end{axis}
+			\end{tikzpicture}
+			\caption{Maximum de $P$ et $R$ : $\max(P, R)$}
+		\end{figure}
+	\end{onlyenv}
+	\begin{onlyenv}<3>
+		\begin{figure}
+			\tikzset{external/export=true}
+			\begin{tikzpicture}
+				\begin{axis}[meanheatmap]
+					\addplot3[surf, shader=interp]
+						{min(x, y)};
+				\end{axis}
+			\end{tikzpicture}
+		\caption{Minimum de $P$ et $R$ : $\min(P, R)$}
+		\end{figure}
+	\end{onlyenv}
+	\begin{onlyenv}<4>
+		\begin{figure}
+			\tikzset{external/export=true}
+			\begin{tikzpicture}
+				\begin{axis}[meanheatmap]
+					\addplot3[surf, shader=interp]
+					{(2*x*y)/(x+y)};
+				\end{axis}
+			\end{tikzpicture}
+			\caption{Moyenne harmonique de \(P\) et \(R\) : \(\frac{1}{\frac{1}{P}+\frac{1}{R}}=\frac{2×P×R}{P+R}\)}
+		\end{figure}
+	\end{onlyenv}
+	\begin{onlyenv}<5>
+		\begin{figure}
+			\tikzset{external/export=true}
+			\begin{tikzpicture}
+				\begin{axis}[meanheatmap]
+					\addplot3[surf, shader=interp]
+						{(sqrt(x*y))};
+				\end{axis}
+			\end{tikzpicture}
+		\caption{Moyenne géométrique de $P$ et $R$ : $√{P×R}$}
+		\end{figure}
+	\end{onlyenv}
+	\begin{onlyenv}<6>
+		\begin{figure}
+			\tikzset{external/export=true}
+			\begin{tikzpicture}
+				\begin{axis}[meanheatmap]
+					\addplot3[surf, shader=interp]
+						{sqrt((x*x+y*y)/2)};
+				\end{axis}
+			\end{tikzpicture}
+		\caption{Moyenne quadratique de $P$ et $R$ : $√{\frac{P²+R²}{2}}$}
+		\end{figure}
+	\end{onlyenv}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{F-scores généralisés}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}
-            \begin{axis}[meanheatmap]
-                \addplot3[surf, shader=interp]
-                    {(x*y*(1+0.5^2))/(y+x*0.5^2)};
-            \end{axis}
-        \end{tikzpicture}
-    \caption{$F_β$ ($β=0.5$)}
-    \end{figure}
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}
+			\begin{axis}[meanheatmap]
+				\addplot3[surf, shader=interp]
+					{(x*y*(1+0.5^2))/(y+x*0.5^2)};
+			\end{axis}
+		\end{tikzpicture}
+	\caption{$F_β$ ($β=0.5$)}
+	\end{figure}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]
-    % \begin{columns}
-    %     \column{0.45\textwidth}
-    %         \begin{figure}
-    %             \tikzset{external/export=true}
-    %             \begin{tikzpicture}
-    %                 \begin{axis}[
-    %                     meanheatmap,
-    %                     width=\linewidth,
-    %                 ]
-    %                     \addplot3[surf, shader=interp]
-    %                         {(x*y*(1+0.5^2))/(y+x*0.5^2)};
-    %                 \end{axis}
-    %             \end{tikzpicture}
-    %         \caption{$F_β$ ($β=0.5$)}
-    %         \end{figure}
-    %     \column{0.45\textwidth}
-    %         L'idée est de pondérer la moyenne harmonique
-    %         \begin{align}
-    %             F_{λ, μ}(P, R)
-    %                 &= \frac{λ+μ}{\frac{λ}{P}+\frac{μ}{R}}\\
-    %                 &= (λ+μ) \frac{P×R}{λP + μR}\\
-    %                 &= \frac{λ+μ}{μ} \frac{P×R}{\underbrace{\frac{λ}{μ}}_{β²}P + R}\\
-    %                 &= (1+β²)\frac{P×R}{β²P + R}
-    %         \end{align}
-    % \end{columns}
-    L'idée est de pondérer la moyenne harmonique
-    \begin{align}
-        F_{λ, μ}(P, R)
-            &= \frac{λ+μ}{\frac{λ}{P}+\frac{μ}{R}}\\
-            &= (λ+μ) \frac{P×R}{λP + μR}\\
-            &= \frac{λ+μ}{μ} \frac{P×R}{\underbrace{\frac{λ}{μ}}_{β²}P + R}\\
-            &= (1+β²)\frac{P×R}{β²P + R}
-    \end{align}
-    La F-mesure est simplement le cas $β=1$.
+	% \begin{columns}
+	%     \column{0.45\textwidth}
+	%         \begin{figure}
+	%             \tikzset{external/export=true}
+	%             \begin{tikzpicture}
+	%                 \begin{axis}[
+	%                     meanheatmap,
+	%                     width=\linewidth,
+	%                 ]
+	%                     \addplot3[surf, shader=interp]
+	%                         {(x*y*(1+0.5^2))/(y+x*0.5^2)};
+	%                 \end{axis}
+	%             \end{tikzpicture}
+	%         \caption{$F_β$ ($β=0.5$)}
+	%         \end{figure}
+	%     \column{0.45\textwidth}
+	%         L'idée est de pondérer la moyenne harmonique
+	%         \begin{align}
+	%             F_{λ, μ}(P, R)
+	%                 &= \frac{λ+μ}{\frac{λ}{P}+\frac{μ}{R}}\\
+	%                 &= (λ+μ) \frac{P×R}{λP + μR}\\
+	%                 &= \frac{λ+μ}{μ} \frac{P×R}{\underbrace{\frac{λ}{μ}}_{β²}P + R}\\
+	%                 &= (1+β²)\frac{P×R}{β²P + R}
+	%         \end{align}
+	% \end{columns}
+	L'idée est de pondérer la moyenne harmonique
+	\begin{align}
+		F_{λ, μ}(P, R)
+			&= \frac{λ+μ}{\frac{λ}{P}+\frac{μ}{R}}\\
+			&= (λ+μ) \frac{P×R}{λP + μR}\\
+			&= \frac{λ+μ}{μ} \frac{P×R}{\underbrace{\frac{λ}{μ}}_{β²}P + R}\\
+			&= (1+β²)\frac{P×R}{β²P + R}
+	\end{align}
+	La F-mesure est simplement le cas $β=1$.
 \end{frame}
 
 %  ██████ ██       █████  ███████ ███████ ██ ███████
@@ -708,121 +721,205 @@
 \section{Classification}
 
 \begin{frame}[label=classif,fragile]{Classification}
-    La \emph{classification} est la tâche consistant à \alert{répartir} des données dans un ensemble de classes.
-    \begin{itemize}
-        \item « Détecter les spams dans un ensemble d'emails »
-        \item « Repérer dans un ensemble de tweets ceux qui sont sarcastiques ou ironique »
-        \item « Classer un ensemble de textes par genre littéraire »
-    \end{itemize}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}[true scale=0.80]
-            \node[data, highlight=4] (in) {Donnée};
-            \node[program, right=1cm of in, text width=15ex] (prog) {Programme de classification};
-            \node[data, right=1cm of prog] (out) {Classe};
-            \node[data, below=.6cm of prog, highlight=8] (res) {Classes};
-            \draw[->] (in) -- (prog);
-            \draw[->] (prog) -- (out);
-            \draw[->] (res) -- (prog);
-        \end{tikzpicture}
-    \end{figure}
-    \begin{itemize}
-        \item Les \textcolor{highlight8}{classes} sont connus à l'avance
-        \item Chaque \textcolor{highlight4}{donnée} appartient à une classe.
-    \end{itemize}
+	La \emph{classification} est la tâche consistant à \alert{répartir} des données dans un ensemble de classes.
+	\begin{itemize}
+		\item « Distinguer dans une ensemble d'emails les spams et les non-spams »
+		\item « Repérer dans un ensemble de tweets ceux qui sont sarcastiques ou ironique »
+		\item « Classer un ensemble de textes par genre littéraire »
+	\end{itemize}
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}[true scale=0.80]
+			\node[data, highlight=4] (in) {Donnée};
+			\node[program, right=1cm of in, text width=15ex] (prog) {Programme de classification};
+			\node[data, right=1cm of prog] (out) {Classe};
+			\node[data, below=.6cm of prog, highlight=8] (res) {Classes};
+			\draw[->] (in) -- (prog);
+			\draw[->] (prog) -- (out);
+			\draw[->] (res) -- (prog);
+		\end{tikzpicture}
+	\end{figure}
+	\begin{itemize}
+		\item Les \textcolor{highlight8}{classes} sont connus à l'avance
+		\item Chaque \textcolor{highlight4}{donnée} appartient à une classe.
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{Domaines d'application}
-    \begin{itemize}
-        \item Classification par type de document
-            \begin{itemize}
-                \item[→] DEFT 2018 tâche 1 (\shorturl{deft.limsi.fr/2018})
-            \end{itemize}
-        \item Classification par opinion/sentiment
-            \begin{itemize}
-                \item[→] DEFT 2018 tâche 2
-            \end{itemize}
-        \item Classification par qualité
-            \begin{itemize}
-                \item[→] \shorturl{www.youtube.com/watch?v=anwy2MPT5RE}
-            \end{itemize}
-        \item[…]
-    \end{itemize}
-    Ne s'applique pas qu'aux textes, mais de façon générale à tous les types de données !
-    \begin{itemize}
-        \item[→] Le temps permet-il de faire un tennis ? (Weka \texttt{weater.numeric})
-        \item[→] Cet empan de texte est-il un groupe nominal ?
-        \item[…]
-    \end{itemize}
+	\begin{itemize}
+		\item Classification par type de document
+			\begin{itemize}
+				\item[→] DEFT 2018 tâche 1 (\shorturl{deft.limsi.fr/2018}) \enquote{Classification transport/non-transport}
+			\end{itemize}
+		\item Classification par opinion/sentiment
+			\begin{itemize}
+				\item[→] DEFT 2018 tâche 2 \enquote{Polarité globale}
+			\end{itemize}
+		\item Classification par qualité
+			\begin{itemize}
+				\item[→] \shorturl{www.youtube.com/watch?v=anwy2MPT5RE}
+			\end{itemize}
+		\item[…]
+	\end{itemize}
+	Ne s'applique pas qu'aux textes, mais de façon générale à tous les types de données !
+	\begin{itemize}
+		\item[→] Le temps permet-il de faire un tennis ? (Weka \texttt{weather.numeric})
+		\item[→] Cet empan de texte est-il un groupe nominal ?
+		\item[…]
+	\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Évaluation}
-    \colorlet{VP}{highlight3}
-    \colorlet{VN}{highlight2}
-    \colorlet{FN}{highlight4}
-    \colorlet{FP}{highlight8}
-    \begin{figure}
-        \begin{tikzpicture}[
-            table/.style={
-                matrix of nodes,
-                row sep=-\pgflinewidth,
-                column sep=-\pgflinewidth,
-                nodes={draw, text width=3ex, align=center},
-                text depth=0.25ex,
-                text height=1em,
-                nodes in empty cells
-            },
-            aa/.style={alt=<3>{fill=VP}{}, alt={<4,5>{fill=VN}{}}},
-            bb/.style={alt=<4>{fill=VP}{}, alt={<3,5>{fill=VN}{}}},
-            cc/.style={alt=<5>{fill=VP}{}, alt={<3,4>{fill=VN}{}}},
-            ab/.style={alt=<3>{fill=FN}{}, alt=<4>{fill=FP}{}, alt=<5>{fill=VN}{}},
-            ac/.style={alt=<3>{fill=FN}{}, alt=<4>{fill=VN}{}, alt=<5>{fill=FP}{}},
-            ba/.style={alt=<3>{fill=FP}{}, alt=<4>{fill=FN}{}, alt=<5>{fill=VN}{}},
-            bc/.style={alt=<3>{fill=VN}{}, alt=<4>{fill=FN}{}, alt=<5>{fill=FP}{}},
-            ca/.style={alt=<3>{fill=FP}{}, alt=<4>{fill=VN}{}, alt=<5>{fill=FN}{}},
-            cb/.style={alt=<3>{fill=VN}{}, alt=<4>{fill=FP}{}, alt=<5>{fill=FN}{}},
-        ]
-            \matrix[table]{
-                    & |(apred)| A   & |(bpred)| B   & |(cpred)| C\\
-                |(atrue)| A   & |[aa]| $16$  & |[ab]| $0$   & |[ac]| $0$\\
-                |(btrue)| B   & |[ba]| $0$   & |[bb]| $19$  & |[bc]| $1$\\
-                |(ctrue)| C   & |[ca]| $0$   & |[cb]| $2$   & |[cc]| $15$\\
-            };
+	\colorlet{VP}{highlight3}
+	\colorlet{VN}{highlight2}
+	\colorlet{FN}{highlight4}
+	\colorlet{FP}{highlight8}
+	\begin{figure}
+		\begin{tikzpicture}[
+			table/.style={
+				matrix of nodes,
+				row sep=-\pgflinewidth,
+				column sep=-\pgflinewidth,
+				nodes={draw, text width=3ex, align=center},
+				text depth=0.25ex,
+				text height=1em,
+				nodes in empty cells
+			},
+			aa/.style={alt=<3>{fill=VP}{}, alt={<4,5>{fill=VN}{}}},
+			bb/.style={alt=<4>{fill=VP}{}, alt={<3,5>{fill=VN}{}}},
+			cc/.style={alt=<5>{fill=VP}{}, alt={<3,4>{fill=VN}{}}},
+			ab/.style={alt=<3>{fill=FN}{}, alt=<4>{fill=FP}{}, alt=<5>{fill=VN}{}},
+			ac/.style={alt=<3>{fill=FN}{}, alt=<4>{fill=VN}{}, alt=<5>{fill=FP}{}},
+			ba/.style={alt=<3>{fill=FP}{}, alt=<4>{fill=FN}{}, alt=<5>{fill=VN}{}},
+			bc/.style={alt=<3>{fill=VN}{}, alt=<4>{fill=FN}{}, alt=<5>{fill=FP}{}},
+			ca/.style={alt=<3>{fill=FP}{}, alt=<4>{fill=VN}{}, alt=<5>{fill=FN}{}},
+			cb/.style={alt=<3>{fill=VN}{}, alt=<4>{fill=FP}{}, alt=<5>{fill=FN}{}},
+		]
+			\matrix[table]{
+					& |(apred)| A   & |(bpred)| B   & |(cpred)| C\\
+				|(atrue)| A   & |[aa]| $16$  & |[ab]| $0$   & |[ac]| $0$\\
+				|(btrue)| B   & |[ba]| $0$   & |[bb]| $19$  & |[bc]| $1$\\
+				|(ctrue)| C   & |[ca]| $0$   & |[cb]| $2$   & |[cc]| $15$\\
+			};
 
-            \draw [decorate, decoration={brace, amplitude=1em}, yshift=-0.5ex] (apred.north west) -- (cpred.north east) node [midway, above=1.25ex] {Classes prédites};
-            \draw [decorate, decoration={brace, amplitude=1em, mirror}, xshift=-0.5ex] (atrue.north west) -- (ctrue.south west) node [midway, left=1.25ex, rotate=90, anchor=south] {Vraies classes};
-        \end{tikzpicture}
-        \caption{Matrice de confusion pour un problème à trois classes}
-    \end{figure}
-    \vspace{-1em}
-    \only<2>{On calcule pour chaque classe les mêmes indicateurs que pour la RI}
-    \only<3>{Pour A}\only<4>{Pour B}\only<5>{Pour C}
-    \only<2-5>{
-        \begin{itemize}
-            % TODO: dans la liste suivante ajouter les totaux pour chaque classe à chaque slide
-            \item \textcolor{VP}{Vrais Positifs}
-                \only<3>{$16$}\only<4>{$19$}\only<5>{$15$}
-            \item \textcolor{VN}{Vrais Négatifs}
-                \only<3>{$19+2+1+15=37$}
-                \only<4>{$16+0+0+15=31$}
-                \only<5>{$16+0+0+19=35$}
-            \item \textcolor{FN}{Faux Négatifs}
-                \only<3>{$0+0=0$}\only<4>{$0+1=1$}\only<5>{$0+2=2$}
-            \item \textcolor{FP}{Faux Positifs}
-                \only<3>{$0+0=0$}\only<4>{$0+2=2$}\only<5>{$0+1=1$}
-        \end{itemize}
-    }
-    \only<6>{Puis pour chaque classe, $P$, $R$ et $F$ et la moyenne sur l'ensemble
-        \begin{description}
-            \item[macro-average] Sans pondération
-            \item[micro-average] Pondérée par la taille des classes
-        \end{description}
-    }
+			\draw [decorate, decoration={brace, amplitude=1em}, yshift=-0.5ex] (apred.north west) -- (cpred.north east) node [midway, above=1.25ex] {Classes prédites};
+			\draw [decorate, decoration={brace, amplitude=1em, mirror}, xshift=-0.5ex] (atrue.north west) -- (ctrue.south west) node [midway, left=1.25ex, rotate=90, anchor=south] {Vraies classes};
+		\end{tikzpicture}
+		\caption{Matrice de confusion pour un problème à trois classes}
+	\end{figure}
+	\vspace{-1em}
+	\only<2>{On calcule les indicateurs de RI \alert{pour chaque classe}}
+	\only<3>{Pour A}\only<4>{Pour B}\only<5>{Pour C}
+	\only<2-5>{
+		\begin{itemize}
+			% TODO: dans la liste suivante ajouter les totaux pour chaque classe à chaque slide
+			\item \textcolor{VP}{Vrais Positifs}
+				\only<3>{\num{16}}\only<4>{\num{19}}\only<5>{\num{15}}
+			\item \textcolor{VN}{Vrais Négatifs}
+				\only<3>{\(19+2+1+15=37\)}
+				\only<4>{\(16+0+0+15=31\)}
+				\only<5>{\(16+0+0+19=35\)}
+			\item \textcolor{FN}{Faux Négatifs}
+				\only<3>{\(0+0=0\)}\only<4>{\(0+1=1\)}\only<5>{\(0+2=2\)}
+			\item \textcolor{FP}{Faux Positifs}
+				\only<3>{\(0+0=0\)}\only<4>{\(0+2=2\)}\only<5>{\(0+1=1\)}
+		\end{itemize}
+	}
+	\only<6>{Puis pour chaque classe, \(P\), \(R\) et \(F\) et la moyenne sur l'ensemble
+		\begin{description}
+			\item[macro-moyenne] Sans pondération
+			\item[micro-moyenne] Pondérée par la taille des classes
+		\end{description}
+	}
 \end{frame}
 
 \begin{frame}{Exercice}
-    Étant donnée la matrice de confusion précédente, déterminer précision, rappel et F-mesure pour chacune des classes, ainsi que la micro- et macro-average.
+	Étant donnée la matrice de confusion précédente, déterminer précision, rappel et F-mesure pour chacune des classes, ainsi que la micro- et macro-moyenne.
 \end{frame}
+
+\begin{frame}<-3>[fragile]{Correction}
+	\colorlet{VP}{highlight3}
+	\colorlet{VN}{highlight2}
+	\colorlet{FN}{highlight4}
+	\colorlet{FP}{highlight8}
+	\vspace{-1em}
+	\begin{figure}
+		\begin{tikzpicture}[
+			table/.style={
+				matrix of nodes,
+				row sep=-\pgflinewidth,
+				column sep=-\pgflinewidth,
+				nodes={draw, text width=3ex, align=center},
+				text depth=0.25ex,
+				text height=1em,
+				nodes in empty cells
+			},
+			aa/.style={alt=<1>{fill=VP}{}, alt={<2,3>{fill=VN}{}}},
+			bb/.style={alt=<2>{fill=VP}{}, alt={<1,3>{fill=VN}{}}},
+			cc/.style={alt=<3>{fill=VP}{}, alt={<1,2>{fill=VN}{}}},
+			ab/.style={alt=<1>{fill=FN}{}, alt=<2>{fill=FP}{}, alt=<3>{fill=VN}{}},
+			ac/.style={alt=<1>{fill=FN}{}, alt=<2>{fill=VN}{}, alt=<3>{fill=FP}{}},
+			ba/.style={alt=<1>{fill=FP}{}, alt=<2>{fill=FN}{}, alt=<3>{fill=VN}{}},
+			bc/.style={alt=<1>{fill=VN}{}, alt=<2>{fill=FN}{}, alt=<3>{fill=FP}{}},
+			ca/.style={alt=<1>{fill=FP}{}, alt=<2>{fill=VN}{}, alt=<3>{fill=FN}{}},
+			cb/.style={alt=<1>{fill=VN}{}, alt=<2>{fill=FP}{}, alt=<3>{fill=FN}{}},
+		]
+			\matrix[table]{
+					& |(apred)| A   & |(bpred)| B   & |(cpred)| C\\
+				|(atrue)| A   & |[aa]| $16$  & |[ab]| $0$   & |[ac]| $0$\\
+				|(btrue)| B   & |[ba]| $0$   & |[bb]| $19$  & |[bc]| $1$\\
+				|(ctrue)| C   & |[ca]| $0$   & |[cb]| $2$   & |[cc]| $15$\\
+			};
+
+			\draw [decorate, decoration={brace, amplitude=1em}, yshift=-0.5ex] (apred.north west) -- (cpred.north east) node [midway, above=1.25ex] {Classes prédites};
+			\draw [decorate, decoration={brace, amplitude=1em, mirror}, xshift=-0.5ex] (atrue.north west) -- (ctrue.south west) node [midway, left=1.25ex, rotate=90, anchor=south] {Vraies classes};
+		\end{tikzpicture}
+		\caption{Matrice de confusion}
+	\end{figure}
+	\vspace{-1.5em}
+	\begin{overprint}
+		\onslide<1>
+			Pour \(A\):
+			\begin{align}
+				P_A
+					&= \frac{\textcolor{VP}{\mathrm{VP}_A}}{\textcolor{VP}{\mathrm{VP}_A}+\textcolor{FP}{\mathrm{FP}_A}}
+					= \frac{\textcolor{VP}{16}}{\textcolor{VP}{16}+\textcolor{FP}{0}}
+					= 1\\
+				R_A
+					&= \frac{\textcolor{VP}{\mathrm{VP}_A}}{\textcolor{VP}{\mathrm{VP}_A}+\textcolor{FN}{\mathrm{FN}_A}}
+					= \frac{\textcolor{VP}{16}}{\textcolor{VP}{16}+\textcolor{FN}{0}}
+					= 1\\
+				F_A &= 2×\frac{P_A×R_A}{P_A+R_A} = 1
+			\end{align}
+		\onslide<2>
+			Pour \(B\):
+			\begin{align}
+				P_B
+					&= \frac{\textcolor{VP}{\mathrm{VP}_B}}{\textcolor{VP}{\mathrm{VP}_B}+\textcolor{FP}{\mathrm{FP}_B}}
+					= \frac{\textcolor{VP}{19}}{\textcolor{VP}{19}+\textcolor{FP}{2}}
+					≈ 0.90\\
+				R_B
+					&= \frac{\textcolor{VP}{\mathrm{VP}_B}}{\textcolor{VP}{\mathrm{VP}_B}+\textcolor{FN}{\mathrm{FN}_B}}
+					= \frac{\textcolor{VP}{19}}{\textcolor{VP}{19}+\textcolor{FN}{1}}
+					= 0.95\\
+				F_B &= 2×\frac{P_B×R_B}{P_B+R_B} ≈ 0.93
+			\end{align}
+		\onslide<3>
+			Pour \(C\):
+			\begin{align}
+				P_C
+					&= \frac{\textcolor{VP}{\mathrm{VP}_C}}{\textcolor{VP}{\mathrm{VP}_C}+\textcolor{FP}{\mathrm{FP}_C}}
+					= \frac{\textcolor{VP}{15}}{\textcolor{VP}{15}+\textcolor{FP}{1}}
+					≈ 0.94\\
+				R_C
+					&= \frac{\textcolor{VP}{\mathrm{VP}_B}}{\textcolor{VP}{\mathrm{VP}_C}+\textcolor{FN}{\mathrm{FN}_C}}
+					= \frac{\textcolor{VP}{15}}{\textcolor{VP}{15}+\textcolor{FN}{2}}
+					≈ 0.88\\
+				F_C &= 2×\frac{P_C×R_C}{P_C+R_C} ≈ 0.91
+			\end{align}
+	\end{overprint}
+\end{frame}
+
 
 
 
@@ -837,27 +934,27 @@
 \section{Annexes}
 \pdfbookmark[2]{Remerciements}{acknowledgements}
 \begin{frame}{Remerciements}
-    Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017IntroductionFouilleTextes} \parencite{tellier2017IntroductionFouilleTextes} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
+	Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017IntroductionFouilleTextes} \parencite{tellier2017IntroductionFouilleTextes} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
 \end{frame}
 
 \pdfbookmark[2]{Références}{references}
 \begin{frame}[allowframebreaks]{References}
-    \printbibliography[heading=none]
+	\printbibliography[heading=none]
 \end{frame}
 
 \pdfbookmark[2]{Licence}{licence}
 \begin{frame}{Licence}
-    \begin{center}
-        {\huge \ccby}
-        \vfill
-        This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
+	\begin{center}
+		{\huge \ccby}
+		\vfill
+		This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
 
-        Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
-        \vfill
-        © 2019, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
+		Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
+		\vfill
+		© 2019, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
 
-        \shorturl[http]{lattice.cnrs.fr/Grobol-Loic}
-    \end{center}
+		\shorturl[http]{lattice.cnrs.fr/Grobol-Loic}
+	\end{center}
 \end{frame}
 
 \end{document}

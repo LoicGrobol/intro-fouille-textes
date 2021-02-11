@@ -10,20 +10,20 @@
 \newcommand\mymail{loic.grobol@gmail.com}
 \newcommand\titlepagetitle{\pdftitle}
 \newcommand\titlepagesubtitle{Cours 3 : Annotation, extraction d'informations et relations entre tâches}
-\newcommand\docdate{2020-02-36}  % chktex 8
+\newcommand\docdate{2021-02-11}  % chktex 8
 \newcommand\conference{M1 Plurital}
 
 % \RequirePackage{hyperxmp}  % Results in a complex failure with beamer + tikzexternal (2020-01-17)
 \documentclass[xcolor={svgnames}, french]{beamer}
 \hypersetup{
-    pdftitle={\pdftitle},
-    pdfauthor={\myname},
-    % pdfcontactemail={\mymail},  % hyperxmp
-    breaklinks,
-    hypertexnames=true,
-    pdfdisplaydoctitle,
-    pdflang={fr},
-    % keeppdfinfo,  % hyperxmp
+	pdftitle={\pdftitle},
+	pdfauthor={\myname},
+	% pdfcontactemail={\mymail},  % hyperxmp
+	breaklinks,
+	hypertexnames=true,
+	pdfdisplaydoctitle,
+	pdflang={fr},
+	% keeppdfinfo,  % hyperxmp
 }
 
 % Colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf) v3.1
@@ -52,7 +52,7 @@
 
 \usetheme[
 	sectionpage=progressbar,
-    subsectionpage=progressbar,
+	subsectionpage=progressbar,
 	progressbar=frametitle,
 ]{metropolis}
 	\colorlet{accent}{sronbrightgreen}
@@ -74,7 +74,7 @@
 
 % Use non-standard fonts
 \usefonttheme{professionalfonts}
-    \setsansfont[BoldFont={* Semibold}]{Fira Sans}
+	\setsansfont[BoldFont={* Semibold}]{Fira Sans}
 \setmonofont[Scale=0.9]{Fira Mono}
 
 % Fix missing glyphs in Fira by delegating to polyglossia/babel
@@ -91,7 +91,7 @@
 \usepackage{amsfonts,amssymb}
 \usepackage{amsmath,amsthm}
 \usepackage{mathtools}	% AMS Maths service pack
-    % Pour des lignes d'équation numérotées entre crochets
+	% Pour des lignes d'équation numérotées entre crochets
 	\newtagform{brackets}{[}{]} % chktex 9
 	\mathtoolsset{showonlyrefs, showmanualtags, mathic}	% affiche les tags manuels (\tag et \tag*) et corrige le kerning des maths inline dans un bloc italique voir la doc de mathtools
 	\usetagform{brackets}	% Utilise le style de tags défini plus haut
@@ -106,98 +106,111 @@
 \usepackage{tabu}
 \usepackage{booktabs}
 \usepackage{siunitx}
+	\sisetup{
+		binary-units=true,
+		detect-all,
+		detect-inline-weight=math,
+		group-separator=\text{\,},
+	}
+	\DeclareSIUnit{\quantity}{\relax}
+	\DeclareSIUnit{\words}{words}
+	\DeclareSIUnit{\sentences}{sentences}
+	% Needed for italics and bold numbers in siunitx S-aligned columns
+	\usepackage{siunitx}
+	\robustify\itshape
+	\robustify\bfseries
 \usepackage{multicol}
 \usepackage{ccicons}
 \usepackage{bookmark}
 \usepackage{caption}
-    \captionsetup{skip=1ex}
+	\captionsetup{skip=1ex}
 \usepackage[iso]{datetime}
 
 \usepackage{tikz}
 	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}} % chktex 36
-    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {\(\displaystyle #3\)};}} % chktex 36
+	\NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {\(\displaystyle #3\)};}} % chktex 36
 	\tikzset{
 		alt/.code args={<#1>#2#3}{%
 		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
 		},
-        invisible/.style={opacity=0, fill opacity=0},
+		invisible/.style={opacity=0, fill opacity=0},
 		visible on/.style={alt={<#1>{}{invisible}}}
 	}
-    \usepackage{forest}
-    \usepackage{tkz-graph}
-    \usepackage[beamer, markings]{hf-tikz}
-    \usepackage{tikz-3dplot}
-    \usepackage{pgfplots}
-        % Due to pgfplots meddling with pgfkeys, we have to redefine alt here.
-        \pgfplotsset{
-    		alt/.code args={<#1>#2#3}{%
-    		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
-    		},
-    	}
-        \pgfplotsset{compat=1.16}
-        \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}} % chktex 36
-    \usetikzlibrary{matrix}
-    \usetikzlibrary{shapes, shapes.geometric}
-    \usetikzlibrary{decorations.pathreplacing}
+	\usepackage{forest}
+	\usepackage{tkz-graph}
+	\usepackage[beamer, markings]{hf-tikz}
+	\usepackage{tikz-3dplot}
+	\usepackage{pgfplots}
+		% Due to pgfplots meddling with pgfkeys, we have to redefine alt here.
+		\pgfplotsset{
+			alt/.code args={<#1>#2#3}{%
+			\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+			},
+		}
+		\pgfplotsset{compat=1.16}
+		\pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}} % chktex 36
+	\usetikzlibrary{matrix}
+	\usetikzlibrary{shapes, shapes.geometric}
+	\usetikzlibrary{decorations.pathreplacing}
 	\usetikzlibrary{positioning, calc, intersections}
-    \usetikzlibrary{fit}
-    \usetikzlibrary{backgrounds}
+	\usetikzlibrary{fit}
+	\usetikzlibrary{backgrounds}
 
-    % Do evil things with soft path
-    \makeatletter
-        \def\@appendnamedsoftpath#1{% chktex 21
-            \pgfsyssoftpath@getcurrentpath\@temppatha % chktex 21 chktex 1
-            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 41 chktex 21
-            \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb} % chktex 41 chktex 21
-            \pgfsyssoftpath@setcurrentpath\@temppatha % chktex 21 chktex 1
-        }
-        \def\@appendnamedpathforactions#1{% chktex 21
-            \pgfsyssoftpath@getcurrentpath\@temppatha % chktex 1 chktex 21
-            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
-            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb} % chktex 21 chktex 41
+	% Do evil things with soft path
+	\makeatletter
+		\def\@appendnamedsoftpath#1{% chktex 21
+			\pgfsyssoftpath@getcurrentpath\@temppatha % chktex 21 chktex 1
+			\expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 41 chktex 21
+			\expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb} % chktex 41 chktex 21
+			\pgfsyssoftpath@setcurrentpath\@temppatha % chktex 21 chktex 1
+		}
+		\def\@appendnamedpathforactions#1{% chktex 21
+			\pgfsyssoftpath@getcurrentpath\@temppatha % chktex 1 chktex 21
+			\expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
+			\expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb} % chktex 21 chktex 41
 
-            \let\tikz@actions@path\@temppatha  % chktex 21 chktex 1
-        }
+			\let\tikz@actions@path\@temppatha  % chktex 21 chktex 1
+		}
 
-        \tikzset{
-            use path for main/.code={%
-                \tikz@addmode{%
-                    \expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
-                }%
-            },
-            append path for main/.code={%
-                \tikz@addmode{%
-                    \@appendnamedsoftpath{#1}%
-                }%
-            },
-            use path for actions/.code={%
-                \expandafter\def\expandafter\tikz@preactions\expandafter {\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}% chktex 21 chktex 41
-            },
-            append path for actions/.code={%
-                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions % chktex 21 chktex 41 chktex 1
-                \@appendnamedpathforactions{#1}}%
-            },
-            use path/.style={%
-                use path for main=#1,
-                use path for actions=#1,
-            },
-            append path/.style={%
-                append path for main=#1,
-                append path for actions=#1
-            }
-        }
-    \makeatother
+		\tikzset{
+			use path for main/.code={%
+				\tikz@addmode{%
+					\expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
+				}%
+			},
+			append path for main/.code={%
+				\tikz@addmode{%
+					\@appendnamedsoftpath{#1}%
+				}%
+			},
+			use path for actions/.code={%
+				\expandafter\def\expandafter\tikz@preactions\expandafter {\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}% chktex 21 chktex 41
+			},
+			append path for actions/.code={%
+				\expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions % chktex 21 chktex 41 chktex 1
+				\@appendnamedpathforactions{#1}}%
+			},
+			use path/.style={%
+				use path for main=#1,
+				use path for actions=#1,
+			},
+			append path/.style={%
+				append path for main=#1,
+				append path for actions=#1
+			}
+		}
+	\makeatother
 
-    % TikZ externalisation
-    \usetikzlibrary{external}
-    % Create the `tikzpics/` folder if it does not exist
-    \ShellEscape{mkdir -p tikzpics}
-    % Only externalise pictures on demand (to avoid messing up with metropolis theme)
-    \tikzset{
-        external/export=false,
-        external/prefix=tikzpics/
-    }
-    \tikzexternalize % chktex 1
+	% TikZ externalisation
+	\usetikzlibrary{external}
+	% Create the `tikzpics/` folder if it does not exist
+	\ShellEscape{mkdir -p tikzpics}
+	% Only externalise pictures on demand (to avoid messing up with metropolis theme)
+	\tikzset{
+		external/export=false,
+		external/prefix=tikzpics/
+	}
+	\tikzexternalize % chktex 1
 
 \usepackage{minted}
 	\usemintedstyle{lovelace}
@@ -207,31 +220,29 @@
 \usepackage{csquotes}
 
 \usepackage[style=authoryear, block=ragged, doi=false, isbn=false]{biblatex}
-    \AtEveryBibitem{
-        \ifentrytype{online}
-        {} {
-            \iffieldequalstr{howpublished}{online}
-            {
-                \clearfield{howpublished}
-            } {
-                \clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}
-            }
-        }
-    }
+	\AtEveryBibitem{
+		\ifentrytype{online}
+		{} {
+			\iffieldequalstr{howpublished}{online}
+			{
+				\clearfield{howpublished}
+			} {
+				\clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}
+			}
+		}
+	}
 
 	\addbibresource{../biblio.bib}
 
-% Compact bibliography style
-\setbeamertemplate{bibliography item}[text]
-
 \AtEveryBibitem{
-    \clearfield{series}
-    \clearfield{pages}
-    \clearlist{publisher}
-    \clearname{editor}
-    \clearlist{location}
+	\clearfield{series}
+	\clearfield{pages}
+	% \clearlist{publisher}
+	\clearname{editor}
+	% \clearlist{location}
 }
 \renewcommand*{\bibfont}{\tiny}
+
 
 \usepackage{hyperxmp}	% XMP metadata
 
@@ -253,31 +264,31 @@
 
 % Schémas de tâches
 \tikzset{
-    >=stealth,
-    hair lines/.style={line width = 0.05pt, lightgray},
-    data/.style={draw, ellipse},
-    program/.style={draw, rectangle},
-    accent on/.style={alt={<#1>{draw=accent, text=accent, thick}{draw}}},
-    true scale/.style={scale=#1, every node/.style={transform shape}},
-    highlight/.style={color=highlight#1}
+	>=stealth,
+	hair lines/.style={line width = 0.05pt, lightgray},
+	data/.style={draw, ellipse},
+	program/.style={draw, rectangle},
+	accent on/.style={alt={<#1>{draw=accent, text=accent, thick}{draw}}},
+	true scale/.style={scale=#1, every node/.style={transform shape}},
+	highlight/.style={color=highlight#1}
 }
 
 % Styles des heatmap pour les moyennes
 \pgfplotsset{
-    meanheatmap/.style={
-        colorbar, colormap name=SRON,
-        view={0}{90},
-        samples=100,
-        domain=0:1,
-        min=0, max=1,
-        xlabel={\(P\)},
-        ylabel={\(R\)},
-    }
+	meanheatmap/.style={
+		colorbar, colormap name=SRON,
+		view={0}{90},
+		samples=100,
+		domain=0:1,
+		min=0, max=1,
+		xlabel={\(P\)},
+		ylabel={\(R\)},
+	}
 }
 
 % Commands spécifiques
 \NewDocumentCommand\shorturl{ O{https} O{://} m }{%
-    \href{#1#2#3}{\nolinkurl{#3}}%
+	\href{#1#2#3}{\nolinkurl{#3}}%
 }
 
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}
@@ -305,7 +316,7 @@
 \DeclareMathOperator{\IDF}{IDF}
 
 \ExplSyntaxOn % chktex 1
-    \DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
+	\DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
 \ExplSyntaxOff % chktex 1
 
 
@@ -332,32 +343,32 @@
 
 
 \begin{frame}{Exercice}
-    \begin{itemize}
-        \item Un moteur de recherche donné renvoie en général la plupart des documents pertinent pour une requête, mais aussi beaucoup de documents qui n'ont rien à voir. A-t-il une bonne précision ? Un bon rappel ?
-        \item J'entre dans un moteur de recherche la requête « Chopin ». Il renvoie \num{10} documents qui concernent Frédéric Chopin, \num{5} qui concernent Florent Chopin, un qui concerne Paul-François Choppin, \num{2} qui concernent George Sand et \num{3} qui concernent la mission Apollo 13. Évaluer ce résultat.
-    \end{itemize}
+	\begin{itemize}
+		\item Un moteur de recherche donné renvoie en général la plupart des documents pertinent pour une requête, mais aussi beaucoup de documents qui n'ont rien à voir. A-t-il une bonne précision ? Un bon rappel ?
+		\item J'entre dans un moteur de recherche la requête « Chopin ». Il renvoie \num{10} documents qui concernent Frédéric Chopin, \num{5} qui concernent Florent Chopin, un qui concerne Paul-François Choppin, \num{2} qui concernent George Sand (qui a notoirement eu une relation sentimentale avec Frédéric Hopin) et \num{3} qui concernent la mission Apollo 13. Évaluer ce résultat.
+	\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Exercice}
-    Étant donnée la matrice de confusion suivante (vraies classes en lignes)
-    \begin{enumerate}
-        \item Sans faire de calculs, que penser des résultats pour la classe « pony » ?
-        \item Déterminer précision, rappel et F-mesure pour chacune des classes, ainsi que la micro- et macro-average.
-    \end{enumerate}
-    \begin{table}
-        \begin{tabu}{|l|*{2}{c|}}
-            \hline
-                        &  pony    & metal band\\
-            \hline
-            pony        & \num{20} & \num{12}\\
-            \hline
-            metal band  & \num{4}  & \num{12}\\
-            \hline
-        \end{tabu}
-        \caption{Matrice de confusion pour un problème à deux classes}
-    \end{table}
+	Étant donnée la matrice de confusion suivante (vraies classes en lignes)
+	\begin{enumerate}
+		\item Sans faire de calculs, que penser des résultats pour la classe « pony » ?
+		\item Déterminer précision, rappel et F-mesure pour chacune des classes, ainsi que les micro- et macro-moyennes.
+	\end{enumerate}
+	\begin{table}
+		\begin{tabu}{|l|*{2}{c|}}
+			\hline
+						&  pony    & metal band\\
+			\hline
+			pony        & \num{20} & \num{12}\\
+			\hline
+			metal band  & \num{4}  & \num{12}\\
+			\hline
+		\end{tabu}
+		\caption{Matrice de confusion pour un problème à deux classes}
+	\end{table}
 
-    {\small\shorturl[http]{aiweirdness.com/post/174211306032/metal-band-or-my-little-pony}}
+	{\small\shorturl[http]{aiweirdness.com/post/174211306032/metal-band-or-my-little-pony}}
 \end{frame}
 
 % ██       █████  ██████  ███████ ██      ██      ██ ███    ██  ██████
@@ -369,154 +380,154 @@
 \section{Annotation}
 
 \begin{frame}[fragile=singleslide]{Annotation}
-    L'\emph{annotation} ou \emph{étiquetage} est la tâche consistant à attribuer une étiquette à chaque élément d'un ensemble \alert{structuré}.
+	L'\emph{annotation} ou \emph{étiquetage} est la tâche consistant à attribuer une étiquette à chaque élément d'un ensemble \alert{structuré}.
 
-    \begin{itemize}
-        \item « Déterminer les catégories grammaticales des mots d'une phrase »
-        \item « Découper un discours en parties thématiques »
-    \end{itemize}
+	\begin{itemize}
+		\item « Déterminer les catégories grammaticales des mots d'une phrase »
+		\item « Découper un discours en parties thématiques »
+	\end{itemize}
 
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}[true scale=0.80]
-            \node[data, highlight=4] (in) {Donnée};
-            \node[program, right=1cm of in, text width=12ex] (prog) {Programme d'annotation};
-            \node[data, right=1cm of prog] (out) {Donnée annotée};
-            \node[data, below=.6cm of prog, highlight=8] (res) {Ensemble des étiquettes};
-            \draw[->] (in) -- (prog);
-            \draw[->] (prog) -- (out);
-            \draw[->] (res) -- (prog);
-        \end{tikzpicture}
-    \end{figure}
-    \vskip-1em
-    \begin{itemize}
-        \item La \textcolor{highlight4}{donnée} à annoter est composée de plusieurs unités et munie d'une structure d'\alert{ordre}
-        \item Chacune des unités se voit attribuer une des \textcolor{highlight8}{étiquettes} possibles, qui sont connus à l'avance
-    \end{itemize}
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}[true scale=0.80]
+			\node[data, highlight=4] (in) {Donnée};
+			\node[program, right=1cm of in, text width=12ex] (prog) {Programme d'annotation};
+			\node[data, right=1cm of prog] (out) {Donnée annotée};
+			\node[data, below=.6cm of prog, highlight=8] (res) {Ensemble des étiquettes};
+			\draw[->] (in) -- (prog);
+			\draw[->] (prog) -- (out);
+			\draw[->] (res) -- (prog);
+		\end{tikzpicture}
+	\end{figure}
+	\vskip-1em
+	\begin{itemize}
+		\item La \textcolor{highlight4}{donnée} à annoter est composée de plusieurs unités et munie d'une structure d'\alert{ordre}
+		\item Chacune des unités se voit attribuer une des \textcolor{highlight8}{étiquettes} possibles, qui sont connus à l'avance
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{Structure et ordre}
-    L'annotation se distingue de la classification par la notion de \emph{structure}.
-    \begin{itemize}
-        \item Les unités à annoter sont liées par des relations
-            \begin{itemize}
-                \item Ordre total (séquence)
-                \item Ordre partiel (arbre, DAG)
-                \item Arbitraires (graphe)
-            \end{itemize}
-        \item Les étiquettes qui leur sont attribuées dépendent de ces relations
-    \end{itemize}
+	L'annotation se distingue de la classification par la notion de \emph{structure}.
+	\begin{itemize}
+		\item Les unités à annoter sont liées par des relations
+			\begin{itemize}
+				\item Ordre total (séquence)
+				\item Ordre partiel (arbre, DAG)
+				\item Arbitraires (graphe)
+			\end{itemize}
+		\item Les étiquettes qui leur sont attribuées dépendent de ces relations
+	\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Exemples}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}
-            \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
-                Le  & petit & chat  & est & content\\
-                DET & ADJ   & NC    & V   & ADJ\\
-            };
-            \foreach \x in {1, ..., 5}
-                \draw[->] (m-1-\x) -- (m-2-\x);
-        \end{tikzpicture}
-        \caption{\emph{Part Of Speech Tagging}}
-    \end{figure}
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}
+			\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+				Le  & petit & chat  & est & content\\
+				DET & ADJ   & NC    & V   & ADJ\\
+			};
+			\foreach \x in {1, ..., 5}
+				\draw[->] (m-1-\x) -- (m-2-\x);
+		\end{tikzpicture}
+		\caption{\emph{Part Of Speech Tagging}}
+	\end{figure}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Exemples}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}
-            \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
-                Le  & petit & chat  & est & content\\
-                B & I   & I   & B & B\\
-            };
-            \foreach \x in {1, ..., 5}
-                \draw[->] (m-1-\x) -- (m-2-\x);
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}
+			\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+				Le  & petit & chat  & est & content\\
+				B & I   & I   & B & B\\
+			};
+			\foreach \x in {1, ..., 5}
+				\draw[->] (m-1-\x) -- (m-2-\x);
 
-            \matrix[matrix of nodes, anchor=base, below=2em of m] (s){
-                (   & Le    & petit & chat & )  & ( & est   & ) & (  & content & )\\
-            };
-            \foreach \x/\y in {4/5, 4/6, 5/8, 5/9}
-                \draw[->] (m-2-\x) -- (s-1-\y);
-        \end{tikzpicture}
-        \caption{\emph{Chunking}}
-    \end{figure}
+			\matrix[matrix of nodes, anchor=base, below=2em of m] (s){
+				(   & Le    & petit & chat & )  & ( & est   & ) & (  & content & )\\
+			};
+			\foreach \x/\y in {4/5, 4/6, 5/8, 5/9}
+				\draw[->] (m-2-\x) -- (s-1-\y);
+		\end{tikzpicture}
+		\caption{\emph{Chunking}}
+	\end{figure}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Exemples}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{forest}
-            [S
-                [NP→\textcolor{highlighta}{sub}
-                    [Det the]
-                    [N cat]
-                ]
-                [VP→\textcolor{highlighta}{pred}
-                    [V sat]
-                    [PP→\textcolor{highlighta}{mod}
-                        [P on]
-                        [NP
-                            [Det the]
-                            [N mat]
-                        ]
-                    ]
-                ]
-            ]
-        \end{forest}
-        \caption{\textcolor{highlighta}{Étiquetage fonctionnel} d'un arbre syntaxique}
-    \end{figure}
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{forest}
+			[S
+				[NP→\textcolor{highlighta}{sub}
+					[Det the]
+					[N cat]
+				]
+				[VP→\textcolor{highlighta}{pred}
+					[V sat]
+					[PP→\textcolor{highlighta}{mod}
+						[P on]
+						[NP
+							[Det the]
+							[N mat]
+						]
+					]
+				]
+			]
+		\end{forest}
+		\caption{\textcolor{highlighta}{Étiquetage fonctionnel} d'un arbre syntaxique}
+	\end{figure}
 \end{frame}
 
 \begin{frame}{Évaluation}
-    Pour évaluer un étiquetage, on choisit en général de le considérer comme un problème de classification à plusieurs classes
-    \begin{itemize}
-        \item On considère chaque unité comme une donnée et chaque étiquette comme une classe
-        \item On calcule comme précédemment \(P\), \(R\) et \(F\)
-        \item On privilégie les micro-averages pour les scores globaux
-    \end{itemize}
+	Pour évaluer un étiquetage, on choisit en général de le considérer comme un problème de classification à plusieurs classes
+	\begin{itemize}
+		\item On considère chaque unité comme une donnée et chaque étiquette comme une classe
+		\item On calcule comme précédemment \(P\), \(R\) et \(F\)
+		\item On privilégie les micro-averages pour les scores globaux
+	\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Aparté : micro-average et exactitude}
-    \begin{theorem}
-        Si chaque unité reçoit une unique étiquette, les micro-average de \(P\), \(R\) et \(F\) sont égales à l'exactitude.
-    \end{theorem}
-    On considère la matrice de confusion suivante
-    \begin{center}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}[
-            table/.style={
-                matrix of nodes,
-                row sep=-\pgflinewidth,
-                column sep=-\pgflinewidth,
-                nodes={draw, text width=3ex, align=center},
-                text depth=0.25ex,
-                text height=1em,
-                nodes in empty cells
-            },
-            aa/.style={},
-            bb/.style={},
-            cc/.style={},
-            ab/.style={},
-            ac/.style={},
-            ba/.style={},
-            bc/.style={},
-            ca/.style={},
-            cb/.style={},
-        ]
-            \matrix[table]{
-                              & |(apred)| A   & |(bpred)| B   & |(cpred)| C\\
-                |(atrue)| A   & |[aa]| $aa$   & |[ab]| $ab$   & |[ac]| $ac$\\
-                |(btrue)| B   & |[ba]| $ba$   & |[bb]| $bb$   & |[bc]| $bc$\\
-                |(ctrue)| C   & |[ca]| $ca$   & |[cb]| $cb$   & |[cc]| $cc$\\
-            };
+	\begin{theorem}
+		Si chaque unité reçoit une unique étiquette, les micro-average de \(P\), \(R\) et \(F\) sont égales à l'exactitude.
+	\end{theorem}
+	On considère la matrice de confusion suivante
+	\begin{center}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}[
+			table/.style={
+				matrix of nodes,
+				row sep=-\pgflinewidth,
+				column sep=-\pgflinewidth,
+				nodes={draw, text width=3ex, align=center},
+				text depth=0.25ex,
+				text height=1em,
+				nodes in empty cells
+			},
+			aa/.style={},
+			bb/.style={},
+			cc/.style={},
+			ab/.style={},
+			ac/.style={},
+			ba/.style={},
+			bc/.style={},
+			ca/.style={},
+			cb/.style={},
+		]
+			\matrix[table]{
+							  & |(apred)| A   & |(bpred)| B   & |(cpred)| C\\
+				|(atrue)| A   & |[aa]| $aa$   & |[ab]| $ab$   & |[ac]| $ac$\\
+				|(btrue)| B   & |[ba]| $ba$   & |[bb]| $bb$   & |[bc]| $bc$\\
+				|(ctrue)| C   & |[ca]| $ca$   & |[cb]| $cb$   & |[cc]| $cc$\\
+			};
 
-            \draw [decorate, decoration={brace, amplitude=1em}, yshift=-0.5ex] (apred.north west) -- (cpred.north east) node [midway, above=1.25ex] {Classes prédites};
-            \draw [decorate, decoration={brace, amplitude=1em, mirror}, xshift=-0.5ex] (atrue.north west) -- (ctrue.south west) node [midway, left=1.25ex, rotate=90, anchor=south] {Vraies classes};
-        \end{tikzpicture}
-    \end{center}
-    Et on regarde le tableau !
+			\draw [decorate, decoration={brace, amplitude=1em}, yshift=-0.5ex] (apred.north west) -- (cpred.north east) node [midway, above=1.25ex] {Classes prédites};
+			\draw [decorate, decoration={brace, amplitude=1em, mirror}, xshift=-0.5ex] (atrue.north west) -- (ctrue.south west) node [midway, left=1.25ex, rotate=90, anchor=south] {Vraies classes};
+		\end{tikzpicture}
+	\end{center}
+	Preuve : voir le poly
 \end{frame}
 
 % TODO: add slides for the proof above
@@ -529,81 +540,81 @@
 
 \section{L'extraction d'informations}
 \begin{frame}[fragile]{Extraction d'informations}
-    L'\emph{extraction d'informations} est la tâche consistant à trouver dans un document les \alert{réponses} à des questions prédéfinies.
+	L'\emph{extraction d'informations} est la tâche consistant à trouver dans un document les \alert{réponses} à des questions prédéfinies.
 
-    \only<1>{
-        \begin{itemize}
-            \item « Déterminer le nom du héros et des principaux protagonistes d'un texte narratif »
-            \item « Déterminer les symptômes présentés par un patient à partir d'un rapport clinique »
-        \end{itemize}
-    }
+	\only<1>{
+		\begin{itemize}
+			\item « Déterminer le nom du héros et des principaux protagonistes d'un texte narratif »
+			\item « Déterminer les symptômes présentés par un patient à partir d'un rapport clinique »
+		\end{itemize}
+	}
 
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}[true scale=0.80]
-            \node[data, highlight=4] (in) {Donnée};
-            \node[program, right=1cm of in, text width=12ex] (prog) {Programme d'EI};
-            \node[data, right=1cm of prog, highlight=6] (out) {Champs remplis};
-            \node[data, below=.6cm of prog, highlight=8] (res) {Champs à remplir};
-            \draw[->] (in) -- (prog);
-            \draw[->] (prog) -- (out);
-            \draw[->] (res) -- (prog);
-        \end{tikzpicture}
-    \end{figure}
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}[true scale=0.80]
+			\node[data, highlight=4] (in) {Donnée};
+			\node[program, right=1cm of in, text width=12ex] (prog) {Programme d'EI};
+			\node[data, right=1cm of prog, highlight=6] (out) {Champs remplis};
+			\node[data, below=.6cm of prog, highlight=8] (res) {Champs à remplir};
+			\draw[->] (in) -- (prog);
+			\draw[->] (prog) -- (out);
+			\draw[->] (res) -- (prog);
+		\end{tikzpicture}
+	\end{figure}
 
-    \only<2>{
-        \begin{itemize}
-            \item La \textcolor{highlight4}{donnée} est un texte brut ou un document semi-structuré
-            \item La \textcolor{highlight6}{sortie} est un tableau qui donne la valeur de chacun des champs
-            \item Les \textcolor{highlight8}{champs} \emph{peuvent} être multivalués et en nombre variable
-        \end{itemize}
-    }
+	\only<2>{
+		\begin{itemize}
+			\item La \textcolor{highlight4}{donnée} est un texte brut ou un document semi-structuré
+			\item La \textcolor{highlight6}{sortie} est un tableau qui donne la valeur de chacun des champs
+			\item Les \textcolor{highlight8}{champs} \emph{peuvent} être multivalués et en nombre variable
+		\end{itemize}
+	}
 \end{frame}
 
 % TODO: add cites
 \begin{frame}{Domaines d'application}
-    Ils sont nombreux !
-    \begin{itemize}
-        \item Identification de protagonistes (littérature, militaire)
-        \item Identification d'événement (biomédical, militaire)
-        \item Fouille d'arguments
-            \begin{itemize}
-                \item Aide à la décision (politique)
-                    \begin{itemize}
-                        \item[→] IBM Watson (\textcite{slonim2014claims}, \shorturl{youtube.com/watch?v=sEf0GLvrP9U})
-                    \end{itemize}
-                \item Aide à la lecture (judiciaire, scientifique)
-                    \begin{itemize}
-                        \item[→] « Argument zoning » (\textcite{teufel2009argument}, \shorturl{www.cl.cam.ac.uk/~sht25/az.html})
-                    \end{itemize}
-            \end{itemize}
-        \item …
-    \end{itemize}
-    À l'extrême, la tâche se confond avec la compréhension de document.
+	Ils sont nombreux !
+	\begin{itemize}
+		\item Identification de protagonistes (littérature, militaire)
+		\item Identification d'événement (biomédical, militaire)
+		\item Fouille d'arguments
+			\begin{itemize}
+				\item Aide à la décision (politique)
+					\begin{itemize}
+						\item[→] IBM Watson (\textcite{slonim2014claims}, \shorturl{youtube.com/watch?v=sEf0GLvrP9U})
+					\end{itemize}
+				\item Aide à la lecture (judiciaire, scientifique)
+					\begin{itemize}
+						\item[→] « Argument zoning » (\textcite{teufel2009argument}, \shorturl{www.cl.cam.ac.uk/~sht25/az.html})
+					\end{itemize}
+			\end{itemize}
+		\item …
+	\end{itemize}
+	À l'extrême, la tâche se confond avec la compréhension de document.
 \end{frame}
 
 \begin{frame}{Évaluation}
-    L'idée est toujours de se comparer à une référence humaine.
-    \begin{itemize}
-        \item Basiquement : on compare les contenus des champs et on en déduit \(P\), \(R\) et \(F\)
-        \item Plus subtilement : on peut utiliser des mesures d'adéquation entre les réponses
-            \begin{itemize}
-                \item[→] Une réponse peut être partiellement correcte : on pondère~!
-            \end{itemize}
-        \item Pour certaines tâches, on utilise des mesures spécifiques
-            \begin{itemize}
-                \item Pour les tâches comprenant une composante de localisation (NER, Argument Zoning), on peut appliquer des pondérations différentes à extraction et localisation
-            \end{itemize}
-    \end{itemize}
+	L'idée est toujours de se comparer à une référence humaine.
+	\begin{itemize}
+		\item Basiquement : on compare les contenus des champs et on en déduit \(P\), \(R\) et \(F\)
+		\item Plus subtilement : on peut utiliser des mesures d'adéquation entre les réponses
+			\begin{itemize}
+				\item[→] Une réponse peut être partiellement correcte : on pondère~!
+			\end{itemize}
+		\item Pour certaines tâches, on utilise des mesures spécifiques
+			\begin{itemize}
+				\item Pour les tâches comprenant une composante de localisation (NER, Argument Zoning), on peut appliquer des pondérations différentes à extraction et localisation
+			\end{itemize}
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{Exercice}
-    Une requête dans un moteur de recherche renvoie \num{27} documents. Parmi ceux-ci, \num{13} sont pertinents pour cette requête. Une étude du corpus montre que parmi ses \num{1024} documents, \num{15} étaient pertinents pour cette requête.
-    \begin{itemize}
-        \item Déterminer les nombres de vrais positifs, vrais négatifs, faux positifs et faux négatifs
-        \item Déterminer la précision, le rappel et la $F$-mesure associées
-        \item Mêmes questions pour un corpus de taille \num{2713}
-    \end{itemize}
+	Une requête dans un moteur de recherche renvoie \num{27} documents. Parmi ceux-ci, \num{13} sont pertinents pour cette requête. Une étude du corpus montre que parmi ses \num{1024} documents, \num{15} étaient pertinents pour cette requête.
+	\begin{itemize}
+		\item Déterminer les nombres de vrais positifs, vrais négatifs, faux positifs et faux négatifs
+		\item Déterminer la précision, le rappel et la $F$-mesure associées
+		\item Mêmes questions pour un corpus de taille \num{2713}
+	\end{itemize}
 \end{frame}
 
 % ██████  ███████ ██       █████  ████████ ██  ██████  ███    ██ ███████
@@ -615,128 +626,128 @@
 
 \section{Relations entre tâches}
 \begin{frame}<1>[label=taskrel]{Relations entre tâches}
-    Les tâches présentées précédemment sont \alert{élémentaires} au sens où on peut y \alert{réduire} la plupart des tâches de la fouille de texte.
+	Les tâches présentées précédemment sont \alert{élémentaires} au sens où on peut y \alert{réduire} la plupart des tâches de la fouille de texte.
 
-    Cependant ces tâches ne sont pas complètement indépendantes les unes des autres \emph{via} des \alert{reformulations}.
+	Cependant ces tâches ne sont pas complètement indépendantes les unes des autres \emph{via} des \alert{reformulations}.
 \end{frame}
 
 \begin{frame}[fragile]{La RI comme classification}
-    On peut voir la RI comme un problème de \alert{classification binaire}
-    \vspace{-\bigskipamount}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}[true scale=0.75]
-            \node[data, alt=<2>{highlight=0}] (in) {Requête};
-            \node[program, right=1.5cm of in, text width=13ex, visible on=2] (prog) {Programme de classification};
-            \node[data, below=1.5cm of prog, alt=<2>{highlight=1}] (res) {Corpus};
-            \node[data, right=3.5cm of prog, text width=10ex] (out) {Documents pertinents};
-            \draw
-                ($(prog.north west)+(-1cm, 1.25cm)$)
-                -- ($(prog.north east)+(3cm, 1.25cm)$)
-                -- ($(prog.south east)+(3cm, -1.25cm)$)
-                -- ($(prog.south west)+(-1cm, -1.25cm)$)
-                -- cycle;
-            \alt<1> {
-                \node (ri) at (prog) {Programme de RI};
-                \draw[->] (in.east) -- ($(prog.west)-(1cm, 0)$);
-                \draw[->] (res.north) -- ($(prog.south)-(0, 1.25cm)$);
-                \draw[->] ($(prog.east)+(3cm, 0)$) -- (out);
-            }{
-                \node[anchor=north west] (ri) at ($(prog.north west)+(-0.9cm, 1.15cm)$) {Programme de RI};
-                \draw[->] (in.east) -- ($(prog.west)-(0.75cm, 0)$) |- ($(prog.south)-(0, 0.5cm)$) -- (prog.south);
-                \draw[->] (res.north) -- ($(prog.south)-(0, 1cm)$) -| ($(prog.west)-(0.5cm, 0)$) -- (prog.west);
-                \node[data, right=0.5cm of prog.east, highlight=3] (clas) {Classes};
-                \draw[->] (prog) -- (clas) -- (out);
-            }
-        \end{tikzpicture}
-        \caption{La RI comme une classification}
-    \end{figure}
-    \vspace{-\bigskipamount}
-    \only<2>{
-        \begin{itemize}
-            \item On répartit les documents entre les \textcolor{highlight3}{classes} « pertinent » et « non-pertinent »
-            \item \textcolor{highlight0}{La requête} devient une ressource et \textcolor{highlight1}{le corpus} une entrée
-        \end{itemize}
-    }
+	On peut voir la RI comme un problème de \alert{classification binaire}
+	\vspace{-\bigskipamount}
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}[true scale=0.75]
+			\node[data, alt=<2>{highlight=0}] (in) {Requête};
+			\node[program, right=1.5cm of in, text width=13ex, visible on=2] (prog) {Programme de classification};
+			\node[data, below=1.5cm of prog, alt=<2>{highlight=1}] (res) {Corpus};
+			\node[data, right=3.5cm of prog, text width=10ex] (out) {Documents pertinents};
+			\draw
+				($(prog.north west)+(-1cm, 1.25cm)$)
+				-- ($(prog.north east)+(3cm, 1.25cm)$)
+				-- ($(prog.south east)+(3cm, -1.25cm)$)
+				-- ($(prog.south west)+(-1cm, -1.25cm)$)
+				-- cycle;
+			\alt<1> {
+				\node (ri) at (prog) {Programme de RI};
+				\draw[->] (in.east) -- ($(prog.west)-(1cm, 0)$);
+				\draw[->] (res.north) -- ($(prog.south)-(0, 1.25cm)$);
+				\draw[->] ($(prog.east)+(3cm, 0)$) -- (out);
+			}{
+				\node[anchor=north west] (ri) at ($(prog.north west)+(-0.9cm, 1.15cm)$) {Programme de RI};
+				\draw[->] (in.east) -- ($(prog.west)-(0.75cm, 0)$) |- ($(prog.south)-(0, 0.5cm)$) -- (prog.south);
+				\draw[->] (res.north) -- ($(prog.south)-(0, 1cm)$) -| ($(prog.west)-(0.5cm, 0)$) -- (prog.west);
+				\node[data, right=0.5cm of prog.east, highlight=3] (clas) {Classes};
+				\draw[->] (prog) -- (clas) -- (out);
+			}
+		\end{tikzpicture}
+		\caption{La RI comme une classification}
+	\end{figure}
+	\vspace{-\bigskipamount}
+	\only<2>{
+		\begin{itemize}
+			\item On répartit les documents entre les \textcolor{highlight3}{classes} « pertinent » et « non-pertinent »
+			\item \textcolor{highlight0}{La requête} devient une ressource et \textcolor{highlight1}{le corpus} une entrée
+		\end{itemize}
+	}
 \end{frame}
 
 \begin{frame}{L'annotation comme classification}
-    Plusieurs stratégies sont envisageables pour conserver l'information de structure
-    \begin{itemize}
-        \item Voir la suite des étiquettes d'une séquence comme une seule classe.
-        \item Étiqueter par classifications successives en utilisant à chaque étape l'ensemble des étiquettes précédentes comme information pour choisir l'étiquette suivante.
-    \end{itemize}
+	Plusieurs stratégies sont envisageables pour conserver l'information de structure
+	\begin{itemize}
+		\item Voir la suite des étiquettes d'une séquence comme une seule classe.
+		\item Étiqueter par classifications successives en utilisant à chaque étape l'ensemble des étiquettes précédentes comme information pour choisir l'étiquette suivante.
+	\end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{L'annotation comme une suite de classifications}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}[
-                row 2 column 1/.style={visible on={1,2,6}},
-                row 2 column 2/.style={visible on={2,3,6}},
-                row 2 column 3/.style={visible on={3,4,6}},
-                row 2 column 4/.style={visible on={4,5,6}},
-                row 2 column 5/.style={visible on={5-}},
-            ]
-            \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
-                Le  & petit & chat  & est & content\\
-                DET & ADJ   & NC    & V   & ADJ\\
-            };
-            \foreach \x in {1, ..., 5}
-                \draw[->, visible on={\x,6}] (m-1-\x) -- (m-2-\x);
-        \end{tikzpicture}
-        \caption{\emph{Part Of Speech Tagging} comme une suite de classifications}
-    \end{figure}
-    \only<6>{}
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}[
+				row 2 column 1/.style={visible on={1,2,6}},
+				row 2 column 2/.style={visible on={2,3,6}},
+				row 2 column 3/.style={visible on={3,4,6}},
+				row 2 column 4/.style={visible on={4,5,6}},
+				row 2 column 5/.style={visible on={5-}},
+			]
+			\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+				Le  & petit & chat  & est & content\\
+				DET & ADJ   & NC    & V   & ADJ\\
+			};
+			\foreach \x in {1, ..., 5}
+				\draw[->, visible on={\x,6}] (m-1-\x) -- (m-2-\x);
+		\end{tikzpicture}
+		\caption{\emph{Part Of Speech Tagging} comme une suite de classifications}
+	\end{figure}
+	\only<6>{}
 \end{frame}
 
 \begin{frame}[fragile]{EI comme annotation}
-    \begin{figure}
-        \begin{overprint}
-            \onslide<1>
-                \tikzset{external/export=true}
-                \begin{tikzpicture}
-                    \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
-                        En & 2019 & la & France & gagne & à & l' & Eurovision\\
-                        O & D & O & C & O & O & O & E\\
-                    };
-                    \foreach \x in {1, ..., 8}
-                        \draw[->] (m-1-\x) -- (m-2-\x);
-                \end{tikzpicture}
-            \onslide<2>
-                \tikzset{external/export=true}
-                \begin{tikzpicture}
-                    \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
-                        En & 2019 & la & France & gagne & à & l' & Eurovision\\
-                        O & B-D & B-C & I-C & O & O & B-E & I-E\\\\
-                    };
-                    \foreach \x in {1, ..., 8}
-                        \draw[->] (m-1-\x) -- (m-2-\x);
-                \end{tikzpicture}
-            \onslide<3>
-                \tikzset{external/export=true}
-                \begin{tikzpicture}
-                    \matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
-                        En & 2019 & la & France & gagne & à & l' & Eurovision\\
-                        O & U-D & B-C & L-C & O & O & B-E & L-E\\\\
-                    };
-                    \foreach \x in {1, ..., 8}
-                        \draw[->] (m-1-\x) -- (m-2-\x);
-                \end{tikzpicture}
-        \end{overprint}
-        \caption{\emph{EI} comme une annotation}
-    \end{figure}
+	\begin{figure}
+		\begin{overprint}
+			\onslide<1>
+				\tikzset{external/export=true}
+				\begin{tikzpicture}
+					\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+						En & 2019 & la & France & gagne & à & l' & Eurovision\\
+						O & D & O & C & O & O & O & E\\
+					};
+					\foreach \x in {1, ..., 8}
+						\draw[->] (m-1-\x) -- (m-2-\x);
+				\end{tikzpicture}
+			\onslide<2>
+				\tikzset{external/export=true}
+				\begin{tikzpicture}
+					\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+						En & 2019 & la & France & gagne & à & l' & Eurovision\\
+						O & B-D & B-C & I-C & O & O & B-E & I-E\\\\
+					};
+					\foreach \x in {1, ..., 8}
+						\draw[->] (m-1-\x) -- (m-2-\x);
+				\end{tikzpicture}
+			\onslide<3>
+				\tikzset{external/export=true}
+				\begin{tikzpicture}
+					\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+						En & 2019 & la & France & gagne & à & l' & Eurovision\\
+						O & U-D & B-C & L-C & O & O & B-E & L-E\\\\
+					};
+					\foreach \x in {1, ..., 8}
+						\draw[->] (m-1-\x) -- (m-2-\x);
+				\end{tikzpicture}
+		\end{overprint}
+		\caption{\emph{EI} comme une annotation}
+	\end{figure}
 \end{frame}
 
 \begin{frame}{Exercice}
-    \begin{enumerate}
-        \item Donner la suite d'étiquettes correspondant au parenthésage suivant : (Le volcan Eyjafjallajökull)\textsubscript{P} est (entré en éruption)\textsubscript{E} (hier)\textsubscript{D} à (15h30)\textsubscript{T}
-            \begin{enumerate}
-                \item En BIO
-                \item En BILOU
-            \end{enumerate}
-        \item Donner une phrase qui correspond à la suite d'étiquettes de chunking \texttt{B-N I-N I-N I-V I-Adj}
-    \end{enumerate}
+	\begin{enumerate}
+		\item Donner la suite d'étiquettes correspondant au parenthésage suivant : (Le volcan Eyjafjallajökull)\textsubscript{P} est (entré en éruption)\textsubscript{E} (hier)\textsubscript{D} à (15h30)\textsubscript{T}
+			\begin{enumerate}
+				\item En BIO
+				\item En BILOU
+			\end{enumerate}
+		\item Donner une phrase qui correspond à la suite d'étiquettes de chunking \texttt{B-N I-N I-N I-V I-Adj}
+	\end{enumerate}
 \end{frame}
 
 
@@ -752,27 +763,27 @@
 \section{Annexes}
 \pdfbookmark[2]{Remerciements}{acknowledgements}
 \begin{frame}{Remerciements}
-    Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017IntroductionFouilleTextes} \parencite{tellier2017IntroductionFouilleTextes} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
+	Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017IntroductionFouilleTextes} \parencite{tellier2017IntroductionFouilleTextes} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
 \end{frame}
 
 \pdfbookmark[2]{Références}{references}
 \begin{frame}[allowframebreaks]{References}
-    \printbibliography[heading=none]
+	\printbibliography[heading=none]
 \end{frame}
 
 \pdfbookmark[2]{Licence}{licence}
 \begin{frame}{Licence}
-    \begin{center}
-        {\huge \ccby}
-        \vfill
-        This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
+	\begin{center}
+		{\huge \ccby}
+		\vfill
+		This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
 
-        Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
-        \vfill
-        © 2019, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
+		Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
+		\vfill
+		© 2019, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
 
-        \shorturl[http]{lattice.cnrs.fr/Grobol-Loic}
-    \end{center}
+		\shorturl[http]{lattice.cnrs.fr/Grobol-Loic}
+	\end{center}
 \end{frame}
 
 \end{document}
