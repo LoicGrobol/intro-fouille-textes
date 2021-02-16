@@ -44,7 +44,7 @@ Non-exhaustive
 
 - [@bastings_nlp](https://twitter.com/bastings_nlp)
 - [@BayesForDays](https://twitter.com/BayesForDays)
-- [@kirbyconrod](https://mobile.twitter.com/kirbyconrod/
+- [@kirbyconrod](https://twitter.com/kirbyconrod)
 - [@Seb_Ruder](https://twitter.com/seb_ruder)
 - [@harmaru](https://twitter.com/hardmaru)
 - [@honnibal](https://twitter.com/honnibal)
