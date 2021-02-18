@@ -76,8 +76,16 @@
 \usepackage{fontspec}
 \usefonttheme{professionalfonts}
 
-\setmainfont{Fira Sans}[
+\directlua{luaotfload.add_fallback
+   ("emojifallback",
+    {
+      "NotoColorEmoji:mode=harf;"
+    }
+   )}
+
+\setsansfont{Fira Sans}[
 	BoldFont={* Semibold},
+	RawFeature={fallback=emojifallback},
 ]
 \setmonofont[Scale=0.9]{Fira Mono}
 \newfontfamily\fallbackfont{Deja Vu Sans}
@@ -276,7 +284,7 @@
 	data/.style={draw, ellipse},
 	program/.style={draw, rectangle},
 	accent on/.style={alt={<#1>{draw=accent, text=accent, thick}{draw}}},
-	true scale/.style={scale=#1, every node/.style={transform shape}},
+	true scale/.style={scale=#1, every node/.append style={scale=#1}},
 	highlight/.style={color=highlight#1}
 }
 
@@ -749,21 +757,24 @@
 
 \againframe{segmentation}
 
-\begin{frame}<-2>[fragile]{Aparté: segmentation et repérage}
+\begin{frame}<-4>[fragile]{Aparté: segmentation et repérage}
 	Observation : il suffit de savoir pour chaque mot s'il est dans une zone.
 
-	\pause
+	Par exemple pour repérer les \textcolor{sronbrightpurple}{noms de personnes}
 
-	Par exemple pour
-
-	% \tikzset{external/export=true}
-	\begin{tikzpicture}[true scale=0.6]
-		\matrix[matrix of nodes, anchor=base, row sep=0em, column sep=0em, row 2/.style={font=\large\fallbackfont}] (m) {
-			C' & étaient & Susan & Calvin & et & Alfred & Lanning & de & l' & US & Robots\\
-			|[sronbrightred]| ✗ & |[sronbrightred]| ✗ & |[sronbrightgreen]| ✓ & |[sronbrightgreen]| ✓ & |[sronbrightred]| ✗ & |[sronbrightgreen]| ✓ & |[sronbrightgreen]| ✓ & |[sronbrightred]| ✗ & |[sronbrightred]| ✗ & |[sronbrightred]| ✗ & |[sronbrightred]| ✗\\
+	\tikzset{external/export=true}
+	\begin{tikzpicture}[true scale=0.9]
+		\matrix[matrix of nodes, anchor=base, row sep=0em, column sep=0em, row 2/.style={font=\bfseries, visible on={2-}}] (m) {
+			C' & étaient & |[sronbrightpurple]|  Susan & |[sronbrightpurple]| Calvin & et & |[sronbrightpurple]| Alfred & |[sronbrightpurple]| Lanning & de & l' & US & Robots\\
+			\alt<-3>{🚫}{O} & \alt<-3>{🚫}{O} & |[sronbrightpurple]| \alt<-3>{👆}{I} & |[sronbrightpurple]| \alt<-3>{👆}{I} & \alt<-3>{🚫}{O} & |[sronbrightpurple]| \alt<-3>{👆}{I} & |[sronbrightpurple]| \alt<-3>{👆}{I} & \alt<-3>{🚫}{O} & \alt<-3>{🚫}{O} & \alt<-3>{🚫}{O} & \alt<-3>{🚫}{O}\\
 		};
 	\end{tikzpicture}
+
+	\onslide<3-> Mais ça c'est exactement des étiquettes !
+
+	\onslide<4> Par convention on utilise plutôt \alert{I} \enquote{\emph{Inside}} et \alert{O} \enquote{\emph{Outside}}.
 \end{frame}
+
 % \begin{frame}[fragile]{EI comme annotation}
 % 	\begin{figure}
 % 		\begin{overprint}
