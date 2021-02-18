@@ -1,4 +1,5 @@
-%% Copyright © 2019, Loïc Grobol <loic.grobol@gmail.com>
+% LTeX: language=fr
+% Copyright © 2019, Loïc Grobol <loic.grobol@gmail.com>
 % This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (https://creativecommons.org/licenses/by/4.0/)
 
 \RequirePackage{xparse}
@@ -10,20 +11,20 @@
 \newcommand\mymail{loic.grobol@gmail.com}
 \newcommand\titlepagetitle{\pdftitle}
 \newcommand\titlepagesubtitle{Cours 4 : Décomposition en tâches élémentaires et représentations des données}
-\newcommand\docdate{2020-02-06}  % chktex 8
+\newcommand\docdate{2021-02-18}  % chktex 8
 \newcommand\conference{M1 Plurital}
 
 % \RequirePackage{hyperxmp}  % Results in a complex failure with beamer + tikzexternal (2020-01-17)
 \documentclass[xcolor={svgnames}, french]{beamer}
 \hypersetup{
-    pdftitle={\pdftitle},
-    pdfauthor={\myname},
-    % pdfcontactemail={\mymail},  % hyperxmpAnnotation et extraction d'informations
-    breaklinks,
-    hypertexnames=true,
-    pdfdisplaydoctitle,
-    pdflang={fr},
-    % keeppdfinfo,  % hyperxmp
+	pdftitle={\pdftitle},
+	pdfauthor={\myname},
+	% pdfcontactemail={\mymail},  % hyperxmp
+	breaklinks,
+	hypertexnames=true,
+	pdfdisplaydoctitle,
+	pdflang={fr},
+	% keeppdfinfo,  % hyperxmp
 }
 
 % Colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf) v3.1
@@ -52,7 +53,7 @@
 
 \usetheme[
 	sectionpage=progressbar,
-    subsectionpage=progressbar,
+	subsectionpage=progressbar,
 	progressbar=frametitle,
 ]{metropolis}
 	\colorlet{accent}{sronbrightgreen}
@@ -73,9 +74,24 @@
 
 
 % Use non-standard fonts
+\usepackage{fontspec}
 \usefonttheme{professionalfonts}
-    \setsansfont[BoldFont={* Semibold}]{Fira Sans}
+
+\directlua{luaotfload.add_fallback
+   ("emojifallback",
+	{
+	  "NotoColorEmoji:mode=harf;"
+	}
+   )}
+
+\setsansfont{Fira Sans}[
+	BoldFont={* Semibold},
+	RawFeature={fallback=emojifallback},
+]
 \setmonofont[Scale=0.9]{Fira Mono}
+\newfontfamily\fallbackfont{Deja Vu Sans}
+\newfontfamily\emojifont{Noto Color Emoji}[Renderer=HarfBuzz]
+\frenchspacing
 
 % Fix missing glyphs in Fira by delegating to polyglossia/babel
 \usepackage{newunicodechar}
@@ -87,11 +103,14 @@
 % \setbeameroption{show notes on second screen=left}
 
 
-\usepackage[french, english]{babel}
+\usepackage{polyglossia}
+	\setmainlanguage{french}
+	\setotherlanguage[variant=british]{english}
+
 \usepackage{amsfonts,amssymb}
 \usepackage{amsmath,amsthm}
 \usepackage{mathtools}	% AMS Maths service pack
-    % Pour des lignes d'équation numérotées entre crochets
+	% Pour des lignes d'équation numérotées entre crochets
 	\newtagform{brackets}{[}{]} % chktex 9
 	\mathtoolsset{showonlyrefs, showmanualtags, mathic}	% affiche les tags manuels (\tag et \tag*) et corrige le kerning des maths inline dans un bloc italique voir la doc de mathtools
 	\usetagform{brackets}	% Utilise le style de tags défini plus haut
@@ -106,132 +125,147 @@
 \usepackage{tabu}
 \usepackage{booktabs}
 \usepackage{siunitx}
+	\sisetup{
+		binary-units=true,
+		detect-all,
+		detect-inline-weight=math,
+		group-separator=\text{\,},
+	}
+	\DeclareSIUnit{\quantity}{\relax}
+	\DeclareSIUnit{\words}{words}
+	\DeclareSIUnit{\sentences}{sentences}
+	% Needed for italics and bold numbers in siunitx S-aligned columns
+	\robustify\itshape
+	\robustify\bfseries
 \usepackage{multicol}
 \usepackage{ccicons}
 \usepackage{bookmark}
 \usepackage{caption}
-    \captionsetup{skip=1ex}
+	\captionsetup{skip=1ex, labelformat=empty}
 \usepackage[iso]{datetime}
+\usepackage{lua-ul}
 
 \usepackage{tikz}
 	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}} % chktex 36
-    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {\(\displaystyle #3\)};}} % chktex 36
+	\NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {\(\displaystyle #3\)};}} % chktex 36
 	\tikzset{
 		alt/.code args={<#1>#2#3}{%
 		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
 		},
-        invisible/.style={opacity=0, fill opacity=0},
+		invisible/.style={opacity=0, fill opacity=0},
 		visible on/.style={alt={<#1>{}{invisible}}}
 	}
-    \usepackage{forest}
-    \usepackage{tkz-graph}
-    \usepackage[beamer, markings]{hf-tikz}
-    \usepackage{tikz-3dplot}
-    \usepackage{pgfplots}
-        % Due to pgfplots meddling with pgfkeys, we have to redefine alt here.
-        \pgfplotsset{
-    		alt/.code args={<#1>#2#3}{%
-    		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
-    		},
-    	}
-        \pgfplotsset{compat=1.16}
-        \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}} % chktex 36
-    \usetikzlibrary{matrix}
-    \usetikzlibrary{shapes, shapes.geometric}
-    \usetikzlibrary{decorations.pathreplacing}
+	\usepackage{forest}
+	\usepackage{tkz-graph}
+	\usepackage[beamer, markings]{hf-tikz}
+	\usepackage{tikz-3dplot}
+	\usepackage{pgfplots}
+		% Due to pgfplots meddling with pgfkeys, we have to redefine alt here.
+		\pgfplotsset{
+			alt/.code args={<#1>#2#3}{%
+			\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+			},
+		}
+		\pgfplotsset{compat=1.16}
+		\pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}} % chktex 36
+	\usetikzlibrary{matrix}
+	\usetikzlibrary{shapes, shapes.geometric}
+	\usetikzlibrary{decorations.pathreplacing}
 	\usetikzlibrary{positioning, calc, intersections}
-    \usetikzlibrary{fit}
-    \usetikzlibrary{backgrounds}
+	\usetikzlibrary{fit}
+	\usetikzlibrary{backgrounds}
 
-    % Do evil things with soft path
-    \makeatletter
-        \def\@appendnamedsoftpath#1{% chktex 21
-            \pgfsyssoftpath@getcurrentpath\@temppatha % chktex 21 chktex 1
-            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 41 chktex 21
-            \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb} % chktex 41 chktex 21
-            \pgfsyssoftpath@setcurrentpath\@temppatha % chktex 21 chktex 1
-        }
-        \def\@appendnamedpathforactions#1{% chktex 21
-            \pgfsyssoftpath@getcurrentpath\@temppatha % chktex 1 chktex 21
-            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
-            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb} % chktex 21 chktex 41
+	% Do evil things with soft path
+	\makeatletter
+		\def\@appendnamedsoftpath#1{% chktex 21
+			\pgfsyssoftpath@getcurrentpath\@temppatha % chktex 21 chktex 1
+			\expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 41 chktex 21
+			\expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb} % chktex 41 chktex 21
+			\pgfsyssoftpath@setcurrentpath\@temppatha % chktex 21 chktex 1
+		}
+		\def\@appendnamedpathforactions#1{% chktex 21
+			\pgfsyssoftpath@getcurrentpath\@temppatha % chktex 1 chktex 21
+			\expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
+			\expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb} % chktex 21 chktex 41
 
-            \let\tikz@actions@path\@temppatha  % chktex 21 chktex 1
-        }
+			\let\tikz@actions@path\@temppatha  % chktex 21 chktex 1
+		}
 
-        \tikzset{
-            use path for main/.code={%
-                \tikz@addmode{%
-                    \expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
-                }%
-            },
-            append path for main/.code={%
-                \tikz@addmode{%
-                    \@appendnamedsoftpath{#1}%
-                }%
-            },
-            use path for actions/.code={%
-                \expandafter\def\expandafter\tikz@preactions\expandafter {\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}% chktex 21 chktex 41
-            },
-            append path for actions/.code={%
-                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions % chktex 21 chktex 41 chktex 1
-                \@appendnamedpathforactions{#1}}%
-            },
-            use path/.style={%
-                use path for main=#1,
-                use path for actions=#1,
-            },
-            append path/.style={%
-                append path for main=#1,
-                append path for actions=#1
-            }
-        }
-    \makeatother
+		\tikzset{
+			use path for main/.code={%
+				\tikz@addmode{%
+					\expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
+				}%
+			},
+			append path for main/.code={%
+				\tikz@addmode{%
+					\@appendnamedsoftpath{#1}%
+				}%
+			},
+			use path for actions/.code={%
+				\expandafter\def\expandafter\tikz@preactions\expandafter {\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}% chktex 21 chktex 41
+			},
+			append path for actions/.code={%
+				\expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions % chktex 21 chktex 41 chktex 1
+				\@appendnamedpathforactions{#1}}%
+			},
+			use path/.style={%
+				use path for main=#1,
+				use path for actions=#1,
+			},
+			append path/.style={%
+				append path for main=#1,
+				append path for actions=#1
+			}
+		}
+	\makeatother
 
-    % TikZ externalisation
-    \usetikzlibrary{external}
-    % Create the `tikzpics/` folder if it does not exist
-    \ShellEscape{mkdir -p tikzpics}
-    % Only externalise pictures on demand (to avoid messing up with metropolis theme)
-    \tikzset{
-        external/export=false,
-        external/prefix=tikzpics/
-    }
-    \tikzexternalize % chktex 1
+	% TikZ externalisation
+	\usetikzlibrary{external}
+	% Create the `tikzpics/` folder if it does not exist
+	\ShellEscape{mkdir -p tikzpics}
+	% Only externalise pictures on demand (to avoid messing up with metropolis theme)
+	\tikzset{
+		external/export=false,
+		external/prefix=tikzpics/
+	}
+	\tikzexternalize % chktex 1
 
 \usepackage{minted}
 	\usemintedstyle{lovelace}
 	\setminted{autogobble, tabsize=2}
 	\setmintedinline{fontsize=auto}
 
-\usepackage{csquotes}
+\usepackage[
+	english=american,
+	french=guillemets,
+	autostyle=true,
+]{csquotes}
 
 \usepackage[style=authoryear, block=ragged, doi=false, isbn=false]{biblatex}
-    \AtEveryBibitem{
-        \ifentrytype{online}
-        {} {
-            \iffieldequalstr{howpublished}{online}
-            {
-                \clearfield{howpublished}
-            } {
-                \clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}
-            }
-        }
-    }
+	\AtEveryBibitem{
+		\ifentrytype{online}
+		{} {
+			\iffieldequalstr{howpublished}{online}
+			{
+				\clearfield{howpublished}
+			} {
+				\clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}
+			}
+		}
+	}
 
 	\addbibresource{../biblio.bib}
 
-% Compact bibliography style
-\setbeamertemplate{bibliography item}[text]
-
 \AtEveryBibitem{
-    \clearfield{series}
-    \clearfield{pages}
-    \clearlist{publisher}
-    \clearname{editor}
-    \clearlist{location}
+	\clearfield{series}
+	\clearfield{pages}
+	% \clearlist{publisher}
+	\clearname{editor}
+	% \clearlist{location}
 }
 \renewcommand*{\bibfont}{\tiny}
+
 
 \usepackage{hyperxmp}	% XMP metadata
 
@@ -253,31 +287,31 @@
 
 % Schémas de tâches
 \tikzset{
-    >=stealth,
-    hair lines/.style={line width = 0.05pt, lightgray},
-    data/.style={draw, ellipse},
-    program/.style={draw, rectangle},
-    accent on/.style={alt={<#1>{draw=accent, text=accent, thick}{draw}}},
-    true scale/.style={scale=#1, every node/.style={transform shape}},
-    highlight/.style={color=highlight#1}
+	>=stealth,
+	hair lines/.style={line width = 0.05pt, lightgray},
+	data/.style={draw, ellipse},
+	program/.style={draw, rectangle},
+	accent on/.style={alt={<#1>{draw=accent, text=accent, thick}{draw}}},
+	true scale/.style={scale=#1, every node/.append style={scale=#1}},
+	highlight/.style={color=highlight#1}
 }
 
 % Styles des heatmap pour les moyennes
 \pgfplotsset{
-    meanheatmap/.style={
-        colorbar, colormap name=SRON,
-        view={0}{90},
-        samples=100,
-        domain=0:1,
-        min=0, max=1,
-        xlabel={\(P\)},
-        ylabel={\(R\)},
-    }
+	meanheatmap/.style={
+		colorbar, colormap name=SRON,
+		view={0}{90},
+		samples=100,
+		domain=0:1,
+		min=0, max=1,
+		xlabel={\(P\)},
+		ylabel={\(R\)},
+	}
 }
 
 % Commands spécifiques
 \NewDocumentCommand\shorturl{ O{https} O{://} m }{%
-    \href{#1#2#3}{\nolinkurl{#3}}%
+	\href{#1#2#3}{\nolinkurl{#3}}%
 }
 
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}
@@ -305,7 +339,7 @@
 \DeclareMathOperator{\IDF}{IDF}
 
 \ExplSyntaxOn % chktex 1
-    \DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
+	\DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
 \ExplSyntaxOff % chktex 1
 
 
@@ -313,6 +347,17 @@
 \newcommand{\itpause}{%
 	\addtocounter{beamerpauses}{-1}%
 	\pause % chktex 1
+}
+
+% Rectangles aroundt things
+\NewDocumentCommand\hightlightikz{D<>{1-} O{accent} O{} m}{%
+	\alt<#1>{%
+		\tikz[baseline]{
+			\node[alt=<{#2}>{#3}, inner sep=3pt, anchor=text, rectangle, rounded corners=1mm, draw=#2] {#4};
+		}%
+	}{%
+		#4%
+	}%
 }
 
 
@@ -339,195 +384,195 @@
 
 \section{Décomposition en tâches élémentaires}
 \begin{frame}[fragile]{Décomposition en tâches élémentaires}
-    Les tâches \emph{élémentaires} le sont parce qu'on peut y réduire des tâches plus complexes.
+	Les tâches \emph{élémentaires} le sont parce qu'on peut y réduire des tâches plus complexes.
 
-    \only<1>{
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}[true scale=0.75]
-                \node[data] (in) {Entrée};
-                \node[right=1cm of in, text width=10ex, accent on=1] (prog) {Programme};
-                \node[data, right=1cm of prog] (out) {Résultat};
-                \draw[->] (in) -- (prog);
-                \draw[->] (prog) -- (out);
-            \end{tikzpicture}
-            \caption{Schéma général d'une tâche}
-        \end{figure}
-        Le \alert{programme} réalisant la tâche sera ainsi composé de sous-programmes réalisant des tâches élémentaires.
-    }
+	\only<1>{
+		\begin{figure}
+			\tikzset{external/export=true}
+			\begin{tikzpicture}[true scale=0.75]
+				\node[data] (in) {Entrée};
+				\node[right=1cm of in, text width=10ex, accent on=1] (prog) {Programme};
+				\node[data, right=1cm of prog] (out) {Résultat};
+				\draw[->] (in) -- (prog);
+				\draw[->] (prog) -- (out);
+			\end{tikzpicture}
+			\caption{Schéma général d'une tâche}
+		\end{figure}
+		Le \alert{programme} réalisant la tâche sera ainsi composé de sous-programmes réalisant des tâches élémentaires.
+	}
 
-    \only<2>{
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}[true scale=0.75]
-                \node[data] (in1) {Entrée};
-                \node[program, right=1cm of in1, text width=12ex] (prog1) {Programme élémentaire};
-                \node[data, right=0.75cm of prog1] (out1) {Résultat};
-                \draw[->] (in1) -- (prog1);
-                \draw[->] (prog1) -- (out1);
+	\only<2>{
+		\begin{figure}
+			\tikzset{external/export=true}
+			\begin{tikzpicture}[true scale=0.75]
+				\node[data] (in1) {Entrée};
+				\node[program, right=1cm of in1, text width=12ex] (prog1) {Programme élémentaire};
+				\node[data, right=0.75cm of prog1] (out1) {Résultat};
+				\draw[->] (in1) -- (prog1);
+				\draw[->] (prog1) -- (out1);
 
-                \node[program, right=0.75cm of out1, text width=12ex] (prog2) {Programme élémentaire};
-                \node[data, right=1cm of prog2] (out2) {Résultat};
-                \draw[->] (out1) -- (prog2);
-                \draw[->] (prog2) -- (out2);
+				\node[program, right=0.75cm of out1, text width=12ex] (prog2) {Programme élémentaire};
+				\node[data, right=1cm of prog2] (out2) {Résultat};
+				\draw[->] (out1) -- (prog2);
+				\draw[->] (prog2) -- (out2);
 
-                \draw ($(prog1.north west)+(-0.5cm, 1cm)$) rectangle ($(prog2.south east)+(0.5cm, -1cm)$);
-            \end{tikzpicture}
-            \caption{Décomposition d'une tâche complexe}
-        \end{figure}
-    }
+				\draw ($(prog1.north west)+(-0.5cm, 1cm)$) rectangle ($(prog2.south east)+(0.5cm, -1cm)$);
+			\end{tikzpicture}
+			\caption{Décomposition d'une tâche complexe}
+		\end{figure}
+	}
 
-    \only<3>{
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}[true scale=0.75]
-                \node[data] (in1) {Entrée};
-                \node[program, right=2cm of in1, text width=12ex] (prog1) {Programme élémentaire};
-                \node[data, right=1cm of prog1] (out1) {Résultat};
-                \draw[->] (in1) -- (prog1);
-                \draw[->] (prog1) -- (out1);
+	\only<3>{
+		\begin{figure}
+			\tikzset{external/export=true}
+			\begin{tikzpicture}[true scale=0.75]
+				\node[data] (in1) {Entrée};
+				\node[program, right=2cm of in1, text width=12ex] (prog1) {Programme élémentaire};
+				\node[data, right=1cm of prog1] (out1) {Résultat};
+				\draw[->] (in1) -- (prog1);
+				\draw[->] (prog1) -- (out1);
 
-                \node[program, above=1cm of out1, text width=12ex] (prog2) {Programme élémentaire};
-                \node[data, right=2cm of prog2] (out2) {Résultat};
-                \draw[->] (out1) -- (prog2);
-                \draw[->] (prog2) -- (out2);
-                \draw[->] (in1) -- ($(prog1.west)-(0.75cm, 0)$) |- (prog2.west);
+				\node[program, above=1cm of out1, text width=12ex] (prog2) {Programme élémentaire};
+				\node[data, right=2cm of prog2] (out2) {Résultat};
+				\draw[->] (out1) -- (prog2);
+				\draw[->] (prog2) -- (out2);
+				\draw[->] (in1) -- ($(prog1.west)-(0.75cm, 0)$) |- (prog2.west);
 
-                \draw ($(prog1.south west)+(-1cm, -1cm)$) rectangle ($(prog2.north east)+(1cm, 1cm)$);
-            \end{tikzpicture}
-            \caption{Décomposition d'une tâche complexe}
-        \end{figure}
-    }
+				\draw ($(prog1.south west)+(-1cm, -1cm)$) rectangle ($(prog2.north east)+(1cm, 1cm)$);
+			\end{tikzpicture}
+			\caption{Décomposition d'une tâche complexe}
+		\end{figure}
+	}
 \end{frame}
 
 \begin{frame}{Exemple : les systèmes de Question/Réponse}
-    Les systèmes de question/réponse fournissent des réponses factuelles à des requêtes données en langage naturel
+	Les systèmes de question/réponse fournissent des réponses factuelles à des requêtes données en langage naturel
 
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}[true scale=0.75]
-            \node[data, text width=15ex] (in) {« Quelle est la vitesse d'une hirondelle ? »};
-            \node[program, right=1cm of in, text width=15ex] (prog) {Programme de Q/R};
-            \node[data, right=1cm of prog] (out) {« \SI{60}{km/h} »};
-            \node[data, below=.6cm of prog] (res) {Corpus};
-            \draw[->] (in) -- (prog);
-            \draw[->] (prog) -- (out);
-            \draw[->] (res) -- (prog);
-        \end{tikzpicture}
-        \caption{Structure d'un système de Q/R}
-    \end{figure}
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}[true scale=0.75]
+			\node[data, text width=15ex] (in) {« Quelle est la vitesse d'une hirondelle ? »};
+			\node[program, right=1cm of in, text width=15ex] (prog) {Programme de Q/R};
+			\node[data, right=1cm of prog] (out) {« \SI{60}{km/h} »};
+			\node[data, below=.6cm of prog] (res) {Corpus};
+			\draw[->] (in) -- (prog);
+			\draw[->] (prog) -- (out);
+			\draw[->] (res) -- (prog);
+		\end{tikzpicture}
+		\caption{Structure d'un système de Q/R}
+	\end{figure}
 \end{frame}
 
 \begin{frame}[fragile]{Q/R via RI}
-    % TODO: add progressive result feedback on the “Quelle est la vitesse d'une hirondelle sample question”
-    % TODO: add arrow colours
-    La première reformulation possible utilise un système de \alert<1>{RI}
+	% TODO: add progressive result feedback on the “Quelle est la vitesse d'une hirondelle sample question”
+	% TODO: add arrow colours
+	La première reformulation possible utilise un système de \alert<1>{RI}
 
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}[true scale=0.55]
-            \node[data, alt=<2>{highlight=6}{}] (in) {Question};
-            \node[coordinate, right=1cm of in] (split) {};
-            \fill[alt=<2>{highlight=6}{}] (split) circle[radius=2pt];
-            \draw[alt=<2>{highlight=6, thick}{}] (in) -- (split);
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}[true scale=0.55]
+			\node[data, alt=<2>{highlight=6}{}] (in) {Question};
+			\node[coordinate, right=1cm of in] (split) {};
+			\fill[alt=<2>{highlight=6}{}] (split) circle[radius=2pt];
+			\draw[alt=<2>{highlight=6, thick}{}] (in) -- (split);
 
-            \node[program, above right=0.5cm and 1cm of split, alt=<2>{highlight=a}{}] (term) {Terminologie};
-            \node[data, right=1cm of term, alt=<3>{highlight=a}{}] (words) {Mots};
-            \node[program, right=1cm of words, accent on=1, alt=<3>{highlight=3}{}] (ri) {RI};
-            \node[data, right=1cm of ri, alt=<3-4>{highlight=8}{}] (docs) {Docs};
-            \node[program, right=1cm of docs, alt=<4>{highlight=3}{}] (ei) {EI};
-            \node[coordinate, below right=0.5cm and 1cm of ei] (gather) {};
-            \node[data, right=1cm of gather, alt=<4>{highlight=a}{}] (answer) {Réponse};
-            \draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (term);
-            \draw[->] (term) -- (words);
-            \draw[->] (words) -- (ri);
-            \draw[->] (ri) -- (docs);
-            \draw[->] (docs) -- (ei);
-            \draw[->] (ei) -| (gather) -- (answer);
+			\node[program, above right=0.5cm and 1cm of split, alt=<2>{highlight=a}{}] (term) {Terminologie};
+			\node[data, right=1cm of term, alt=<3>{highlight=a}{}] (words) {Mots};
+			\node[program, right=1cm of words, accent on=1, alt=<3>{highlight=3}{}] (ri) {RI};
+			\node[data, right=1cm of ri, alt=<3-4>{highlight=8}{}] (docs) {Docs};
+			\node[program, right=1cm of docs, alt=<4>{highlight=3}{}] (ei) {EI};
+			\node[coordinate, below right=0.5cm and 1cm of ei] (gather) {};
+			\node[data, right=1cm of gather, alt=<4>{highlight=a}{}] (answer) {Réponse};
+			\draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (term);
+			\draw[->] (term) -- (words);
+			\draw[->] (words) -- (ri);
+			\draw[->] (ri) -- (docs);
+			\draw[->] (docs) -- (ei);
+			\draw[->] (ei) -| (gather) -- (answer);
 
-            \node[program, below right=0.5cm and 1cm of split, alt=<2>{highlight=3}{}] (classif) {Classifieur};
-            \node[data, below=1cm of ei, alt=<4>{highlight=2}{}] (field) {Champs};
-            \draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (classif);
-            \draw[->] (classif) -- (field);
-            \draw[->] (field) -- (ei);
+			\node[program, below right=0.5cm and 1cm of split, alt=<2>{highlight=3}{}] (classif) {Classifieur};
+			\node[data, below=1cm of ei, alt=<4>{highlight=2}{}] (field) {Champs};
+			\draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (classif);
+			\draw[->] (classif) -- (field);
+			\draw[->] (field) -- (ei);
 
-            \draw ($(split)+(-0.5cm, 2cm)$) rectangle ($(field.south east)+(1cm, -0.5cm)$);
+			\draw ($(split)+(-0.5cm, 2cm)$) rectangle ($(field.south east)+(1cm, -0.5cm)$);
 
-            \node[data, below=3cm of ri, alt=<3>{highlight=2}{}] (corpus) {Corpus};
-            \draw[->] (corpus) -- (ri);
-        \end{tikzpicture}
-        \caption{Système de Question/Réponse via Recherche d'Informations}
-    \end{figure}
-    \only<2->{
-        \begin{itemize}
-            \only<2>{
-                \item \textcolor{highlight6}{La question en langage naturel} est envoyée en parallèle à \textcolor{highlighta}{un extracteur de mots-clés} et à un \textcolor{highlight3}{classifieur} qui détermine le type de la réponse attendue
-            }
-            \only<3>{
-                \item \textcolor{highlighta}{Les mots-clés extraits} sont utilisés comme requête pour \textcolor{highlight3}{le programme de RI} qui sélectionne dans \textcolor{highlight2}{le corpus} \textcolor{highlight8}{les documents pertinents} pour répondre à la question
-            }
-            \only<4>{
-                \item<4> \textcolor{highlight3}{Un programme d'EI} extrait des \textcolor{highlight8}{documents pertinents} le contenu des \textcolor{highlight2}{champs}, qui constituent la \textcolor{highlighta}{réponse} à la question posée
-            }
-        \end{itemize}
-    }
+			\node[data, below=3cm of ri, alt=<3>{highlight=2}{}] (corpus) {Corpus};
+			\draw[->] (corpus) -- (ri);
+		\end{tikzpicture}
+		\caption{Système de Question/Réponse via Recherche d'Informations}
+	\end{figure}
+	\only<2->{
+		\begin{itemize}
+			\only<2>{
+				\item \textcolor{highlight6}{La question en langage naturel} est envoyée en parallèle à \textcolor{highlighta}{un extracteur de mots-clés} et à un \textcolor{highlight3}{classifieur} qui détermine le type de la réponse attendue
+			}
+			\only<3>{
+				\item \textcolor{highlighta}{Les mots-clés extraits} sont utilisés comme requête pour \textcolor{highlight3}{le programme de RI} qui sélectionne dans \textcolor{highlight2}{le corpus} \textcolor{highlight8}{les documents pertinents} pour répondre à la question
+			}
+			\only<4>{
+				\item<4> \textcolor{highlight3}{Un programme d'EI} extrait des \textcolor{highlight8}{documents pertinents} le contenu des \textcolor{highlight2}{champs}, qui constituent la \textcolor{highlighta}{réponse} à la question posée
+			}
+		\end{itemize}
+	}
 \end{frame}
 
 \begin{frame}<1>[fragile]{Q/R via base de connaissances}
-    % TODO: add further overlay
-    % TODO: add progressive result feedback on the “Quelle est la vitesse d'une hirondelle sample question”
-    % TODO: add arrow colours
-    Une autre stratégie consiste à reformuler la question en requête dans une \alert<1>{base de connaissances structurée}
+	% TODO: add further overlay
+	% TODO: add progressive result feedback on the “Quelle est la vitesse d'une hirondelle sample question”
+	% TODO: add arrow colours
+	Une autre stratégie consiste à reformuler la question en requête dans une \alert<1>{base de connaissances structurée}
 
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}[true scale=0.6]
-            \node[data, alt=<2>{highlight=6}{}] (in) {Question};
-            \node[coordinate, right=1cm of in] (split) {};
-            \draw[alt=<2>{highlight=6, thick}{}] (in) -- (split);
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}[true scale=0.6]
+			\node[data, alt=<2>{highlight=6}{}] (in) {Question};
+			\node[coordinate, right=1cm of in] (split) {};
+			\draw[alt=<2>{highlight=6, thick}{}] (in) -- (split);
 
-            \node[program, above right=0.5cm and 1cm of split, alt=<2>{highlight=a}{}] (trad) {Traduction};
-            \node[data, right=1cm of trad, alt=<2-3>{highlight=3}{}] (req) {Requête};
-            \node[program, right=1cm of req, alt=<3>{highlight=3}{}] (int) {Interrogation};
-            \node[coordinate, below right=0.5cm and 1cm of int] (gather) {};
-            \node[data, right=1cm of gather, alt=<4>{highlight=a}{}] (answer) {Réponse};
-            \draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (trad);
-            \draw[->] (trad) -- (req);
-            \draw[->] (req) -- (int);
-            \draw[->] (int) -| (gather) -- (answer);
+			\node[program, above right=0.5cm and 1cm of split, alt=<2>{highlight=a}{}] (trad) {Traduction};
+			\node[data, right=1cm of trad, alt=<2-3>{highlight=3}{}] (req) {Requête};
+			\node[program, right=1cm of req, alt=<3>{highlight=3}{}] (int) {Interrogation};
+			\node[coordinate, below right=0.5cm and 1cm of int] (gather) {};
+			\node[data, right=1cm of gather, alt=<4>{highlight=a}{}] (answer) {Réponse};
+			\draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (trad);
+			\draw[->] (trad) -- (req);
+			\draw[->] (req) -- (int);
+			\draw[->] (int) -| (gather) -- (answer);
 
-            \node[program, below=1cm of req, alt=<2>{highlight=3}{}] (ei) {EI};
-            \node[data, accent on=1, alt=<4>{highlight=2}{}] at (int|-ei) (base) {Base};
-            \draw[->] (ei) -- (base);
-            \draw[->] (base) -- (int);
+			\node[program, below=1cm of req, alt=<2>{highlight=3}{}] (ei) {EI};
+			\node[data, accent on=1, alt=<4>{highlight=2}{}] at (int|-ei) (base) {Base};
+			\draw[->] (ei) -- (base);
+			\draw[->] (base) -- (int);
 
-            \draw ($(split|-trad.north)+(-0.5cm,0.5cm)$) rectangle ($(int.east|-ei.south)+(1.25cm, -0.5cm)$);
+			\draw ($(split|-trad.north)+(-0.5cm,0.5cm)$) rectangle ($(int.east|-ei.south)+(1.25cm, -0.5cm)$);
 
-            \node[data, below=1cm of ei, alt=<3>{highlight=2}{}] (corpus) {Corpus};
-            \draw[->] (corpus.west) -- ++ (-0.25cm, 0) |- (ei.west);
-        \end{tikzpicture}
-        \caption{Système de Question/Réponse utilisant une base de connaissances}
-    \end{figure}
-    \only<2->{
-        \begin{itemize}
-            \item<2|only@2> \textcolor{highlight6}{La question en langue naturelle} est \textcolor{highlighta}{traduite} en une \textcolor{highlight3}{requête} dans un langage formel (SQL, SPARQL…)
-        \end{itemize}
-    }
+			\node[data, below=1cm of ei, alt=<3>{highlight=2}{}] (corpus) {Corpus};
+			\draw[->] (corpus.west) -- ++ (-0.25cm, 0) |- (ei.west);
+		\end{tikzpicture}
+		\caption{Système de Question/Réponse utilisant une base de connaissances}
+	\end{figure}
+	\only<2->{
+		\begin{itemize}
+			\item<2|only@2> \textcolor{highlight6}{La question en langue naturelle} est \textcolor{highlighta}{traduite} en une \textcolor{highlight3}{requête} dans un langage formel (SQL, SPARQL…)
+		\end{itemize}
+	}
 \end{frame}
 
 % TODO: add links and refs for the two deompositions
 
 \begin{frame}{Conclusion}
-    On a donc vu qu'on pouvait
-    \begin{itemize}
-        \item Réaliser des tâches complexes en se ramenant des tâches élémentaires
-        \item Reformuler les tâches élémentaires en terme de classification
-    \end{itemize}
+	On a donc vu qu'on pouvait
+	\begin{itemize}
+		\item Réaliser des tâches complexes en se ramenant des tâches élémentaires
+		\item Reformuler les tâches élémentaires en terme de classification
+	\end{itemize}
 
-    En pratique, on peut donc presque toujours ramener n'importe quelle tâche de fouille de texte à de la classification, on parlera donc pour celle-ci de \alert{tâche pivot}.
-    \begin{itemize}
-        \item[→] Attention cependant à ne pas faire cuire les pâtes comme un mathématicien…
-    \end{itemize}
+	En pratique, on peut donc presque toujours ramener n'importe quelle tâche de fouille de texte à de la classification, on parlera donc pour celle-ci de \alert{tâche pivot}.
+	\begin{itemize}
+		\item[→] Attention cependant à ne pas faire cuire les pâtes comme un mathématicien…
+	\end{itemize}
 \end{frame}
 
 % ██████  ███████ ██████  ██████  ███████ ███████
@@ -540,12 +585,12 @@
 \section{Représentation des données}
 
 \begin{frame}{Représentation des données}
-    Étant donné que
-    \begin{itemize}
-        \item La classification joue en fouille de texte le rôle de tâche pivot
-        \item On privilégie pour la classification des données au format tabulaire
-    \end{itemize}
-    Il est naturel de vouloir mettre les données à traiter sous forme tabulaire.
+	Étant donné que
+	\begin{itemize}
+		\item La classification joue en fouille de texte le rôle de tâche pivot
+		\item On privilégie pour la classification des données au format tabulaire
+	\end{itemize}
+	Il est naturel de vouloir mettre les données à traiter sous forme tabulaire.
 \end{frame}
 
 % ███████ ████████  █████  ████████
@@ -556,95 +601,95 @@
 
 \subsection{Spécificités statistiques}
 \begin{frame}{Loi de Zipf}
-    Dans \textit{Ulysse} de James Joyce on\textsuperscript{1} observe\textsuperscript{2} que
-    \begin{itemize}
-        \item Le mot le plus courant apparaît \num{8000} fois
-        \item Le dixième mot le plus courant apparaît \num{800} fois
-        \item Le centième mot le plus courant apparaît \num{80} fois
-        \item Le millième mot le plus courant apparaît \num{8} fois
-    \end{itemize}
+	Dans \textit{Ulysse} de James Joyce on\textsuperscript{1} observe\textsuperscript{2} que
+	\begin{itemize}
+		\item Le mot le plus courant apparaît \num{8000} fois
+		\item Le dixième mot le plus courant apparaît \num{800} fois
+		\item Le centième mot le plus courant apparaît \num{80} fois
+		\item Le millième mot le plus courant apparaît \num{8} fois
+	\end{itemize}
 
-    \begin{block}{Hypothèse (Loi de Zipf)}
-        La fréquence $f(n)$ du $n$-ième mot le plus fréquent d'un corpus vérifie
-        \begin{equation}
-            f(n) = \frac{K}{n}
-        \end{equation}
-        où $K$ est une constante ne dépendant que du corpus.
-    \end{block}
-    \vskip0pt plus 1fill
-    {\tiny 1. Georges Zipf (1902-1950) dans \parencite{zipf1949HumanBehaviorPrinciple}\\2. d'après la légende}
+	\begin{block}{Hypothèse (Loi de Zipf)}
+		La fréquence $f(n)$ du $n$-ième mot le plus fréquent d'un corpus vérifie
+		\begin{equation}
+			f(n) = \frac{K}{n}
+		\end{equation}
+		où $K$ est une constante ne dépendant que du corpus.
+	\end{block}
+	\vskip0pt plus 1fill
+	{\tiny 1. Georges Zipf (1902-1950) dans \parencite{zipf1949HumanBehaviorPrinciple}\\2. d'après la légende}
 \end{frame}
 
 % TODO: add Ulysse répartition
 % TODO: add visualisation for fat tail
 \begin{frame}{Loi de Zipf : observations}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}
-            \begin{axis}[
-                xmin=0, ymin=0, xmax=20,
-                width=0.9\textwidth,
-                height=0.8\textheight,
-                xlabel={Rang},
-                ylabel={Fréquence d'apparition},
-                title={Loi de Zipf : $y=\frac{K}{x}$},
-                scaled ticks=false,
-                ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}
-            ]
-                \addplot[highlighta, domain=1:20, samples=1001] {max(8000/x, 1)};
-            \end{axis}
-        \end{tikzpicture}
-        \caption{Courbe d'une loi de Zipf ($K=\num{8000}$)}
-    \end{figure}
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}
+			\begin{axis}[
+				xmin=0, ymin=0, xmax=20,
+				width=0.9\textwidth,
+				height=0.8\textheight,
+				xlabel={Rang},
+				ylabel={Fréquence d'apparition},
+				title={Loi de Zipf : $y=\frac{K}{x}$},
+				scaled ticks=false,
+				ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}
+			]
+				\addplot[highlighta, domain=1:20, samples=1001] {max(8000/x, 1)};
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Courbe d'une loi de Zipf ($K=\num{8000}$)}
+	\end{figure}
 \end{frame}
 
 % TODO: add cites
 \begin{frame}{Loi de Zipf : observations}
-    \begin{itemize}
-        \item La loi de Zipf se vérifie plutôt bien expérimentalement
-        \item En pratique, les répartitions observées sont de la forme $f(n)=\frac{k}{x^s}$ avec $s$ proche de $1$
-        \item Ce type de distribution, dites \emph{loi de puissance} est omniprésent en statistiques (en en sciences en général)
-        \item Elles font parties des distributions dites \emph{à longue traîne} (\textit{fat tail})
-        \item Une autre approche due à Mandelbrot présente une généralisation de la loi de Zipf comme le résultat de contraintes d'optimalité d'utilisation d'un canal de communication.
-    \end{itemize}
+	\begin{itemize}
+		\item La loi de Zipf se vérifie plutôt bien expérimentalement
+		\item En pratique, les répartitions observées sont de la forme $f(n)=\frac{k}{x^s}$ avec $s$ proche de $1$
+		\item Ce type de distribution, dites \emph{loi de puissance} est omniprésent en statistiques (en en sciences en général)
+		\item Elles font parties des distributions dites \emph{à longue traîne} (\textit{fat tail})
+		\item Une autre approche due à Mandelbrot présente une généralisation de la loi de Zipf comme le résultat de contraintes d'optimalité d'utilisation d'un canal de communication.
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{Loi de Heaps}
-    Si la loi de Zipf donne une estimation de la répartition du vocabulaire d'un corpus, la loi de Heaps est une estimation de sa diversité
-    \begin{block}{Hypothèse : loi de Heaps}
-        Le nombre $V$ de mots distincts dans sous-corpus de taille $M$ vérifie
-        \begin{equation}
-            V = K×M^β
-        \end{equation}
-        Où $K$ et $β$ sont des paramètres dépendant du corpus
-    \end{block}
-    \begin{itemize}
-        \item[→] Ce $K$ n'est pas le même que pour la loi de Zipf, et $β$ n'a aucun lien avec la pondération de $F_β$
-        \item[→] On parle souvent de relation \emph{types-tokens}
-        \item[→] Pour l'anglais, on a $K∈[30, 100]$ et $β≈0.5$
-        \item[→] Cette loi peut-elle être valable quelle que soit la taille de la collection ?
-    \end{itemize}
+	Si la loi de Zipf donne une estimation de la répartition du vocabulaire d'un corpus, la loi de Heaps est une estimation de sa diversité
+	\begin{block}{Hypothèse : loi de Heaps}
+		Le nombre $V$ de mots distincts dans sous-corpus de taille $M$ vérifie
+		\begin{equation}
+			V = K×M^β
+		\end{equation}
+		Où $K$ et $β$ sont des paramètres dépendant du corpus
+	\end{block}
+	\begin{itemize}
+		\item[→] Ce $K$ n'est pas le même que pour la loi de Zipf, et $β$ n'a aucun lien avec la pondération de $F_β$
+		\item[→] On parle souvent de relation \emph{types-tokens}
+		\item[→] Pour l'anglais, on a $K∈[30, 100]$ et $β≈0.5$
+		\item[→] Cette loi peut-elle être valable quelle que soit la taille de la collection ?
+	\end{itemize}
 \end{frame}
 
 \begin{frame}[label=heapslawgraph]{Loi de Heaps}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}
-            \begin{axis}[
-                xmin=0, xmax=800000, ymin=0,
-                width=0.9\textwidth,
-                height=0.8\textheight,
-                xlabel={Taille de la collection},
-                ylabel={Taille du vocabulaire},
-                title={Loi de Heaps : $y=K×x^β$},
-                scaled ticks=false,
-                ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}
-            ]
-                \addplot[highlighta, domain=0:800000, samples=1001] {40*x^0.5};
-            \end{axis}
-        \end{tikzpicture}
-        \caption{Courbe d'une loi de Heaps}
-    \end{figure}
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}
+			\begin{axis}[
+				xmin=0, xmax=800000, ymin=0,
+				width=0.9\textwidth,
+				height=0.8\textheight,
+				xlabel={Taille de la collection},
+				ylabel={Taille du vocabulaire},
+				title={Loi de Heaps : $y=K×x^β$},
+				scaled ticks=false,
+				ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}
+			]
+				\addplot[highlighta, domain=0:800000, samples=1001] {40*x^0.5};
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Courbe d'une loi de Heaps}
+	\end{figure}
 \end{frame}
 %
 % ███████ ███████  █████  ████████ ███████
@@ -656,57 +701,57 @@
 
 \subsection{Choix des attributs}
 \begin{frame}{Choix des attributs}
-    Pour pouvoir faire de la classification, il faut pouvoir mettre les données au bon format
-    \begin{description}[<+->][*]
-        \item[Objectif] Transformer les documents à traiter en fichiers tabulaires pour les passer à un classifieur
-        \item[Problème] Quel choix d'attributs (colonnes) ?
-        \item[Solution] Ça dépend des cas !
-            \begin{itemize}
-                \item[→] Mais on peut identifier plusieurs stratégies élémentaires (air connu)
-            \end{itemize}
-    \end{description}
+	Pour pouvoir faire de la classification, il faut pouvoir mettre les données au bon format
+	\begin{description}[<+->][*]
+		\item[Objectif] Transformer les documents à traiter en fichiers tabulaires pour les passer à un classifieur
+		\item[Problème] Quel choix d'attributs (colonnes) ?
+		\item[Solution] Ça dépend des cas !
+			\begin{itemize}
+				\item[→] Mais on peut identifier plusieurs stratégies élémentaires (air connu)
+			\end{itemize}
+	\end{description}
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Caractères}
-    Puisqu'un texte brut est une séquence de caractères : utilisons comme attribut la fréquence de chaque caractère
+	Puisqu'un texte brut est une séquence de caractères : utilisons comme attribut la fréquence de chaque caractère
 
-    \begin{figure}
-        \begin{tabu}{*{5}{>{\ttfamily\small}X[m, c]}}
-            Texte   & a & b & c & …\\
-            Ulysse  & 90578 & 17848 & 27902 & …
-        \end{tabu}
-    \end{figure}
+	\begin{figure}
+		\begin{tabu}{*{5}{>{\ttfamily\small}X[m, c]}}
+			Texte   & a & b & c & …\\
+			Ulysse  & 90578 & 17848 & 27902 & …
+		\end{tabu}
+	\end{figure}
 
-    \begin{itemize}
-        \item Combien d'attributs par texte ?
-        \item Est-ce suffisant ?
-            \begin{itemize}
-                \item Suffisant pour quoi ?
-            \end{itemize}
-    \end{itemize}
+	\begin{itemize}
+		\item Combien d'attributs par texte ?
+		\item Est-ce suffisant ?
+			\begin{itemize}
+				\item Suffisant pour quoi ?
+			\end{itemize}
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{$n$-grammes de caractères}
-    % TODO: add corrections
-    % TODO: add sources
-    % TODO: add examples
-    Une stratégie un peu plus raffinée est de compter non pas les caractères, mais les séquences de caractères de longueur $n$.
+	% TODO: add corrections
+	% TODO: add sources
+	% TODO: add examples
+	Une stratégie un peu plus raffinée est de compter non pas les caractères, mais les séquences de caractères de longueur $n$.
 
-    Exemple : « Le petit chat est content »
+	Exemple : « Le petit chat est content »
 
-    \begin{itemize}
-        \item Quels sont les unigrammes ?
-        \item Quels sont les bigrammes ?
-        \item Quels sont les trigrammes ?
-        \item En général, pour un alphabet à $k$ caractères, combien y a-t-il de $n$-grammes ?
-    \end{itemize}
+	\begin{itemize}
+		\item Quels sont les unigrammes ?
+		\item Quels sont les bigrammes ?
+		\item Quels sont les trigrammes ?
+		\item En général, pour un alphabet à $k$ caractères, combien y a-t-il de $n$-grammes ?
+	\end{itemize}
 
-    En pratique, les trigrammes peuvent suffire pour certaines applications !
-    \begin{itemize}
-        \item Détection du plagiat
-    \end{itemize}
+	En pratique, les trigrammes peuvent suffire pour certaines applications !
+	\begin{itemize}
+		\item Détection du plagiat
+	\end{itemize}
 
-    Pour plus de richesse, on peut aussi utiliser des \emph{skip-grams}
+	Pour plus de richesse, on peut aussi utiliser des \emph{skip-grams}
 \end{frame}
 
 
@@ -721,27 +766,27 @@
 \section{Annexes}
 \pdfbookmark[2]{Remerciements}{acknowledgements}
 \begin{frame}{Remerciements}
-    Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017IntroductionFouilleTextes} \parencite{tellier2017IntroductionFouilleTextes} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
+	Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017IntroductionFouilleTextes} \parencite{tellier2017IntroductionFouilleTextes} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
 \end{frame}
 
 \pdfbookmark[2]{Références}{references}
 \begin{frame}[allowframebreaks]{References}
-    \printbibliography[heading=none]
+	\printbibliography[heading=none]
 \end{frame}
 
 \pdfbookmark[2]{Licence}{licence}
 \begin{frame}{Licence}
-    \begin{center}
-        {\huge \ccby}
-        \vfill
-        This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
+	\begin{center}
+		{\huge \ccby}
+		\vfill
+		This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
 
-        Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
-        \vfill
-        © 2019, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
+		Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
+		\vfill
+		© 2019, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
 
-        \shorturl[http]{lattice.cnrs.fr/Grobol-Loic}
-    \end{center}
+		\shorturl[http]{lattice.cnrs.fr/Grobol-Loic}
+	\end{center}
 \end{frame}
 
 \end{document}

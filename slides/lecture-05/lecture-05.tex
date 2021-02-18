@@ -1,4 +1,5 @@
-%% Copyright © 2019, Loïc Grobol <loic.grobol@gmail.com>
+% LTeX: language=fr
+% Copyright © 2019, Loïc Grobol <loic.grobol@gmail.com>
 % This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (https://creativecommons.org/licenses/by/4.0/)
 
 \RequirePackage{xparse}
@@ -10,20 +11,20 @@
 \newcommand\mymail{loic.grobol@gmail.com}
 \newcommand\titlepagetitle{\pdftitle}
 \newcommand\titlepagesubtitle{Cours 5 : Représentation des données}
-\newcommand\docdate{2020-02-06}  % chktex 8
+\newcommand\docdate{2021-02-18}  % chktex 8
 \newcommand\conference{M1 Plurital}
 
 % \RequirePackage{hyperxmp}  % Results in a complex failure with beamer + tikzexternal (2020-01-17)
 \documentclass[xcolor={svgnames}, french]{beamer}
 \hypersetup{
-    pdftitle={\pdftitle},
-    pdfauthor={\myname},
-    % pdfcontactemail={\mymail},  % hyperxmpAnnotation et extraction d'informations
-    breaklinks,
-    hypertexnames=true,
-    pdfdisplaydoctitle,
-    pdflang={fr},
-    % keeppdfinfo,  % hyperxmp
+	pdftitle={\pdftitle},
+	pdfauthor={\myname},
+	% pdfcontactemail={\mymail},  % hyperxmp
+	breaklinks,
+	hypertexnames=true,
+	pdfdisplaydoctitle,
+	pdflang={fr},
+	% keeppdfinfo,  % hyperxmp
 }
 
 % Colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf) v3.1
@@ -52,7 +53,7 @@
 
 \usetheme[
 	sectionpage=progressbar,
-    subsectionpage=progressbar,
+	subsectionpage=progressbar,
 	progressbar=frametitle,
 ]{metropolis}
 	\colorlet{accent}{sronbrightgreen}
@@ -73,9 +74,24 @@
 
 
 % Use non-standard fonts
+\usepackage{fontspec}
 \usefonttheme{professionalfonts}
-    \setsansfont[BoldFont={* Semibold}]{Fira Sans}
+
+\directlua{luaotfload.add_fallback
+   ("emojifallback",
+	{
+	  "NotoColorEmoji:mode=harf;"
+	}
+   )}
+
+\setsansfont{Fira Sans}[
+	BoldFont={* Semibold},
+	RawFeature={fallback=emojifallback},
+]
 \setmonofont[Scale=0.9]{Fira Mono}
+\newfontfamily\fallbackfont{Deja Vu Sans}
+\newfontfamily\emojifont{Noto Color Emoji}[Renderer=HarfBuzz]
+\frenchspacing
 
 % Fix missing glyphs in Fira by delegating to polyglossia/babel
 \usepackage{newunicodechar}
@@ -87,11 +103,14 @@
 % \setbeameroption{show notes on second screen=left}
 
 
-\usepackage[french, english]{babel}
+\usepackage{polyglossia}
+	\setmainlanguage{french}
+	\setotherlanguage[variant=british]{english}
+
 \usepackage{amsfonts,amssymb}
 \usepackage{amsmath,amsthm}
 \usepackage{mathtools}	% AMS Maths service pack
-    % Pour des lignes d'équation numérotées entre crochets
+	% Pour des lignes d'équation numérotées entre crochets
 	\newtagform{brackets}{[}{]} % chktex 9
 	\mathtoolsset{showonlyrefs, showmanualtags, mathic}	% affiche les tags manuels (\tag et \tag*) et corrige le kerning des maths inline dans un bloc italique voir la doc de mathtools
 	\usetagform{brackets}	% Utilise le style de tags défini plus haut
@@ -106,132 +125,147 @@
 \usepackage{tabu}
 \usepackage{booktabs}
 \usepackage{siunitx}
+	\sisetup{
+		binary-units=true,
+		detect-all,
+		detect-inline-weight=math,
+		group-separator=\text{\,},
+	}
+	\DeclareSIUnit{\quantity}{\relax}
+	\DeclareSIUnit{\words}{words}
+	\DeclareSIUnit{\sentences}{sentences}
+	% Needed for italics and bold numbers in siunitx S-aligned columns
+	\robustify\itshape
+	\robustify\bfseries
 \usepackage{multicol}
 \usepackage{ccicons}
 \usepackage{bookmark}
 \usepackage{caption}
-    \captionsetup{skip=1ex}
+	\captionsetup{skip=1ex, labelformat=empty}
 \usepackage[iso]{datetime}
+\usepackage{lua-ul}
 
 \usepackage{tikz}
 	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}} % chktex 36
-    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {\(\displaystyle #3\)};}} % chktex 36
+	\NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {\(\displaystyle #3\)};}} % chktex 36
 	\tikzset{
 		alt/.code args={<#1>#2#3}{%
 		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
 		},
-        invisible/.style={opacity=0, fill opacity=0},
+		invisible/.style={opacity=0, fill opacity=0},
 		visible on/.style={alt={<#1>{}{invisible}}}
 	}
-    \usepackage{forest}
-    \usepackage{tkz-graph}
-    \usepackage[beamer, markings]{hf-tikz}
-    \usepackage{tikz-3dplot}
-    \usepackage{pgfplots}
-        % Due to pgfplots meddling with pgfkeys, we have to redefine alt here.
-        \pgfplotsset{
-    		alt/.code args={<#1>#2#3}{%
-    		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
-    		},
-    	}
-        \pgfplotsset{compat=1.16}
-        \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}} % chktex 36
-    \usetikzlibrary{matrix}
-    \usetikzlibrary{shapes, shapes.geometric}
-    \usetikzlibrary{decorations.pathreplacing}
+	\usepackage{forest}
+	\usepackage{tkz-graph}
+	\usepackage[beamer, markings]{hf-tikz}
+	\usepackage{tikz-3dplot}
+	\usepackage{pgfplots}
+		% Due to pgfplots meddling with pgfkeys, we have to redefine alt here.
+		\pgfplotsset{
+			alt/.code args={<#1>#2#3}{%
+			\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+			},
+		}
+		\pgfplotsset{compat=1.16}
+		\pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}} % chktex 36
+	\usetikzlibrary{matrix}
+	\usetikzlibrary{shapes, shapes.geometric}
+	\usetikzlibrary{decorations.pathreplacing}
 	\usetikzlibrary{positioning, calc, intersections}
-    \usetikzlibrary{fit}
-    \usetikzlibrary{backgrounds}
+	\usetikzlibrary{fit}
+	\usetikzlibrary{backgrounds}
 
-    % Do evil things with soft path
-    \makeatletter
-        \def\@appendnamedsoftpath#1{% chktex 21
-            \pgfsyssoftpath@getcurrentpath\@temppatha % chktex 21 chktex 1
-            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 41 chktex 21
-            \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb} % chktex 41 chktex 21
-            \pgfsyssoftpath@setcurrentpath\@temppatha % chktex 21 chktex 1
-        }
-        \def\@appendnamedpathforactions#1{% chktex 21
-            \pgfsyssoftpath@getcurrentpath\@temppatha % chktex 1 chktex 21
-            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
-            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb} % chktex 21 chktex 41
+	% Do evil things with soft path
+	\makeatletter
+		\def\@appendnamedsoftpath#1{% chktex 21
+			\pgfsyssoftpath@getcurrentpath\@temppatha % chktex 21 chktex 1
+			\expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 41 chktex 21
+			\expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb} % chktex 41 chktex 21
+			\pgfsyssoftpath@setcurrentpath\@temppatha % chktex 21 chktex 1
+		}
+		\def\@appendnamedpathforactions#1{% chktex 21
+			\pgfsyssoftpath@getcurrentpath\@temppatha % chktex 1 chktex 21
+			\expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
+			\expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb} % chktex 21 chktex 41
 
-            \let\tikz@actions@path\@temppatha  % chktex 21 chktex 1
-        }
+			\let\tikz@actions@path\@temppatha  % chktex 21 chktex 1
+		}
 
-        \tikzset{
-            use path for main/.code={%
-                \tikz@addmode{%
-                    \expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
-                }%
-            },
-            append path for main/.code={%
-                \tikz@addmode{%
-                    \@appendnamedsoftpath{#1}%
-                }%
-            },
-            use path for actions/.code={%
-                \expandafter\def\expandafter\tikz@preactions\expandafter {\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}% chktex 21 chktex 41
-            },
-            append path for actions/.code={%
-                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions % chktex 21 chktex 41 chktex 1
-                \@appendnamedpathforactions{#1}}%
-            },
-            use path/.style={%
-                use path for main=#1,
-                use path for actions=#1,
-            },
-            append path/.style={%
-                append path for main=#1,
-                append path for actions=#1
-            }
-        }
-    \makeatother
+		\tikzset{
+			use path for main/.code={%
+				\tikz@addmode{%
+					\expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
+				}%
+			},
+			append path for main/.code={%
+				\tikz@addmode{%
+					\@appendnamedsoftpath{#1}%
+				}%
+			},
+			use path for actions/.code={%
+				\expandafter\def\expandafter\tikz@preactions\expandafter {\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}% chktex 21 chktex 41
+			},
+			append path for actions/.code={%
+				\expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions % chktex 21 chktex 41 chktex 1
+				\@appendnamedpathforactions{#1}}%
+			},
+			use path/.style={%
+				use path for main=#1,
+				use path for actions=#1,
+			},
+			append path/.style={%
+				append path for main=#1,
+				append path for actions=#1
+			}
+		}
+	\makeatother
 
-    % TikZ externalisation
-    \usetikzlibrary{external}
-    % Create the `tikzpics/` folder if it does not exist
-    \ShellEscape{mkdir -p tikzpics}
-    % Only externalise pictures on demand (to avoid messing up with metropolis theme)
-    \tikzset{
-        external/export=false,
-        external/prefix=tikzpics/
-    }
-    \tikzexternalize % chktex 1
+	% TikZ externalisation
+	\usetikzlibrary{external}
+	% Create the `tikzpics/` folder if it does not exist
+	\ShellEscape{mkdir -p tikzpics}
+	% Only externalise pictures on demand (to avoid messing up with metropolis theme)
+	\tikzset{
+		external/export=false,
+		external/prefix=tikzpics/
+	}
+	\tikzexternalize % chktex 1
 
 \usepackage{minted}
 	\usemintedstyle{lovelace}
 	\setminted{autogobble, tabsize=2}
 	\setmintedinline{fontsize=auto}
 
-\usepackage{csquotes}
+\usepackage[
+	english=american,
+	french=guillemets,
+	autostyle=true,
+]{csquotes}
 
 \usepackage[style=authoryear, block=ragged, doi=false, isbn=false]{biblatex}
-    \AtEveryBibitem{
-        \ifentrytype{online}
-        {} {
-            \iffieldequalstr{howpublished}{online}
-            {
-                \clearfield{howpublished}
-            } {
-                \clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}
-            }
-        }
-    }
+	\AtEveryBibitem{
+		\ifentrytype{online}
+		{} {
+			\iffieldequalstr{howpublished}{online}
+			{
+				\clearfield{howpublished}
+			} {
+				\clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}
+			}
+		}
+	}
 
 	\addbibresource{../biblio.bib}
 
-% Compact bibliography style
-\setbeamertemplate{bibliography item}[text]
-
 \AtEveryBibitem{
-    \clearfield{series}
-    \clearfield{pages}
-    \clearlist{publisher}
-    \clearname{editor}
-    \clearlist{location}
+	\clearfield{series}
+	\clearfield{pages}
+	% \clearlist{publisher}
+	\clearname{editor}
+	% \clearlist{location}
 }
 \renewcommand*{\bibfont}{\tiny}
+
 
 \usepackage{hyperxmp}	% XMP metadata
 
@@ -253,31 +287,31 @@
 
 % Schémas de tâches
 \tikzset{
-    >=stealth,
-    hair lines/.style={line width = 0.05pt, lightgray},
-    data/.style={draw, ellipse},
-    program/.style={draw, rectangle},
-    accent on/.style={alt={<#1>{draw=accent, text=accent, thick}{draw}}},
-    true scale/.style={scale=#1, every node/.style={transform shape}},
-    highlight/.style={color=highlight#1}
+	>=stealth,
+	hair lines/.style={line width = 0.05pt, lightgray},
+	data/.style={draw, ellipse},
+	program/.style={draw, rectangle},
+	accent on/.style={alt={<#1>{draw=accent, text=accent, thick}{draw}}},
+	true scale/.style={scale=#1, every node/.append style={scale=#1}},
+	highlight/.style={color=highlight#1}
 }
 
 % Styles des heatmap pour les moyennes
 \pgfplotsset{
-    meanheatmap/.style={
-        colorbar, colormap name=SRON,
-        view={0}{90},
-        samples=100,
-        domain=0:1,
-        min=0, max=1,
-        xlabel={\(P\)},
-        ylabel={\(R\)},
-    }
+	meanheatmap/.style={
+		colorbar, colormap name=SRON,
+		view={0}{90},
+		samples=100,
+		domain=0:1,
+		min=0, max=1,
+		xlabel={\(P\)},
+		ylabel={\(R\)},
+	}
 }
 
 % Commands spécifiques
 \NewDocumentCommand\shorturl{ O{https} O{://} m }{%
-    \href{#1#2#3}{\nolinkurl{#3}}%
+	\href{#1#2#3}{\nolinkurl{#3}}%
 }
 
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}
@@ -305,7 +339,7 @@
 \DeclareMathOperator{\IDF}{IDF}
 
 \ExplSyntaxOn % chktex 1
-    \DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
+	\DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
 \ExplSyntaxOff % chktex 1
 
 
@@ -313,6 +347,17 @@
 \newcommand{\itpause}{%
 	\addtocounter{beamerpauses}{-1}%
 	\pause % chktex 1
+}
+
+% Rectangles aroundt things
+\NewDocumentCommand\hightlightikz{D<>{1-} O{accent} O{} m}{%
+	\alt<#1>{%
+		\tikz[baseline]{
+			\node[alt=<{#2}>{#3}, inner sep=3pt, anchor=text, rectangle, rounded corners=1mm, draw=#2] {#4};
+		}%
+	}{%
+		#4%
+	}%
 }
 
 
@@ -331,7 +376,7 @@
 \end{frame}
 
 \begin{frame}{Exercice}
-    La tâche de \emph{résolution d'anaphores}\footnote{Ou en tout cas une version simplifiée} consiste à déterminer l'antécédent d'un pronom dans un texte.
+	La tâche de \emph{résolution d'anaphores}\footnote{Ou en tout cas une version simplifiée} consiste à déterminer l'antécédent d'un pronom dans un texte.
 	\vspace{\bigskipamount}
 
 	\begin{overprint}
@@ -347,155 +392,155 @@
 \section{Attributs des documents}
 
 \begin{frame}<-2>{Mots}
-    Faisons \alt<1>{enfin de la}{un peu de} linguistique : comptons les \alert{mots} !
-    \begin{itemize}
-        \item Problème : qu'est-ce qu'un mot ?
-            \begin{itemize}
-                \item \emph{pomme de terre} ?
-                \item \emph{y a-\textbf{t}-il} ?
-                \item …
-            \end{itemize}
-        \item On a plutôt tendance à compter les \alert{tokens}
-            \begin{itemize}
-                \item « Séquences de caractères comprises entre deux séparateurs »
-                \item[→] Problème : qu'est-ce qu'un séparateur ? \begin{itemize}
-                    \item « E-mail » vs. « Alsace–Lorraine »
-                    \item « […] kiwi. Hier […] » vs. « M. Martin »
-                    \item « Yann Le Bourdonnec » vs. « Félix le chat »
-                \end{itemize}
-                \item On délègue à un segmenteur (\emph{tokenizer})
-            \end{itemize}
-    \end{itemize}
+	Faisons \alt<1>{enfin de la}{un peu de} linguistique : comptons les \alert{mots} !
+	\begin{itemize}
+		\item Problème : qu'est-ce qu'un mot ?
+			\begin{itemize}
+				\item \emph{pomme de terre} ?
+				\item \emph{y a-\textbf{t}-il} ?
+				\item …
+			\end{itemize}
+		\item On a plutôt tendance à compter les \alert{tokens}
+			\begin{itemize}
+				\item « Séquences de caractères comprises entre deux séparateurs »
+				\item[→] Problème : qu'est-ce qu'un séparateur ? \begin{itemize}
+					\item « E-mail » vs. « Alsace–Lorraine »
+					\item « […] kiwi. Hier […] » vs. « M. Martin »
+					\item « Yann Le Bourdonnec » vs. « Félix le chat »
+				\end{itemize}
+				\item On délègue à un segmenteur (\emph{tokenizer})
+			\end{itemize}
+	\end{itemize}
 \end{frame}
 
 \begin{frame}<-2>[label=wordcols]{Des mots aux colonnes}
-    Objectif : utiliser les \alert{fréquences} des mots comme attributs (colonnes) dans une représentation tabulaire.
+	Objectif : utiliser les \alert{fréquences} des mots comme attributs (colonnes) dans une représentation tabulaire.
 	\pause
-    \begin{itemize}
-        \item<+-> Combien de colonnes faut-il ?
+	\begin{itemize}
+		\item<+-> Combien de colonnes faut-il ?
 			\pause
-            \begin{itemize}
-                \item[→] $K×M^β$ (loi de Heaps)
-                \item Pour \emph{Ulysse}, environ \num{34000}
-            \end{itemize}
-        \item<+-> Il faut donc arriver à filtrer !
+			\begin{itemize}
+				\item[→] $K×M^β$ (loi de Heaps)
+				\item Pour \emph{Ulysse}, environ \num{34000}
+			\end{itemize}
+		\item<+-> Il faut donc arriver à filtrer !
 			% TODO: déroulé progressif avec exemples de colonnes
-            \begin{itemize}[<+->]
-                \item Supprimer les \alert{mots vides} (\emph{stop words}) : \emph{le}, \emph{à}, \emph{mais}…
-                \item Ne conserver certaines catégories spécifiques à la tâche (noms, adjectifs…)
-                \item Supprimer les \alert{hapax} (mots n'apparaissant qu'un seule fois)
-                \item[→] De façon générale, ne conserver qu'une \alert{bande de fréquences}
-            \end{itemize}
-    \end{itemize}
+			\begin{itemize}[<+->]
+				\item Supprimer les \alert{mots vides} (\emph{stop words}) : \emph{le}, \emph{à}, \emph{mais}…
+				\item Ne conserver certaines catégories spécifiques à la tâche (noms, adjectifs…)
+				\item Supprimer les \alert{hapax} (mots n'apparaissant qu'un seule fois)
+				\item[→] De façon générale, ne conserver qu'une \alert{bande de fréquences}
+			\end{itemize}
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{Loi de Heaps}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}
-            \begin{axis}[
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}
+			\begin{axis}[
 				title={Loi de Heaps : $y=K×x^β$},
 				xlabel={Taille de la collection},
 				ylabel={Taille du vocabulaire},
 				xmin=0, xmax=800000, ymin=0,
-                width=0.9\textwidth,
-                height=0.8\textheight,
-                scaled ticks=false,
-                ticklabel style={/pgf/number format/.cd, 1000 sep={\,}},
+				width=0.9\textwidth,
+				height=0.8\textheight,
+				scaled ticks=false,
+				ticklabel style={/pgf/number format/.cd, 1000 sep={\,}},
 			]
-                \addplot[highlighta, domain=0:800000, samples=1001] {40*x^0.5};
-            \end{axis}
-        \end{tikzpicture}
-        \caption{Courbe d'une loi de Heaps}
-    \end{figure}
+				\addplot[highlighta, domain=0:800000, samples=1001] {40*x^0.5};
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Courbe d'une loi de Heaps}
+	\end{figure}
 \end{frame}
 
 \againframe<4-7>{wordcols}
 
 \begin{frame}[fragile]{Filtrer les hapax}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}
-            \begin{axis}[
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}
+			\begin{axis}[
 				title={$y=\frac{K}{x}$},
 				xlabel={Rang},
 				ylabel={Fréquence d'apparition},
 				xmin=0, ymin=0, xmax=40, ymax=15,
-                xtick=\empty,
-                ytick=\empty,
-                alt=<2>{extra y ticks={1}}{},
-                width=0.9\textwidth,
-                height=0.8\textheight,
+				xtick=\empty,
+				ytick=\empty,
+				alt=<2>{extra y ticks={1}}{},
+				width=0.9\textwidth,
+				height=0.8\textheight,
 			]
-                \addplot[highlighta, domain=1:20, samples=501] {20/x};
-                \addplot[highlighta, alt=<2>{dotted}{}, domain=20:40, samples=500] {1};
-                \draw<2>[highlight6] (axis cs:0,1) -- (current axis.east|-{axis cs:0,1});
-            \end{axis}
-        \end{tikzpicture}
-        \caption{\alt<2>{Filtrage des hapax sur la c}{C}ourbe de Zipf}
-    \end{figure}
+				\addplot[highlighta, domain=1:20, samples=501] {20/x};
+				\addplot[highlighta, alt=<2>{dotted}{}, domain=20:40, samples=500] {1};
+				\draw<2>[highlight6] (axis cs:0,1) -- (current axis.east|-{axis cs:0,1});
+			\end{axis}
+		\end{tikzpicture}
+		\caption{\alt<2>{Filtrage des hapax sur la c}{C}ourbe de Zipf}
+	\end{figure}
 \end{frame}
 
 \againframe<8->{wordcols}
 
 \begin{frame}[fragile=singleslide]{Filtrer une bande de fréquences}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}
-            \begin{axis}[
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}
+			\begin{axis}[
 				title={$y=\frac{K}{x}$}
 				xlabel={Rang},
 				ylabel={Fréquence d'apparition},
 				xmin=0, ymin=0, xmax=40, ymax=20,
-                 xtick=\empty,
-                 ytick={2, 15},
-                 yticklabels={$a$, $b$},
-                 width=0.9\textwidth,
-                 height=0.8\textheight,
+				 xtick=\empty,
+				 ytick={2, 15},
+				 yticklabels={$a$, $b$},
+				 width=0.9\textwidth,
+				 height=0.8\textheight,
 			]
-                \addplot[highlighta, dotted, domain=1:1.33, samples=333] {20/x};
-                \addplot[highlighta, domain=1.33:10, samples=333] {20/x};
-                \addplot[highlighta, dotted, domain=10:40, samples=333] {max(20/x,1)};
-                \draw[highlight6] (axis cs:0,15) -- (current axis.east|-{axis cs:0,15});
-                \draw[highlight6] (axis cs:0,2) -- (current axis.east|-{axis cs:0,2});
-            \end{axis}
-        \end{tikzpicture}
-        \caption{Filtrage d'une bande de fréquences sur la courbe de Zipf}
-    \end{figure}
+				\addplot[highlighta, dotted, domain=1:1.33, samples=333] {20/x};
+				\addplot[highlighta, domain=1.33:10, samples=333] {20/x};
+				\addplot[highlighta, dotted, domain=10:40, samples=333] {max(20/x,1)};
+				\draw[highlight6] (axis cs:0,15) -- (current axis.east|-{axis cs:0,15});
+				\draw[highlight6] (axis cs:0,2) -- (current axis.east|-{axis cs:0,2});
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Filtrage d'une bande de fréquences sur la courbe de Zipf}
+	\end{figure}
 \end{frame}
 
 \begin{frame}{Mots}
-    Pour réduire encore plus le nombre de colonnes
+	Pour réduire encore plus le nombre de colonnes
 	\pause
 	% TODO: déroulé progressif avec exemples de colonnes
-    \begin{itemize}[<+->]
-        \item Lemmatiser : \{\emph{est}, \emph{était}, \emph{suis}, \emph{êtes}, \emph{furent}…\} → \emph{est}
-        \item Radicaliser : \{\emph{homme}, \emph{hommes}\} → \emph{homme}
-        \item Fixer un lexique \emph{a priori}
-            \begin{itemize}
-                \item[→] Avec les dangers que ça comporte
-            \end{itemize}
-    \end{itemize}
+	\begin{itemize}[<+->]
+		\item Lemmatiser : \{\emph{est}, \emph{était}, \emph{suis}, \emph{êtes}, \emph{furent}…\} → \emph{est}
+		\item Radicaliser : \{\emph{homme}, \emph{hommes}\} → \emph{homme}
+		\item Fixer un lexique \emph{a priori}
+			\begin{itemize}
+				\item[→] Avec les dangers que ça comporte
+			\end{itemize}
+	\end{itemize}
 
 	\pause
-    À l'inverse, pour plus de détails, on peut utiliser des $n$-grammes de mots
-    \begin{itemize}
-        \item[→] Représentation plus riche, mais amplifie le problème de quantité
-    \end{itemize}
+	À l'inverse, pour plus de détails, on peut utiliser des $n$-grammes de mots
+	\begin{itemize}
+		\item[→] Représentation plus riche, mais amplifie le problème de quantité
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{Traits linguistiques avancés}
-    Si les ressource le permettent, on peut envisager d'autres attributs
+	Si les ressource le permettent, on peut envisager d'autres attributs
 	\pause
-    \begin{itemize}[<+->]
-        \item Avec un étiqueteur morphosyntaxique : POS, $n$-grammes de POS
-        \item Avec un parser : largeur/profondeur/taille moyenne des arbres/constituants, paires gouverneur-gouverné, paires nœud-relation…
-        \item Avec des analyseurs sémantiques : rôles
-        \item Avec des bases de connaissances : présence de certains concepts
-        \item …
-    \end{itemize}
+	\begin{itemize}[<+->]
+		\item Avec un étiqueteur morphosyntaxique : POS, $n$-grammes de POS
+		\item Avec un parser : largeur/profondeur/taille moyenne des arbres/constituants, paires gouverneur-gouverné, paires nœud-relation…
+		\item Avec des analyseurs sémantiques : rôles
+		\item Avec des bases de connaissances : présence de certains concepts
+		\item …
+	\end{itemize}
 	\pause
-    Mais on introduit alors des dépendances vis-à-vis des ressources, ce qui multiplie les causes d'erreurs.
+	Mais on introduit alors des dépendances vis-à-vis des ressources, ce qui multiplie les causes d'erreurs.
 \end{frame}
 
 
@@ -507,19 +552,19 @@
 
 \section{Valuation des attributs}
 \begin{frame}[label=attrval]{Valuation des attributs}
-    Avoir choisi les attributs à utiliser pour une classification ne suffit pas : encore faut-il leur donner une \alert{valeur}
+	Avoir choisi les attributs à utiliser pour une classification ne suffit pas : encore faut-il leur donner une \alert{valeur}
 	\pause
-    \begin{description}[*]
-        \item<+->[Booléenne] Vrai/Faux ($0$/$1$) suivant que l'attribut est ou n'est pas présent dans le document
-        \item<+->[Occurrences] Le nombre $n_{i,j}$ de fois qu'apparaît l'attribut $a_j$ dans le document $t_i$
+	\begin{description}[*]
+		\item<+->[Booléenne] Vrai/Faux ($0$/$1$) suivant que l'attribut est ou n'est pas présent dans le document
+		\item<+->[Occurrences] Le nombre $n_{i,j}$ de fois qu'apparaît l'attribut $a_j$ dans le document $t_i$
 		% FIXME: Commencer par faire un exemple, puis écrire avec …, puis seulement passer à Σ
-        \item<+->[Fréquences normalisées par ligne] (ici pour la norme $1$)
-            \begin{equation}
-                \frac{\mathnode{freqfracnum}{n_{i,j}}}{\mathnode{freqfracden}{\sum_k n_{i,k}}}
-            \end{equation}
-    \end{description}
+		\item<+->[Fréquences normalisées par ligne] (ici pour la norme $1$)
+			\begin{equation}
+				\frac{\mathnode{freqfracnum}{n_{i,j}}}{\mathnode{freqfracden}{\sum_k n_{i,k}}}
+			\end{equation}
+	\end{description}
 	\pause
-    \textbf{Note} : ici et dans la suite, on considère que toutes les colonnes sont de même nature
+	\textbf{Note} : ici et dans la suite, on considère que toutes les colonnes sont de même nature
 \end{frame}
 
 % TODO: peut-être pas nécessaire à ce stade d'introduir les notations et le tableau
@@ -528,34 +573,34 @@
 	\begin{overprint}
 		\onslide<1>
 			\begin{figure}
-		        \begin{tabu} to 0.9\linewidth {X[m, c]|*{4}{X[m, c]}}
-		                    & je     & traque     & $…$ & kiwi\\
-		            \hline
-		            $t_1$   & $150$ & $12$ & $…$ & $0$\\
-		            $t_2$   & $2713$ & $20$ & $…$ & $0$\\
-		            $⋮$    & $⋮$      & $⋮$       &     & $⋮$\\
-		            $t_m$   & $1$ & $1$ & $…$ & $1$\\
-		         \end{tabu}
-		    \end{figure}
+				\begin{tabu} to 0.9\linewidth {X[m, c]|*{4}{X[m, c]}}
+							& je     & traque     & $…$ & kiwi\\
+					\hline
+					$t_1$   & $150$ & $12$ & $…$ & $0$\\
+					$t_2$   & $2713$ & $20$ & $…$ & $0$\\
+					$⋮$    & $⋮$      & $⋮$       &     & $⋮$\\
+					$t_m$   & $1$ & $1$ & $…$ & $1$\\
+				 \end{tabu}
+			\end{figure}
 		\onslide<2>
 			\begin{figure}
-		        \begin{tabu} to 0.9\linewidth {X[m, c]|*{4}{X[m, c]}}
-		                    & $a_1$     & $a_2$     & $…$ & $a_n$\\
-		            \hline
-		            $t_1$   & $v_{1,1}$ & $v_{1,2}$ & $…$ & $v_{1,n}$\\
-		            $t_2$   & $v_{2,1}$ & $v_{2,2}$ & $…$ & $v_{2,n}$\\
-		            $⋮$    & $⋮$      & $⋮$       &     & $⋮$\\
-		            $t_m$   & $v_{m,1}$ & $v_{m,2}$ & $…$ & $v_{m,n}$\\
-		         \end{tabu}
-		    \end{figure}
+				\begin{tabu} to 0.9\linewidth {X[m, c]|*{4}{X[m, c]}}
+							& $a_1$     & $a_2$     & $…$ & $a_n$\\
+					\hline
+					$t_1$   & $v_{1,1}$ & $v_{1,2}$ & $…$ & $v_{1,n}$\\
+					$t_2$   & $v_{2,1}$ & $v_{2,2}$ & $…$ & $v_{2,n}$\\
+					$⋮$    & $⋮$      & $⋮$       &     & $⋮$\\
+					$t_m$   & $v_{m,1}$ & $v_{m,2}$ & $…$ & $v_{m,n}$\\
+				 \end{tabu}
+			\end{figure}
 	\end{overprint}
 
 	\only<2>{
 		\begin{itemize}
-	        \item Les textes sont notés $t_1$, $t_2$, …, $t_m$
-	        \item Les attributs sont notés $a_1$, $a_2$, …, $a_n$
-	        \item La valeur du $j$-ème attribut pour le $i$-ème texte est notée $v_{i,j}$ (ligne, colonne)
-	    \end{itemize}
+			\item Les textes sont notés $t_1$, $t_2$, …, $t_m$
+			\item Les attributs sont notés $a_1$, $a_2$, …, $a_n$
+			\item La valeur du $j$-ème attribut pour le $i$-ème texte est notée $v_{i,j}$ (ligne, colonne)
+		\end{itemize}
 	}
 \end{frame}
 
@@ -564,30 +609,30 @@
 % TODO: ajouter une transition
 % TODO: add cites
 \begin{frame}{TF.IDF}
-    \only<-2>{On veut pouvoir \alert{pondérer} l'importance d'un terme (mot, caractère, $n$-gramme…) en fonction de sa \alert{spécificité} (au sens large) pour un document.}
+	\only<-2>{On veut pouvoir \alert{pondérer} l'importance d'un terme (mot, caractère, $n$-gramme…) en fonction de sa \alert{spécificité} (au sens large) pour un document.}
 
-    \begin{itemize}
-        \item \emph{\textbf{T}erm \textbf{F}requency $×$ \textbf{I}nverse \textbf{D}ocument \textbf{F}requency}
-        \item $\TF(i,j) = n_{i,j}$ ou $\TF(i,j) = \frac{n_{i,j}}{\sum_k n_{i,j}}$
-        \item
-            \only<1>{
-                \begin{equation}
-                    \IDF(j) = \log\mleft(\frac{m}{\#\compset{i}{n_{i,j}>0}}\mright)
-                \end{equation}
-            }
-            \only<2>{
-                \begin{equation}
-                    \IDF(j) = \log\frac{\overbrace{m}^{\mathclap{\text{nombre total de documents}}}}{\underbrace{\#\compset{i}{n_{i,j}>0}}_{\mathclap{\text{nombre de documents contenant $a_j$}}}}
-                \end{equation}
-            }
-            \only<3->{$\IDF(j) = \log\frac{m}{\#\compset{i}{n_{i,j}>0}}$}
-        \only<3->{
-            \item Intuitivement $\IDF$ mesure la rareté d'un attribut, donc (on espère !) son informativité
-            \item « Si $a_j$ est présent dans tous les textes, savoir qu'il est présent dans $t_i$ ne donne pas d'information sur $t_i$ »
-            \item Permet un filtrage moins arbitraire des \emph{stop words}
-            \item \alt<4>{$\log$ donne à $\IDF$ la forme d'une \emph{surprise} au sens de Shannon}{$\log$ est une façon pratique de modérer les effets de cette pondération : on devrait parler de $\log$-$\IDF$}
-        }
-    \end{itemize}
+	\begin{itemize}
+		\item \emph{\textbf{T}erm \textbf{F}requency $×$ \textbf{I}nverse \textbf{D}ocument \textbf{F}requency}
+		\item $\TF(i,j) = n_{i,j}$ ou $\TF(i,j) = \frac{n_{i,j}}{\sum_k n_{i,j}}$
+		\item
+			\only<1>{
+				\begin{equation}
+					\IDF(j) = \log\mleft(\frac{m}{\#\compset{i}{n_{i,j}>0}}\mright)
+				\end{equation}
+			}
+			\only<2>{
+				\begin{equation}
+					\IDF(j) = \log\frac{\overbrace{m}^{\mathclap{\text{nombre total de documents}}}}{\underbrace{\#\compset{i}{n_{i,j}>0}}_{\mathclap{\text{nombre de documents contenant $a_j$}}}}
+				\end{equation}
+			}
+			\only<3->{$\IDF(j) = \log\frac{m}{\#\compset{i}{n_{i,j}>0}}$}
+		\only<3->{
+			\item Intuitivement $\IDF$ mesure la rareté d'un attribut, donc (on espère !) son informativité
+			\item « Si $a_j$ est présent dans tous les textes, savoir qu'il est présent dans $t_i$ ne donne pas d'information sur $t_i$ »
+			\item Permet un filtrage moins arbitraire des \emph{stop words}
+			\item \alt<4>{$\log$ donne à $\IDF$ la forme d'une \emph{surprise} au sens de Shannon}{$\log$ est une façon pratique de modérer les effets de cette pondération : on devrait parler de $\log$-$\IDF$}
+		}
+	\end{itemize}
 \end{frame}
 
 
@@ -602,27 +647,27 @@
 \section{Annexes}
 \pdfbookmark[2]{Remerciements}{acknowledgements}
 \begin{frame}{Remerciements}
-    Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017IntroductionFouilleTextes} \parencite{tellier2017IntroductionFouilleTextes} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
+	Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017IntroductionFouilleTextes} \parencite{tellier2017IntroductionFouilleTextes} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
 \end{frame}
 
 \pdfbookmark[2]{Références}{references}
 \begin{frame}[allowframebreaks]{References}
-    \printbibliography[heading=none]
+	\printbibliography[heading=none]
 \end{frame}
 
 \pdfbookmark[2]{Licence}{licence}
 \begin{frame}{Licence}
-    \begin{center}
-        {\huge \ccby}
-        \vfill
-        This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
+	\begin{center}
+		{\huge \ccby}
+		\vfill
+		This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
 
-        Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
-        \vfill
-        © 2019, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
+		Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
+		\vfill
+		© 2019, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
 
-        \shorturl[http]{lattice.cnrs.fr/Grobol-Loic}
-    \end{center}
+		\shorturl[http]{lattice.cnrs.fr/Grobol-Loic}
+	\end{center}
 \end{frame}
 
 \end{document}
