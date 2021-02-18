@@ -123,6 +123,7 @@
 \usepackage{mleftright}
 
 \usepackage{tabu}
+\usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{siunitx}
 	\sisetup{
@@ -404,7 +405,7 @@
 	\only<2>{
 		\begin{figure}
 			\tikzset{external/export=true}
-			\begin{tikzpicture}[true scale=0.75]
+			\begin{tikzpicture}[true scale=0.6]
 				\node[data] (in1) {Entrée};
 				\node[program, right=1cm of in1, text width=12ex] (prog1) {Programme élémentaire};
 				\node[data, right=0.75cm of prog1] (out1) {Résultat};
@@ -425,7 +426,7 @@
 	\only<3>{
 		\begin{figure}
 			\tikzset{external/export=true}
-			\begin{tikzpicture}[true scale=0.75]
+			\begin{tikzpicture}[true scale=0.6]
 				\node[data] (in1) {Entrée};
 				\node[program, right=2cm of in1, text width=12ex] (prog1) {Programme élémentaire};
 				\node[data, right=1cm of prog1] (out1) {Résultat};
@@ -472,17 +473,17 @@
 		\tikzset{external/export=true}
 		\begin{tikzpicture}[true scale=0.55]
 			\node[data, alt=<2>{highlight=6}{}] (in) {Question};
-			\node[coordinate, right=1cm of in] (split) {};
+			\node[coordinate, right=1em of in] (split) {};
 			\fill[alt=<2>{highlight=6}{}] (split) circle[radius=2pt];
 			\draw[alt=<2>{highlight=6, thick}{}] (in) -- (split);
 
-			\node[program, above right=0.5cm and 1cm of split, alt=<2>{highlight=a}{}] (term) {Terminologie};
-			\node[data, right=1cm of term, alt=<3>{highlight=a}{}] (words) {Mots};
-			\node[program, right=1cm of words, accent on=1, alt=<3>{highlight=3}{}] (ri) {RI};
-			\node[data, right=1cm of ri, alt=<3-4>{highlight=8}{}] (docs) {Docs};
-			\node[program, right=1cm of docs, alt=<4>{highlight=3}{}] (ei) {EI};
-			\node[coordinate, below right=0.5cm and 1cm of ei] (gather) {};
-			\node[data, right=1cm of gather, alt=<4>{highlight=a}{}] (answer) {Réponse};
+			\node[program, above right=0.5em and 1em of split, alt=<2>{highlight=a}{}] (term) {Terminologie};
+			\node[data, right=1em of term, alt=<3>{highlight=a}{}] (words) {Mots};
+			\node[program, right=1em of words, accent on=1, alt=<3>{highlight=3}{}] (ri) {RI};
+			\node[data, right=1em of ri, alt=<3-4>{highlight=8}{}] (docs) {Docs};
+			\node[program, right=1em of docs, alt=<4>{highlight=3}{}] (ei) {EI};
+			\node[coordinate, below right=0.5em and 1em of ei] (gather) {};
+			\node[data, right=1em of gather, alt=<4>{highlight=a}{}] (answer) {Réponse};
 			\draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (term);
 			\draw[->] (term) -- (words);
 			\draw[->] (words) -- (ri);
@@ -490,15 +491,15 @@
 			\draw[->] (docs) -- (ei);
 			\draw[->] (ei) -| (gather) -- (answer);
 
-			\node[program, below right=0.5cm and 1cm of split, alt=<2>{highlight=3}{}] (classif) {Classifieur};
-			\node[data, below=1cm of ei, alt=<4>{highlight=2}{}] (field) {Champs};
+			\node[program, below right=0.5em and 1em of split, alt=<2>{highlight=3}{}] (classif) {Classifieur};
+			\node[data, below=1em of ei, alt=<4>{highlight=2}{}] (field) {Champs};
 			\draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (classif);
 			\draw[->] (classif) -- (field);
 			\draw[->] (field) -- (ei);
 
 			\draw ($(split)+(-0.5cm, 2cm)$) rectangle ($(field.south east)+(1cm, -0.5cm)$);
 
-			\node[data, below=3cm of ri, alt=<3>{highlight=2}{}] (corpus) {Corpus};
+			\node[data, below=3em of ri, alt=<3>{highlight=2}{}] (corpus) {Corpus};
 			\draw[->] (corpus) -- (ri);
 		\end{tikzpicture}
 		\caption{Système de Question/Réponse via Recherche d'Informations}
@@ -528,28 +529,28 @@
 		\tikzset{external/export=true}
 		\begin{tikzpicture}[true scale=0.6]
 			\node[data, alt=<2>{highlight=6}{}] (in) {Question};
-			\node[coordinate, right=1cm of in] (split) {};
+			\node[coordinate, right=1em of in] (split) {};
 			\draw[alt=<2>{highlight=6, thick}{}] (in) -- (split);
 
-			\node[program, above right=0.5cm and 1cm of split, alt=<2>{highlight=a}{}] (trad) {Traduction};
-			\node[data, right=1cm of trad, alt=<2-3>{highlight=3}{}] (req) {Requête};
-			\node[program, right=1cm of req, alt=<3>{highlight=3}{}] (int) {Interrogation};
-			\node[coordinate, below right=0.5cm and 1cm of int] (gather) {};
-			\node[data, right=1cm of gather, alt=<4>{highlight=a}{}] (answer) {Réponse};
+			\node[program, above right=0.5em and 1em of split, alt=<2>{highlight=a}{}] (trad) {Traduction};
+			\node[data, right=1em of trad, alt=<2-3>{highlight=3}{}] (req) {Requête};
+			\node[program, right=1em of req, alt=<3>{highlight=3}{}] (int) {Interrogation};
+			\node[coordinate, below right=0.5em and 1em of int] (gather) {};
+			\node[data, right=1em of gather, alt=<4>{highlight=a}{}] (answer) {Réponse};
 			\draw[->, alt=<2>{highlight=6, thick}{}] (split) |- (trad);
 			\draw[->] (trad) -- (req);
 			\draw[->] (req) -- (int);
 			\draw[->] (int) -| (gather) -- (answer);
 
-			\node[program, below=1cm of req, alt=<2>{highlight=3}{}] (ei) {EI};
+			\node[program, below=1em of req, alt=<2>{highlight=3}{}] (ei) {EI};
 			\node[data, accent on=1, alt=<4>{highlight=2}{}] at (int|-ei) (base) {Base};
 			\draw[->] (ei) -- (base);
 			\draw[->] (base) -- (int);
 
 			\draw ($(split|-trad.north)+(-0.5cm,0.5cm)$) rectangle ($(int.east|-ei.south)+(1.25cm, -0.5cm)$);
 
-			\node[data, below=1cm of ei, alt=<3>{highlight=2}{}] (corpus) {Corpus};
-			\draw[->] (corpus.west) -- ++ (-0.25cm, 0) |- (ei.west);
+			\node[data, below=3em of ei, alt=<3>{highlight=2}{}] (corpus) {Corpus};
+			\draw[->] (corpus.west) -- ++ (-0.25em, 0) |- (ei.west);
 		\end{tikzpicture}
 		\caption{Système de Question/Réponse utilisant une base de connaissances}
 	\end{figure}
@@ -610,7 +611,7 @@
 	\end{itemize}
 
 	\begin{block}{Hypothèse (Loi de Zipf)}
-		La fréquence $f(n)$ du $n$-ième mot le plus fréquent d'un corpus vérifie
+		La fréquence \(f(n)\) du \(n\)-ième mot le plus fréquent d'un corpus vérifie
 		\begin{equation}
 			f(n) = \frac{K}{n}
 		\end{equation}
@@ -647,7 +648,7 @@
 \begin{frame}{Loi de Zipf : observations}
 	\begin{itemize}
 		\item La loi de Zipf se vérifie plutôt bien expérimentalement
-		\item En pratique, les répartitions observées sont de la forme $f(n)=\frac{k}{x^s}$ avec $s$ proche de $1$
+		\item En pratique, les répartitions observées sont de la forme $f(n)=\frac{k}{n^s}$ avec $s$ proche de $1$
 		\item Ce type de distribution, dites \emph{loi de puissance} est omniprésent en statistiques (en en sciences en général)
 		\item Elles font parties des distributions dites \emph{à longue traîne} (\textit{fat tail})
 		\item Une autre approche due à Mandelbrot présente une généralisation de la loi de Zipf comme le résultat de contraintes d'optimalité d'utilisation d'un canal de communication.
@@ -657,16 +658,16 @@
 \begin{frame}{Loi de Heaps}
 	Si la loi de Zipf donne une estimation de la répartition du vocabulaire d'un corpus, la loi de Heaps est une estimation de sa diversité
 	\begin{block}{Hypothèse : loi de Heaps}
-		Le nombre $V$ de mots distincts dans sous-corpus de taille $M$ vérifie
+		Le nombre \(V\) de mots distincts dans sous-corpus de taille \(M\) vérifie
 		\begin{equation}
 			V = K×M^β
 		\end{equation}
-		Où $K$ et $β$ sont des paramètres dépendant du corpus
+		Où \(K\) et \(β\) sont des paramètres dépendant du corpus
 	\end{block}
 	\begin{itemize}
-		\item[→] Ce $K$ n'est pas le même que pour la loi de Zipf, et $β$ n'a aucun lien avec la pondération de $F_β$
+		\item[→] Ce \(K\) n'est pas le même que pour la loi de Zipf, et \(β\) n'a aucun lien avec la pondération de \(F_β\)
 		\item[→] On parle souvent de relation \emph{types-tokens}
-		\item[→] Pour l'anglais, on a $K∈[30, 100]$ et $β≈0.5$
+		\item[→] Pour l'anglais, on a \(K∈[30, 100]\) et \(β≈0.5\)
 		\item[→] Cette loi peut-elle être valable quelle que soit la taille de la collection ?
 	\end{itemize}
 \end{frame}
@@ -681,9 +682,10 @@
 				height=0.8\textheight,
 				xlabel={Taille de la collection},
 				ylabel={Taille du vocabulaire},
-				title={Loi de Heaps : $y=K×x^β$},
+				title={Loi de Heaps : \(y=K×x^β\)},
 				scaled ticks=false,
-				ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}
+				ticklabel style={/pgf/number format/1000 sep={\,}},
+				xticklabel style={rotate=45, anchor=north east, yshift=-0.1em},
 			]
 				\addplot[highlighta, domain=0:800000, samples=1001] {40*x^0.5};
 			\end{axis}
@@ -712,30 +714,32 @@
 	\end{description}
 \end{frame}
 
-\begin{frame}[fragile=singleslide]{Caractères}
+\begin{frame}{Caractères}
 	Puisqu'un texte brut est une séquence de caractères : utilisons comme attribut la fréquence de chaque caractère
 
 	\begin{figure}
-		\begin{tabu}{*{5}{>{\ttfamily\small}X[m, c]}}
-			Texte   & a & b & c & …\\
-			Ulysse  & 90578 & 17848 & 27902 & …
-		\end{tabu}
+		\begin{tabular}{l*{4}{S}}
+			{\textbf{Texte}}   & {\textbf{a}} & {\textbf{b}} & {\textbf{c}} & {\textbf{…}}\\
+			Ulysse  & 90578 & 17848 & 27902 & {…}
+		\end{tabular}
 	\end{figure}
+
+	\pause
 
 	\begin{itemize}
 		\item Combien d'attributs par texte ?
 		\item Est-ce suffisant ?
 			\begin{itemize}
-				\item Suffisant pour quoi ?
+				\item<+-> Suffisant pour quoi ?
 			\end{itemize}
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{$n$-grammes de caractères}
+\begin{frame}{\(n\)-grammes de caractères}
 	% TODO: add corrections
 	% TODO: add sources
 	% TODO: add examples
-	Une stratégie un peu plus raffinée est de compter non pas les caractères, mais les séquences de caractères de longueur $n$.
+	Une stratégie un peu plus raffinée est de compter non pas les caractères, mais les séquences de caractères de longueur \(n\).
 
 	Exemple : « Le petit chat est content »
 
@@ -743,7 +747,7 @@
 		\item Quels sont les unigrammes ?
 		\item Quels sont les bigrammes ?
 		\item Quels sont les trigrammes ?
-		\item En général, pour un alphabet à $k$ caractères, combien y a-t-il de $n$-grammes ?
+		\item En général, pour un alphabet à \(k\) caractères, combien y a-t-il de \(n\)-grammes possibles ?
 	\end{itemize}
 
 	En pratique, les trigrammes peuvent suffire pour certaines applications !
