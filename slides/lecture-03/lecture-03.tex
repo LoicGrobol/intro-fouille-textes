@@ -73,9 +73,16 @@
 
 
 % Use non-standard fonts
+\usepackage{fontspec}
 \usefonttheme{professionalfonts}
-	\setsansfont[BoldFont={* Semibold}]{Fira Sans}
+
+\setmainfont{Fira Sans}[
+	BoldFont={* Semibold},
+]
 \setmonofont[Scale=0.9]{Fira Mono}
+\newfontfamily\fallbackfont{Deja Vu Sans}
+\newfontfamily\emojifont{Noto Color Emoji}[Renderer=HarfBuzz]
+\frenchspacing
 
 % Fix missing glyphs in Fira by delegating to polyglossia/babel
 \usepackage{newunicodechar}
@@ -324,6 +331,17 @@
 \newcommand{\itpause}{%
 	\addtocounter{beamerpauses}{-1}%
 	\pause % chktex 1
+}
+
+% Rectangles aroundt things
+\NewDocumentCommand\hightlightikz{D<>{1-} O{accent} O{} m}{%
+	\alt<#1>{%
+		\tikz[baseline]{
+			\node[alt=<{#2}>{#3}, inner sep=3pt, anchor=text, rectangle, rounded corners=1mm, draw=#2] {#4};
+		}%
+	}{%
+		#4%
+	}%
 }
 
 
@@ -701,43 +719,88 @@
 	\only<6>{}
 \end{frame}
 
-\begin{frame}[fragile]{EI comme annotation}
-	\begin{figure}
-		\begin{overprint}
-			\onslide<1>
-				\tikzset{external/export=true}
-				\begin{tikzpicture}
-					\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
-						En & 2019 & la & France & gagne & à & l' & Eurovision\\
-						O & D & O & C & O & O & O & E\\
-					};
-					\foreach \x in {1, ..., 8}
-						\draw[->] (m-1-\x) -- (m-2-\x);
-				\end{tikzpicture}
-			\onslide<2>
-				\tikzset{external/export=true}
-				\begin{tikzpicture}
-					\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
-						En & 2019 & la & France & gagne & à & l' & Eurovision\\
-						O & B-D & B-C & I-C & O & O & B-E & I-E\\\\
-					};
-					\foreach \x in {1, ..., 8}
-						\draw[->] (m-1-\x) -- (m-2-\x);
-				\end{tikzpicture}
-			\onslide<3>
-				\tikzset{external/export=true}
-				\begin{tikzpicture}
-					\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
-						En & 2019 & la & France & gagne & à & l' & Eurovision\\
-						O & U-D & B-C & L-C & O & O & B-E & L-E\\\\
-					};
-					\foreach \x in {1, ..., 8}
-						\draw[->] (m-1-\x) -- (m-2-\x);
-				\end{tikzpicture}
-		\end{overprint}
-		\caption{\emph{EI} comme une annotation}
-	\end{figure}
+\begin{frame}<1>[label=segmentation]{Aparté: segmentation et repérage}
+	Une tâche courante en TAL : repérer des zones dans un texte
+	\begin{itemize}
+		\item En EI : par exemple reprérer des parties d'un document
+		\item Reconnaissance d'entités nommées
+		\item Segmentation en phrases
+		\item …
+	\end{itemize}
+
+	\pause
+
+	Problème : on fait comment ?
 \end{frame}
+
+\begin{frame}<-2>[fragile]{Exemple : repérage de noms de lieux}
+	On a un texte
+
+	\vspace{\bigskipamount}
+	{\itshape
+		C’était à \hightlightikz<2->{Mégara, faubourg de \hightlightikz<2->{Carthage}}, dans \hightlightikz<2->{les jardins d’Hamilcar}. Les soldats qu’il avait commandés en \hightlightikz<2->{Sicile} se donnaient un grand festin pour célébrer le jour anniversaire de la bataille d’\hightlightikz<2->{Éryx}.
+	}
+	\vspace{\bigskipamount}
+
+	\pause
+
+	On veut y repérer des zones, ici les \alert{lieux}.
+\end{frame}
+
+\againframe{segmentation}
+
+\begin{frame}<-2>[fragile]{Aparté: segmentation et repérage}
+	Observation : il suffit de savoir pour chaque mot s'il est dans une zone.
+
+	\pause
+
+	Par exemple pour
+
+	% \tikzset{external/export=true}
+	\begin{tikzpicture}[true scale=0.6]
+		\matrix[matrix of nodes, anchor=base, row sep=0em, column sep=0em, row 2/.style={font=\large\fallbackfont}] (m) {
+			C' & étaient & Susan & Calvin & et & Alfred & Lanning & de & l' & US & Robots\\
+			|[sronbrightred]| ✗ & |[sronbrightred]| ✗ & |[sronbrightgreen]| ✓ & |[sronbrightgreen]| ✓ & |[sronbrightred]| ✗ & |[sronbrightgreen]| ✓ & |[sronbrightgreen]| ✓ & |[sronbrightred]| ✗ & |[sronbrightred]| ✗ & |[sronbrightred]| ✗ & |[sronbrightred]| ✗\\
+		};
+	\end{tikzpicture}
+\end{frame}
+% \begin{frame}[fragile]{EI comme annotation}
+% 	\begin{figure}
+% 		\begin{overprint}
+% 			\onslide<1>
+% 				\tikzset{external/export=true}
+% 				\begin{tikzpicture}
+% 					\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+% 						En & 2019 & la & France & gagne & à & l' & Eurovision\\
+% 						O & D & O & C & O & O & O & E\\
+% 					};
+% 					\foreach \x in {1, ..., 8}
+% 						\draw[->] (m-1-\x) -- (m-2-\x);
+% 				\end{tikzpicture}
+% 			\onslide<2>
+% 				\tikzset{external/export=true}
+% 				\begin{tikzpicture}
+% 					\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+% 						En & 2019 & la & France & gagne & à & l' & Eurovision\\
+% 						O & B-D & B-C & I-C & O & O & B-E & I-E\\\\
+% 					};
+% 					\foreach \x in {1, ..., 8}
+% 						\draw[->] (m-1-\x) -- (m-2-\x);
+% 				\end{tikzpicture}
+% 			\onslide<3>
+% 				\tikzset{external/export=true}
+% 				\begin{tikzpicture}
+% 					\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+% 						En & 2019 & la & France & gagne & à & l' & Eurovision\\
+% 						O & U-D & B-C & L-C & O & O & B-E & L-E\\\\
+% 					};
+% 					\foreach \x in {1, ..., 8}
+% 						\draw[->] (m-1-\x) -- (m-2-\x);
+% 				\end{tikzpicture}
+% 		\end{overprint}
+% 		\caption{\emph{EI} comme une annotation}
+% 	\end{figure}
+% \end{frame}
 
 \begin{frame}{Exercice}
 	\begin{enumerate}
