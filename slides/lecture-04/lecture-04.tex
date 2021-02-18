@@ -718,9 +718,14 @@
 	Puisqu'un texte brut est une séquence de caractères : utilisons comme attribut la fréquence de chaque caractère
 
 	\begin{figure}
-		\begin{tabular}{l*{4}{S}}
+		\begin{tabular}{l*{4}{S[table-format = 4.0]}}
+			\toprule
 			{\textbf{Texte}}   & {\textbf{a}} & {\textbf{b}} & {\textbf{c}} & {\textbf{…}}\\
-			Ulysse  & 90578 & 17848 & 27902 & {…}
+			\midrule
+			Ulysse  & 90578 & 17848 & 27902 & {…}\\
+			A hat full of sky  & {…}\\
+			\(⋮\)\\
+			\bottomrule
 		\end{tabular}
 	\end{figure}
 

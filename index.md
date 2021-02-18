@@ -42,7 +42,6 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2021
 
 - [Slides 3](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-03.pdf)
 - [Slides 4](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-04.pdf)
-- [Slides 5](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-05.pdf)
 
 ## Twittographie
 
