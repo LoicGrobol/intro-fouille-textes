@@ -1,3 +1,4 @@
+% LTeX: language=fr
 % Copyright © 2019, Loïc Grobol <loic.grobol@gmail.com>
 % This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (https://creativecommons.org/licenses/by/4.0/)
 
@@ -78,9 +79,9 @@
 
 \directlua{luaotfload.add_fallback
    ("emojifallback",
-    {
-      "NotoColorEmoji:mode=harf;"
-    }
+	{
+	  "NotoColorEmoji:mode=harf;"
+	}
    )}
 
 \setsansfont{Fira Sans}[
@@ -102,7 +103,10 @@
 % \setbeameroption{show notes on second screen=left}
 
 
-\usepackage[french, english]{babel}
+\usepackage{polyglossia}
+	\setmainlanguage{french}
+	\setotherlanguage[variant=british]{english}
+
 \usepackage{amsfonts,amssymb}
 \usepackage{amsmath,amsthm}
 \usepackage{mathtools}	% AMS Maths service pack
@@ -131,15 +135,15 @@
 	\DeclareSIUnit{\words}{words}
 	\DeclareSIUnit{\sentences}{sentences}
 	% Needed for italics and bold numbers in siunitx S-aligned columns
-	\usepackage{siunitx}
 	\robustify\itshape
 	\robustify\bfseries
 \usepackage{multicol}
 \usepackage{ccicons}
 \usepackage{bookmark}
 \usepackage{caption}
-	\captionsetup{skip=1ex}
+	\captionsetup{skip=1ex, labelformat=empty}
 \usepackage[iso]{datetime}
+\usepackage{lua-ul}
 
 \usepackage{tikz}
 	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}} % chktex 36
@@ -232,7 +236,11 @@
 	\setminted{autogobble, tabsize=2}
 	\setmintedinline{fontsize=auto}
 
-\usepackage{csquotes}
+\usepackage[
+	english=american,
+	french=guillemets,
+	autostyle=true,
+]{csquotes}
 
 \usepackage[style=authoryear, block=ragged, doi=false, isbn=false]{biblatex}
 	\AtEveryBibitem{
@@ -607,11 +615,11 @@
 			\begin{itemize}
 				\item Aide à la décision (politique)
 					\begin{itemize}
-						\item[→] IBM Watson (\textcite{slonim2014claims}, \shorturl{youtube.com/watch?v=sEf0GLvrP9U})
+						\item[→] IBM Watson (\textcite{slonim2014ClaimsDemandInitial}, \shorturl{youtube.com/watch?v=sEf0GLvrP9U})
 					\end{itemize}
 				\item Aide à la lecture (judiciaire, scientifique)
 					\begin{itemize}
-						\item[→] « Argument zoning » (\textcite{teufel2009argument}, \shorturl{www.cl.cam.ac.uk/~sht25/az.html})
+						\item[→] « Argument zoning » (\textcite{teufel1999ArgumentativeZoningInformation}, \shorturl{www.cl.cam.ac.uk/~sht25/az.html})
 					\end{itemize}
 			\end{itemize}
 		\item …
@@ -775,43 +783,83 @@
 	\onslide<4> Par convention on utilise plutôt \alert{I} \enquote{\emph{Inside}} et \alert{O} \enquote{\emph{Outside}}.
 \end{frame}
 
-% \begin{frame}[fragile]{EI comme annotation}
-% 	\begin{figure}
-% 		\begin{overprint}
-% 			\onslide<1>
-% 				\tikzset{external/export=true}
-% 				\begin{tikzpicture}
-% 					\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
-% 						En & 2019 & la & France & gagne & à & l' & Eurovision\\
-% 						O & D & O & C & O & O & O & E\\
-% 					};
-% 					\foreach \x in {1, ..., 8}
-% 						\draw[->] (m-1-\x) -- (m-2-\x);
-% 				\end{tikzpicture}
-% 			\onslide<2>
-% 				\tikzset{external/export=true}
-% 				\begin{tikzpicture}
-% 					\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
-% 						En & 2019 & la & France & gagne & à & l' & Eurovision\\
-% 						O & B-D & B-C & I-C & O & O & B-E & I-E\\\\
-% 					};
-% 					\foreach \x in {1, ..., 8}
-% 						\draw[->] (m-1-\x) -- (m-2-\x);
-% 				\end{tikzpicture}
-% 			\onslide<3>
-% 				\tikzset{external/export=true}
-% 				\begin{tikzpicture}
-% 					\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
-% 						En & 2019 & la & France & gagne & à & l' & Eurovision\\
-% 						O & U-D & B-C & L-C & O & O & B-E & L-E\\\\
-% 					};
-% 					\foreach \x in {1, ..., 8}
-% 						\draw[->] (m-1-\x) -- (m-2-\x);
-% 				\end{tikzpicture}
-% 		\end{overprint}
-% 		\caption{\emph{EI} comme une annotation}
-% 	\end{figure}
-% \end{frame}
+\begin{frame}<-2>[fragile]{Aparté: segmentation et repérage}
+	Et si les zones sont connexes ?
+
+	\tikzset{external/export=true}
+	\begin{tikzpicture}[true scale=0.9]
+		\matrix[matrix of nodes, anchor=base, row sep=0em, column sep=0em, row 2/.style={font=\bfseries, visible on={2-}}] (m) {
+			c' & étaient & |[sronbrightpurple]|  [Susan & |[sronbrightpurple]| Calvin] & |[sronbrightpurple]| [Alfred & |[sronbrightpurple]| Lanning] & et & |[sronbrightpurple]| [Lawrence & |[sronbrightpurple]| Robertson]\\
+			O & O & \alt<1>{I}{\alert{B}} & I & \alt<1>{I}{\alert{B}} & I & O & \alt<1>{I}{\alert{B}} & I\\
+		};
+	\end{tikzpicture}
+
+	\onslide<2>{On ajoute une étiquette \alert{B} \enquote{\emph{Begining}}}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Aparté: segmentation et repérage}
+	On peut aussi typer les zones avec des étiquettes composites, ici \textcolor{sronbrightblue}{Organisation}, \textcolor{sronbrightgreen}{Person} et \textcolor{sronbrightpurple}{Country}
+
+	\tikzset{external/export=true}
+	\begin{tikzpicture}[true scale=0.9]
+		\matrix[matrix of nodes, anchor=base, row sep=0em, column sep=0em, row 2/.style={font=\bfseries, visible on={2-}}] (m) {
+			|[sronbrightblue]| US & |[sronbrightblue]| Robots & et & |[sronbrightgreen]| Lawrence & |[sronbrightgreen]| Robertson & viennent & des & |[sronbrightyellow]| États-Unis\\
+			\\
+			|[sronbrightblue]| B-Org & |[sronbrightblue]| I-Org & O & |[sronbrightgreen]| B-Per & |[sronbrightgreen]| I-Per & O & O & |[sronbrightyellow]| B-Cou\\
+		};
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Aller plus loin}
+	En plus de permettre de repérer plus de structure, l'étiquette \alert{B}a  un autre avantage : pour un système par apprentissage artificiel, elle permet d'apprendre les caractéristiques spécifique des premiers mots des zones → peut améliorer les performances.
+
+	\pause
+
+	On peut pousser cette logique plus loin avec deux nouvelles étiquettes
+
+	\begin{itemize}
+		\item \alert{E} \enquote{\emph{End}} pour le dernier mot des zones
+		\item \alert{U} \enquote{\emph{Unit}} pour les mots qui sont les seuls de leur zone
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{EI comme annotation}
+	\begin{figure}
+		\begin{overprint}
+			\onslide<1>
+				\tikzset{external/export=true}
+				\begin{tikzpicture}
+					\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+						En & 2019 & la & France & gagne & à & l' & Eurovision\\
+						O & D & O & C & O & O & O & E\\
+					};
+					\foreach \x in {1, ..., 8}
+						\draw[->] (m-1-\x) -- (m-2-\x);
+				\end{tikzpicture}
+			\onslide<2>
+				\tikzset{external/export=true}
+				\begin{tikzpicture}
+					\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+						En & 2019 & la & France & gagne & à & l' & Eurovision\\
+						O & B-D & B-C & I-C & O & O & B-E & I-E\\\\
+					};
+					\foreach \x in {1, ..., 8}
+						\draw[->] (m-1-\x) -- (m-2-\x);
+				\end{tikzpicture}
+			\onslide<3>
+				\tikzset{external/export=true}
+				\begin{tikzpicture}
+					\matrix[matrix of nodes, anchor=base, row sep=1.5em] (m) {
+						En & 2019 & la & France & gagne & à & l' & Eurovision\\
+						O & U-D & B-C & L-C & O & O & B-E & L-E\\\\
+					};
+					\foreach \x in {1, ..., 8}
+						\draw[->] (m-1-\x) -- (m-2-\x);
+				\end{tikzpicture}
+		\end{overprint}
+		\caption{\emph{EI} comme une annotation}
+	\end{figure}
+\end{frame}
 
 \begin{frame}{Exercice}
 	\begin{enumerate}
