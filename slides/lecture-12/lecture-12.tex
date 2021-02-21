@@ -3,12 +3,6 @@
 % This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (https://creativecommons.org/licenses/by/4.0/)
 
 \documentclass[../allslides.tex]{subfiles}
-\renewcommand\titlepagesubtitle{Cours 12 : Modèles d'étiquetage}
-\renewcommand\docdate{2021-02-18}  % chktex 8
-
-\ExplSyntaxOn
-    \DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
-\ExplSyntaxOff
 
 \nocite{
 	collinsLogLinearModelsMEMMs,
@@ -18,11 +12,14 @@
 }
 
 \begin{document}
-\part{\titlepagesubtitle{}}
+\renewcommand\titlepagesubtitle
+\renewcommand\docdate{2021-02-18}  % chktex 8
 
-\begin{frame}[plain]
-	\partpage % chktex 1
-\end{frame}
+\ExplSyntaxOn
+    \DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
+\ExplSyntaxOff
+\lecture{Modèles d'étiquetage}{Cours 12}
+
 
 \begin{frame}[fragile=singleslide]{Rappel}
 	\begin{quote}

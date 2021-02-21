@@ -73,6 +73,23 @@
 	% FIXME: not pretty and footnotes are still too big
 	\let\footnoterule\relax  % No footnote rule, push down footnote
 
+% title pages for lectures
+\makeatletter
+	\AtBeginLecture{%
+		\begin{frame}[plain]
+			\usebeamercolor[fg]{section title}
+			\usebeamerfont{section title}
+			\beamer@currentlecturelabel: \insertlecture\par
+			\ifSubfilesClassLoaded{
+				\usebeamertemplate*{title separator}
+				\ifx\beamer@shortauthor\@empty\else\usebeamertemplate*{author}\fi
+				\ifx\insertdate\@empty\else\usebeamertemplate*{date}\fi
+				\ifx\insertinstitute\@empty\else\usebeamertemplate*{institute}\fi
+			}{}
+		\end{frame}
+	}
+\makeatother
+
 
 % Use non-standard fonts
 \usepackage{fontspec}
