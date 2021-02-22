@@ -39,7 +39,7 @@ def main(args: List[str] = sys.argv[1:]):
     else:
         raise ValueError("Wrong number of args")
 
-    out_dir = repo_root / "build"
+    out_dir = repo_root / "_build"
     out_dir.mkdir(exist_ok=True)
 
     for slide_tex in repo_root.glob("slides/lecture*/lecture*.tex"):

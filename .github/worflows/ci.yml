@@ -1,0 +1,14 @@
+on: [push]
+
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+            python-version: 3.9
+      - uses: xu-cheng/texlive-action/full@v1
+        with:
+          run: |
+            python tools/make_slides.py
