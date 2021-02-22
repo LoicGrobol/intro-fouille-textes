@@ -1,3 +1,5 @@
+name: "Build LaTeX files"
+
 on: [push]
 
 jobs:
