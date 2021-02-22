@@ -9,6 +9,7 @@ _build
 
 ### virtual envs, avoid using different names
 .virtenv
+.venv
 
 ## LaTeX not caught by Github'.gitignore
 *.tns
