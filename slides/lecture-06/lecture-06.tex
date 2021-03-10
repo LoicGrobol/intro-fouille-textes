@@ -32,12 +32,12 @@
 			\toprule
 			\textbf{Texte} & {\textbf{France}} & {\textbf{cinéma}} & {\textbf{art}} & {\textbf{économie}}\\
 			\midrule
-			\(t_1\) & 0 & 1 & 1 & 0\\
-			\(t_2\) & 1 & 2 & 0 & 0\\
-			\(t_3\) & 0 & 0 & 0 & 0\\
-			\(t_4\) & 1 & 0 & 0 & 1\\
-			\(t_5\) & 0 & 0 & 1 & 0\\
-			\(t_6\) & 0 & 0 & 0 & 1\\
+			\(t₁\) & 0 & 1 & 1 & 0\\
+			\(t₂\) & 1 & 2 & 0 & 0\\
+			\(t₃\) & 0 & 0 & 0 & 0\\
+			\(t₄\) & 1 & 0 & 0 & 1\\
+			\(t₅\) & 0 & 0 & 1 & 0\\
+			\(t₆\) & 0 & 0 & 0 & 1\\
 			\hline
 			\bottomrule
 		\end{tabular}
@@ -51,12 +51,12 @@
 			\toprule
 			\textbf{Texte} & {\textbf{France}} & {\textbf{cinéma}} & {\textbf{art}} & {\textbf{économie}}\\
 			\midrule
-			\(t_1\) & 0 & 1 & 1 & 0\\
-			\(t_2\) & 1 & 1 & 0 & 0\\
-			\(t_3\) & 0 & 0 & 0 & 0\\
-			\(t_4\) & 1 & 0 & 0 & 1\\
-			\(t_5\) & 0 & 0 & 1 & 0\\
-			\(t_6\) & 0 & 0 & 0 & 1\\
+			\(t₁\) & 0 & 1 & 1 & 0\\
+			\(t₂\) & 1 & 1 & 0 & 0\\
+			\(t₃\) & 0 & 0 & 0 & 0\\
+			\(t₄\) & 1 & 0 & 0 & 1\\
+			\(t₅\) & 0 & 0 & 1 & 0\\
+			\(t₆\) & 0 & 0 & 0 & 1\\
 			\bottomrule
 		\end{tabular}
 	\end{figure}
@@ -67,14 +67,14 @@
 		\caption{Représentation tabulaire par \emph{fréquences relatives}}
 		\begin{tabular}{l*{4}{S}}
 			\toprule
-			\# & {\textbf{France}} & {\textbf{cinéma}} & {\textbf{art}} & {\textbf{économie}}\\
+			\textbf{Texte} & {\textbf{France}} & {\textbf{cinéma}} & {\textbf{art}} & {\textbf{économie}}\\
 			\midrule
-			1 & 0 & 0.11 & 0.11 & 0\\
-			2 & 0.04 & 0.08 & 0 & 0\\
-			3 & 0 & 0 & 0 & 0\\
-			4 & 0.07 & 0 & 0 & 0.07\\
-			5 & 0 & 0 & 0.1 & 0\\
-			6 & 0 & 0 & 0 & 0.09\\
+			\(t₁\) & 0 & 0.11 & 0.11 & 0\\
+			\(t₂\) & 0.04 & 0.08 & 0 & 0\\
+			\(t₃\) & 0 & 0 & 0 & 0\\
+			\(t₄\) & 0.07 & 0 & 0 & 0.07\\
+			\(t₅\) & 0 & 0 & 0.1 & 0\\
+			\(t₆\) & 0 & 0 & 0 & 0.09\\
 			\bottomrule
 		\end{tabular}
 	\end{figure}
@@ -87,7 +87,6 @@
 \section{Représentations vectorielles et distances}
 % TODO: toute cette partie est à refaire
 %  - Virer la partie formelle, prendre un exemple et le filer pour chaque distance, laisser les formules pour le poly
-%  - Pour la simil, garder les vecteurs, mais commencer par parler d'angle et introduire le produit scalaire comme outil de calcul (et définir la norme)
 % ! CECI EST VRAIMENT IMPORTANT !
 
 \begin{frame}{Sacs de mots}
@@ -145,7 +144,7 @@
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Similarités : exemple de travail}
-	On considère deux points \(t_1=(v_{1,1}, … v_{1,n})\) et \(t_2=(v_{2,1}, …, v_{2,n})\) représentant des documents
+	On considère deux points \(t₁=(v_{1,1}, … v_{1,n})\) et \(t₂=(v_{2,1}, …, v_{2,n})\) représentant des documents
 
 	Par exemple, si on utilise comme traits les fréquences de \emph{orange} et \emph{kiwi}, étant donné le fichier tabulaire suivant
 	\begin{columns}
@@ -155,13 +154,13 @@
 				\toprule
 				\textbf{Texte}	& {\textbf{orange}}& {\textbf{kiwi}}\\
 				\midrule
-				\(t_1\)	& 3	& 1\\
-				\(t_2\)	& 1	& 2\\
+				\(t₁\)	& 3	& 1\\
+				\(t₂\)	& 1	& 2\\
 				\bottomrule
 			\end{tabular}
 		\end{figure}
 
-		On aura \(t_1=\tvcord{3, 1}\) et \(t_2=\tvcord{1, 2}\)
+		On aura \(t₁=\tvcord{3, 1}\) et \(t₂=\tvcord{1, 2}\)
 	\column{0.5\textwidth}
 		\begin{figure}
 			\tikzset{external/export=true}
@@ -178,8 +177,8 @@
 
 				\draw (0, 0) node[below left] {\footnotesize \(0\)};
 
-				\draw [->, accent, line width=2pt] (0,0) -- (3,1) node[midway, above] {\(t_1\)};
-				\draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {\(t_2\)};
+				\draw [->, accent, line width=2pt] (0,0) -- (3,1) node[midway, above] {\(t₁\)};
+				\draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {\(t₂\)};
 			\end{tikzpicture}
 			\caption{Exemple de travail}
 	\end{figure}
@@ -199,9 +198,9 @@
 % TODO: for all examples → connect to real-world examples with word frequences
 \begin{frame}[fragile]{Distance de Manhattan}
 	\begin{block}{Définition (distance de Manhattan)}
-		On appelle \emph{distance de Manhattan} entre \(t_1\) et \(t_2\) le nombre
+		On appelle \emph{distance de Manhattan} entre \(t₁\) et \(t₂\) le nombre
 		\begin{equation}
-			\norm{t_2-t_1}_1 = ∑_{k=1}^n\abs{v_{2,k}-v_{1,k}} \left(=\abs{v_{2,1}-v_{1,1}}+…+\abs{v_{2,n}-v_{1,n}}\right)
+			d₁(t₁, t₂) = ∑_{k=1}^n\abs{v_{2,k}-v_{1,k}} \left(=\abs{v_{2,1}-v_{1,1}}+…+\abs{v_{2,n}-v_{1,n}}\right)
 		\end{equation}
 	\end{block}
 
@@ -233,7 +232,7 @@
 		\begin{columns}
 		\column{.6\textwidth}
 			\begin{align}
-				\norm{\textcolor{highlight3}{t₂}-\textcolor{accent}{t₁}}
+				d₁(\textcolor{highlight1}{t₁}, \textcolor{highlight3}{t₂})
 					&= ∑_{k=1}^n\abs{v_{2,k}-v_{1,k}}\\
 					&= \textcolor{highlight2}{\abs{v_{2,1}-v_{1,1}}}+\textcolor{highlight5}{\abs{v_{2,2}-v_{1,2}}}\\
 					&= \textcolor{highlight2}{\abs{1-3}}+\textcolor{highlight5}{\abs{2-1}}\\
@@ -257,8 +256,8 @@
 
 					\draw (0, 0) node[below left] {\footnotesize \(0\)};
 
-					\draw [->, accent, line width=2pt] (0,0) -- (3,1) node[midway, below right] {\(t₁\)};
-					\draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {\(t₂\)};
+					\fill[highlight1] (3,1) circle [radius=2pt] node[below right] {\(t₁\)};
+					\fill[highlight3] (1,2) circle [radius=2pt] node[above left] {\(t₂\)};
 					\draw [<->, highlight2] (3, 2) -- (1, 2) node [midway, above] {\(\abs{1-3}\)};
 					\draw[<->, highlight5] (3, 2) -- (3, 1)  node [midway, right] {\(\abs{2-1}\)};
 					\draw [<->, highlight4] (1, 2) --  (3, 1)  node [midway, below left] {\(3\)};
@@ -271,9 +270,9 @@
 
 \begin{frame}{Distance euclidienne}
 	\begin{block}{Définition (distance euclidienne)}
-		On appelle \emph{distance euclidienne\textsuperscript{1}} entre \(t_1\) et \(t_2\) le nombre
+		On appelle \emph{distance euclidienne\textsuperscript{1}} entre \(t₁\) et \(t₂\) le nombre
 		\begin{equation}
-			\norm{t₂-t₁}₂ = √{∑_{k=1}^n(v_{2,k}-v_{1,k})²}
+			d₂(t₁, t₂) = √{∑_{k=1}^n(v_{2,k}-v_{1,k})²}
 		\end{equation}
 	\end{block}
 	\vspace{-1.5\bigskipamount}
@@ -282,7 +281,7 @@
 	\begin{columns}
 	\column{.65\textwidth}
 		\begin{align}
-			\norm{\textcolor{highlight3}{t₂}-\textcolor{accent}{t₁}}₂
+			d₂(\textcolor{highlight1}{t₁}, \textcolor{highlight3}{t₂})
 				&= √{∑_{k=1}^n(v_{2,k}-v_{1,k})²}\\
 				&= √{\textcolor{highlight2}{(v_{2,1}-v_{1,1})}² +
 					 \textcolor{highlight5}{(v_{2,2}-v_{1,2})}²}\\
@@ -306,8 +305,8 @@
 
 				\draw (0, 0) node[below left] {\footnotesize \(0\)};
 
-				\draw [->, accent, line width=2pt] (0,0) -- (3,1) node[midway, below right] {\(t₁\)};
-				\draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {\(t₂\)};
+				\fill[highlight1] (3,1) circle [radius=2pt] node[below right] {\(t₁\)};
+				\fill[highlight3] (1,2) circle [radius=2pt] node[above left] {\(t₂\)};
 				\draw [->, highlight2] (3, 2) -- (1, 2)  node [midway, above] {\((1-3)\)};
 				\draw[->, highlight5] (3, 2) -- (3, 1)  node [midway, right] {\((2-1)\)};
 				\draw [<->, highlight4] (1, 2) --  (3, 1)  node [midway, below left] {\(√{5}\)};
@@ -321,16 +320,16 @@
 
 \begin{frame}{Distance de Tchebychev}
 	\begin{block}{Définition (distance de Tchebychev)}
-		On appelle \emph{distance de Tchebychev\textsuperscript{1}} entre \(t_1\) et \(t_2\) le nombre
+		On appelle \emph{distance de Tchebychev\textsuperscript{1}} entre \(t₁\) et \(t₂\) le nombre
 		\begin{equation}
-			\norm{t₂-t₁}_∞ = \max_{1⩽k⩽n}\abs{v_{2,k}-v_{1,k}}
+			d_{∞}(t₁, t₂) = \max_{1⩽k⩽n}\abs{v_{2,k}-v_{1,k}}
 		\end{equation}
 	\end{block}
 	\vspace{-1\smallskipamount}
 	\begin{columns}
 	\column{.65\textwidth}
 		\begin{align}
-			\norm{\textcolor{highlight3}{t₂}-\textcolor{accent}{t₁}}_∞
+			d_∞(\textcolor{highlight1}{t₁}, \textcolor{highlight3}{t₂})
 				&= \max_{1⩽k⩽n}\abs{v_{2,k}-v_{1,k}}\\
 				&= \max_{1⩽k⩽n}\mleft(
 					\textcolor{highlight2}{\abs{v_{2,1}-v_{1,1}}},
@@ -357,8 +356,8 @@
 
 				\draw (0, 0) node[below left] {\footnotesize \(0\)};
 
-				\draw [->, accent, line width=2pt] (0,0) -- (3,1) node[midway, below right] {\(t₁\)};
-				\draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {\(t₂\)};
+				\fill[highlight1] (3,1) circle [radius=2pt] node[below right] {\(t₁\)};
+				\fill[highlight3] (1,2) circle [radius=2pt] node[above left] {\(t₂\)};
 				\draw [->, highlight2] (3, 2) -- (1, 2)  node [midway, above] {\(\abs{1-3}\)};
 				\draw[->, highlight5] (3, 2) -- (3, 1)  node [midway, right] {\(\abs{2-1}\)};
 				\draw [<->, highlight4] (1, 2) --  (3, 1)  node [midway, below left] {\(2\)};
@@ -372,9 +371,9 @@
 
 \begin{frame}{Distances de Minkowski}
 	\begin{block}{Définition (distance de Minkowski)}
-		Pour tout \(p⩾1\), on appelle \emph{distance de Minkowski\textsuperscript{1} de paramètre \(p\)} entre \(t_1\) et \(t_2\) le nombre
+		Pour tout \(p⩾1\), on appelle \emph{distance de Minkowski\textsuperscript{1} de paramètre \(p\)} entre \(t₁\) et \(t₂\) le nombre
 		\begin{equation}
-			\norm{t₂-t₁}_p ={\left(∑_{k=1}^n\abs{v_{2,k}-v_{1,k}}^p\right)}^{\frac{1}{p}}
+			d_p(t₁-t₂) ={\left(∑_{k=1}^n\abs{v_{2,k}-v_{1,k}}^p\right)}^{\frac{1}{p}}
 		\end{equation}
 	\end{block}
 	\vspace{-1\bigskipamount}
@@ -394,7 +393,7 @@
 				width=0.9\textwidth,
 				height=0.8\textheight,
 				xlabel={\(p\)},
-				ylabel={\(\norm{t₂-t₁}_p\)},
+				ylabel={\(d_p(t₁-t₂)\)},
 				title={Distances de Minkowski : \(y=(2^x+1^x)^{\frac{1}{x}}\)},
 				scaled ticks=false,
 				ticklabel style={/pgf/number format/.cd, 1000 sep={\,}},
@@ -534,61 +533,105 @@
 % \end{frame}
 
 \begin{frame}{Les maths en cinq secondes : produit scalaire}
-	Intuitivement, le produit scalaire mesure la \alert{similarité} des directions des vecteurs
-	\begin{columns}
-	\column{.5\textwidth}
-		\begin{figure}
-			\tikzset{external/export=true}
-			\begin{tikzpicture}[true scale=0.8]
-				\draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (4, 3);
+	Soit deux vecteurs \(t₁ = (t_{1,1}, …, t_{1,n})\) et \(t₂ = (t_{2,1}, …, t_{2,n})\), leur \alert{produit scalaire} est
 
-				\draw[->] (-0.5,0) -- (4.25, 0);
-				\foreach \x in {1,...,4}
-					\draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize \(\x\)};
-				\draw[->] (0, -0.5) -- (0, 3.25);
+	\begin{equation}
+		\innprod{t₁}{t₂} = t_{1,1} × t_{2,1} + … + t_{1,n} × t_{2,n}
+	\end{equation}
 
-				\foreach \y in {1,...,3}
-					\draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize \(\y\)};
+	Autrement dit \alert{la somme des produits des coordonnées} de ces vecteurs.
 
-				\draw (0, 0) node[below left] {\footnotesize \(0\)};
+	{\small En particulier c'est assez facile à calculer.}
+\end{frame}
 
-				\draw [->, accent, line width=2pt] (0,0) -- (3,0) node[midway, below right] {\(t₁\)};
-				\draw [->, highlight3, line width=2pt] (0,0) -- (0,2) node[midway, above left] {\(t₂\)};
+\begin{frame}[fragile=singleslide]{Les maths en cinq secondes : écarts angulaires}
+	En pratique, une propriété qui nous intéresse plus c'est que
 
-				\draw [domain=0:90] plot ({cos(\x)}, {sin(\x)}) (0.9, 0.9) node {\(90\)};
-			\end{tikzpicture}
-		\end{figure}
-		\vspace{-\bigskipamount}
-		Nul pour des vecteurs \alert{orthogonaux} (qui font un angle droit)
-		\begin{equation}
-			\innprod{t₁}{t₂} =\norm{t₁}₂×\norm{t₂}₂×\underbrace{\cos 90}_{0} = 0
-		\end{equation}
-	\column{.5\textwidth}
-		\begin{figure}
-			\tikzset{external/export=true}
-			\begin{tikzpicture}[true scale=0.8]
-				\draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (4, 3);
+	\begin{equation}
+		\innprod{t₁}{t₂} =\norm{t₁}₂×\norm{t₂}₂×\cos(θ) = 0
+	\end{equation}
 
-				\draw[->] (-0.5,0) -- (4.25, 0);
-				\foreach \x in {1,...,4}
-					\draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize \(\x\)};
-				\draw[->] (0, -0.5) -- (0, 3.25);
+	Où \(\norm{tᵢ}₂\) est la norme euclidienne de \(tᵢ\) — sa longueur pour la distance euclidienne — et \(θ=\widehat{(t₁, t₂)}\) est l'écart angulaire entre les deux vecteurs.
 
-				\foreach \y in {1,...,3}
-					\draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize \(\y\)};
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}[true scale=0.8]
+			\draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (4, 4);
 
-				\draw (0, 0) node[below left] {\footnotesize \(0\)};
+			\draw[->] (-0.5,0) -- (4.25, 0);
+			\foreach \x in {1,...,4}
+				\draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize \(\x\)};
+			
+			\draw[->] (0, -0.5) -- (0, 4.25);
+			\foreach \y in {1,...,4}
+				\draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize \(\y\)};
 
-				\draw [->, accent, line width=2pt] (0,0) -- (3,2) node[midway, below right] {\(t₁\)};
-				\draw [->, highlight3, line width=2pt] (0,0) -- (1.5,1) node[midway, above left] {\(t₂\)};
-			\end{tikzpicture}
-		\end{figure}
-		\vspace{-\bigskipamount}
-		Maximal pour des vecteurs colinéaires
-		\begin{equation}
-			\innprod{t₁}{t₂} = \norm{t₁}₂×\norm{t₂}₂×\underbrace{\cos 0}_{1} = \norm{t₁}₂×\norm{t}₂
-		\end{equation}
-	\end{columns}
+			\draw (0, 0) node[below left] {\footnotesize \(0\)};
+
+			\draw [->, accent, line width=2pt] (0,0) -- (3,1) node[midway, below right] {\(t₁\)};
+			\draw [->, highlight3, line width=2pt] (0,0) -- (1,4) node[midway, above left] {\(t₂\)};
+
+			\draw [domain=18.4:76] plot ({cos(\x)}, {sin(\x)}) (0.9, 0.9) node {\(θ\)};
+		\end{tikzpicture}
+	\end{figure}
+
+	Intuitivement, le produit scalaire mesure une sorte de \alert{similarité} des directions des vecteurs, puisqu'il dépend de \(\cos(θ)\).
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les maths en cinq secondes : écarts angulaires}
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}[true scale=0.8]
+			\draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (4, 4);
+
+			\draw[->] (-0.5,0) -- (4.25, 0);
+			\foreach \x in {1,...,4}
+				\draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize \(\x\)};
+			
+			\draw[->] (0, -0.5) -- (0, 4.25);
+			\foreach \y in {1,...,4}
+				\draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize \(\y\)};
+
+			\draw (0, 0) node[below left] {\footnotesize \(0\)};
+
+			\draw [->, accent, line width=2pt] (0,0) -- (3,0) node[midway, below right] {\(t₁\)};
+			\draw [->, highlight3, line width=2pt] (0,0) -- (0,2) node[midway, above left] {\(t₂\)};
+
+			\draw [domain=0:90] plot ({cos(\x)}, {sin(\x)}) (0.9, 0.9) node {\(90\)};
+		\end{tikzpicture}
+	\end{figure}
+	\vspace{-\bigskipamount}
+	Le produit scalaire est nul pour des vecteurs \alert{orthogonaux} (qui font un angle droit)
+	\begin{equation}
+		\innprod{t₁}{t₂} =\norm{t₁}₂×\norm{t₂}₂×\underbrace{\cos 90}_{0} = 0
+	\end{equation}
+\end{frame}
+
+\begin{frame}[fragile=singleslide]{Les maths en cinq secondes : écarts angulaires}
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}[true scale=0.8]
+			\draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (4, 4);
+
+			\draw[->] (-0.5,0) -- (4.25, 0);
+			\foreach \x in {1,...,4}
+				\draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize \(\x\)};
+			
+			\draw[->] (0, -0.5) -- (0, 4.25);
+			\foreach \y in {1,...,4}
+				\draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize \(\y\)};
+
+			\draw (0, 0) node[below left] {\footnotesize \(0\)};
+
+			\draw [->, accent, line width=2pt] (0,0) -- (3,2) node[midway, below right] {\(t₁\)};
+			\draw [->, highlight3, line width=2pt] (0,0) -- (1.5,1) node[midway, above left] {\(t₂\)};
+		\end{tikzpicture}
+	\end{figure}
+	\vspace{-\bigskipamount}
+	Le produit scalaire est maximal pour des vecteurs colinéaires
+	\begin{equation}
+		\innprod{t₁}{t₂} = \norm{t₁}₂×\norm{t₂}₂×\underbrace{\cos 0}_{1} = \norm{t₁}₂×\norm{t}₂
+	\end{equation}
 	Il est négatif pour des vecteurs de sens opposés,  mais ça ne peut pas être le cas avec nos sacs de mots.
 \end{frame}
 
@@ -599,14 +642,14 @@
 		\begin{itemize}
 			\item Si deux textes n'ont aucun mot en commun, les sacs de mots correspondants seront des vecteurs orthogonaux → similarité nulle
 		\end{itemize}
-	Mais le terme \(\norm{t₁}₂×\norm{t}₂\) induit un bias
+	Mais le terme \(\norm{t₁}₂×\norm{t}₂\) induit un biais → plus des textes vont être longs, plus leur produit scalaire sera grand, même s'ils ne sont pas très similaires.
 		\begin{itemize}
-			\item Utiliser des fréquences ne garantit pas que la norme euclidienne vaille \(1\) !
+			\item Utiliser des fréquences relatives ne garantit pas que la norme euclidienne vaille \(1\) !
 		\end{itemize}
 	On utilise donc plutôt des normalisations du produit scalaire.
 \end{frame}
 
-\begin{frame}{Similarité cosinus}
+\begin{frame}<1>[label=simcos]{Similarité cosinus}
 	\begin{block}{Définition (Similarité cosinus)}
 		On appelle \emph{similarité cosinus des vecteur \(t₁\) et \(t₂\)} le cosinus de l'écart angulaire entre \(t₁\) et \(t₂\).
 	\end{block}
@@ -637,8 +680,7 @@
 				\frac{\innprod{t₁}{t₂}}{\min\mleft(\norm{t₁}₂, \norm{t₂}₂\mright)}
 			\end{equation}
 	\end{itemize}
-
-Attention : en général, ces mesures ne seront pas nécessairement inférieures à \(1\).
+	Attention : en général, ces mesures ne seront pas nécessairement inférieures à \(1\).
 \end{frame}
 
 \begin{frame}{Autres normalisations : versions booléennes}
