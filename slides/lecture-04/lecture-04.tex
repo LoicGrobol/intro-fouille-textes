@@ -250,7 +250,7 @@
 		\begin{equation}
 			f(n) = \frac{K}{n}
 		\end{equation}
-		où $K$ est une constante ne dépendant que du corpus.
+		où \(K\) est une constante ne dépendant que du corpus.
 	\end{block}
 	\vskip0pt plus 1fill
 	{\tiny 1. Georges Zipf (1902-1950) dans \parencite{zipf1949HumanBehaviorPrinciple}\\2. d'après la légende}
@@ -268,14 +268,14 @@
 				height=0.8\textheight,
 				xlabel={Rang},
 				ylabel={Fréquence d'apparition},
-				title={Loi de Zipf : $y=\frac{K}{x}$},
+				title={Loi de Zipf : \(y=\frac{K}{x}\)},
 				scaled ticks=false,
 				ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}
 			]
-				\addplot[aacent, domain=1:20, samples=1001] {max(8000/x, 1)};
+				\addplot[accent, domain=1:20, samples=1001] {max(8000/x, 1)};
 			\end{axis}
 		\end{tikzpicture}
-		\caption{Courbe d'une loi de Zipf ($K=\num{8000}$)}
+		\caption{Courbe d'une loi de Zipf (\(K=\num{8000}\))}
 	\end{figure}
 \end{frame}
 
@@ -283,7 +283,7 @@
 \begin{frame}{Loi de Zipf : observations}
 	\begin{itemize}
 		\item La loi de Zipf se vérifie plutôt bien expérimentalement
-		\item En pratique, les répartitions observées sont de la forme $f(n)=\frac{k}{n^s}$ avec $s$ proche de $1$
+		\item En pratique, les répartitions observées sont de la forme \(f(n)=\frac{k}{n^s}\) avec \(s\) proche de \(1\)
 		\item Ce type de distribution, dites \emph{loi de puissance} est omniprésent en statistiques (en en sciences en général)
 		\item Elles font parties des distributions dites \emph{à longue traîne} (\textit{fat tail})
 		\item Une autre approche due à Mandelbrot présente une généralisation de la loi de Zipf comme le résultat de contraintes d'optimalité d'utilisation d'un canal de communication.
