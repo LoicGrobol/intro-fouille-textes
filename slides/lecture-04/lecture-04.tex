@@ -272,7 +272,7 @@
 				scaled ticks=false,
 				ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}
 			]
-				\addplot[highlighta, domain=1:20, samples=1001] {max(8000/x, 1)};
+				\addplot[aacent, domain=1:20, samples=1001] {max(8000/x, 1)};
 			\end{axis}
 		\end{tikzpicture}
 		\caption{Courbe d'une loi de Zipf ($K=\num{8000}$)}
@@ -315,7 +315,7 @@
 				xmin=0, xmax=800000, ymin=0,
 				width=0.9\textwidth,
 				height=0.8\textheight,
-				xlabel={Taille de la collection},
+				xlabel={Taille du corpus en nombre de mots},
 				ylabel={Taille du vocabulaire},
 				title={Loi de Heaps : \(y=K×x^β\)},
 				scaled ticks=false,

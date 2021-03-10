@@ -70,9 +70,6 @@
 	% 	\par\centering}%
 	% 	{\par}
 	% \makeatother
-	% FIXME: not pretty and footnotes are still too big
-	\let\footnoterule\relax  % No footnote rule, push down footnote
-
 % title pages for lectures
 \makeatletter
 	\AtBeginLecture{%
@@ -81,8 +78,9 @@
 			\usebeamerfont{section title}
 			\beamer@currentlecturelabel: \insertlecture\par
 			\ifSubfilesClassLoaded{
+				\pdfbookmark[2]{Titre}{title}
 				\usebeamertemplate*{title separator}
-				\ifx\beamer@shortauthor\@empty\else\usebeamertemplate*{author}\fi
+				\ifx\beamera@shortauthor\@empty\else\usebeamertemplate*{author}\fi
 				\ifx\insertdate\@empty\else\usebeamertemplate*{date}\fi
 				\ifx\insertinstitute\@empty\else\usebeamertemplate*{institute}\fi
 			}{}
@@ -95,12 +93,12 @@
 \usepackage{fontspec}
 \usefonttheme{professionalfonts}
 
-\directlua{luaotfload.add_fallback
-   ("emojifallback",
-	{
-	  "NotoColorEmoji:mode=harf;"
-	}
-   )}
+\directlua{
+	luaotfload.add_fallback(
+		"emojifallback",
+		{"NotoColorEmoji:mode=harf;"}
+	)
+}
 
 \setsansfont{Fira Sans}[
 	BoldFont={* Semibold},
