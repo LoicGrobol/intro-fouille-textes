@@ -373,24 +373,24 @@
 \end{frame}
 
 \begin{frame}{Les maths en cinq secondes : probabilités}
-	Objectif : on veut une mesure \alert{quantitative} du fait qu'un évènement dépendant du hasard (aléatoire) ait des chances de se produire. On appelle cette mesure \alert{probabilité} de l'évènement.
+	Objectif : on veut une \alert{mesure} des chances qu'un évènement se produise, qu'on appelle \alert{probabilité} de l'évènement.
 	
 	\pause
-	On impose que
+	On impose les contraintes suivantes :
 	\begin{itemize}
-		\item la probabilité d'un évènement soit un nombre compris entre \num{0} (pour un évènement impossible) et \num{1} (pour un évènement certain)
+		\item La probabilité d'un évènement est un nombre compris entre \num{0} (pour un évènement impossible) et \num{1} (pour un évènement certain)
 		\item Si deux évènements sont \alert{incompatibles}, la probabilité qu'un des deux se produise est la somme de leurs probabilités respectives
 	\end{itemize}
 	\itpause
-	Dans ces conditions, soit un corpus de \(n\) documents et un ensemble de \(k\) documents dans ce corpus.
-	Si on choisit au hasard et de façon non-biaisée un texte du corpus, la probabilité que ce texte soit un de ces \(k\) textes est \(\frac{k}{n}\).
+	Alors, soit un corpus de \(n\) documents et un ensemble de \(k\) documents dans ce corpus.
+	Si on choisit au hasard et de façon non-biaisée un texte du corpus, la probabilité que le texte choisi soit un de ces \(k\) textes est \(\frac{k}{n}\).
 \end{frame}
 
 \begin{frame}{IDF, probabilités et surprise}
 	Dans un corpus de \num{1000} textes, \num{55} contiennent le mot \emph{kiwi}.
-	\pause
 	
 	On considère les évènements \(Aᵢ\) « avoir choisi le texte \(i\) ».
+	\pause
 	\begin{enumerate}
 		\item Combien y a-t-il de \(Aᵢ\) ?  \only<3->{→ \num{1000}}
 		\item Quelle est la probabilité qu'au moins un des \(Aᵢ\) se réalise ?  \only<4->{→ \num{1}}
