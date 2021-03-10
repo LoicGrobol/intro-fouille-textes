@@ -8,7 +8,7 @@
 
 \renewcommand\docdate{2021-02-18}  % chktex 8
 
-\lecture{TF⋅IDF et représentations vectorielles}{Cours 6}
+\lecture{Représentations vectorielles, distances et similarités}{Cours 6}
 
 
 % TODO: mieux choisir les exemples pour avoir un tableau moins creux et plus de trucs intéressants à dire sur les différentes représentations
@@ -25,729 +25,639 @@
 \end{frame}
 
 
-\begin{frame}[fragile]{Exemples de travail}
-    \begin{figure}
-        \caption{Représentation tabulaire par \emph{occurences}}
-        \begin{tabu} to \linewidth {l*{4}{X[c]}}
-            \toprule
-            \# & France & cinéma & art & économie\\
-            \midrule
-            1 & 0 & 1 & 1 & 0\\
-            2 & 1 & 2 & 0 & 0\\
-            3 & 0 & 0 & 0 & 0\\
-            4 & 1 & 0 & 0 & 1\\
-            5 & 0 & 0 & 1 & 0\\
-            6 & 0 & 0 & 0 & 1\\
-            \hline
-            \bottomrule
-        \end{tabu}
-    \end{figure}
+\begin{frame}{Exemples de travail}
+	\begin{figure}
+		\caption{Représentation tabulaire par \emph{occurences}}
+		\begin{tabular}{l*{4}{S}}
+			\toprule
+			\textbf{Texte} & {\textbf{France}} & {\textbf{cinéma}} & {\textbf{art}} & {\textbf{économie}}\\
+			\midrule
+			\(t_1\) & 0 & 1 & 1 & 0\\
+			\(t_2\) & 1 & 2 & 0 & 0\\
+			\(t_3\) & 0 & 0 & 0 & 0\\
+			\(t_4\) & 1 & 0 & 0 & 1\\
+			\(t_5\) & 0 & 0 & 1 & 0\\
+			\(t_6\) & 0 & 0 & 0 & 1\\
+			\hline
+			\bottomrule
+		\end{tabular}
+	\end{figure}
 \end{frame}
 
 \begin{frame}<-2>[fragile]{Exemples de travail}
-    \begin{figure}
-        \caption{Représentation tabulaire \emph{booléenne}}
-        \begin{tabu} to \linewidth {l*{4}{X[c]}}
-            \toprule
-            \# & France & cinéma & art & économie\\
-            \midrule
-            1 & 0 & 1 & 1 & 0\\
-            2 & 1 & 1 & 0 & 0\\
-            3 & 0 & 0 & 0 & 0\\
-            4 & 1 & 0 & 0 & 1\\
-            5 & 0 & 0 & 1 & 0\\
-            6 & 0 & 0 & 0 & 1\\
-            \bottomrule
-        \end{tabu}
-    \end{figure}
+	\begin{figure}
+		\caption{Représentation tabulaire \emph{booléenne}}
+		\begin{tabular}{l*{4}{S}}
+			\toprule
+			\textbf{Texte} & {\textbf{France}} & {\textbf{cinéma}} & {\textbf{art}} & {\textbf{économie}}\\
+			\midrule
+			\(t_1\) & 0 & 1 & 1 & 0\\
+			\(t_2\) & 1 & 1 & 0 & 0\\
+			\(t_3\) & 0 & 0 & 0 & 0\\
+			\(t_4\) & 1 & 0 & 0 & 1\\
+			\(t_5\) & 0 & 0 & 1 & 0\\
+			\(t_6\) & 0 & 0 & 0 & 1\\
+			\bottomrule
+		\end{tabular}
+	\end{figure}
 \end{frame}
 
-\begin{frame}[fragile]{Exemples de travail}
-    \begin{figure}
-        \caption{Représentation tabulaire par \emph{fréquences relatives}}
-        \begin{tabu} to \linewidth {l*{4}{X[c]}}
-            \toprule
-            \# & France & cinéma & art & économie\\
-            \midrule
-            1 & 0 & 0.11 & 0.11 & 0\\
-            2 & 0.04 & 0.08 & 0 & 0\\
-            3 & 0 & 0 & 0 & 0\\
-            4 & 0.07 & 0 & 0 & 0.07\\
-            5 & 0 & 0 & 0.1 & 0\\
-            6 & 0 & 0 & 0 & 0.09\\
-            \bottomrule
-        \end{tabu}
-    \end{figure}
-\end{frame}
-
-\section{TF⋅IDF}
-
-\begin{frame}{TF⋅IDF}
-    \only<-2>{On veut pouvoir \alert{pondérer} l'importance d'un terme (mot, caractère, $n$-gramme…) en fonction de sa \alert{spécificité} (au sens large) pour un document.}
-
-    \begin{itemize}
-        \item \emph{\textbf{T}erm \textbf{F}requency $×$ \textbf{I}nverse \textbf{D}ocument \textbf{F}requency}
-        \item $\TF(i,j) = n_{i,j}$ ou $\TF(i,j) = \frac{n_{i,j}}{\sum_k n_{i,j}}$
-        \item
-            \only<1>{
-                \begin{equation}
-                    \IDF(j) = \log\mleft(\frac{m}{\#\compset{i}{n_{i,j}>0}}\mright)
-                \end{equation}
-            }
-            \only<2>{
-                \begin{equation}
-                    \IDF(j) = \log\frac{\overbrace{m}^{\mathclap{\text{nombre total de documents}}}}{\underbrace{\#\compset{i}{n_{i,j}>0}}_{\mathclap{\text{nombre de documents contenant $a_j$}}}}
-                \end{equation}
-            }
-            \only<3->{$\IDF(j) = \log\frac{m}{\#\compset{i}{n_{i,j}>0}}$}
-        \only<3->{
-            \item Intuitivement $\IDF$ mesure la rareté d'un attribut, donc (on espère !) son informativité
-            \item « Si $a_j$ est présent dans tous les textes, savoir qu'il est présent dans $t_i$ ne donne pas d'information sur $t_i$ »
-            \item Permet un filtrage moins arbitraire des \emph{stop words}
-            \item \alt<4>{$\log$ donne à $\IDF$ la forme d'une \emph{surprise} au sens de Shannon}{$\log$ est une façon pratique de modérer les effets de cette pondération : on devrait parler de $\log$-$\IDF$}
-        }
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{IDF, probabilités et surprise}
-	Dans un corpus de \num{1000} textes, \num{55} contiennent le mot \emph{kiwi}.
-    \pause
-
-	On choisit un texte au hasard sans en favoriser aucun. Serait-il surprenant que le texte choisi contienne le mot \emph{kiwi} ?
-\end{frame}
-
-\begin{frame}{Les maths en cinq secondes : probabilités}
-    Objectif : on veut une mesure \alert{quantitative} du fait qu'un évènement dépendant du hasard (aléatoire) ait des chances de se produire. On appelle cette mesure \alert{probabilité} de l'évènement.
-    
-	\pause
-	On impose que
-	\begin{itemize}
-		\item la probabilité d'un évènement soit un nombre compris entre \num{0} (pour un évènement impossible) et \num{1} (pour un évènement certain)
-		\item Si deux évènements sont \alert{incompatibles}, la probabilité qu'un des deux se produise est la somme de leurs probabilités respectives
-	\end{itemize}
-\end{frame}
-
-\begin{frame}{IDF, probabilités et surprise}
-	Dans un corpus de \num{1000} textes, \num{55} contiennent le mot \emph{kiwi}.
-    \pause
-    
-	On considère les évènements $Aᵢ$ « avoir choisi le texte $i$ ».
-	\begin{enumerate}
-		\item Combien y a-t-il de $Aᵢ$ ?  \only<2>{→ \num{1000}}
-		\item Quelle est la probabilité qu'au moins un des $Aᵢ$ se réalise ?  \only<2>{→ \num{1}}
-		\item Pour un $i$ donné, quelle est la probabilité (notée $P(Aᵢ)$) de $Aᵢ$ ?  \only<2>{→ \(\frac{1}{1000}\)}
-		\item En déduire la probabilité que le texte choisi contienne le mot \emph{kiwi}  \only<2>{→ \(\frac{55}{1000}\)}
-	\end{enumerate}
-\end{frame}
-
-\begin{frame}{IDF, probabilités et surprise}
-	La notion de \alert{surprise} vient de la théorie de l'information. La surprise d'un évènement $A$ mesure le caractère inattendu de la réalisation d'un évènement.
-
-	On la définit par
-	\begin{equation}
-		I(A) = -\log P(A)
-	\end{equation}
-
-	Intuitivement, plus la probabilité d'un évènement est faible, plus sa surprise est grande.
-\end{frame}
-
-\begin{frame}{Surprise}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}
-            \begin{axis}[
-				title={Surprise : $y=-\log x$},
-				xlabel={$P(A)$},
-				ylabel={$I(A)$},
-				xmin=0, xmax=1, ymin=0,
-                width=0.9\textwidth,
-                height=0.8\textheight,
-			]
-                \addplot[highlighta, domain=0:1, samples=1001] {-ln(x)};
-            \end{axis}
-        \end{tikzpicture}
-        \caption{Suprise d'un évènement en fonction de sa probabilité}
-    \end{figure}
-\end{frame}
-
-\begin{frame}{IDF}
-	On a pour le mot $m_j$
-	\begin{equation}
-		\IDF(m_j) = \log\mleft(\frac{m}{\#\compset{i}{n_{i,j}>0}}\mright) = -\log\mleft(\frac{\#\compset{i}{n_{i,j}>0}}{m}\mright) = I(…)
-	\end{equation}
-
-	Autrement dit : l'\(\IDF\) du mot \emph{kiwi} est la surprise de l'événement \enquote{un texte choisi au hasard dans le corpus contient le mot \emph{kiwi}}.
+\begin{frame}{Exemples de travail}
+	\begin{figure}
+		\caption{Représentation tabulaire par \emph{fréquences relatives}}
+		\begin{tabular}{l*{4}{S}}
+			\toprule
+			\# & {\textbf{France}} & {\textbf{cinéma}} & {\textbf{art}} & {\textbf{économie}}\\
+			\midrule
+			1 & 0 & 0.11 & 0.11 & 0\\
+			2 & 0.04 & 0.08 & 0 & 0\\
+			3 & 0 & 0 & 0 & 0\\
+			4 & 0.07 & 0 & 0 & 0.07\\
+			5 & 0 & 0 & 0.1 & 0\\
+			6 & 0 & 0 & 0 & 0.09\\
+			\bottomrule
+		\end{tabular}
+	\end{figure}
 \end{frame}
 
 % \begin{frame}{Exercice}
 % 	Donner une représentation tabulaire du corpus d'exemple qui utilise les TF⋅IDF.
 % \end{frame}
 
-\section{Représentations vectorielles et similarités}
+\section{Représentations vectorielles et distances}
 % TODO: toute cette partie est à refaire
-%  - VIrer la partie somme et scale de vecteurs : RAF
 %  - Virer la partie formelle, prendre un exemple et le filer pour chaque distance, laisser les formules pour le poly
-%  - Pour les distances, voir les textes comme des points pas comme des vecteurs
 %  - Pour la simil, garder les vecteurs, mais commencer par parler d'angle et introduire le produit scalaire comme outil de calcul (et définir la norme)
 % ! CECI EST VRAIMENT IMPORTANT !
 
-\begin{frame}{Des sacs de mots aux vecteurs}
-    Dans tout ce qui précède, on ne tient pas compte des positions relatives des termes, mais seulement de leurs nombres d'occurrences.
-    \begin{itemize}
-        \item Approche \emph{bag-of-words} (sac de mots)
-        \item « Siobhan applaudit Eóghan » vs. « Eóghan applaudit Siobhan »…
-        \begin{itemize}
-            \item[→] On compte (comme d'habitude) sur la masse de données pour passer outre ce genre de problèmes
-        \end{itemize}
-    \end{itemize}
-    En pratique on fait même plus fort
-    \begin{itemize}
-        \item Hypothèse d'\alert{indépendance} : si $k≠ℓ$, $a_k$ et $a_ℓ$ sont indépendants
-        \item On peut alors considérer chaque ligne comme un vecteur (ou un point…) d'un espace vectoriel
-        \item Et accéder à la puissance de l'algèbre linéaire et de la géométrie vectorielle !
-    \end{itemize}
+\begin{frame}{Sacs de mots}
+	Dans tout ce qui précède, on ne tient pas compte des positions relatives des termes, mais seulement de leurs nombres d'occurrences.
+	\begin{itemize}
+		\item Approche \alert{\emph{bag-of-words}} (sac de mots)
+		\item « Siobhan applaudit Eóghan » vs. « Eóghan applaudit Siobhan »…
+		\begin{itemize}
+			\item[→] On compte (comme d'habitude) sur la \alert{masse} de données pour passer outre ce genre de problèmes
+		\end{itemize}
+	\end{itemize}
 \end{frame}
 
-\subsection{Les maths en cinq secondes : vecteurs}
-
-\begin{frame}{Les maths en cinq secondes : vecteurs}
-    On appelle \emph{vecteur de dimension $n$} tout $n$-uplet de nombres
-    \begin{equation}
-        v = \vcord{v_1, ⋮, v_n}
-    \end{equation}
-    Si $n=2$, on peut les représenter simplement dans le plan
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}
-            \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
-
-            \draw[->] (-0.5,0) -- (5.25, 0);
-            \foreach \x in {1,...,5}
-                \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
-            \draw[->] (0, -0.5) -- (0, 4.25);
-
-            \foreach \y in {1,...,4}
-                \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
-
-            \draw (0, 0) node[below left] {\footnotesize $0$};
-
-            \draw [->, highlighta, line width=2pt] (0,0) -- (2,3);
-
-            \draw (1.5, 1.5) node[anchor=west] {$\textcolor{highlighta}{v}=\vcord{2,3}$};
-        \end{tikzpicture}
-        \caption{Vecteur en dimension $2$}
-    \end{figure}
-\end{frame}
-
-\begin{frame}{Les maths en cinq secondes : vecteurs}
-    On définit la \emph{somme} et le \emph{produit par un nombre} par
-    \begin{equation}
-        \vcord{a_1, ⋮, a_n} + \vcord{b_1, ⋮, b_n} = \vcord{a_1+b_1, ⋮, a_n+b_n}
-    \end{equation}
-    et
-    \begin{equation}
-        λ⋅\vcord{a_1, ⋮, a_n} = \vcord{λa_1, ⋮, λa_n}
-    \end{equation}
-    par exemple
-    \begin{equation}
-        \vcord{2, 7} + \vcord{1, 3} = \vcord{3, 10}
-    \end{equation}
-    \begin{equation}
-        5⋅\vcord{3.5, -3} = \vcord{17.5, -15}
-    \end{equation}
-\end{frame}
-
-\begin{frame}[fragile]{Les maths en cinq secondes : vecteurs}
-    Géométriquement
-    \only<1-4>{
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}
-                \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
-
-                \draw[->] (-0.5,0) -- (5.25, 0);
-                \foreach \x in {1,...,5}
-                    \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
-                \draw[->] (0, -0.5) -- (0, 4.25);
-
-                \foreach \y in {1,...,4}
-                    \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
-
-                \draw (0, 0) node[below left] {\footnotesize $0$};
-
-                \draw [->, highlighta, line width=2pt, alt=<2-3>{invisible}{}] (0,0) -- (3,1) node[midway, above] {$v$};
-                \draw [->, highlighta, line width=2pt, alt=<2-3>{}{invisible}] (1,2) -- (4,3) node[midway, above] {$v$};
-
-                \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$u$};
-
-                \draw[->, highlight6, line width=2pt, alt=<3->{}{invisible}] (0,0) -- (4,3) node[midway, right] {$u+v$};
-            \end{tikzpicture}
-            \caption{Somme de deux vecteurs}
-        \end{figure}
-    }
-    \only<5-7>{
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}
-                \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
-
-                \draw[->] (-0.5,0) -- (5.25, 0);
-                \foreach \x in {1,...,5}
-                    \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
-                \draw[->] (0, -0.5) -- (0, 4.25);
-
-                \foreach \y in {1,...,4}
-                    \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
-
-                \draw (0, 0) node[below left] {\footnotesize $0$};
-
-                \draw [->, highlighta, line width=2pt, alt=<5>{}{invisible}] (0,0) -- (2,1) node[midway, above] {$v$};
-
-                \draw[->, highlighta, line width=2pt, alt=<6>{}{invisible}] (0,0) -- (4,2) node[midway, above] {$2v$};
-                \draw[->, highlighta, line width=2pt, alt=<7>{}{invisible}] (0,0) -- (1,0.5) node[above] {$0.5v$};
-            \end{tikzpicture}
-            \caption{produit d'un vecteur par un nombre}
-        \end{figure}
-    }
-\end{frame}
-
-\begin{frame}{Exercice}
-	Calculer
-	\begin{enumerate}
-		\item
-			\begin{equation}
-				\vcord{2, 1} + \vcord{3, 7}
-			\end{equation}
-		\item
-			\begin{equation}
-				3⋅\vcord{2, 1, -2, 0}
-			\end{equation}
-		\item
-			\begin{equation}
-				\frac{1}{2}⋅\left(\vcord{2, 4} + \vcord{3,6}\right)
-			\end{equation}
-		\item
-			\begin{equation}
-				0.2⋅\vcord{2, 4} + 0.8⋅\vcord{3,6}
-			\end{equation}
-	\end{enumerate}
+\begin{frame}{Hypothèse d'indépendance}
+	En pratique on fait même plus fort :
+	\begin{itemize}[<+->]
+		\item Hypothèse d'\alert{indépendance} : si \(k≠ℓ\), \(a_k\) et \(a_ℓ\) sont indépendants
+		\item On peut alors considérer les différentes colonnes d'une même ligne comme des coordonnées
+		\item Et donc considérer chaque ligne comme un \alert{point} ou un \alert{vecteur} dans un certain espace
+		\item Et accéder à la puissance de l'algèbre linéaire et des géométries vectorielles et affines !
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{Interprétation}
-    Bien entendu, l'hypothèse d'indépendance est fausse en général
-    \begin{itemize}
-        \item[→] Si un texte contient \emph{main}, il est plus probable qu'il contienne également \emph{doigt}
-    \end{itemize}
-    Et représenter les documents par des vecteurs a ses limites
-    \begin{itemize}
-        \item[→] Que signifie le fait des sommer les attributs de deux documents ?
-    \end{itemize}
-    Mais ces approximations permettent d'utiliser une machinerie mathématique qui marche suffisamment bien en pratique.
+	Bien entendu, l'hypothèse d'indépendance est \alert{fausse} en général
+	\begin{itemize}
+		\item[→] Si un texte contient \emph{main}, il est plus probable qu'il contienne également \emph{doigt}
+	\end{itemize}
+	Et représenter les documents par des points a ses limites
+	\begin{itemize}
+		\item[→] Que signifie le fait de sommer les attributs de deux documents ?
+	\end{itemize}
+	Mais ces approximations permettent d'utiliser une machinerie mathématique qui marche suffisamment bien en pratique.
 
-    On est bien dans la philosophie de la fouille de textes !
+	On est bien dans la philosophie de la fouille de textes !
 \end{frame}
 
 \subsection{Distances vectorielles}
 
 \begin{frame}{Similarité : exemple de travail}
-    En pratique, les documents considérés auront beaucoup de colonnes
-    \begin{itemize}
-        \item De quelques-unes à plusieurs centaines
-        \item Donc les vecteurs considérés seront de grande dimension
-        \item Mais pour l'intuition on va se retreindre à la dimension $2$ : le plan
-    \end{itemize}
+	En pratique, les documents considérés auront beaucoup de colonnes
+	\begin{itemize}
+		\item De quelques-unes à plusieurs centaines
+		\item Donc l'espace considéré aura un grand nombre de dimensions
+		\item Mais pour l'intuition on va se retreindre à la dimension \(2\) : le plan
+		\item<+-> Ça nous permet de faire des dessins !
+	\end{itemize}
 \end{frame}
 
 \begin{frame}[standout]
-    To deal with a $\mathbf{14}$-dimensional space, visualize a $3$-D space and say `fourteen' to yourself very loudly. Everyone does it.
+	To deal with a \(\mathbf{14}\)-dimensional space, visualize a \(3\)-D space and say `fourteen' to yourself very loudly. Everyone does it.
 	\vspace{\bigskipamount}
 
-    Geoffrey Hinton
+	Geoffrey Hinton
 \end{frame}
 
 \begin{frame}[fragile=singleslide]{Similarités : exemple de travail}
-    On considère deux vecteurs $t_1=(v_{1,1}, … v_{1,n})$ et $t_2=(v_{2,1}, …, v_{2,n})$ représentant des documents
+	On considère deux points \(t_1=(v_{1,1}, … v_{1,n})\) et \(t_2=(v_{2,1}, …, v_{2,n})\) représentant des documents
 
-    Par exemple, si on utilise comme traits les fréquences de \emph{orange} et \emph{kiwi}, étant donné le fichier tabulaire suivant
-    \begin{columns}
-    \column{0.5\textwidth}
-        \begin{figure}
-            \begin{tabu} to .9\linewidth {*{3}{X[c]}}
-                \texttt{t}  & \texttt{orange} & \texttt{kiwi}\\
-                \hline
-                \texttt{1}  & \texttt{3}      & \texttt{1}\\
-                \texttt{2}  & \texttt{1}      & \texttt{2}\\
-            \end{tabu}
-        \end{figure}
+	Par exemple, si on utilise comme traits les fréquences de \emph{orange} et \emph{kiwi}, étant donné le fichier tabulaire suivant
+	\begin{columns}
+	\column{0.5\textwidth}
+		\begin{figure}
+			\begin{tabular}{l*{2}{S[table-format=1.0]}}
+				\toprule
+				\textbf{Texte}	& {\textbf{orange}}& {\textbf{kiwi}}\\
+				\midrule
+				\(t_1\)	& 3	& 1\\
+				\(t_2\)	& 1	& 2\\
+				\bottomrule
+			\end{tabular}
+		\end{figure}
 
-        On aura $t_1=\tvcord{3, 1}$ et $t_2=\tvcord{1, 2}$
-    \column{0.5\textwidth}
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}[true scale=0.8]
-                \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+		On aura \(t_1=\tvcord{3, 1}\) et \(t_2=\tvcord{1, 2}\)
+	\column{0.5\textwidth}
+		\begin{figure}
+			\tikzset{external/export=true}
+			\begin{tikzpicture}[true scale=0.8]
+				\draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
 
-                \draw[->] (-0.5,0) -- (5.25, 0);
-                \foreach \x in {1,...,5}
-                    \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
-                \draw[->] (0, -0.5) -- (0, 4.25);
+				\draw[->] (-0.5,0) -- (5.25, 0);
+				\foreach \x in {1,...,5}
+					\draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize \(\x\)};
+				\draw[->] (0, -0.5) -- (0, 4.25);
 
-                \foreach \y in {1,...,4}
-                    \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+				\foreach \y in {1,...,4}
+					\draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize \(\y\)};
 
-                \draw (0, 0) node[below left] {\footnotesize $0$};
+				\draw (0, 0) node[below left] {\footnotesize \(0\)};
 
-                \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, above] {$t_1$};
-                \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t_2$};
-            \end{tikzpicture}
-            \caption{Exemple de travail}
-    \end{figure}
+				\draw [->, accent, line width=2pt] (0,0) -- (3,1) node[midway, above] {\(t_1\)};
+				\draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {\(t_2\)};
+			\end{tikzpicture}
+			\caption{Exemple de travail}
+	\end{figure}
 \end{columns}
 \end{frame}
 
 \begin{frame}{Exemple}
 	\begin{enumerate}
 		\item Représenter le corpus d'exemple sous forme tabulaire en utilisant comme attributs les fréquences des mots ayant trait au \emph{cinéma} et à l'économie \emph{économie}
-		\item En déduire une représentation du corpus comme un ensemble de vecteurs du plan
+		\item En déduire une représentation du corpus comme un ensemble de points du plan
 	\end{enumerate}
-	Pour la suite, choisir deux de ces vecteurs et calculer leur distance pour chacune des distances proposées.
+	Pour la suite, choisir deux de ces points et calculer leur distance pour chacune des distances proposées.
 \end{frame}
 
 % TODO: overlay equation uncover ?
 % TODO: distances comparisons (particularly minkovsky) : show distorted diagrams ?
 % TODO: for all examples → connect to real-world examples with word frequences
 \begin{frame}[fragile]{Distance de Manhattan}
-    \begin{block}{Définition (distance de Manhattan)}
-        On appelle \emph{distance de Manhattan} entre $t_1$ et $t_2$ le nombre
-        \begin{equation}
-            \norm{t_2-t_1}_1 = ∑_{k=1}^n\abs{v_{2,k}-v_{1,k}} \left(=\abs{v_{2,1}-v_{1,1}}+…+\abs{v_{2,n}-v_{1,n}}\right)
-        \end{equation}
-    \end{block}
+	\begin{block}{Définition (distance de Manhattan)}
+		On appelle \emph{distance de Manhattan} entre \(t_1\) et \(t_2\) le nombre
+		\begin{equation}
+			\norm{t_2-t_1}_1 = ∑_{k=1}^n\abs{v_{2,k}-v_{1,k}} \left(=\abs{v_{2,1}-v_{1,1}}+…+\abs{v_{2,n}-v_{1,n}}\right)
+		\end{equation}
+	\end{block}
 
-    \only<1>{
-    \begin{columns}
-        \column{0.5\textwidth}
-        On l'appelle aussi \emph{taxicab distance} : c'est la distance du chemin le plus court pour aller d'un point à un autre en se déplaçant sur une grille
+	\only<1>{
+		\begin{columns}
+			\column{0.5\textwidth}
+			On l'appelle aussi \emph{taxicab distance} : c'est la distance du chemin le plus court pour aller d'un point à un autre en se déplaçant sur une grille
 
-        \column{0.5\textwidth}
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}[background rectangle/.style={fill=gray}, show background rectangle, true scale=0.7]
-                \draw [xstep=1, ystep=1, line width=5pt, white] (0, 0) grid (5.1, 5.1);
-                \draw[sronbrightpurple, line width=2pt] (0, 0) -| (5, 5);
-                \draw[sronbrightgrey, line width=2pt] (0, 0) |- (5, 5);
-                \draw[sronbrightred, line width=2pt] (0, 0) -| (1, 1) -| (2, 2) -| (3, 3) -| (4, 4) -| (5, 5);
-                \draw[highlight4, line width=2pt] (0, 0) |- (2, 3) -| (5, 5);
-                \fill[highlight3] (0, 0) circle [radius=2pt];
-                \fill[highlight3] (5, 5) circle [radius=2pt];
-            \end{tikzpicture}
-            \caption{\emph{Taxicab distance}}
-        \end{figure}
-    \end{columns}
-    }
-    \only<2>{
-        \vspace{-1\bigskipamount}
-        Pour notre exemple
-        \vspace{-1\smallskipamount}
-        \begin{columns}
-        \column{.6\textwidth}
-            \begin{align}
-                \norm{\textcolor{highlight3}{t₂}-\textcolor{highlighta}{t₁}}
-                    &= ∑_{k=1}^n\abs{v_{2,k}-v_{1,k}}\\
-                    &= \textcolor{highlight2}{\abs{v_{2,1}-v_{1,1}}}+\textcolor{highlight5}{\abs{v_{2,2}-v_{1,2}}}\\
-                    &= \textcolor{highlight2}{\abs{1-3}}+\textcolor{highlight5}{\abs{2-1}}\\
-                    &= 2+1\\
-                    &= \textcolor{highlight4}{3}
-            \end{align}
-        \column{.45\textwidth}
-            \vspace{-1.5\bigskipamount}
-            \begin{figure}
-                \tikzset{external/export=true}
-                \begin{tikzpicture}[true scale=0.8]
-                    \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5, 4);
+			\column{0.5\textwidth}
+			\begin{figure}
+				\tikzset{external/export=true}
+				\begin{tikzpicture}[background rectangle/.style={fill=gray}, show background rectangle, true scale=0.7]
+					\draw [xstep=1, ystep=1, line width=5pt, white] (0, 0) grid (5.1, 5.1);
+					\draw[sronbrightpurple, line width=2pt] (0, 0) -| (5, 5);
+					\draw[sronbrightgrey, line width=2pt] (0, 0) |- (5, 5);
+					\draw[sronbrightred, line width=2pt] (0, 0) -| (1, 1) -| (2, 2) -| (3, 3) -| (4, 4) -| (5, 5);
+					\draw[highlight4, line width=2pt] (0, 0) |- (2, 3) -| (5, 5);
+					\fill[highlight3] (0, 0) circle [radius=2pt];
+					\fill[highlight3] (5, 5) circle [radius=2pt];
+				\end{tikzpicture}
+				\caption{\emph{Taxicab distance}}
+			\end{figure}
+		\end{columns}
+	}
+	\only<2>{
+		\vspace{-1\bigskipamount}
+		Pour notre exemple
+		\vspace{-1\smallskipamount}
+		\begin{columns}
+		\column{.6\textwidth}
+			\begin{align}
+				\norm{\textcolor{highlight3}{t₂}-\textcolor{accent}{t₁}}
+					&= ∑_{k=1}^n\abs{v_{2,k}-v_{1,k}}\\
+					&= \textcolor{highlight2}{\abs{v_{2,1}-v_{1,1}}}+\textcolor{highlight5}{\abs{v_{2,2}-v_{1,2}}}\\
+					&= \textcolor{highlight2}{\abs{1-3}}+\textcolor{highlight5}{\abs{2-1}}\\
+					&= 2+1\\
+					&= \textcolor{highlight4}{3}
+			\end{align}
+		\column{.45\textwidth}
+			\vspace{-1.5\bigskipamount}
+			\begin{figure}
+				\tikzset{external/export=true}
+				\begin{tikzpicture}[true scale=0.8]
+					\draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5, 4);
 
-                    \draw[->] (-0.5,0) -- (5.25, 0);
-                    \foreach \x in {1,...,5}
-                        \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
-                    \draw[->] (0, -0.5) -- (0, 4.25);
+					\draw[->] (-0.5,0) -- (5.25, 0);
+					\foreach \x in {1,...,5}
+						\draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize \(\x\)};
+					\draw[->] (0, -0.5) -- (0, 4.25);
 
-                    \foreach \y in {1,...,4}
-                        \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+					\foreach \y in {1,...,4}
+						\draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize \(\y\)};
 
-                    \draw (0, 0) node[below left] {\footnotesize $0$};
+					\draw (0, 0) node[below left] {\footnotesize \(0\)};
 
-                    \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, below right] {$t₁$};
-                    \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t₂$};
-                    \draw [<->, highlight2] (3, 2) -- (1, 2) node [midway, above] {$\abs{1-3}$};
-                    \draw[<->, highlight5] (3, 2) -- (3, 1)  node [midway, right] {$\abs{2-1}$};
-                    \draw [<->, highlight4] (1, 2) --  (3, 1)  node [midway, below left] {$3$};
-                \end{tikzpicture}
-                \caption{Distance de Manhattan}
-            \end{figure}
-        \end{columns}
-    }
+					\draw [->, accent, line width=2pt] (0,0) -- (3,1) node[midway, below right] {\(t₁\)};
+					\draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {\(t₂\)};
+					\draw [<->, highlight2] (3, 2) -- (1, 2) node [midway, above] {\(\abs{1-3}\)};
+					\draw[<->, highlight5] (3, 2) -- (3, 1)  node [midway, right] {\(\abs{2-1}\)};
+					\draw [<->, highlight4] (1, 2) --  (3, 1)  node [midway, below left] {\(3\)};
+				\end{tikzpicture}
+				\caption{Distance de Manhattan}
+			\end{figure}
+		\end{columns}
+	}
 \end{frame}
 
 \begin{frame}{Distance euclidienne}
-    \begin{block}{Définition (distance euclidienne)}
-        On appelle \emph{distance euclidienne\textsuperscript{1}} entre $t_1$ et $t_2$ le nombre
-        \begin{equation}
-            \norm{t₂-t₁}₂ = √{∑_{k=1}^n(v_{2,k}-v_{1,k})²}
-        \end{equation}
-    \end{block}
-    \vspace{-1.5\bigskipamount}
-    C'est la distance usuelle dans le plan. Pour notre exemple :
-    \vspace{-1\bigskipamount}
-    \begin{columns}
-    \column{.65\textwidth}
-        \begin{align}
-            \norm{\textcolor{highlight3}{t₂}-\textcolor{highlighta}{t₁}}₂
-                &= √{∑_{k=1}^n(v_{2,k}-v_{1,k})²}\\
-                &= √{\textcolor{highlight2}{(v_{2,1}-v_{1,1})}² +
-                     \textcolor{highlight5}{(v_{2,2}-v_{1,2})}²}\\
-                &= √{\textcolor{highlight2}{(1-3)}²+\textcolor{highlight5}{(2-1)}²}\\
-                &= √{2²+1²}\\
-                &= \textcolor{highlight4}{√{5}}
-        \end{align}
-    \column{.5\textwidth}
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}[true scale=0.85]
-                \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+	\begin{block}{Définition (distance euclidienne)}
+		On appelle \emph{distance euclidienne\textsuperscript{1}} entre \(t_1\) et \(t_2\) le nombre
+		\begin{equation}
+			\norm{t₂-t₁}₂ = √{∑_{k=1}^n(v_{2,k}-v_{1,k})²}
+		\end{equation}
+	\end{block}
+	\vspace{-1.5\bigskipamount}
+	C'est la distance usuelle dans le plan. Pour notre exemple :
+	\vspace{-1\bigskipamount}
+	\begin{columns}
+	\column{.65\textwidth}
+		\begin{align}
+			\norm{\textcolor{highlight3}{t₂}-\textcolor{accent}{t₁}}₂
+				&= √{∑_{k=1}^n(v_{2,k}-v_{1,k})²}\\
+				&= √{\textcolor{highlight2}{(v_{2,1}-v_{1,1})}² +
+					 \textcolor{highlight5}{(v_{2,2}-v_{1,2})}²}\\
+				&= √{\textcolor{highlight2}{(1-3)}²+\textcolor{highlight5}{(2-1)}²}\\
+				&= √{2²+1²}\\
+				&= \textcolor{highlight4}{√{5}}
+		\end{align}
+	\column{.5\textwidth}
+		\begin{figure}
+			\tikzset{external/export=true}
+			\begin{tikzpicture}[true scale=0.85]
+				\draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
 
-                \draw[->] (-0.5,0) -- (5.25, 0);
-                \foreach \x in {1,...,5}
-                    \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
-                \draw[->] (0, -0.5) -- (0, 4.25);
+				\draw[->] (-0.5,0) -- (5.25, 0);
+				\foreach \x in {1,...,5}
+					\draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize \(\x\)};
+				\draw[->] (0, -0.5) -- (0, 4.25);
 
-                \foreach \y in {1,...,4}
-                    \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+				\foreach \y in {1,...,4}
+					\draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize \(\y\)};
 
-                \draw (0, 0) node[below left] {\footnotesize $0$};
+				\draw (0, 0) node[below left] {\footnotesize \(0\)};
 
-                \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, below right] {$t₁$};
-                \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t₂$};
-                \draw [->, highlight2] (3, 2) -- (1, 2)  node [midway, above] {$(1-3)$};
-                \draw[->, highlight5] (3, 2) -- (3, 1)  node [midway, right] {$(2-1)$};
-                \draw [<->, highlight4] (1, 2) --  (3, 1)  node [midway, below left] {$√{5}$};
-            \end{tikzpicture}
-            \caption{Distance euclidienne}
-        \end{figure}
-    \end{columns}
-    \vspace{-1\bigskipamount}
-    {\tiny 1. Euclide d'Alexandrie, IIIè s AEC}
+				\draw [->, accent, line width=2pt] (0,0) -- (3,1) node[midway, below right] {\(t₁\)};
+				\draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {\(t₂\)};
+				\draw [->, highlight2] (3, 2) -- (1, 2)  node [midway, above] {\((1-3)\)};
+				\draw[->, highlight5] (3, 2) -- (3, 1)  node [midway, right] {\((2-1)\)};
+				\draw [<->, highlight4] (1, 2) --  (3, 1)  node [midway, below left] {\(√{5}\)};
+			\end{tikzpicture}
+			\caption{Distance euclidienne}
+		\end{figure}
+	\end{columns}
+	\vspace{-1\bigskipamount}
+	{\tiny 1. Euclide d'Alexandrie, IIIè s AEC}
 \end{frame}
 
 \begin{frame}{Distance de Tchebychev}
-    \begin{block}{Définition (distance de Tchebychev)}
-        On appelle \emph{distance de Tchebychev\textsuperscript{1}} entre $t_1$ et $t_2$ le nombre
-        \begin{equation}
-            \norm{t₂-t₁}_∞ = \max_{1⩽k⩽n}\abs{v_{2,k}-v_{1,k}}
-        \end{equation}
-    \end{block}
-    \vspace{-1\smallskipamount}
-    \begin{columns}
-    \column{.65\textwidth}
-        \begin{align}
-            \norm{\textcolor{highlight3}{t₂}-\textcolor{highlighta}{t₁}}_∞
-                &= \max_{1⩽k⩽n}\abs{v_{2,k}-v_{1,k}}\\
-                &= \max_{1⩽k⩽n}\mleft(
-                    \textcolor{highlight2}{\abs{v_{2,1}-v_{1,1}}},
-                    \textcolor{highlight5}{\abs{v_{2,2}-v_{1,2}}}\mright)\\
-                &= \max_{1⩽k⩽n}\mleft(
-                    \textcolor{highlight2}{\abs{1-3}},
-                    \textcolor{highlight5}{\abs{2-1}}\mright)\\
-                &= \max_{1⩽k⩽n}(2, 1)\\
-                &= \textcolor{highlight4}{2}
-        \end{align}
-    \column{.5\textwidth}
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}[true scale=0.85]
-                \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+	\begin{block}{Définition (distance de Tchebychev)}
+		On appelle \emph{distance de Tchebychev\textsuperscript{1}} entre \(t_1\) et \(t_2\) le nombre
+		\begin{equation}
+			\norm{t₂-t₁}_∞ = \max_{1⩽k⩽n}\abs{v_{2,k}-v_{1,k}}
+		\end{equation}
+	\end{block}
+	\vspace{-1\smallskipamount}
+	\begin{columns}
+	\column{.65\textwidth}
+		\begin{align}
+			\norm{\textcolor{highlight3}{t₂}-\textcolor{accent}{t₁}}_∞
+				&= \max_{1⩽k⩽n}\abs{v_{2,k}-v_{1,k}}\\
+				&= \max_{1⩽k⩽n}\mleft(
+					\textcolor{highlight2}{\abs{v_{2,1}-v_{1,1}}},
+					\textcolor{highlight5}{\abs{v_{2,2}-v_{1,2}}}\mright)\\
+				&= \max_{1⩽k⩽n}\mleft(
+					\textcolor{highlight2}{\abs{1-3}},
+					\textcolor{highlight5}{\abs{2-1}}\mright)\\
+				&= \max_{1⩽k⩽n}(2, 1)\\
+				&= \textcolor{highlight4}{2}
+		\end{align}
+	\column{.5\textwidth}
+		\begin{figure}
+			\tikzset{external/export=true}
+			\begin{tikzpicture}[true scale=0.85]
+				\draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
 
-                \draw[->] (-0.5,0) -- (5.25, 0);
-                \foreach \x in {1,...,5}
-                    \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
-                \draw[->] (0, -0.5) -- (0, 4.25);
+				\draw[->] (-0.5,0) -- (5.25, 0);
+				\foreach \x in {1,...,5}
+					\draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize \(\x\)};
+				\draw[->] (0, -0.5) -- (0, 4.25);
 
-                \foreach \y in {1,...,4}
-                    \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+				\foreach \y in {1,...,4}
+					\draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize \(\y\)};
 
-                \draw (0, 0) node[below left] {\footnotesize $0$};
+				\draw (0, 0) node[below left] {\footnotesize \(0\)};
 
-                \draw [->, highlighta, line width=2pt] (0,0) -- (3,1) node[midway, below right] {$t₁$};
-                \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {$t₂$};
-                \draw [->, highlight2] (3, 2) -- (1, 2)  node [midway, above] {$\abs{1-3}$};
-                \draw[->, highlight5] (3, 2) -- (3, 1)  node [midway, right] {$\abs{2-1}$};
-                \draw [<->, highlight4] (1, 2) --  (3, 1)  node [midway, below left] {$2$};
-            \end{tikzpicture}
-            \caption{Distance de Tchebychev}
-        \end{figure}
-    \end{columns}
-    \vspace{-1\smallskipamount}
-    {\tiny 1. Пафну́тий Льво́вич Чебышёв, 1821–1894}
+				\draw [->, accent, line width=2pt] (0,0) -- (3,1) node[midway, below right] {\(t₁\)};
+				\draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {\(t₂\)};
+				\draw [->, highlight2] (3, 2) -- (1, 2)  node [midway, above] {\(\abs{1-3}\)};
+				\draw[->, highlight5] (3, 2) -- (3, 1)  node [midway, right] {\(\abs{2-1}\)};
+				\draw [<->, highlight4] (1, 2) --  (3, 1)  node [midway, below left] {\(2\)};
+			\end{tikzpicture}
+			\caption{Distance de Tchebychev}
+		\end{figure}
+	\end{columns}
+	\vspace{-1\smallskipamount}
+	{\tiny 1. Пафну́тий Льво́вич Чебышёв, 1821–1894}
 \end{frame}
 
 \begin{frame}{Distances de Minkowski}
-    \begin{block}{Définition (distance de Minkowski)}
-        Pour tout $p⩾1$, on appelle \emph{distance de Minkowski\textsuperscript{1} de paramètre $p$} entre $t_1$ et $t_2$ le nombre
-        \begin{equation}
-            \norm{t₂-t₁}_p ={\left(∑_{k=1}^n\abs{v_{2,k}-v_{1,k}}^p\right)}^{\frac{1}{p}}
-        \end{equation}
-    \end{block}
-    \vspace{-1\bigskipamount}
-    Pour $p=1$ on retrouve la distance de Manhattan, pour $p=2$ la distance euclidienne, et pour $p→+∞$, la distance de Minkowski tend vers la distance de Tchebychev.
+	\begin{block}{Définition (distance de Minkowski)}
+		Pour tout \(p⩾1\), on appelle \emph{distance de Minkowski\textsuperscript{1} de paramètre \(p\)} entre \(t_1\) et \(t_2\) le nombre
+		\begin{equation}
+			\norm{t₂-t₁}_p ={\left(∑_{k=1}^n\abs{v_{2,k}-v_{1,k}}^p\right)}^{\frac{1}{p}}
+		\end{equation}
+	\end{block}
+	\vspace{-1\bigskipamount}
+	Pour \(p=1\) on retrouve la distance de Manhattan, pour \(p=2\) la distance euclidienne, et pour \(p→+∞\), la distance de Minkowski tend vers la distance de Tchebychev.
 
-    Intuitivement, pour $p=1$, elle traite également tous les écarts entre coordonnées, pour $p=∞$, elle ne conserve que le plus grand écart, et les autres $p$ donnent une interpolation entre ces deux extrêmes.
-    \vskip0pt plus 1fill
-    {\tiny 1. Hermann Minkowski, 1864–1909}
+	Intuitivement, pour \(p=1\), elle traite également tous les écarts entre coordonnées, pour \(p=∞\), elle ne conserve que le plus grand écart, et les autres \(p\) donnent une interpolation entre ces deux extrêmes.
+	\vskip0pt plus 1fill
+	{\tiny 1. Hermann Minkowski, 1864–1909}
 \end{frame}
 
 \begin{frame}{Distances de Minkowski}
-    \begin{figure}
-        \tikzset{external/export=true}
-        \begin{tikzpicture}
-            \begin{axis}[xmin=1, xmax=6, ymin=0,
-                         width=0.9\textwidth,
-                         height=0.8\textheight,
-                         xlabel={$p$},
-                         ylabel={$\norm{t₂-t₁}_p$},
-                         title={Distances de Minkowski : $y=(2^x+1^x)^{\frac{1}{x}}$},
-                         scaled ticks=false,
-                         ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}]
-                \addplot[highlighta, domain=1:6, samples=1001] {(2^x+1)^(1/x)};
-            \end{axis}
-        \end{tikzpicture}
-        \caption{Distances de Minkowski pour notre exemple}
-    \end{figure}
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}
+			\begin{axis}[
+				xmin=1, xmax=6, ymin=0,
+				width=0.9\textwidth,
+				height=0.8\textheight,
+				xlabel={\(p\)},
+				ylabel={\(\norm{t₂-t₁}_p\)},
+				title={Distances de Minkowski : \(y=(2^x+1^x)^{\frac{1}{x}}\)},
+				scaled ticks=false,
+				ticklabel style={/pgf/number format/.cd, 1000 sep={\,}},
+			]
+				\addplot[accent, domain=1:6, samples=1001] {(2^x+1)^(1/x)};
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Distances de Minkowski pour notre exemple}
+	\end{figure}
 \end{frame}
 
-\subsection{Similarités}
+\section{Similarités}
+
+\subsection{Les maths en cinq secondes : vecteurs}
+
+\begin{frame}{Les maths en cinq secondes : vecteurs}
+	On appelle \emph{vecteur de dimension \(n\)} tout \(n\)-uplet de nombres
+	\begin{equation}
+		v = \vcord{v_1, ⋮, v_n}
+	\end{equation}
+	Si \(n=2\), on peut les représenter simplement dans le plan
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}
+			\draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+
+			\draw[->] (-0.5,0) -- (5.25, 0);
+			\foreach \x in {1,...,5}
+				\draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize \(\x\)};
+			\draw[->] (0, -0.5) -- (0, 4.25);
+
+			\foreach \y in {1,...,4}
+				\draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize \(\y\)};
+
+			\draw (0, 0) node[below left] {\footnotesize \(0\)};
+
+			\draw [->, accent, line width=2pt] (0,0) -- (2,3);
+
+			\draw (1.5, 1.5) node[anchor=west] {\(\textcolor{accent}{v}=\vcord{2,3}\)};
+		\end{tikzpicture}
+		\caption{Vecteur en dimension \(2\)}
+	\end{figure}
+\end{frame}
+
+% \begin{frame}{Les maths en cinq secondes : vecteurs}
+%     On définit la \emph{somme} et le \emph{produit par un nombre} par
+%     \begin{equation}
+%         \vcord{a_1, ⋮, a_n} + \vcord{b_1, ⋮, b_n} = \vcord{a_1+b_1, ⋮, a_n+b_n}
+%     \end{equation}
+%     et
+%     \begin{equation}
+%         λ⋅\vcord{a_1, ⋮, a_n} = \vcord{λa_1, ⋮, λa_n}
+%     \end{equation}
+%     par exemple
+%     \begin{equation}
+%         \vcord{2, 7} + \vcord{1, 3} = \vcord{3, 10}
+%     \end{equation}
+%     \begin{equation}
+%         5⋅\vcord{3.5, -3} = \vcord{17.5, -15}
+%     \end{equation}
+% \end{frame}
+
+% \begin{frame}[fragile]{Les maths en cinq secondes : vecteurs}
+%     Géométriquement
+%     \only<1-4>{
+%         \begin{figure}
+%             \tikzset{external/export=true}
+%             \begin{tikzpicture}
+%                 \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+
+%                 \draw[->] (-0.5,0) -- (5.25, 0);
+%                 \foreach \x in {1,...,5}
+%                     \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize \(\x\)};
+%                 \draw[->] (0, -0.5) -- (0, 4.25);
+
+%                 \foreach \y in {1,...,4}
+%                     \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize \(\y\)};
+
+%                 \draw (0, 0) node[below left] {\footnotesize \(0\)};
+
+%                 \draw [->, accent, line width=2pt, alt=<2-3>{invisible}{}] (0,0) -- (3,1) node[midway, above] {\(v\)};
+%                 \draw [->, accent, line width=2pt, alt=<2-3>{}{invisible}] (1,2) -- (4,3) node[midway, above] {\(v\)};
+
+%                 \draw [->, highlight3, line width=2pt] (0,0) -- (1,2) node[midway, above left] {\(u\)};
+
+%                 \draw[->, highlight6, line width=2pt, alt=<3->{}{invisible}] (0,0) -- (4,3) node[midway, right] {\(u+v\)};
+%             \end{tikzpicture}
+%             \caption{Somme de deux vecteurs}
+%         \end{figure}
+%     }
+%     \only<5-7>{
+%         \begin{figure}
+%             \tikzset{external/export=true}
+%             \begin{tikzpicture}
+%                 \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+
+%                 \draw[->] (-0.5,0) -- (5.25, 0);
+%                 \foreach \x in {1,...,5}
+%                     \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize \(\x\)};
+%                 \draw[->] (0, -0.5) -- (0, 4.25);
+
+%                 \foreach \y in {1,...,4}
+%                     \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize \(\y\)};
+
+%                 \draw (0, 0) node[below left] {\footnotesize \(0\)};
+
+%                 \draw [->, accent, line width=2pt, alt=<5>{}{invisible}] (0,0) -- (2,1) node[midway, above] {\(v\)};
+
+%                 \draw[->, accent, line width=2pt, alt=<6>{}{invisible}] (0,0) -- (4,2) node[midway, above] {\(2v\)};
+%                 \draw[->, accent, line width=2pt, alt=<7>{}{invisible}] (0,0) -- (1,0.5) node[above] {\(0.5v\)};
+%             \end{tikzpicture}
+%             \caption{produit d'un vecteur par un nombre}
+%         \end{figure}
+%     }
+% \end{frame}
+
+% \begin{frame}{Exercice}
+% 	Calculer
+% 	\begin{enumerate}
+% 		\item
+% 			\begin{equation}
+% 				\vcord{2, 1} + \vcord{3, 7}
+% 			\end{equation}
+% 		\item
+% 			\begin{equation}
+% 				3⋅\vcord{2, 1, -2, 0}
+% 			\end{equation}
+% 		\item
+% 			\begin{equation}
+% 				\frac{1}{2}⋅\left(\vcord{2, 4} + \vcord{3,6}\right)
+% 			\end{equation}
+% 		\item
+% 			\begin{equation}
+% 				0.2⋅\vcord{2, 4} + 0.8⋅\vcord{3,6}
+% 			\end{equation}
+% 	\end{enumerate}
+% \end{frame}
 
 \begin{frame}{Les maths en cinq secondes : produit scalaire}
-    Intuitivement, le produit scalaire mesure la similarité des directions des vecteurs
-    \begin{columns}
-    \column{.5\textwidth}
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}[true scale=0.8]
-                \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (4, 3);
+	Intuitivement, le produit scalaire mesure la \alert{similarité} des directions des vecteurs
+	\begin{columns}
+	\column{.5\textwidth}
+		\begin{figure}
+			\tikzset{external/export=true}
+			\begin{tikzpicture}[true scale=0.8]
+				\draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (4, 3);
 
-                \draw[->] (-0.5,0) -- (4.25, 0);
-                \foreach \x in {1,...,4}
-                    \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
-                \draw[->] (0, -0.5) -- (0, 3.25);
+				\draw[->] (-0.5,0) -- (4.25, 0);
+				\foreach \x in {1,...,4}
+					\draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize \(\x\)};
+				\draw[->] (0, -0.5) -- (0, 3.25);
 
-                \foreach \y in {1,...,3}
-                    \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+				\foreach \y in {1,...,3}
+					\draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize \(\y\)};
 
-                \draw (0, 0) node[below left] {\footnotesize $0$};
+				\draw (0, 0) node[below left] {\footnotesize \(0\)};
 
-                \draw [->, highlighta, line width=2pt] (0,0) -- (3,0) node[midway, below right] {$t₁$};
-                \draw [->, highlight3, line width=2pt] (0,0) -- (0,2) node[midway, above left] {$t₂$};
+				\draw [->, accent, line width=2pt] (0,0) -- (3,0) node[midway, below right] {\(t₁\)};
+				\draw [->, highlight3, line width=2pt] (0,0) -- (0,2) node[midway, above left] {\(t₂\)};
 
-                \draw [domain=0:90] plot ({cos(\x)}, {sin(\x)}) (0.9, 0.9) node {$90$};
-            \end{tikzpicture}
-        \end{figure}
-        \vspace{-\bigskipamount}
-        Nul pour des vecteurs orthogonaux
-        \begin{equation}
-            \innprod{t₁}{t₂} =\norm{t₁}₂×\norm{t₂}₂×\underbrace{\cos 90}_{0} = 0
-        \end{equation}
-    \column{.5\textwidth}
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}[true scale=0.8]
-                \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (4, 3);
+				\draw [domain=0:90] plot ({cos(\x)}, {sin(\x)}) (0.9, 0.9) node {\(90\)};
+			\end{tikzpicture}
+		\end{figure}
+		\vspace{-\bigskipamount}
+		Nul pour des vecteurs \alert{orthogonaux} (qui font un angle droit)
+		\begin{equation}
+			\innprod{t₁}{t₂} =\norm{t₁}₂×\norm{t₂}₂×\underbrace{\cos 90}_{0} = 0
+		\end{equation}
+	\column{.5\textwidth}
+		\begin{figure}
+			\tikzset{external/export=true}
+			\begin{tikzpicture}[true scale=0.8]
+				\draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (4, 3);
 
-                \draw[->] (-0.5,0) -- (4.25, 0);
-                \foreach \x in {1,...,4}
-                    \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
-                \draw[->] (0, -0.5) -- (0, 3.25);
+				\draw[->] (-0.5,0) -- (4.25, 0);
+				\foreach \x in {1,...,4}
+					\draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize \(\x\)};
+				\draw[->] (0, -0.5) -- (0, 3.25);
 
-                \foreach \y in {1,...,3}
-                    \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+				\foreach \y in {1,...,3}
+					\draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize \(\y\)};
 
-                \draw (0, 0) node[below left] {\footnotesize $0$};
+				\draw (0, 0) node[below left] {\footnotesize \(0\)};
 
-                \draw [->, highlighta, line width=2pt] (0,0) -- (3,2) node[midway, below right] {$t₁$};
-                \draw [->, highlight3, line width=2pt] (0,0) -- (1.5,1) node[midway, above left] {$t₂$};
-            \end{tikzpicture}
-        \end{figure}
-        \vspace{-\bigskipamount}
-        Maximal pour des vecteurs colinéaires
-        \begin{equation}
-            \innprod{t₁}{t₂} = \norm{t₁}₂×\norm{t₂}₂×\underbrace{\cos 0}_{1} = \norm{t₁}₂×\norm{t}₂
-        \end{equation}
-    \end{columns}
-    Il est négatif pour des vecteurs de sens opposés,  mais ça ne peut pas être le cas avec nos sacs de mots.
+				\draw [->, accent, line width=2pt] (0,0) -- (3,2) node[midway, below right] {\(t₁\)};
+				\draw [->, highlight3, line width=2pt] (0,0) -- (1.5,1) node[midway, above left] {\(t₂\)};
+			\end{tikzpicture}
+		\end{figure}
+		\vspace{-\bigskipamount}
+		Maximal pour des vecteurs colinéaires
+		\begin{equation}
+			\innprod{t₁}{t₂} = \norm{t₁}₂×\norm{t₂}₂×\underbrace{\cos 0}_{1} = \norm{t₁}₂×\norm{t}₂
+		\end{equation}
+	\end{columns}
+	Il est négatif pour des vecteurs de sens opposés,  mais ça ne peut pas être le cas avec nos sacs de mots.
 \end{frame}
 
+\subsection{Similarité cosinus}
+
 \begin{frame}{Similarités cosinus}
-    On est tenté d'utiliser le produit scalaire de deux vecteurs comme mesure de similarité
-        \begin{itemize}
-            \item Si deux textes n'ont aucun mot en commun, les sacs de mots correspondants seront des vecteurs orthogonaux → similarité nulle
-        \end{itemize}
-    Mais le terme $\norm{t₁}₂×\norm{t}₂$ induit un bias
-        \begin{itemize}
-            \item Utiliser des fréquences ne garantit pas que la norme euclidienne vaille $1$ !
-        \end{itemize}
-    On utilise donc plutôt des normalisations du produit scalaire.
+	On est tenté d'utiliser le produit scalaire de deux vecteurs comme mesure de similarité
+		\begin{itemize}
+			\item Si deux textes n'ont aucun mot en commun, les sacs de mots correspondants seront des vecteurs orthogonaux → similarité nulle
+		\end{itemize}
+	Mais le terme \(\norm{t₁}₂×\norm{t}₂\) induit un bias
+		\begin{itemize}
+			\item Utiliser des fréquences ne garantit pas que la norme euclidienne vaille \(1\) !
+		\end{itemize}
+	On utilise donc plutôt des normalisations du produit scalaire.
 \end{frame}
 
 \begin{frame}{Similarité cosinus}
-    \begin{block}{Définition (Similarité cosinus)}
-        On appelle \emph{similarité cosinus des vecteur $t₁$ et $t₂$} le cosinus de l'écart angulaire entre $t₁$ et $t₂$.
-    \end{block}
-    Autrement dit $\cos θ$. Ce qui revient à calculer
-    \begin{equation}
-        \cos θ = \frac{\innprod{t₁}{t₂}}{\norm{t₁}₂×\norm{t₂}₂}
-    \end{equation}
-    Soit pour notre exemple
-    \begin{equation}
-        \cos θ = \frac{5}{√{5} + √{10}} = \frac{√2}{2}
-    \end{equation}
+	\begin{block}{Définition (Similarité cosinus)}
+		On appelle \emph{similarité cosinus des vecteur \(t₁\) et \(t₂\)} le cosinus de l'écart angulaire entre \(t₁\) et \(t₂\).
+	\end{block}
+	Autrement dit \(\cos θ\). Ce qui revient à calculer
+	\begin{equation}
+		\cos θ = \frac{\innprod{t₁}{t₂}}{\norm{t₁}₂×\norm{t₂}₂}
+	\end{equation}
+	Soit pour notre exemple
+	\begin{equation}
+		\cos θ = \frac{5}{√{5} + √{10}} = \frac{√2}{2}
+	\end{equation}
 
-    C'est la plus simple des normalisations du produit scalaire, et celle qu'on utilise en général.
+	C'est la plus simple des normalisations du produit scalaire, et celle qu'on utilise en général.
 \end{frame}
 
 \begin{frame}{Autres normalisations}
-    \begin{itemize}
-        \item Mesure de Sørensen–Dice
-            \begin{equation}
-                2×\frac{\innprod{t₁}{t₂}}{\norm{t₁}₂+\norm{t₂}₂}
-            \end{equation}
-        \item Mesure de Jaccard
-            \begin{equation}
-                \frac{\innprod{t₁}{t₂}}{\norm{t₁+t₂}₂}
-            \end{equation}
-        \item Coefficient de recouvrement
-            \begin{equation}
-                \frac{\innprod{t₁}{t₂}}{\min\mleft(\norm{t₁}₂, \norm{t₂}₂\mright)}
-            \end{equation}
-    \end{itemize}
+	\begin{itemize}
+		\item Mesure de Sørensen–Dice
+			\begin{equation}
+				2×\frac{\innprod{t₁}{t₂}}{\norm{t₁}₂+\norm{t₂}₂}
+			\end{equation}
+		\item Mesure de Jaccard
+			\begin{equation}
+				\frac{\innprod{t₁}{t₂}}{\norm{t₁+t₂}₂}
+			\end{equation}
+		\item Coefficient de recouvrement
+			\begin{equation}
+				\frac{\innprod{t₁}{t₂}}{\min\mleft(\norm{t₁}₂, \norm{t₂}₂\mright)}
+			\end{equation}
+	\end{itemize}
 
-Attention : en général, ces mesures ne seront pas nécessairement inférieures à $1$.
+Attention : en général, ces mesures ne seront pas nécessairement inférieures à \(1\).
 \end{frame}
 
 \begin{frame}{Autres normalisations : versions booléennes}
-    Si les coordonnées des vecteurs indiquent la présence d'un mot plutôt que sa fréquence, on a
-    \begin{itemize}
-        \item Mesure de Sørensen–Dice
-            \begin{equation}
-                2×\frac{\#(t₁∩t₂)}{\#t₁+\#t₂}
-            \end{equation}
-        \item Mesure de Jaccard
-            \begin{equation}
-                \frac{\#(t₁∩t₂)}{\#(t₁∪t₂)}
-            \end{equation}
-        \item Coefficient de recouvrement
-            \begin{equation}
-                \frac{\#(t₁∩t₂)}{\min(\#t₁, \#t₂)}
-            \end{equation}
-    \end{itemize}
-Dans ce cas, ces mesures sont bien comprises entre $0$ et $1$.
+	Si les coordonnées des vecteurs indiquent la présence d'un mot plutôt que sa fréquence, on a
+	\begin{itemize}
+		\item Mesure de Sørensen–Dice
+			\begin{equation}
+				2×\frac{\#(t₁∩t₂)}{\#t₁+\#t₂}
+			\end{equation}
+		\item Mesure de Jaccard
+			\begin{equation}
+				\frac{\#(t₁∩t₂)}{\#(t₁∪t₂)}
+			\end{equation}
+		\item Coefficient de recouvrement
+			\begin{equation}
+				\frac{\#(t₁∩t₂)}{\min(\#t₁, \#t₂)}
+			\end{equation}
+	\end{itemize}
+	Dans ce cas, ces mesures sont bien comprises entre \(0\) et \(1\).
 \end{frame}
 
 %  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██

@@ -188,7 +188,7 @@
 % ██  ██  ██ ██      ██   ██      ██ ██    ██ ██   ██ ██
 % ██      ██ ███████ ██   ██ ███████  ██████  ██   ██ ███████
 
-\section{}{Valuation des attributs}
+\section{Valuation des attributs}
 \begin{frame}<1>[label=attrval]{Valuation des attributs}
 	Avoir choisi les attributs à utiliser pour une classification ne suffit pas : encore faut-il leur donner une \alert{valeur}.
 
@@ -273,9 +273,58 @@
 \againframe<3-4>{attrval}
 \againframe<4>{reprexpls}
 
-% TODO: peut-être pas nécessaire à ce stade d'introduir les notations et le tableau d'exemple
-% pourrait être remonté
-\begin{frame}{Notations}
+
+% TODO: add exemples
+
+\begin{frame}{Le problème des occurences}
+	Il y a un problème avec les comptes d'occurrences et les fréquences relatives.
+
+	\pause
+
+	Même avec les meilleurs filtres du monde, il va rester des mots dont la présence n'est pas très \alert{informative}.
+
+	\pause
+
+	Par exemple, dans un corpus de recette, savoir que le mot \emph{ingrédients} apparaît dans un texte n'apporte aucune information : il est \alert{présent dans tous les textes}.
+
+	\pause
+
+	Ça nous fait une colonne inutile, et pire : une colonne dont la valeur va nous distraire des valeurs des autres colonnes.
+
+	\pause
+
+	On va donc chercher à supprimer les colonnes de ce type, ou au pire à \alert{réduire fortement leurs poids}.
+\end{frame}
+
+% TODO: add cites
+\begin{frame}<1>[label=tfidfdef]{TF.IDF}
+	\only<-2>{On veut pouvoir \alert{pondérer} l'importance d'un terme (mot, caractère, \(n\)-gramme…) en fonction de sa \alert{spécificité} (au sens large) pour un document.}
+
+	\begin{itemize}
+		\item \emph{\textbf{T}erm \textbf{F}requency × \textbf{I}nverse \textbf{D}ocument \textbf{F}requency}
+		\item \(\TF(i,j) = n_{i,j}\) ou \(\TF(i,j) = \frac{n_{i,j}}{\sum_k n_{i,j}}\)
+		\item
+			\only<1>{
+				\begin{equation}
+					\IDF(j) = \log\mleft(\frac{m}{\#\compset{i}{n_{i,j}>0}}\mright)
+				\end{equation}
+			}
+			\only<2>{
+				\begin{equation}
+					\IDF(j) = \log\frac{\overbrace{m}^{\mathclap{\text{nombre total de documents}}}}{\underbrace{\#\compset{i}{n_{i,j}>0}}_{\mathclap{\text{nombre de documents contenant \(a_j\)}}}}
+				\end{equation}
+			}
+			\only<3->{\(\IDF(j) = \log\frac{m}{\#\compset{i}{n_{i,j}>0}}\)}
+		\only<3->{
+			\item Intuitivement \(\IDF\) mesure la rareté d'un attribut, donc (on espère !) son informativité
+			\item « Si \(a_j\) est présent dans tous les textes, savoir qu'il est présent dans \(t_i\) ne donne pas d'information sur \(t_i\) »
+			\item Permet un filtrage moins arbitraire des \emph{stop words}
+			\item \alt<4>{\(\log\) donne à \(\IDF\) la forme d'une \emph{surprise} au sens de Shannon}{\(\log\) est une façon pratique de modérer les effets de cette pondération : on devrait parler de \(\log\)-\(\IDF\)}
+		}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[label=textvalnotations]{Notations}
 	\begin{overprint}
 		\onslide<1>
 			\begin{figure}
@@ -314,35 +363,79 @@
 	}
 \end{frame}
 
-% TODO: add exemples
+\againframe<1->{tfidfdef}
 
-% TODO: ajouter une transition
-% TODO: add cites
-\begin{frame}{TF.IDF}
-	\only<-2>{On veut pouvoir \alert{pondérer} l'importance d'un terme (mot, caractère, \(n\)-gramme…) en fonction de sa \alert{spécificité} (au sens large) pour un document.}
+\begin{frame}{IDF, probabilités et surprise}
+	Dans un corpus de \num{1000} textes, \num{55} contiennent le mot \emph{kiwi}.
+	\pause
 
+	On choisit un texte au hasard sans en favoriser aucun. Serait-il surprenant que le texte choisi contienne le mot \emph{kiwi} ?
+\end{frame}
+
+\begin{frame}{Les maths en cinq secondes : probabilités}
+	Objectif : on veut une mesure \alert{quantitative} du fait qu'un évènement dépendant du hasard (aléatoire) ait des chances de se produire. On appelle cette mesure \alert{probabilité} de l'évènement.
+	
+	\pause
+	On impose que
 	\begin{itemize}
-		\item \emph{\textbf{T}erm \textbf{F}requency × \textbf{I}nverse \textbf{D}ocument \textbf{F}requency}
-		\item \(\TF(i,j) = n_{i,j}\) ou \(\TF(i,j) = \frac{n_{i,j}}{\sum_k n_{i,j}}\)
-		\item
-			\only<1>{
-				\begin{equation}
-					\IDF(j) = \log\mleft(\frac{m}{\#\compset{i}{n_{i,j}>0}}\mright)
-				\end{equation}
-			}
-			\only<2>{
-				\begin{equation}
-					\IDF(j) = \log\frac{\overbrace{m}^{\mathclap{\text{nombre total de documents}}}}{\underbrace{\#\compset{i}{n_{i,j}>0}}_{\mathclap{\text{nombre de documents contenant \(a_j\)}}}}
-				\end{equation}
-			}
-			\only<3->{\(\IDF(j) = \log\frac{m}{\#\compset{i}{n_{i,j}>0}}\)}
-		\only<3->{
-			\item Intuitivement \(\IDF\) mesure la rareté d'un attribut, donc (on espère !) son informativité
-			\item « Si \(a_j\) est présent dans tous les textes, savoir qu'il est présent dans \(t_i\) ne donne pas d'information sur \(t_i\) »
-			\item Permet un filtrage moins arbitraire des \emph{stop words}
-			\item \alt<4>{\(\log\) donne à \(\IDF\) la forme d'une \emph{surprise} au sens de Shannon}{\(\log\) est une façon pratique de modérer les effets de cette pondération : on devrait parler de \(\log\)-\(\IDF\)}
-		}
+		\item la probabilité d'un évènement soit un nombre compris entre \num{0} (pour un évènement impossible) et \num{1} (pour un évènement certain)
+		\item Si deux évènements sont \alert{incompatibles}, la probabilité qu'un des deux se produise est la somme de leurs probabilités respectives
 	\end{itemize}
+	\itpause
+	Dans ces conditions, soit un corpus de \(n\) documents et un ensemble de \(k\) documents dans ce corpus.
+	Si on choisit au hasard et de façon non-biaisée un texte du corpus, la probabilité que ce texte soit un de ces \(k\) textes est \(\frac{k}{n}\).
+\end{frame}
+
+\begin{frame}{IDF, probabilités et surprise}
+	Dans un corpus de \num{1000} textes, \num{55} contiennent le mot \emph{kiwi}.
+	\pause
+	
+	On considère les évènements \(Aᵢ\) « avoir choisi le texte \(i\) ».
+	\begin{enumerate}
+		\item Combien y a-t-il de \(Aᵢ\) ?  \only<3->{→ \num{1000}}
+		\item Quelle est la probabilité qu'au moins un des \(Aᵢ\) se réalise ?  \only<4->{→ \num{1}}
+		\item Pour un \(i\) donné, quelle est la probabilité (notée \(P(Aᵢ)\)) de \(Aᵢ\) ?  \only<5->{→ \(\frac{1}{1000}\)}
+		\item En déduire la probabilité que le texte choisi contienne le mot \emph{kiwi}  \only<6->{→ \(\frac{55}{1000}\)}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{IDF, probabilités et surprise}
+	La notion de \alert{surprise} vient de la théorie de l'information. La surprise d'un évènement \(A\) mesure le caractère inattendu de la réalisation d'un évènement.
+
+	On la définit par
+	\begin{equation}
+		I(A) = -\log P(A)
+	\end{equation}
+
+	Intuitivement, plus la probabilité d'un évènement est faible, plus sa surprise est grande.
+\end{frame}
+
+\begin{frame}{Surprise}
+	\begin{figure}
+		\tikzset{external/export=true}
+		\begin{tikzpicture}
+			\begin{axis}[
+				title={Surprise : \(y=-\log x\)},
+				xlabel={\(P(A)\)},
+				ylabel={\(I(A)\)},
+				xmin=0, xmax=1, ymin=0,
+				width=0.9\textwidth,
+				height=0.8\textheight,
+			]
+				\addplot[highlighta, domain=0:1, samples=1001] {-ln(x)};
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Suprise d'un évènement en fonction de sa probabilité}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{IDF}
+	On a pour le mot \(m_j\)
+	\begin{equation}
+		\IDF(m_j) = \log\mleft(\frac{m}{\#\compset{i}{n_{i,j}>0}}\mright) = -\log\mleft(\frac{\#\compset{i}{n_{i,j}>0}}{m}\mright) = I(…)
+	\end{equation}
+
+	Autrement dit : l'\(\IDF\) du mot \emph{kiwi} est la surprise de l'événement \enquote{un texte choisi au hasard dans le corpus contient le mot \emph{kiwi}}.
 \end{frame}
 
 
