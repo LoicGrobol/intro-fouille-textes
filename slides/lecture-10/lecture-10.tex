@@ -1,333 +1,15 @@
+% LTeX: language=fr
+% Copyright © 2019, Loïc Grobol <loic.grobol@gmail.com>
 % This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (https://creativecommons.org/licenses/by/4.0/)
 
-\RequirePackage{xparse}
-\RequirePackage{shellesc}
-% Settings
-\newcommand\myname{Loïc Grobol}
-\newcommand\mylab{Lattice / LLF}
-\newcommand\pdftitle{Introduction à la fouille de textes}
-\newcommand\mymail{loic.grobol@gmail.com}
-\newcommand\titlepagetitle{\pdftitle}
-\newcommand\titlepagesubtitle{Cours 10 : SVM}
-\newcommand\docdate{2020-03-12}  % chktex 8
-\newcommand\conference{M1 Plurital}
-
-% \RequirePackage{hyperxmp}  % Results in a complex failure with beamer + tikzexternal (2020-01-17)
-\documentclass[xcolor={svgnames}, french]{beamer}
-\hypersetup{
-    pdftitle={\pdftitle},
-    pdfauthor={\myname},
-    % pdfcontactemail={\mymail},  % hyperxmpAnnotation
-    breaklinks,
-    hypertexnames=true,
-    pdfdisplaydoctitle,
-    pdflang={fr},
-    % keeppdfinfo,  % hyperxmp
-}
-
-% Colour palette from [Paul Tol's technical note](https://personal.sron.nl/~pault/data/colourschemes.pdf) v3.1
-% Bright scheme
-\definecolor{sronbrightblue}{RGB}{68, 119, 170}
-\definecolor{sronbrightcyan}{RGB}{102, 204, 238}
-\definecolor{sronbrightgreen}{RGB}{34, 136, 51}
-\definecolor{sronbrightyellow}{RGB}{204, 187, 68}
-\definecolor{sronbrightred}{RGB}{238, 102, 119}
-\definecolor{sronbrightpurple}{RGB}{170, 51, 119}
-\definecolor{sronbrightgrey}{RGB}{187, 187, 187}
-
-
-\colorlet{highlight0}{sronbrightblue}
-\colorlet{highlight1}{sronbrightred}
-\colorlet{highlight2}{sronbrightgreen}
-\colorlet{highlight3}{sronbrightyellow}
-\colorlet{highlight4}{sronbrightcyan}
-\colorlet{highlight5}{sronbrightpurple}
-\colorlet{highlight6}{sronbrightgrey}
-% Legacy highlights
-\definecolor{highlighta}{RGB}{68, 118, 170}  % Navy blue
-\definecolor{highlight7}{RGB}{136, 34, 85}    % Purple
-\definecolor{highlight8}{RGB}{170, 68, 153}   % Violet
-
-
-\usetheme[
-	sectionpage=progressbar,
-    subsectionpage=progressbar,
-	progressbar=frametitle,
-]{metropolis}
-	\colorlet{accent}{sronbrightgreen}
-	\setbeamercolor{frametitle}{bg=DarkSlateGrey}
-	\setbeamercolor{alerted text}{fg=accent}
-	\makeatletter
-		\setlength{\metropolis@progressinheadfoot@linewidth}{2pt}
-	\makeatother
-	% Avoid ugly whitespace below figures
-	% \makeatletter
-	% 	\renewenvironment{figure}[1][]{%
-	% 	\def\@captype{figure}%
-	% 	\par\centering}%
-	% 	{\par}
-	% \makeatother
-	% FIXME: not pretty and footnotes are still too big
-	\let\footnoterule\relax  % No footnote rule, push down footnote
-
-
-% Use non-standard fonts
-\usefonttheme{professionalfonts}
-    \setsansfont[BoldFont={* Semibold}]{Fira Sans}
-\setmonofont[Scale=0.9]{Fira Mono}
-
-% Fix missing glyphs in Fira by delegating to polyglossia/babel
-\usepackage{newunicodechar}
-\newunicodechar{ }{~}   % U+202F NARROW NO-BREAK SPACE
-\newunicodechar{ }{ }  % U+2009 THIN SPACE
-
-% Notes on left screen
-% \usepackage{pgfpages}
-% \setbeameroption{show notes on second screen=left}
-
-
-\usepackage[french, english]{babel}
-\usepackage{amsfonts,amssymb}
-\usepackage{amsmath,amsthm}
-\usepackage{mathtools}	% AMS Maths service pack
-    % Pour des lignes d'équation numérotées entre crochets
-	\newtagform{brackets}{[}{]} % chktex 9
-	\mathtoolsset{showonlyrefs, showmanualtags, mathic}	% affiche les tags manuels (\tag et \tag*) et corrige le kerning des maths inline dans un bloc italique voir la doc de mathtools
-	\usetagform{brackets}	% Utilise le style de tags défini plus haut
-\usepackage{lualatex-math}
-
-\usepackage[math-style=french]{unicode-math}
-	\setmathfont[Scale=1.1]{Libertinus Math}
-\usepackage{newunicodechar}
-	\newunicodechar{√}{\sqrt}
-\usepackage{mleftright}
-
-\usepackage{tabu}
-\usepackage{booktabs}
-\usepackage{siunitx}
-\usepackage{multicol}
-\usepackage{ccicons}
-\usepackage{bookmark}
-\usepackage{caption}
-    \captionsetup{skip=1ex}
-\usepackage[iso]{datetime}
-
-\usepackage{tikz}
-	\NewDocumentCommand{\textnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {#3};}} % chktex 36
-    \NewDocumentCommand{\mathnode}{O{}mm}{\tikz[remember picture, baseline=(#2.base), inner sep=0pt]{\node[#1] (#2) {\(\displaystyle #3\)};}} % chktex 36
-	\tikzset{
-		alt/.code args={<#1>#2#3}{%
-		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
-		},
-        invisible/.style={opacity=0, fill opacity=0},
-		visible on/.style={alt={<#1>{}{invisible}}}
-	}
-    \usepackage{forest}
-    \usepackage{tkz-graph}
-    \usepackage[beamer, markings]{hf-tikz}
-    \usepackage{tikz-3dplot}
-    \usepackage{pgfplots}
-        % Due to pgfplots meddling with pgfkeys, we have to redefine alt here.
-        \pgfplotsset{
-    		alt/.code args={<#1>#2#3}{%
-    		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
-    		},
-    	}
-        \pgfplotsset{compat=1.16}
-        \pgfplotsset{colormap={SRON}{rgb255=(61,82,161) rgb255=(255,250,210) rgb255=(174,28,62)}} % chktex 36
-    \usetikzlibrary{matrix}
-    \usetikzlibrary{shapes, shapes.geometric}
-    \usetikzlibrary{decorations.pathreplacing}
-	\usetikzlibrary{positioning, calc, intersections}
-    \usetikzlibrary{fit}
-    \usetikzlibrary{backgrounds}
-
-    % Do evil things with soft path
-    \makeatletter
-        \def\@appendnamedsoftpath#1{% chktex 21
-            \pgfsyssoftpath@getcurrentpath\@temppatha % chktex 21 chktex 1
-            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 41 chktex 21
-            \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@temppatha\expandafter\expandafter\expandafter{\expandafter\@temppatha\@temppathb} % chktex 41 chktex 21
-            \pgfsyssoftpath@setcurrentpath\@temppatha % chktex 21 chktex 1
-        }
-        \def\@appendnamedpathforactions#1{% chktex 21
-            \pgfsyssoftpath@getcurrentpath\@temppatha % chktex 1 chktex 21
-            \expandafter\let\expandafter\@temppathb\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
-            \expandafter\def\expandafter\@temppatha\expandafter{\csname @temppatha\expandafter\endcsname\@temppathb} % chktex 21 chktex 41
-
-            \let\tikz@actions@path\@temppatha  % chktex 21 chktex 1
-        }
-
-        \tikzset{
-            use path for main/.code={%
-                \tikz@addmode{%
-                    \expandafter\pgfsyssoftpath@setcurrentpath\csname tikz@intersect@path@name@#1\endcsname % chktex 21 chktex 41
-                }%
-            },
-            append path for main/.code={%
-                \tikz@addmode{%
-                    \@appendnamedsoftpath{#1}%
-                }%
-            },
-            use path for actions/.code={%
-                \expandafter\def\expandafter\tikz@preactions\expandafter {\tikz@preactions\expandafter\let\expandafter\tikz@actions@path\csname tikz@intersect@path@name@#1\endcsname}% chktex 21 chktex 41
-            },
-            append path for actions/.code={%
-                \expandafter\def\expandafter\tikz@preactions\expandafter{\tikz@preactions % chktex 21 chktex 41 chktex 1
-                \@appendnamedpathforactions{#1}}%
-            },
-            use path/.style={%
-                use path for main=#1,
-                use path for actions=#1,
-            },
-            append path/.style={%
-                append path for main=#1,
-                append path for actions=#1
-            }
-        }
-    \makeatother
-
-    % TikZ externalisation
-    \usetikzlibrary{external}
-    % Create the `tikzpics/` folder if it does not exist
-    \ShellEscape{mkdir -p tikzpics}
-    % Only externalise pictures on demand (to avoid messing up with metropolis theme)
-    \tikzset{
-        external/export=false,
-        external/prefix=tikzpics/
-    }
-    \tikzexternalize % chktex 1
-
-\usepackage{minted}
-	\usemintedstyle{lovelace}
-	\setminted{autogobble, tabsize=2}
-	\setmintedinline{fontsize=auto}
-
-\usepackage{csquotes}
-
-\usepackage[style=authoryear, block=ragged, doi=false, isbn=false]{biblatex}
-    \AtEveryBibitem{
-        \ifentrytype{online}
-        {} {
-            \iffieldequalstr{howpublished}{online}
-            {
-                \clearfield{howpublished}
-            } {
-                \clearfield{urlyear}\clearfield{urlmonth}\clearfield{urlday}
-            }
-        }
-    }
-
-	\addbibresource{../biblio.bib}
-
-% Compact bibliography style
-\setbeamertemplate{bibliography item}[text]
-
-\AtEveryBibitem{
-    \clearfield{series}
-    \clearfield{pages}
-    \clearlist{publisher}
-    \clearname{editor}
-    \clearlist{location}
-}
-\renewcommand*{\bibfont}{\tiny}
-
-\usepackage{hyperxmp}	% XMP metadata
-
-\usepackage[type={CC}, modifier={by}, version={4.0}]{doclicense}
-
-\usepackage{todonotes}
-\let\todox\todo % chktex 1
-\renewcommand\todo[1]{\todox[inline]{#1}}
-
-\title{\titlepagetitle}
-\subtitle{\titlepagesubtitle}
-\author{\textbf{\myname} (\mylab)}
-\institute{}
-\date{\tiny Version {\yyyymmdddate\today}T\currenttime}
-
-\titlegraphic{\ccby}
-
-% Tikz styles
-
-% Schémas de tâches
-\tikzset{
-    >=stealth,
-    hair lines/.style={line width = 0.05pt, lightgray},
-    data/.style={draw, ellipse},
-    program/.style={draw, rectangle},
-    accent on/.style={alt={<#1>{draw=accent, text=accent, thick}{draw}}},
-    true scale/.style={scale=#1, every node/.style={transform shape}},
-    highlight/.style={color=highlight#1}
-}
-
-% Styles des heatmap pour les moyennes
-\pgfplotsset{
-    meanheatmap/.style={
-        colorbar, colormap name=SRON,
-        view={0}{90},
-        samples=100,
-        domain=0:1,
-        min=0, max=1,
-        xlabel={\(P\)},
-        ylabel={\(R\)},
-    }
-}
-
-% Commands spécifiques
-\NewDocumentCommand\shorturl{ O{https} O{://} m }{%
-    \href{#1#2#3}{\nolinkurl{#3}}%
-}
-
-\DeclarePairedDelimiter\norm{\lVert}{\rVert}
-\DeclarePairedDelimiter\abs{\lvert}{\rvert}
-\DeclarePairedDelimiterX\compset[2]{\lbrace}{\rbrace}{#1\,\delimsize|\,#2}
-\DeclarePairedDelimiterX\innprod[2]{\langle}{\rangle}{#1\,\delimsize|\,#2}
-
-\DeclareMathOperator*\argmax{argmax}
-
-% Easy column vectors \vcord{a,b,c} ou \vcord[;]{a;b;c}
-% Here be black magic
-\ExplSyntaxOn % chktex 1
-	\NewDocumentCommand{\vcord}{O{,}m}{\vector_main:nnnn{p}{\\}{#1}{#2}}
-	\NewDocumentCommand{\tvcord}{O{,}m}{\vector_main:nnnn{psmall}{\\}{#1}{#2}}
-	\seq_new:N\l__vector_arg_seq
-	\cs_new_protected:Npn\vector_main:nnnn #1 #2 #3 #4{
-		\seq_set_split:Nnn\l__vector_arg_seq{#3}{#4}
-		\begin{#1matrix}
-			\seq_use:Nnnn\l__vector_arg_seq{#2}{#2}{#2}
-		\end{#1matrix}
-	}
-\ExplSyntaxOff % chktex 1
-
-\DeclareMathOperator{\TF}{TF}
-\DeclareMathOperator{\IDF}{IDF}
-
-\ExplSyntaxOn % chktex 1
-    \DeclareExpandableDocumentCommand\eval{m}{\fp_eval:n{#1}}
-\ExplSyntaxOff % chktex 1
-
-
-% Fixes for pauses after an unveiled list
-\newcommand{\itpause}{%
-	\addtocounter{beamerpauses}{-1}%
-	\pause % chktex 1
-}
-
-
-% ██████   ██████   ██████ ██    ██ ███    ███ ███████ ███    ██ ████████
-% ██   ██ ██    ██ ██      ██    ██ ████  ████ ██      ████   ██    ██
-% ██   ██ ██    ██ ██      ██    ██ ██ ████ ██ █████   ██ ██  ██    ██
-% ██   ██ ██    ██ ██      ██    ██ ██  ██  ██ ██      ██  ██ ██    ██
-% ██████   ██████   ██████  ██████  ██      ██ ███████ ██   ████    ██
-
+\documentclass[../allslides.tex]{subfiles}
 
 \begin{document}
-\pdfbookmark[2]{Title}{title}
 
-\begin{frame}[plain]
-	\titlepage % chktex 1
-\end{frame}
+\renewcommand\docdate{2021-02-18}  % chktex 8
+
+\lecture{SVM}{Cours 10}
+
 
 % ███████ ██    ██ ███    ███
 % ██      ██    ██ ████  ████
@@ -720,32 +402,35 @@
 % ██   ██ ██      ██      ██      ██  ██ ██ ██   ██ ██  ██ ██
 % ██   ██ ██      ██      ███████ ██   ████ ██████  ██ ██   ██
 
-\appendix
-\pgfkeys{/metropolis/inner/sectionpage=simple}  % Avoid random errors with section page progressbar
-\section{Annexes}
-\pdfbookmark[2]{Remerciements}{acknowledgements}
-\begin{frame}{Remerciements}
-    Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017IntroductionFouilleTextes} \parencite{tellier2017IntroductionFouilleTextes} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
-\end{frame}
+\ifSubfilesClassLoaded{
+	\appendix
+	\pgfkeys{/metropolis/inner/sectionpage=simple}  % Avoid random errors with section page progressbar
+	\section{Annexes}
+	\pdfbookmark[2]{Remerciements}{acknowledgements}
+	\begin{frame}{Remerciements}
+		Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017IntroductionFouilleTextes} \parencite{tellier2017IntroductionFouilleTextes} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
+	\end{frame}
 
-\pdfbookmark[2]{Références}{references}
-\begin{frame}[allowframebreaks]{References}
-    \printbibliography[heading=none]
-\end{frame}
+	\pdfbookmark[2]{Références}{references}
+	\begin{frame}[allowframebreaks]{References}
+		\printbibliography[heading=none]
+	\end{frame}
 
-\pdfbookmark[2]{Licence}{licence}
-\begin{frame}{Licence}
-    \begin{center}
-        {\huge \ccby}
-        \vfill
-        This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
+	\pdfbookmark[2]{Licence}{licence}
+	\begin{frame}{Licence}
+		\begin{center}
+			{\huge \ccby}
+			\vfill
+			This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
 
-        Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
-        \vfill
-        © 2020, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
+			Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
+			\vfill
+			© 2019, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
 
-        \shorturl[http]{lattice.cnrs.fr/Grobol-Loic}
-    \end{center}
-\end{frame}
+			\shorturl[http]{lattice.cnrs.fr/Grobol-Loic}
+		\end{center}
+	\end{frame}
+}{}
 
 \end{document}
+

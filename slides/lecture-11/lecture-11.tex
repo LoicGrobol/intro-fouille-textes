@@ -1,0 +1,278 @@
+% LTeX: language=fr
+% Copyright © 2019, Loïc Grobol <loic.grobol@gmail.com>
+% This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (https://creativecommons.org/licenses/by/4.0/)
+
+\documentclass[../allslides.tex]{subfiles}
+
+\begin{document}
+
+\renewcommand\docdate{2021-02-18}  % chktex 8
+
+\lecture{Introduction aux réseaux de neurones}{Cours 11}
+
+
+
+% ███    ██ ███████ ████████
+% ████   ██ ██         ██
+% ██ ██  ██ █████      ██
+% ██  ██ ██ ██         ██
+% ██   ████ ███████    ██
+
+
+\section{Réseaux de neurones}
+
+\begin{frame}{Le modèle du perceptron}
+    Frank Rosenblatt (1957) d'après Warren McCulloch et Walter Pitts (1943).
+	\vspace{-2\bigskipamount}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}[
+            basic/.style={draw, minimum width=3em},
+            input/.style={basic, circle},
+            weights/.style={basic, circle, minimum width=2em},
+            functions/.style={basic, circle},
+            true scale=0.8,
+        ]
+            \node[functions] (sum) at (7,0) {$∑$};
+            \foreach \x [count=\hi] in {n,1,2,0}{%
+				\node[input] (f\hi) at (0,\hi*2cm-5 cm) {$x_{\x}$};
+                \path (f\hi) -- node[weights] (w\hi) {$w_{\x}$} (sum);
+                \draw[->] (f\hi) -- (w\hi);
+                \draw[->] (w\hi) -- (sum) node[midway, above] {$w_{\x}x_{\x}$};
+            }
+            \node at ($(f2)!0.5!(f1)$) {$⋮$};
+            \node at ($(w2)!0.5!(w1)$) {$⋮$};
+            \node[functions] (step) at (11,0) {};
+               \begin{scope}[xshift=11cm,scale=.75]
+                    \draw[thick]
+						(0.5em,0.5em) -- (0,0.5em) --
+                        (0,-0.5em) --  (-0.5em,-0.5em)
+                        (0em,0.75em) -- (0em,-0.75em)
+                        (0.75em,0em) -- (-0.75em,0em);
+               \end{scope}
+            \draw[->] (sum) -- (step) node[midway, above] {$∑wᵢxᵢ$};
+            \draw[->] (step) -- ++(1,0);
+            \node[above right=0.5em and 3em of step] (class0) {$0$};
+            \node[below right=0.5em and 3em of step] (class1) {$1$};
+            \draw [decorate, decoration={brace, amplitude=1em}, xshift=-0.5ex] (class1.west) -- (class0.west);
+            % Labels
+            \node[above=1cm] at (f4) {Entrées};
+            \node[above=1cm] at (w4) {Poids};
+            \node[above=1cm of step] {Activation};
+        \end{tikzpicture}
+        \caption{Perceptron simple}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Exercice}
+	On considère un perceptron simple dont les poids sont
+	\begin{equation}
+		w = \vcord{2,-1,0,1}
+	\end{equation}
+
+	Donner la sortie $y$ du neurone pour l'entrée
+	\begin{equation}
+		x = \vcord{-2,-1,5,4}
+	\end{equation}
+\end{frame}
+
+
+\begin{frame}[fragile]{Fonction de Heavyside}
+    La fonction de Heavyside $H$ est l'activation classique pour faire du perceptron un classifieur binaire : elle transforme les nombres négatifs en $0$ et les nombres positifs en $1$.
+    \vspace{-1\bigskipamount}
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{axis}[
+				xmin=-10, xmax=10, ymin=-0.5,
+                width=0.9\textwidth,
+                height=0.8\textheight,
+                xlabel={$x$},
+                ylabel={$H(x)$},
+                title={Fonction de Heavyside : $y=\max(x, 0)$},
+                scaled ticks=false,
+			]
+                \addplot[highlighta, domain=-10:0, samples=100] {greater(x,0)};
+                \addplot[highlighta, domain=0:10, samples=100] {greater(x,0)};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Courbe de la fonction de Heavyside}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Exercice}
+	On considère un perceptron simple dont les poids sont
+	\begin{equation}
+		w = \vcord{-2,-1,1,0}
+	\end{equation}
+
+	\begin{enumerate}
+		\item Donner la classe obtenue pour l'entrée
+			\begin{equation}
+				x = \vcord{-1, 0, -3, 1}
+			\end{equation}
+		\item Donner une entrée pour laquelle on obtient la classe $1$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Algorithme du perceptron}
+    Le perceptron s'entraîne en parcourant l'ensemble d'entraînement point par point.
+    On commence en initialisant tous les poids$ w_i$ à $0$ (ou à un petit nombre aléatoire).
+
+    Pour chaque exemple $x$ dont la classe est $y$
+    \begin{enumerate}
+        \item Calculer la classe observée $̄\bar{y}=H\mleft(∑w_ix_i\mright)$
+        \item
+            \begin{itemize}
+                \item Si $y=\bar{y}$, on ne change rien
+                \item Sinon, on met à jour les poids $w_i$ selon la règle
+                    \begin{equation}
+                        w_i ← w_i + α(y-\bar{y})x_i
+                    \end{equation}
+            \end{itemize}
+    \end{enumerate}
+    Une fois l'ensemble d'entraînement parcouru, on a réalisé une  \emph{époque d'apprentissage}, on peut alors soit s'arrêter, soit recommencer du début.
+    \begin{itemize}
+        \item $α>0$ est un hyperparamètre appelé \emph{taux d'apprentissage}
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Algorithme du perceptron}
+    En deux dimensions, avec les classes \textcolor{highlighta}{$1$} et \textcolor{highlight1}{$0$}, avec un taux d'apprentissage $α=0.5$.
+    % TODO: this could be even more automated
+    \begin{figure}
+        \tikzset{external/export=true}
+        \begin{tikzpicture}
+            \begin{scope}
+                \path[clip] (-0.5, -0.5) rectangle (5.25, 4.25);
+                \draw [help lines, xstep=1cm, ystep=1cm] (0, 0) grid (5.25, 4.25);
+
+                \draw[->] (-0.5,0) -- (5.25, 0);
+                \foreach \x in {1,...,5}
+                    \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+
+                \draw[->] (0, -0.5) -- (0, 4.25);
+                \foreach \y in {1,...,4}
+                    \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+
+                \draw (0, 0) node[below left] {\footnotesize $0$};
+
+                \foreach \x/\y/\c [count=\i] in {2/1/1,4/0/1,1/0/1,2/1/1,0/1/a,1/1/a,0/1/a}{
+                    \node at (\x, \y) (sample\i) {};
+                    \path[fill=highlight\c] (sample\i) circle[radius=3pt];
+                }
+
+                \begin{scope}[domain=-0.5:5.25]
+                    \begin{scope}
+                        \pgfmathsetmacro{\a}{2}
+                        \pgfmathsetmacro{\b}{1}
+                        \pgfmathsetmacro{\c}{-4}
+                        \pgfmathtruncatemacro{\toprightscore}{\a*5.25+\b*4.25+\c}
+                        \path[
+                            fill={\ifnum \toprightscore>0 highlighta\else highlight1\fi},
+                            fill opacity=0.5, visible on={3-4}
+                        ]
+                            plot (\x, {(\a*\x+\c)/(-\b)}) -- (5.25,4.25) -- (-0.5,4.25) -- cycle;
+                        \path[
+                            fill={\ifnum \toprightscore>0 highlight1\else highlighta\fi},
+                            fill opacity=0.5, visible on={3-4}
+                        ]
+                            plot (\x, {(\a*\x+\c)/(-\b)}) -- (5.25,-0.5) -- (-0.5,-0.5) -- cycle;
+
+                        \draw[highlight1, thick, visible on={2-4}] plot (\x, {(\a*\x+\c)/(-\b)});
+
+                        \draw[->, thick, visible on={2-5}] (1, {(\a+\c)/(-\b)}) -- +(\a, \b) node[coordinate, label=above:$w$] (w1) {};
+
+                        \path[draw=highlight5, very thick, visible on={4-7}] (sample1) circle[radius=3pt];
+                        \draw[->, thick, visible on={4-7}] (0, 0) -- (sample1) node[midway, above left] {$x$};
+
+                        \draw[->, thick, visible on={5}] (w1) -- +(-1, -0.5) node[midway, below right] {$α×(-1)⋅x$};
+                    \end{scope}
+                    \begin{scope}
+                        \pgfmathsetmacro{\a}{1}
+                        \pgfmathsetmacro{\b}{0.5}
+                        \pgfmathsetmacro{\c}{-4.5}
+                        \pgfmathtruncatemacro{\toprightscore}{\a*5.25+\b*4.25+\c}
+                        \path[
+                            fill={\ifnum \toprightscore>0 highlighta\else highlight1\fi},
+                            fill opacity=0.5, visible on=8,
+                        ]
+                            plot (\x, {(\a*\x+\c)/(-\b)}) -- (5.25,4.25) -- (-0.5,4.25) -- cycle;
+                        \path[
+                            fill={\ifnum \toprightscore>0 highlight1\else highlighta\fi},
+                            fill opacity=0.5, visible on=8,
+                        ] plot (\x, {(\a*\x+\c)/(-\b)}) -- (5.25,-0.5) -- (-0.5,-0.5) -- cycle;
+
+                        \draw[highlight1, thick, visible on={7-8}] plot (\x, {(\a*\x+\c)/(-\b)});
+
+                        \draw[->, thick, visible on={6-8}] (3.5, {(\a*3.5+\c)/(-\b)}) -- +(\a, \b) node[coordinate, label=above:$w$] (w2) {};
+
+                        \path[draw=highlight3, very thick, visible on=8] (sample1) circle[radius=3pt];
+                        \draw[->, thick, visible on=8] (0, 0) -- (sample1) node[midway, above left] {$x$};
+                    \end{scope}
+                \end{scope}
+            \end{scope}
+        \end{tikzpicture}
+        \caption{Algorithme du perceptron}
+    \end{figure}
+    \only<8>{}
+\end{frame}
+
+\begin{frame}{À vous de jouer}
+	\begin{center}
+		\huge
+		\shorturl{huit.re/texample}
+	\end{center}
+\end{frame}
+
+% TODO: cite
+\begin{frame}{Réseaux de neurones}
+    \textbf{Dans Weka} classifiers > functions > MultilayerPerceptron
+    \pause
+
+    \textbf{Espace de recherche} Ensemble des chaînes de fonctions linéaires et d'activations non-linéaires
+    \pause
+
+    \textbf{Technique de recherche} en général : descente de gradient stochastique par rétropropagation
+\end{frame}
+
+
+
+%  █████  ██████  ██████  ███████ ███    ██ ██████  ██ ██   ██
+% ██   ██ ██   ██ ██   ██ ██      ████   ██ ██   ██ ██  ██ ██
+% ███████ ██████  ██████  █████   ██ ██  ██ ██   ██ ██   ███
+% ██   ██ ██      ██      ██      ██  ██ ██ ██   ██ ██  ██ ██
+% ██   ██ ██      ██      ███████ ██   ████ ██████  ██ ██   ██
+
+\ifSubfilesClassLoaded{
+	\appendix
+	\pgfkeys{/metropolis/inner/sectionpage=simple}  % Avoid random errors with section page progressbar
+	\section{Annexes}
+	\pdfbookmark[2]{Remerciements}{acknowledgements}
+	\begin{frame}{Remerciements}
+		Ce cours a été construit à partir du polycopié de cours \citetitle{tellier2017IntroductionFouilleTextes} \parencite{tellier2017IntroductionFouilleTextes} et des précieux conseils d'Isabelle Tellier que je ne saurais trop remercier pour sa confiance et son dévouement.
+	\end{frame}
+
+	\pdfbookmark[2]{Références}{references}
+	\begin{frame}[allowframebreaks]{References}
+		\printbibliography[heading=none]
+	\end{frame}
+
+	\pdfbookmark[2]{Licence}{licence}
+	\begin{frame}{Licence}
+		\begin{center}
+			{\huge \ccby}
+			\vfill
+			This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (\shorturl{creativecommons.org/licenses/by/4.0})
+
+			Exceptions to the above statement are listed at {\small\shorturl{loicgrobol.github.io/intro-fouille-textes\#licences}}
+			\vfill
+			© 2019, Loïc Grobol <\shorturl[mailto][:]{loic.grobol@gmail.com}>
+
+			\shorturl[http]{lattice.cnrs.fr/Grobol-Loic}
+		\end{center}
+	\end{frame}
+}{}
+
+\end{document}
