@@ -215,7 +215,7 @@
 					\midrule
 					\(t_1\)	& ?	& ?	& ?	& ?	& ?	& …\\
 					\(t_2\)	& ?	& ?	& ?	& ?	& ?	& …\\
-					\(⋮\)	& \multicolumn{1}{c}{\(⋮\)}	& \multicolumn{1}{c}{\(⋮\)}	& \multicolumn{1}{c}{\(⋮\)}	& \multicolumn{1}{c}{\(⋮\)}	& \multicolumn{1}{c}{\(⋮\)}	& …\\
+					\(⋮\)	& \(⋮\)	& \(⋮\)	& \(⋮\)	& \(⋮\)	& \(⋮\)	& …\\
 					\(t_m\)	& ?	& ?	& ?	& ?	& ?	& …\\
 					\bottomrule
 				\end{tabular}
@@ -261,7 +261,7 @@
 					\(t_m\)	& 0.001	& 0.002	& 0.001	& 0.012	& 0	& …\\
 					\bottomrule
 				\end{tabular}
-				\caption{Représentation pour des nombres d'occurrences}
+				\caption{Représentation pour des fréquences relatives}
 			\end{figure}
 	\end{overprint}
 \end{frame}
@@ -276,7 +276,7 @@
 
 % TODO: add exemples
 
-\begin{frame}{Le problème des occurences}
+\begin{frame}{Le problème des occurrences}
 	Il y a un problème avec les comptes d'occurrences et les fréquences relatives.
 
 	\pause
@@ -299,22 +299,23 @@
 % TODO: add cites
 \begin{frame}<1>[label=tfidfdef]{TF.IDF}
 	\only<-2>{On veut pouvoir \alert{pondérer} l'importance d'un terme (mot, caractère, \(n\)-gramme…) en fonction de sa \alert{spécificité} (au sens large) pour un document.}
-
+	
+	\pause
 	\begin{itemize}
 		\item \emph{\textbf{T}erm \textbf{F}requency × \textbf{I}nverse \textbf{D}ocument \textbf{F}requency}
-		\item \(\TF(i,j) = n_{i,j}\) ou \(\TF(i,j) = \frac{n_{i,j}}{\sum_k n_{i,j}}\)
+		\item \(\TF(i,j) = v_{i,j}\) ou \(\TF(i,j) = \frac{v_{i,j}}{\sum_j v_{i,j}}\)
 		\item
 			\only<1>{
 				\begin{equation}
-					\IDF(j) = \log\mleft(\frac{m}{\#\compset{i}{n_{i,j}>0}}\mright)
+					\IDF(j) = \log\mleft(\frac{m}{\#\compset{i}{v_{i,j}>0}}\mright)
 				\end{equation}
 			}
 			\only<2>{
 				\begin{equation}
-					\IDF(j) = \log\frac{\overbrace{m}^{\mathclap{\text{nombre total de documents}}}}{\underbrace{\#\compset{i}{n_{i,j}>0}}_{\mathclap{\text{nombre de documents contenant \(a_j\)}}}}
+					\IDF(j) = \log\frac{\overbrace{m}^{\mathclap{\text{nombre total de documents}}}}{\underbrace{\#\compset{i}{v_{i,j}>0}}_{\mathclap{\text{nombre de documents contenant \(a_j\)}}}}
 				\end{equation}
 			}
-			\only<3->{\(\IDF(j) = \log\frac{m}{\#\compset{i}{n_{i,j}>0}}\)}
+			\only<3->{\(\IDF(j) = \log\frac{m}{\#\compset{i}{v_{i,j}>0}}\)}
 		\only<3->{
 			\item Intuitivement \(\IDF\) mesure la rareté d'un attribut, donc (on espère !) son informativité
 			\item « Si \(a_j\) est présent dans tous les textes, savoir qu'il est présent dans \(t_i\) ne donne pas d'information sur \(t_i\) »
@@ -372,7 +373,7 @@
 	On choisit un texte au hasard sans en favoriser aucun. Serait-il surprenant que le texte choisi contienne le mot \emph{kiwi} ?
 \end{frame}
 
-\begin{frame}{Les maths en cinq secondes : probabilités}
+\begin{frame}<-2>[label=fivesecproba]{Les maths en cinq secondes : probabilités}
 	Objectif : on veut une \alert{mesure} des chances qu'un évènement se produise, qu'on appelle \alert{probabilité} de l'évènement.
 	
 	\pause
@@ -398,6 +399,8 @@
 		\item En déduire la probabilité que le texte choisi contienne le mot \emph{kiwi}  \only<6->{→ \(\frac{55}{1000}\)}
 	\end{enumerate}
 \end{frame}
+
+\againframe<2->{fivesecproba}
 
 \begin{frame}{IDF, probabilités et surprise}
 	La notion de \alert{surprise} vient de la théorie de l'information. La surprise d'un évènement \(A\) mesure le caractère inattendu de la réalisation d'un évènement.
