@@ -1,4 +1,4 @@
-Projet Fouille de textes 2020
+Projet Fouille de textes 2021
 ==============================
 
 **Objectif** : entraîner des classifieurs par apprentissage automatique et comparer les performances
