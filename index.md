@@ -56,6 +56,8 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2021
 #### 2021-03-18— Représentations vectorielles, distances et similarités
 
 - [Slides 6](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-06.pdf)
+- Correspondance poly : jusqu'à la page 46, à lire pour la prochaine fois
+- Pour la prochaine fois également : chaque groupe m'envoie un mail avec les membres du groupe et une proposition de sujets. Si vous n'avez pas de groupe ou pas de sujet, écrivez moi quand même qu'on essaie de vous aider !
 
 
 ## Twittographie
