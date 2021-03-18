@@ -42,14 +42,20 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2021
 
 - [Slides 3](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-03.pdf)
 - [Slides 4](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-04.pdf)
-- - Correspondance poly : jusqu'à la page 40, à lire pour la prochaine fois
+- Correspondance poly : jusqu'à la page 40, à lire pour la prochaine fois
 
 #### 2021-03-04 Cours reporté
 
-#### 2021-03-11— Représentations vectorielles, distances et similarités
+#### 2021-03-11 — Sacs de mots, fréquences et TF⋅IDF
 
 - [Slides 5](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-05.pdf)
+- Correspondance poly : jusqu'à la page 46, à lire pour la prochaine fois
+
+
+#### 2021-03-18— Représentations vectorielles, distances et similarités
+
 - [Slides 6](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-06.pdf)
+
 
 ## Twittographie
 
