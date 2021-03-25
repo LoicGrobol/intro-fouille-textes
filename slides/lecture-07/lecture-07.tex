@@ -35,7 +35,7 @@
 
 \section{Classification}
 
-\begin{frame}[label=classif,fragile]{Classification}
+\begin{frame}[fragile=singleslide]{Classification}
     La \emph{classification} est la tâche consistant à \alert{répartir} des données dans un ensemble de classes.
     \begin{itemize}
         \item « Détecter les \textcolor{highlight8}{spams} dans un ensemble d'\textcolor{highlight4}{emails} »
@@ -60,14 +60,14 @@
     \end{itemize}
 \end{frame}
 
-\subsection{Principes généraux}
+\subsection{Classification par règles expertes}
 \begin{frame}{Classification par règles expertes}
     La façon traditionnelle de faire de la classification
     \begin{itemize}
         \item<+-> Faire écrire par des experts du domaine un ensemble de règles associant un exemple à une classe
         \item<+-> Exemple : classification du sentiment
 			\begin{itemize}
-                \item Établir un lexique affectif mot → $±1$
+                \item Établir un lexique affectif mot → \(±1\)
                 \item Associer à chaque texte la somme des polarités de ses termes
                 \item Un texte est positif si la somme est positive, négatif sinon
             \end{itemize}
@@ -76,9 +76,9 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Classification par apprentissage automatique}
+\begin{frame}{Classification par apprentissage artificiel}
     \begin{block}{Rappel}
-        Un \textcolor{highlight0}{programme d'apprentissage automatique} est un programme générant à partir d'\textcolor{highlight2}{exemples} traités par des humains un \textcolor{highlight4}{modèle} qui sert de ressource à un \textcolor{highlight5}{programme réalisant une tâche}.
+        Un \textcolor{highlight0}{programme d'apprentissage artificiel} est un programme générant à partir d'\textcolor{highlight2}{exemples} traités par des humains un \textcolor{highlight4}{modèle} qui sert de ressource à un \textcolor{highlight5}{programme réalisant une tâche}.
     \end{block}
     \begin{figure}
         \tikzset{external/export=true}
@@ -95,24 +95,24 @@
             \draw[->] (train) -- (progapp);
             \draw[->] (progapp) -- (mod);
         \end{tikzpicture}
-        \caption{Schéma d'une approche par apprentissage automatique}
+        \caption{Schéma d'une approche par apprentissage artificiel}
     \end{figure}
 \end{frame}
 
 \begin{frame}{Exemple : régression}
-    « Sachant que ma maison fait $s\,\si{m\square}$, en fonction du marché, quel prix puis-je en attendre ? »
+    « Sachant que ma maison fait \(s\,\si{m\square}\), en fonction du marché, quel prix puis-je en attendre ? »
     \begin{description}
-        \item[Hypothèse] Il existe une fonction $f$ qui à la surface $x$ d'une maison associe son prix de vente
-        \item[Données] Le prix de vente de $8$ maisons et leurs surfaces respectives
-        \item[Objectif] Déterminer l'expression de $f$ et en déduire $f(s)$, le prix de vente de ma maison
+        \item[Hypothèse] Il existe une fonction \(f\) qui à la surface \(x\) d'une maison associe son prix de vente
+        \item[Données] Le prix de vente de \num{8} maisons et leurs surfaces respectives
+        \item[Objectif] Déterminer l'expression de \(f\) et en déduire \(f(s)\), le prix de vente de ma maison
     \end{description}
     \begin{itemize}
-        \item[→] Problème : $f$ pourrait avoir n'importe quelle forme !
+        \item[→] Problème : \(f\) pourrait avoir n'importe quelle forme !
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Choix d'une famille de fonctions}
-    Problème : $f$ pourrait avoir n'importe quelle forme !
+    Problème : \(f\) pourrait avoir n'importe quelle forme !
     \begin{itemize}
         \item[→] On choisit une famille de fonctions et on y cherche celle qui semble le mieux correspondre à nos exemples
         \item Par exemple avec des polynômes :
@@ -121,7 +121,7 @@
             \end{equation}
         \item En général « correspondre » au sens des moindres carrés
     \end{itemize}
-    \textbf{Vocabulaire} Le degré (fixé manuellement) est un \alert{hyperparamètre}, les coefficients $a_i$ appris automatiquement sont des \alert{paramètres}.
+    \textbf{Vocabulaire} Le degré (fixé manuellement) est un \alert{hyperparamètre}, les coefficients \(a_i\) appris automatiquement sont des \alert{paramètres}.
     Déterminer les paramètres qui minimisent le coût (ici la distance entre le modèle est les exemple) est une tâche d'\alert{optimisation}.
 
     Étant donné une surface, on peut alors donner le prix correspondant : on donc a appris à prédire les prix !
@@ -139,7 +139,7 @@
                 height=0.8\textheight,
                 xlabel={Surface},
                 ylabel={Prix},
-                title={Régression linéaire : $y=ax+b$},
+                title={Régression linéaire : \(y=ax+b\)},
                 scaled ticks=false,
                 ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}
 			]
@@ -158,7 +158,7 @@
                 \addplot[highlighta, domain=0:800, samples=1001] {402.28*x+202807.17};
             \end{axis}
         \end{tikzpicture}
-        \caption{Polynôme de degré $1$ (linéaire)}
+        \caption{Polynôme de degré \num{1} (linéaire)}
     \end{figure}
 
     Voir aussi \shorturl{ggbm.at/TagmZdxN}
@@ -176,7 +176,7 @@
                 height=0.8\textheight,
                 xlabel={Surface},
                 ylabel={Prix},
-                title={Régression quadratique : $y=ax²+bx+c$},
+                title={Régression quadratique : \(y=ax²+bx+c\)},
                 scaled ticks=false,
                 ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}
 			]
@@ -195,7 +195,7 @@
                 \addplot[highlighta, domain=0:800, samples=1001] {-2.56*x^2+2319.29*x-64113.23};
             \end{axis}
         \end{tikzpicture}
-        \caption{Polynôme de degré $2$ (quadratique)}
+        \caption{Polynôme de degré \num{2} (quadratique)}
     \end{figure}
 \end{frame}
 
@@ -212,7 +212,7 @@
 				height=0.8\textheight,
 				xlabel={Surface},
 				ylabel={Prix},
-				title={$y=a₀ + a₁x + a₂x²+ … + a₆x⁶$},
+				title={\(y=a₀ + a₁x + a₂x²+ … + a₆x⁶\)},
 				scaled ticks=false,
 				ticklabel style={/pgf/number format/.cd, 1000 sep={\,}}
             ]
@@ -232,14 +232,14 @@
                 \addplot[highlighta, domain=590:610, samples at={599.001,599.002,...,599.945,599.9455,599.945526073,599.9456,599.95,599.96,...,600,600.00005,...,610}] {9.133693238227375E-7*x^6-0.0015210072640020665*x^5+0.9901617434548338*x^4-326.9727250825201*x^3+58224.97189714596*x^2-5327933.125949258*x+196687335.202412};
             \end{axis}
         \end{tikzpicture}
-        \caption{Polynôme de degré $6$}\label{fig|overfit}
+        \caption{Polynôme de degré \num{6}}\label{fig|overfit}
     \end{figure}
 \end{frame}
 
 \begin{frame}{Surapprentissage}
     La figure \ref{fig|overfit} est un exemple de cas de \alert{surapprentisage} (\emph{overfitting})
     \begin{itemize}
-        \item Avoir choisi le degré $6$ permet de passer exactement par tous les points d'entraînement
+        \item Avoir choisi le degré \num{6} permet de passer exactement par tous les points d'entraînement
         \item Mais le modèle est très mauvais !
     \end{itemize}
     Comment trouver un modèle \emph{vraiment} bon ?
@@ -252,13 +252,13 @@
 \end{frame}
 
 \begin{frame}{« Apprentissage » ?}
-    Ce qu'on appelle \emph{apprendre} pour une machine consiste à transformer des exemples $(x_i, y_i)$ en règle $f: x⟼y$. Soit
+    Ce qu'on appelle \emph{apprendre} pour une machine consiste à transformer des exemples \((x_i, y_i)\) en règle \(f: x⟼y\). Soit
     \begin{itemize}
-        \item Étant donné un espace de recherche $F$
-        \item Étant donnée une mesure de qualité $q$ sur $F$
-        \item Trouver $f∈F$ qui maximise $q$
+        \item Étant donné un espace de recherche \(F\)
+        \item Étant donnée une mesure de qualité \(q\) sur \(F\)
+        \item Trouver \(f∈F\) qui maximise \(q\)
     \end{itemize}
-    En général $F$ est paramétré par des nombre $a₁,…,a_n$ et on se ramène ainsi à chercher leurs valeurs pour que $q(f_{a₁,…,a_n})$ soit maximal.
+    En général \(F\) est paramétré par des nombre \(a₁,…,a_n\) et on se ramène ainsi à chercher leurs valeurs pour que \(q(f_{a₁,…,a_n})\) soit maximal.
 \end{frame}
 
 \begin{frame}{« Automatique » ?}
@@ -294,19 +294,25 @@
     \onslide<4>
         \begin{itemize}
             \item Il n'y a pas de recette miracle qui marche à chaque fois : « \emph{There is no free lunch} »
-            \item On devrait peut-être parler d'apprentissage \emph{artificiel} plutôt qu'\emph{automatique} cf \emph{Machine Learning}
+            \item Pour cette raison, je préfère parler d'apprentissage \emph{artificiel} plutôt qu'\emph{automatique} cf \emph{Machine Learning}
         \end{itemize}
     \end{overprint}
 \end{frame}
 
 \begin{frame}{Plan des réjouissances}
-    On présente dans la suite plusieurs techniques classiques de classification par apprentissage automatique suivant avec pour chacune
+    On présente dans la suite plusieurs techniques classiques de classification par apprentissage artificiel suivant avec pour chacune
     \begin{itemize}
         \item Espace de recherche
         \item Hyperparamètres
         \item Technique de recherche
         \item Propriétés et usages
     \end{itemize}
+\end{frame}
+
+\begin{frame}{Think fast}
+    Dans un problème de classification, dans l'ensemble d'entraînement, il y a \num{1798} exemples de la classe A et \num{2} de la classe B.
+
+    On vous donne un nouvel exemple dont vous ne connaissez pas la classe sans plus d'information. Dans quelle classe le rangez-vous ?
 \end{frame}
 
 % ███████ ███████ ██████   ██████  ██████
@@ -345,16 +351,16 @@
 % ██  ██       ██  ██ ██ ██  ██ ██
 % ██   ██      ██   ████ ██   ████
 
-\subsection{$k$-plus proches voisins}
+\subsection{\(k\)-plus proches voisins}
 
-\begin{frame}{$k$-plus proches voisins}
+\begin{frame}{\(k\)-plus proches voisins}
     \textbf{Dans Weka} classifiers > lazy > lBk
 
-    \textbf{Espace de recherche} Le singleton $\{f\}$, où $f$ est la fonction qui à un exemple $x$ associe la classe majoritaire dans l'ensemble des $k$ données d'entraînement les plus proches de $x$.
+    \textbf{Espace de recherche} Le singleton \(\{f\}\), où \(f\) est la fonction qui à un exemple \(x\) associe la classe majoritaire dans l'ensemble des \(k\) données d'entraînement les plus proches de \(x\).
 
     En général on utilise la distance euclidienne ou le coefficient d'overlap (pour des vecteurs booléens)
 
-    \textbf{Hyperparamètres} $k$, un entier \only<2>{
+    \textbf{Hyperparamètres} \(k\), un entier \only<2>{
         \begin{itemize}
             \item Plus petit que le nombre d'exemples d'apprentissages
             \item Idéalement non-multiple du nombre de classes
@@ -372,13 +378,13 @@
 
             \draw[->] (-0.5,0) -- (5.25, 0);
             \foreach \x in {1,...,5}
-                \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize $\x$};
+                \draw[shift={(\x, 0)}] (0pt,2pt) -- (0pt,-2pt) node[below] {\footnotesize \(\x\)};
 
             \draw[->] (0, -0.5) -- (0, 4.25);
             \foreach \y in {1,...,4}
-                \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize $\y$};
+                \draw[shift={(0,\y)}] (2pt,0pt) -- (-2pt,0pt) node[left] {\footnotesize \(\y\)};
 
-            \draw (0, 0) node[below left] {\footnotesize $0$};
+            \draw (0, 0) node[below left] {\footnotesize \num{0}};
 
             \foreach \x/\y/\c in {2/1/highlight4,4/0/highlight4,1/0/highlight4,2/3/highlight4,0/3/highlighta,1/2/highlighta,0/2/highlighta}{
                 \path[fill=\c] (\x, \y) circle[radius=3pt];
@@ -388,7 +394,7 @@
                 \path[fill=highlight2, visible on=\i] (\ex, \ey) circle[radius=3pt];
             }
         \end{tikzpicture}
-        \caption{Exemple de classification : $k$-NN}
+        \caption{Exemple de classification : \(k\)-NN}
     \end{figure}
     \only<3>{}
 \end{frame}
@@ -396,7 +402,7 @@
 \begin{frame}{Propriétés}
     \begin{itemize}
         \item Aucune recherche → apprentissage immédiat
-        \item Coût en opération : Taille de l'ensemble d'entraînement $×$ coût d'un calcul de distance
+        \item Coût en opération : Taille de l'ensemble d'entraînement \(×\) coût d'un calcul de distance
         \item Pour être efficace : ensemble d'entraînement suffisamment dense
             \begin{itemize}
                 \item[→] D'où sa faible utilisation en pratique en fouille de texte (à part comme baseline)
