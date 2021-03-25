@@ -62,6 +62,8 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2021
 #### 2021-03-25 — Bases de la classification
 
 - [Slides 7](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-07.pdf)
+- [Données d'entraînement](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/sample-data.tar.gz)
+- [Script de vectorisation](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/vectorisation.py)
 
 
 ## Twittographie
