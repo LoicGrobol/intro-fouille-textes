@@ -166,8 +166,8 @@
                 ]
                 [yes,edge label={node[midway] {overcast}}]
                 [windy,ellipse,edge label={node[midway,right] {rainy}}
-                    [yes,edge label={node[midway,left] {true}}]
-                    [no,edge label={node[midway,right] {false}}]
+                    [no,edge label={node[midway,left] {true}}]
+                    [yes,edge label={node[midway,right] {false}}]
                 ]
             ]
         \end{forest}
@@ -188,9 +188,9 @@
                     return "yes"
                 elif outlook == "rainy":
                     if windy:
-                        return "yes"
-                    else:
                         return "no"
+                    else:
+                        return "yes"
         \end{minted}    
         \caption{Code Pythoncorrespondant à l'arbre précédent}
     \end{figure}
