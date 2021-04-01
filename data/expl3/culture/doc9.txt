@@ -1,0 +1,44 @@
+Un milieu de est un support qui permet la de cellules, de bactéries, de levures, de moisissures afin de permettre leur étude. En principe, les cellules trouvent dans ce milieu les composants indispensables pour leur multiplication en grand nombre, rapidement, mais aussi parfois des éléments qui permettront de privilégier un genre bactérien ou une famille. Ainsi, selon le but de la , il est possible de placer les micro-organismes dans des conditions optimales, ou tout à fait défavorables.
+Il se compose d'une base (agar-agar, eau, minéraux...) ainsi que d'un indicateur coloré de pH ou de réaction d'oxydo-réduction pour permettre  de formuler des hypothèses sur le genre.
+Il existe aussi des bouillons de qui possèdent la même fonction, mais ces milieux ne contiennent pas d'agar-agar, ils sont donc totalement liquides.
+Cet article détaillera les caractéristiques des milieux de se rapportant à la microbiologie.
+Notion de milieu minimum Un milieu minimum ou milieu défini est un milieu comportant les éléments chimiques strictement nécessaires à la croissance bactérienne, sous une forme utilisable par des bactéries n'ayant pas d'exigence particulière.
+Composition d'un milieu minimum :
+une source de carbone et d'énergie, généralement le glucose ;
+une source de potassium et de phosphore : K2HPO4 ;
+une source d'azote et de soufre : (NH4)2SO4 ;
+une source de magnésium : MgCl2 ;
+une source de calcium : CaCl2 ;
+une source de fer : on emploie le citrate de fer (le citrate a pour rôle de maintenir le fer en solution) ;
+une source d'oligo-éléments : sels de Cu, Zn, Co, Ni, B, Ti ;
+une source d'eau, indispensable à toute forme de vie: on utilise l'eau distillée (stérile) ;
+un tampon pH : il permet de maintenir un pH correct voire optimum: KH2PO4 par exemple.En l'absence de l'un de ces composants, les bactéries ne se développent pas, car elles ne peuvent synthétiser ces produits. C'est l'adjonction de facteurs de croissance appropriés qui permet à des bactéries exigeantes de se développer.
+Milieu de empirique Un milieu de dit empirique est un milieu contenant des produits d'origine naturelle et dont on ne connaît pas exactement la composition. 
+Milieu cœur-cervelle Ainsi, dans le milieu type cœur-cervelle, il y a de l'eau, de l'agar-agar, de l'hydrolysat de cœur et de cervelle sans que l'on en connaisse les aspects qualitatifs et quantitatifs. Il sera donc utilisé uniquement pour la croissance des bactéries. Il n'a pas d'effet sélectif.
+Embryon de poulet Les premières recherches sur les virus, à partir des années 1930, utilisent comme milieu de l'œuf de poule embryonné. L'agent à multiplier est inoculé dans les membranes amniotique ou allantoïque. Dans ce système ont pu être étudiés les virus de la variole, de l'herpès, de la grippe, des oreillons, de la rage, etc. ainsi que des bactéries intracellulaires comme les rickettsies. Dans les années 1950, ce système a été le plus souvent supplanté, dans les laboratoires de recherche, par la cellulaire. Il reste utilisé pour la production du vaccin antigrippal.
+Milieu de sélectif Les milieux de dits sélectifs permettent uniquement la de certains genres de micro-organismes. Pour cela on ajoute des éléments qui inhibent la croissance des micro-organismes indésirables comme le chlorure de sodium à forte concentration, le thiosulfate de sodium, le cristal violet ou certains antibiotiques, etc.
+Les éléments ajoutés sont sélectionnés selon les caractéristiques du micro-organisme recherché. Ces milieux sont utilisés pour l'analyse d'un prélèvement polybactérien. Ce milieu permet de sélectionner uniquement en cas de crible positif : Résistance à un antibiotique, la prototrophie, etc. 
+Exemples de milieux sélectifs :
+milieu SS : il ne permet la croissance que des Salmonelles (Shigella s'y développe moins vite : environ 48 à 72 heures avant d'obtenir une exploitable).
+milieu de Sabouraud : il permet la pousse des mycètes.
+gélose Kanamycine - Vancomycine, dite "Kana-Vanco" ou KV : elle empêche la pousse des bactéries à Gram positif (action de la vancomycine) et de la plupart des entérobactéries (action de la Kanamycine). Sur ce milieu, poussent préférentiellement des bactéries anaérobies strictes.
+Milieu de enrichi Ils contiennent, outre les composants de base, des composants indispensables aux bactéries, que celles-ci ne peuvent pas synthétiser. Ce sont des milieux utilisés pour l'obtention des bactéries dites exigeantes et auxotrophes.
+Par exemple : les milieux au sang frais (le sang est riche en nutriments divers comme le fer, principal facteur de croissance des bactéries) : Gélose au sang frais ou cuit.
+Les milieux avec du sérum, du jaune d'œuf : Gélose Baird Parker ou dite BP.
+Milieu différentiel Le  milieu de dit différentiel ou indicateur permet de distinguer deux types de microorganismes se développant dans un même milieu. Ce type de milieu met en évidence certaines caractéristiques biochimiques des microorganismes (principalement l'aptitude à dégrader un substrat) en présence d'indicateur(s) de la réaction chimique : des indicateurs colorés de pH ou d'oxydo-réduction (tel que le rouge neutre, rouge de phénol, l'éosine ou le bleu de méthylène).  
+On retrouve parmi les milieux différentiels : 
+les géloses CLED et BCP et  qui différencient la dégradation du lactose, ainsi que la dénomination indirecte d'e.coli qui sont des entérobactéries hyper-résistantes.
+la Gélose Éosine Bleu de Méthylène (EMB), qui différencie la fermentation du lactose de celle du saccharose
+la Gélose MacConkey (MCK), qui différencie la fermentation du lactose. De plus, cette gélose est sélective (voir plus haut) dans la mesure où elle ne permet que la croissance des bacilles GRAM négatif. La gélose Drigalski possède les mêmes propriétés.
+la Gélose Chapman (MSA), milieu sélectif des staphylocoques qui différencie la fermentation du mannitol permettant une orientation entre autres vers Staphylococcus aureus.
+la gélose Hektoën, qui différencie la fermentation de 3 glucides (lactose, saccharose et salicine) ainsi que la production de sulfure d'hydrogène. Cette gélose est sélective des bacilles GRAM négatif, elle est particulièrement adaptée à la recherche d'entérobactéries pathogènes dans les selles.
+les géloses SS, XLD, DCL, TCBS sont aussi des milieux différentiels couramment utilisés.
+Milieu chromogène (ou discriminant) Ce milieu peut être sélectif ou non. Son principe repose sur la présence d'un ou plusieurs substrat(s) couplé(s) à une molécule chromogène. Lorsque ce substrat est métabolisé par une enzyme bactérienne spécifique, le chromogène associé prend une couleur particulière (il devient un chromophore) directement lisible sur la colonie. Si l'enzyme n'existe que chez une espèce bactérienne donnée, l'identification est immédiate.
+Parmi ces milieux, on trouve : 
+CPS E: milieu non sélectif adapté au diagnostic des infections urinaires. Il permet la mise en évidence de l'activité bêta-glucuronidase présente chez Escherichia coli (colonies rose-bordeaux) responsable de 80 % des cystites en France (40% à l’hôpital) ; la mise en évidence de l'activité bêta-glucosidase chez les entérocoques (colonies bleu turquoise) et certaines entérobactéries (Klebsiella, Enterobacter, Serratia et Citrobacter), (colonies vert-bleu). Le milieu permet aussi une orientation vers Proteus grâce à la mise en évidence de l'activité Tryptophane désaminase (colonies entourées d'une zone de précipitation brune).SM2 : milieu sélectif des bactéries à Gram négatif qui permet la mise en évidence de Salmonella dans les selles grâce à la révélation d'une activité estérase spécifique des salmonelles.CAN2 : milieu sélectif des levures qui permet la mise en évidence de Candida albicans par la mise en évidence de l'activité hexosaminidase.
+autres milieux chromogènes : SAID pour Staphylococcus aureus, MRSA pour la recherche des SARM, ESBL pour la recherche des BLSE, STRB pour la recherche des streptocoques du groupe B...
+Articles connexes Liste de milieux de Agar-agar
+Facteur de croissance
+Peptone
+Milieu chromogène
+Notes et références Portail de la microbiologie

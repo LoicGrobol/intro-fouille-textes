@@ -54,3 +54,4 @@ Attribution 4.0 International
   [LaTeX Project Public Licence](https://github.com/latex3/latex3/blob/master/LICENSE)
 - [`assignment/example.pdf`](assignment/example.pdf) ∘ Marine Delaborde, distribué avec
   l'autorisation de l'autrice.
+- Les documents dans [`data/expl3`](data/expl3) sont issus de [Wikipédia en français](https://fr.wikipedia.org) et sont soumis à la licence [CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/deed.fr). Les sources sont indiquées dans [`data/expl3/page_urls.lst`](data/expl3/page_urls.lst)

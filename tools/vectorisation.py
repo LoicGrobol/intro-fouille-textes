@@ -71,7 +71,7 @@ def process(
 ):
     dossier = pathlib.Path(corpus_path)
     if out_path is None:
-        out_path = dossier.parent / "fichier-resultat.arff"
+        out_path = dossier / "fichier-resultat.arff"
     if fichier_mots_vides is None:
         mots_vides = []
     else:
@@ -189,7 +189,11 @@ def main_entry_point(argv=None):
         choix = input(
             "Représentation booléenne (taper 1) ou en nombre d'occurrences (taper 2) ? "
         )
-    process(corpus_path, boolean=choix == 1, fichier_mots_vides=fichier_mots_vides)
+    process(
+        corpus_path,
+        boolean=choix == 1,
+        fichier_mots_vides=fichier_mots_vides,
+    )
 
 
 if __name__ == "__main__":
