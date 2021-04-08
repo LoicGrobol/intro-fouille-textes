@@ -1,3 +1,4 @@
+% !TeX root = lecture-09.tex
 % LTeX: language=fr
 % Copyright © 2019, Loïc Grobol <loic.grobol@gmail.com>
 % This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (https://creativecommons.org/licenses/by/4.0/)
@@ -42,125 +43,204 @@
 
 % TODO: moyen fluide, peut-être un peu plus d'exmples et des exos à chaque étape
 \begin{frame}[fragile]{Les maths en cinq secondes : probabilités conditionnelles}
-    On lance un dé à six faces équilibré. On note
-    \begin{description}
-        \item[A] « le résultat est inférieur ou égal à $4$ »
-        \item[B] « le résultat est supérieur ou égal à $3$ »
-    \end{description}
-    \begin{columns}
-    \alt<1>{\column{\textwidth}}{\column{0.45\textwidth}}
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}[
-                    hfit/.style={ellipse, inner sep=2pt},
-                    vfit/.style={ellipse, inner sep=2pt},
-                ]
-                \matrix[matrix of nodes, column sep=1em, row sep=1em] (m) {
-                    $1$   & $2$\\
-                    $3$   & $4$\\
-                    $5$   & $6$\\
-                };
+	On lance un dé à six faces équilibré. On note
+	\begin{description}
+		\item[A] « le résultat est inférieur ou égal à \(4\) »
+		\item[B] « le résultat est supérieur ou égal à \(3\) »
+	\end{description}
+	\begin{columns}
+	\alt<1>{\column{\textwidth}}{\column{0.45\textwidth}}
+		\begin{figure}
+			\tikzset{external/export=true}
+			\begin{tikzpicture}[
+					hfit/.style={ellipse, inner sep=2pt},
+					vfit/.style={ellipse, inner sep=2pt},
+				]
+				\matrix[matrix of nodes, column sep=1em, row sep=1em] (m) {
+					\(1\)   & \(2\)\\
+					\(3\)   & \(4\)\\
+					\(5\)   & \(6\)\\
+				};
 
-                \node[fit=(m), inner sep=1em, draw, label=above right:$Ω$] (O) {};
-                \node[fit=(m-1-2)(m-1-2)(m-2-1)(m-2-2), hfit, draw, fill=highlighta, fill opacity=0.5, label=above:$A$] (A) {};
-                \node[fit=(m-2-1)(m-3-2), vfit, draw, fill=highlight6, fill opacity=0.5, label=below:$B$] (B) {};
-            \end{tikzpicture}
-            \caption{Univers}
-        \end{figure}
-    \only<2-3>{\column{0.45\textwidth}
-        On a
-        \begin{align}
-            P(A) &= \alt<1-2>{\phantom{\frac{4}{6}=\frac{2}{3}}}{\frac{4}{6}=\frac{2}{3}}\\
-            P(B) &= \alt<1-2>{\phantom{\frac{4}{6}=\frac{2}{3}}}{\frac{4}{6}=\frac{2}{3}}
-        \end{align}
-    }
-    \end{columns}
+				\node[fit=(m), inner sep=1em, draw, label=above right:\(Ω\)] (O) {};
+				\node[fit=(m-1-2)(m-1-2)(m-2-1)(m-2-2), hfit, draw, fill=highlighta, fill opacity=0.5, label=above:\(A\)] (A) {};
+				\node[fit=(m-2-1)(m-3-2), vfit, draw, fill=highlight6, fill opacity=0.5, label=below:\(B\)] (B) {};
+			\end{tikzpicture}
+			\caption{Univers}
+		\end{figure}
+	\only<2-3>{\column{0.45\textwidth}
+		On a
+		\begin{align}
+			P(A) &= \alt<1-2>{\phantom{\frac{4}{6}=\frac{2}{3}}}{\frac{4}{6}=\frac{2}{3}}\\
+			P(B) &= \alt<1-2>{\phantom{\frac{4}{6}=\frac{2}{3}}}{\frac{4}{6}=\frac{2}{3}}
+		\end{align}
+	}
+	\end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{Les maths en cinq secondes : probabilités conditionnelles}
-    On note
-    \vspace{-1\smallskipamount}
-    \begin{itemize}
-        \item $P(A|B)$ \alt<1>{la probabilité que $A$ se réalise sachant que $B$ se réalise}{la probabilité que le résultat soit inférieur ou égal à $4$ sachant qu'il est supérieur ou égal à $3$}
-        \item $P(B|A)$ \alt<1>{la probabilité que $B$ se réalise sachant que $A$ se réalise}{la probabilité que le résultat soit supérieur ou égal à $3$ sachant qu'il est inférieur ou égal à $4$}
-    \end{itemize}
-    \vspace{-1\bigskipamount}
-    \begin{columns}
-    \alt<1-2>{\column{\textwidth}}{\column{0.45\textwidth}}
-        \begin{figure}
-            \tikzset{external/export=true}
-            \begin{tikzpicture}[
-                    hfit/.style={ellipse, inner sep=2pt},
-                    vfit/.style={ellipse, inner sep=2pt},
-                    true scale=0.8,
-                ]
-                \matrix[matrix of nodes, column sep=1em, row sep=1em] (m) {
-                    $1$   & $2$\\
-                    $3$   & $4$\\
-                    $5$   & $6$\\
-                };
+	On note
+	\vspace{-1\smallskipamount}
+	\begin{itemize}
+		\item \(P(A|B)\) \alt<1>{la probabilité que \(A\) se réalise sachant que \(B\) se réalise}{la probabilité que le résultat soit inférieur ou égal à \(4\) sachant qu'il est supérieur ou égal à \(3\)}
+		\item \(P(B|A)\) \alt<1>{la probabilité que \(B\) se réalise sachant que \(A\) se réalise}{la probabilité que le résultat soit supérieur ou égal à \(3\) sachant qu'il est inférieur ou égal à \(4\)}
+	\end{itemize}
+	\vspace{-1\bigskipamount}
+	\begin{columns}
+	\alt<1-2>{\column{\textwidth}}{\column{0.45\textwidth}}
+		\begin{figure}
+			\tikzset{external/export=true}
+			\begin{tikzpicture}[
+					hfit/.style={ellipse, inner sep=2pt},
+					vfit/.style={ellipse, inner sep=2pt},
+					true scale=0.8,
+				]s
+				\matrix[matrix of nodes, column sep=1em, row sep=1em] (m) {
+					\(1\)   & \(2\)\\
+					\(3\)   & \(4\)\\
+					\(5\)   & \(6\)\\
+				};
 
-                \node[fit=(m), inner sep=1em, draw, label=above right:$Ω$] (O) {};
-                \node[fit=(m-1-2)(m-1-2)(m-2-1)(m-2-2), hfit, draw, fill=highlighta, fill opacity=0.5, label=above:$A$] (A) {};
-                \node[fit=(m-2-1)(m-3-2), vfit, draw, fill=highlight6, fill opacity=0.5, label=below:$B$] (B) {};
-            \end{tikzpicture}
-            \caption{Univers}
-        \end{figure}
-    \only<3->{\column{0.45\textwidth}
-        On a
-        \begin{align}
-            P(A|B) &= \alt<1-3>{\phantom{\frac{2}{3}}}{\frac{2}{4}=\frac{1}{2}}\\
-            P(B|A) &= \alt<1-3>{\phantom{\frac{1}{2}}}{\frac{2}{4}=\frac{1}{2}}
-        \end{align}
-    }
-    \end{columns}
-    \only<5>{Dans le cas général, on a $P(X|Y) = \frac{P(X∩Y)}{P(Y)}$}
+				\node[fit=(m), inner sep=1em, draw, label=above right:\(Ω\)] (O) {};
+				\node[fit=(m-1-2)(m-1-2)(m-2-1)(m-2-2), hfit, draw, fill=highlighta, fill opacity=0.5, label=above:\(A\)] (A) {};
+				\node[fit=(m-2-1)(m-3-2), vfit, draw, fill=highlight6, fill opacity=0.5, label=below:\(B\)] (B) {};
+			\end{tikzpicture}
+			\caption{Univers}
+		\end{figure}
+	\only<3->{\column{0.45\textwidth}
+		On a
+		\begin{align}
+			P(A|B) &= \alt<1-3>{\phantom{\frac{2}{3}}}{\frac{2}{4}=\frac{1}{2}}\\
+			P(B|A) &= \alt<1-3>{\phantom{\frac{1}{2}}}{\frac{2}{4}=\frac{1}{2}}
+		\end{align}
+	}
+	\end{columns}
+	\only<5>{Dans le cas général, on a \(P(X|Y) = \frac{P(X∩Y)}{P(Y)}\)}
+\end{frame}
+
+\begin{frame}{Classifieurs \enquote{probabilistes}}
+	Les classifieurs qu'on a vu jusqu'ici attribuaient directement \alert{une} classe à chaque exemple.
+
+	Ainsi, étant donné un exemple à classifier, l'algorithme des k-plus proches voisins l'algorithme renvoie la classe majoritaire dans le voisinage de cet exemple sans plus de nuance.
+
+	\pause
+
+	Pour plusieurs raisons, il est souvent pratique, étant donné un exemple, de plutôt déterminer un \alert{score} pour chaque classe.
+\end{frame}
+
+\begin{frame}{Classifieurs \enquote{probabilistes}}
+	Par exemple, pour un détecteur de spams, plutôt que de décider directement si un email \(m\) est ou n'est pas un spam, on passe d'abord par une étape intermédiaire où on détermine un score par classe
+	%
+	\begin{equation}
+		\begin{dcases*}
+			\text{score}_{\text{spam}}(m)
+			\text{score}_{\text{non spam}}(m)
+		\end{dcases*}
+	\end{equation}
+	%
+	Et on attribue à \(m\) la classe pour laquelle le score est plus élevé.
+\end{frame}
+
+\begin{frame}{Pourquoi ?}
+	Passer par des scores a plusieurs intérêts
+
+	\begin{itemize}
+		\item Donne accès à des \alert{modélisations statistiques} bien connues.
+		\item Donne accès à des \alert{méthodes mathématiques} d'optimisations plus directes.
+		\item Un score peut facilement refléter plusieurs \alert{facteurs indépendants}.
+			\begin{itemize}
+				\item[→] Une classe peut avoir un score élevé non seulement à cause d'un indice très informatif, mais aussi à cause d'une combinaison d'indices peu informatifs.
+			\end{itemize}
+		\item Dans certaines conditions, il peut permettre d'\alert{interpréter} plus naturellement les décisions du classifieur.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Classifieurs \enquote{probabilistes}}
+	On aime bien en général travailler avec des scores \alert{normalisés}:
+
+	\begin{itemize}
+		\item Le score d'une classe est compris entre \num{0} et \num{1}.
+		\item La somme des scores des classes vaut \num{1}.
+	\end{itemize}
+
+	\pause
+
+	Dans ce cas, il est tentant de voir ces scores comme une \alert{distribution de probabilités}, en interprétant le score de la classe \(i\) comme \enquote{la probabilité que l'exemple considéré appartienne à la classe \(i\)} ou encore \enquote{la \alert{confiance} qu'a le classifieur dans le fait que cet exemple appartienne à la classe \(i\)}.
+
+	Dans le cas général, c'est rarement aussi simple et les intuitions sont parfois trompeuses, mais ça peut nous servir pour imaginer des modèles.
+\end{frame}
+
+\begin{frame}{Tentative de formalisation}
+	On peut formaliser ces intuitions de façon \enquote{mathématiquement pure}, mais
+
+	\begin{itemize}
+		\item Ça n'aide pas forcément l'intuition
+		\item C'est assez pénible et pas très intéressant
+		\item Ça alourdit considérablement les notations
+	\end{itemize}
+
+	Dans la suite on va se contenter d'une modélisation \alert{simple} et imparfaite, mais suffisante pour nos besoins (et de notations un peu abusives).
+\end{frame}
+
+\begin{frame}{Tentative de formalisation}
+	On considère l'expérience suivante : soit \alert{un ensemble de documents} \(Ω\), qui correspond à l'ensemble des documents traitables par notre classifieur et l'expérience aléatoire qui consiste à choisir un document \(d\) dans \(Ω\).
+
+	Les classes sont des sous-ensembles \(Cᵢ\) de \(Ω\) qui en forment une partition.
+
+	\pause
+
+	Le contenu exact des \(Cᵢ\) ne nous est pas connu, mais on a accès à un \alert{échantillon} (qu'on suppose représentatif) de documents dont la classe est connue : notre ensemble d'apprentissage.
+
+	\pause
+
+	Soit un document \(d\) dont la classe nous est inconnue, on attribue un score à chaque classe \(C\) en \alert{estimant} \(P(C|d)\), \enquote{la probabilité qu'on ait tiré un document de la classe \(C\), sachant que le document qu'on a tiré est \(d\)}.
 \end{frame}
 
 \begin{frame}<1>[label=naivebayes]{\emph{Naïve Bayes}}
-    Soit un document $d$ à catégoriser.
-    On lui attribue la classe $C$ telle que $P(C|d)$ est maximale.
+	Soit un document \(d\) à catégoriser.
+	On cherche à déterminer la classe \(C\) telle que \(P(C|d)\) est maximale.
 
 	\only<-2>{
-		Problème: Comment estimer cette probabilité ?
+		Problème : Comment estimer cette probabilité ?
 	}
 
 	\uncover<2->{
-	    Pour une classe donnée $C$, on a par le théorème de Bayes
-	    \begin{equation}
-	        P(C|d) = \frac{P(d|C)×P(C)}{P(d)}
-	    \end{equation}
+		Pour une classe donnée \(C\), on a par le théorème de Bayes
+		\begin{equation}
+			P(C|d) = \frac{P(d|C)×P(C)}{P(d)}
+		\end{equation}
 	}
 
 	\uncover<3->{
-	    $P(d)$ ne dépend pas de $C$, il s'agit donc de maximiser $s(C,d)=P(d|C)×P(C)$.
+		\(P(d)\) ne dépend pas de \(C\), il s'agit donc de maximiser \(s(C,d)=P(d|C)×P(C)\).
 	}
 
 	\uncover<4->{
-		Problème: Comment estimer ces probabilités ?
+		Problème : Comment estimer ces probabilités ?
 	}
 \end{frame}
 
 \begin{frame}{Les maths en cinq secondes : théorème de Bayes}
-    On a
-    \begin{align}
-        P(X|Y)
-            &= \frac{P(X∩Y)}{P(Y)}\\
-            &= \frac{\frac{P(X∩Y)}{P(X)}×P(X)}{P(Y)}\\
-            &= \frac{P(Y|X)×P(X)}{P(Y)}
-    \end{align}
-    \begin{block}{Théorème de Bayes}
-        Pour tous évènements $X$ et $Y$ de probabilités non-nulles,
-        \begin{equation}
-            P(X|Y)=\frac{P(Y|X)×P(X)}{P(Y)}
-        \end{equation}
-    \end{block}
+	On a
+	\begin{align}
+		P(X|Y)
+			&= \frac{P(X∩Y)}{P(Y)}\\
+			&= \frac{\frac{P(X∩Y)}{P(X)}×P(X)}{P(Y)}\\
+			&= \frac{P(Y|X)×P(X)}{P(Y)}
+	\end{align}
+	\pause
+	\begin{block}{Théorème de Bayes}
+		Pour tous évènements \(X\) et \(Y\) de probabilités non-nulles,
+		\begin{equation}
+			P(X|Y)=\frac{P(Y|X)×P(X)}{P(Y)}
+		\end{equation}
+	\end{block}
 \end{frame}
 
 \againframe<1-3>{naivebayes}
 
 \begin{frame}{Probabilité d'une classe}
-	Problème : estimer $P(C)$.
+	Problème : estimer \(P(C)\).
 
 	\pause
 	Facile : Si on a un échantillon (corpus) suffisamment grand, la probabilité d'une classe peut être estimée par sa fréquence empirique. Autrement dit
@@ -168,11 +248,11 @@
 	\pause
 
 	\begin{equation}
-		P(C) ≈ \frac{\text{Nombre de documents de la classe $C$}}{\text{Nombre de documents du corpus}}
+		P(C) ≈ \frac{\text{Nombre de documents de la classe \(C\)}}{\text{Nombre de documents du corpus}}
 	\end{equation}
 
 	\pause
-	Il reste à estimer $P(d|C)$.
+	Il reste à estimer \(P(d|C)\).
 \end{frame}
 
 \begin{frame}{Les maths en cinq secondes : indépendance}
@@ -185,9 +265,9 @@
 	\itpause
 
 	\begin{block}{Indépendance (définition)}
-		On dit que deux évènements $A$ et $B$ sont indépendants si le fait que $B$ se réalise n'a aucune influence sur la probabilité de $A$.
+		On dit que deux évènements \(A\) et \(B\) sont indépendants si le fait que \(B\) se réalise n'a aucune influence sur la probabilité de \(A\).
 
-		Formellement: $P(A|B)=P(A)$.
+		Formellement: \(P(A|B)=P(A)\).
 	\end{block}
 \end{frame}
 
@@ -195,31 +275,31 @@
 \begin{frame}{Les maths en cinq secondes : indépendance}
 	Les assertions suivantes sont équivalentes
 	\begin{enumerate}[<+->]
-		\item $A$ et $B$ sont indépendants
-		\item $P(A|B)=P(A)$
-		\item $P(B|A)=P(B)$
-		\item $P(A∩B) = P(A)×P(B)$
+		\item \(A\) et \(B\) sont indépendants
+		\item \(P(A|B)=P(A)\)
+		\item \(P(B|A)=P(B)\)
+		\item \(P(A∩B) = P(A)×P(B)\)
 	\end{enumerate}
 \end{frame}
 
 
 \begin{frame}{Probabilité d'un document}
-    Si on représente les documents par des sacs de mots, $d$ est un vecteur $(x₁, …, x_n)$.
-    Donc
-    \begin{equation}
-        P(d|C) = P((x₁, …, x_n)|C)
-    \end{equation}
+	Si on représente les documents par des sacs de mots, \(d\) est un vecteur \((x₁, …, x_n)\).
+	Donc
+	\begin{equation}
+		P(d|C) = P((x₁, …, x_n)|C)
+	\end{equation}
 
-    Et en supposant que les $x_i$ sont indépendants (« Naïve »)
-    \begin{equation}
-        P(d|C) = P(x₁|C)×…×P(x_n|C)
-    \end{equation}
+	Et en supposant que les \(x_i\) sont indépendants (« Naïve »)
+	\begin{equation}
+		P(d|C) = P(x₁|C)×…×P(x_n|C)
+	\end{equation}
 
-    Il reste à choisir comment déterminer les $P(x_i|C)$.
+	Il reste à choisir comment déterminer les \(P(x_i|C)\).
 \end{frame}
 
 \begin{frame}{Probabilité d'un attribut}
-	Problème : estimer $P(x_i|C)$.
+	Problème : estimer \(P(x_i|C)\).
 
 	\pause
 	Facile : Si on a un échantillon (classe) suffisamment grand, la probabilité d'un attribut peut être estimée par sa fréquence empirique. Autrement dit
@@ -227,7 +307,7 @@
 	\pause
 
 	\begin{equation}
-		P(x_i|C) ≈ \frac{\text{Nombre de documents $C$ qui possèdent le trait $x_i$}}{\text{Nombre de documents de $C$}}
+		P(x_i|C) ≈ \frac{\text{Nombre de documents \(C\) qui possèdent le trait \(x_i\)}}{\text{Nombre de documents de \(C\)}}
 	\end{equation}
 
 	\pause
@@ -235,18 +315,18 @@
 \end{frame}
 
 \begin{frame}{\emph{Naïve Bayes}}
-    \textbf{Dans Weka} classifiers > bayes > NaiveBayes
+	\textbf{Dans Weka} classifiers > bayes > NaiveBayes
 
-    \textbf{Espace de recherche} Ensemble des fonctions de la forme
-    \begin{equation}
-        x ⟼ \argmax_k s(C_k | x)
-    \end{equation}
-    avec
-    \begin{equation}
-        s(C_k, x) = P(C_k) × P(x₁ | C_k) × … × P(x_n | C_k)
-    \end{equation}
+	\textbf{Espace de recherche} Ensemble des fonctions de la forme
+	\begin{equation}
+		x ⟼ \argmax_k s(C_k | x)
+	\end{equation}
+	avec
+	\begin{equation}
+		s(C_k, x) = P(C_k) × P(x₁ | C_k) × … × P(x_n | C_k)
+	\end{equation}
 
-    \textbf{Technique de recherche} En générale : formule explicite étant donné l'ensemble d'apprentissage
+	\textbf{Technique de recherche} En général : formule explicite étant donné l'ensemble d'apprentissage
 \end{frame}
 
 % TODO: exemples

@@ -64,12 +64,18 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2021
 - [Slides 7](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-07.pdf)
 - [Exemples de données](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/sample-data.tar.gz)
 - [Script de vectorisation](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/vectorisation.py)
+- Correspondance poly : jusqu'à la page 76, à lire pour la prochaine fois (le chapitre Recherche d'Information n'est pas au programme de ce semestre)
 
 #### 2021-04-01 — k-plus proches voisins et arbres de décision
 
 - [Slides 7](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-07.pdf)
 - [Slides 8](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-08.pdf)
 - [Exemples de données](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/sample-data.tar.gz)
+- Correspondance poly : jusqu'à la page 85, à lire pour la prochaine fois
+
+#### 2021-04-08 — *Naïve Bayes*
+
+- [Slides 9](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-09.pdf)
 
 ## Twittographie
 
