@@ -15,20 +15,22 @@
 \begin{frame}[fragile=singleslide]{Exercice}
 	Étant donnée la représentation tabulaire suivante d'un corpus, attribuez les classes manquantes en construisant puis appliquant un arbre de décisions
 	\begin{table}
-		\begin{tabu} to .9\linewidth {*{4}{c}}
-			\texttt{t}  & \texttt{wug} & \texttt{neurone} & \texttt{classe}\\
-			\hline
-			\texttt{1}  & \texttt{3}      & \texttt{2}	& linguistique\\
-			\texttt{2}  & \texttt{1}      & \texttt{0}	& linguistique\\
-			\texttt{3}  & \texttt{0}      & \texttt{2}	& linguistique\\
-			\texttt{4}  & \texttt{2}      & \texttt{1}	& linguistique\\
-			\texttt{5}  & \texttt{4}      & \texttt{4}	& informatique\\
-			\texttt{6}  & \texttt{1}      & \texttt{3}	& informatique\\
-			\texttt{7}  & \texttt{1}      & \texttt{2}	& informatique\\
-			\texttt{8}  & \texttt{2}      & \texttt{2}	& ?\\
-			\texttt{9}  & \texttt{1}      & \texttt{4}	& ?\\
-			\texttt{10}  & \texttt{3}      & \texttt{1}	& ?\\
-		\end{tabu}
+		\begin{tabular}{*{4}{c}}
+			\toprule
+			\texttt{t}	& \texttt{wug}	& \texttt{neurone}	& \texttt{classe}\\
+			\midrule
+			\texttt{2}	& \texttt{2}	& \texttt{0}	& linguistique\\
+			\texttt{1}	& \texttt{3}	& \texttt{2}	& linguistique\\
+			\texttt{3}	& \texttt{2}	& \texttt{2}	& linguistique\\
+			\texttt{4}	& \texttt{2}	& \texttt{1}	& linguistique\\
+			\texttt{5}	& \texttt{4}	& \texttt{4}	& informatique\\
+			\texttt{6}	& \texttt{1}	& \texttt{3}	& informatique\\
+			\texttt{7}	& \texttt{1}	& \texttt{2}	& informatique\\
+			\texttt{8}	& \texttt{2}	& \texttt{2}	& ?\\
+			\texttt{9}	& \texttt{1}	& \texttt{4}	& ?\\
+			\texttt{10}	& \texttt{3}	& \texttt{1}	& ?\\
+			\bottomrule
+		\end{tabular}
 	\end{table}
 \end{frame}
 
