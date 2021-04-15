@@ -77,6 +77,10 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2021
 
 - [Slides 9](https://github.com/LoicGrobol/intro-fouille-textes/releases/download/stable/lecture-09.pdf)
 
+#### 2021-04-15 — Utiliser scikit-learn
+
+- [Notebook](https://github.com/LoicGrobol/intro-fouille-textes/blob/master/demos/classifier_with_sklearn.ipynb), [version Binder](https://mybinder.org/v2/gh/LoicGrobol/intro-fouille-textes/HEAD?filepath=demos%2Fclassifier_with_sklearn.ipynb)
+
 ## Twittographie
 
 Non-exhaustive
