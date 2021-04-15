@@ -1,2 +1,4 @@
+jupyter
 Pygments
+scikit-learn
 wikipedia

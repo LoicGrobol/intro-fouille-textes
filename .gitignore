@@ -11,6 +11,9 @@ _build
 .virtenv
 .venv
 
+## Jupyter
+.ipynb_checkpoints
+
 ## LaTeX not caught by Github'.gitignore
 *.tns
 *-cache.yaml
