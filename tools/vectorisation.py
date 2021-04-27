@@ -98,7 +98,7 @@ def process(
     class_dirs = (
         (d, sorted(d.glob("*.txt")))
         for d in dossier.iterdir()
-        if d.is_dir and not d.name.startswith(".")
+        if d.is_dir and not d.name.startswith(".") and not d.name.endswith("\r")
     )
     lexicon, class_names, rows = _process(
         class_dirs, mots_vides, boolean, lexicon, characters=characters
