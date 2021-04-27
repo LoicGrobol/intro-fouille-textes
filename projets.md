@@ -7,8 +7,8 @@ constitué
 
 ## Consignes
 
-- Projet à rendre le 1er mai *au plus tard* par mail à [loic.grobol@gmail.com](mailto:loic.grobol@gmail.com)
-  - En cas de problème, contactez moi **avant**
+- Projet à rendre le 13er mai à 19h *au plus tard* par mail à [loic.grobol@gmail.com](mailto:loic.grobol@gmail.com)
+  - En cas de problème ou de retard, tout est négociable, mais contactez moi **avant**
 - Projet collectif, par groupe de 2
   - Si c'est un problème pour vous, venez me voir et on en discute
   - Si il y a un problème — quel qu'il soit — dans votre groupe, n'hésitez pas à m'en parler

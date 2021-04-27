@@ -4,7 +4,8 @@ title: Introduction à la fouille de textes — M1 pluriTAL 2021
 
 ## Nouvelles
 
-- **2020-03-18** les [consignes pour les projets 2021](projets.md) sont disponibles
+- **2021-04-27** les projets sont à rendre le 13 mai au plus tard, pensez bien à relire les [consignes](projets.md).
+- **2021-03-18** les [consignes pour les projets 2021](projets.md) sont disponibles
 - Sauf problème, les prochains cours seront intégralement sur le serveur Discord du master pluriTAL. Si vous ne pouvez pas à accéder, écrivez-moi à [<loic.grobol@gmail.com>](mailto:loic.grobol@gmail.com)
 - Premier cours le 2021-01-28 de 13h à 15h sur <http://meet.google.com/tbb-hecp-jce>
 
