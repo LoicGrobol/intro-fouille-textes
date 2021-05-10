@@ -1,0 +1,259 @@
+% LTeX: language=fr
+% Copyright © 2021, Loïc Grobol <loic.grobol@gmail.com>
+% This document is available under the terms of the Creative Commons Attribution 4.0 International License (CC BY 4.0) (https://creativecommons.org/licenses/by/4.0/)
+
+\newcommand\myname{Loïc Grobol}
+\newcommand\mylab{LLF, Lattice}
+\newcommand\pdftitle{Introduction à la fouille de textes : examen final}
+\newcommand\mymail{loic.grobol@gmail.com}
+\newcommand\titlepagetitle{\pdftitle}
+\newcommand\docdate{10 mai 2021}
+\newcommand\pageheadertitle{\pdftitle}
+
+\documentclass[a4paper, 11pt]{article}
+\usepackage{luatexbase}
+\usepackage[hmargin=2cm]{geometry}
+\usepackage{savetrees}
+\setlength\parindent{0pt}
+\setlength\parskip{.2em}
+
+\usepackage{polyglossia}
+		\setmainlanguage{french}
+		\setotherlanguage{english}
+
+\usepackage{csquotes}
+
+\usepackage{fontspec}
+	\directlua{
+		luaotfload.add_fallback(
+			"emojifallback",
+			{"NotoColorEmoji:mode=harf;"}
+		)
+	}
+	\setmainfont[
+			UprightFont={* Regular},
+			ItalicFont={* Italic},
+			BoldFont={* Bold},
+			BoldItalicFont={* Bold Italic},
+	]{Libertinus Serif}[Renderer=Harfbuzz]
+	\setsansfont{Libertinus Sans}[Renderer=Harfbuzz]
+	\setmonofont{Fira Mono}[Scale=MatchLowercase, Renderer=Harfbuzz]
+	\newfontfamily\emojifont{Noto Color Emoji}[Renderer=HarfBuzz]
+	\frenchspacing
+
+\usepackage{xurl}
+\usepackage{hyperref}
+
+% ## Style and metadata
+% ### Page style
+
+\usepackage[totpages]{zref}
+\newpagestyle{main}[\small]{
+	\sethead{}{\ifnum\thepage>1 {\pageheadertitle}\fi}{}
+	\setfoot{}{\ifnum\ztotpages>1 {\thepage\ /\ztotpages}\fi}{}
+}
+\pagestyle{main}
+
+% ### License
+\usepackage[type={CC}, modifier={by}, version={4.0}]{doclicense}
+
+% ### Metadata
+
+\title{\titlepagetitle}
+\author{\myname <\mymail>}
+\date{\docdate}
+
+\begin{document}
+{
+	 \begin{center}
+			\large{M1 PluriTAL}\par
+			\vspace{1em}
+			\huge\textbf{Introduction à la fouille de textes}\par
+			\vspace{0.5em}
+			\LARGE\textit{Examen final}\par
+			\vspace{0.5em}
+			\Large{2021-05-10}
+	 \end{center}
+}
+
+\section{Recherche d'information}
+
+On considère les textes suivants, constitués chacun d'une unique phrase :
+\begin{description}
+	\item[texte 1] L'entraîneur de l'équipe de France a donné sa liste de joueurs pour le match.
+	\item[texte 2] Les matchs de Rolland-Garros ont fini dimanche.
+	\item[texte 3] En préparation, les français ont joué un match amical.
+	\item[texte 4] Les joueurs français se font éliminer à Rolland-Garros.
+\end{description}
+
+\begin{enumerate}
+	\item Les textes sont segmentés et mis en minuscule, la ponctuation est éliminée. On fournit en
+		annexe la liste des mots vides. Donner la liste des mots qui constituent l'espace de
+		représentation de ces textes et donner la représentation vectorielle booléenne (qui, ici, sera
+		identique à la représentation en termes de nombre d'occurrences) de chacun d'eux dans cet
+		espace.
+	\item Quels mots de l'espace ont le plus faible TF⋅IDF quand on considère ces 4 textes (on demande
+		de justifier la réponse mais pas de calculer la valeur exacte) ?
+	\item Qu'est-ce qui changerait dans les représentations précédentes :
+		\begin{itemize}
+		\item si on disposait d'un lemmatiseur et que l'espace de représentation était constitué des
+			\emph{lemmes} des mots non vides
+		\item si on disposait d'un ``raciniseur'' (qui découpe les mots en éliminant leur terminaison)
+			et que l'espace de représentation était constitué des \emph{racines} des mots non vides
+		\end{itemize}
+	\item On garde la représentation de la question 1 (sans lemmatiser ni raciniser). On suppose qu'on
+		soumet à un moteur de recherche vectoriel la requête constituée de la nouvelle phrase suivante :
+		\enquote{Les joueurs français ont peur de se faire éliminer lors du match.} Donner sa
+		représentation dans l'espace défini question 1. En prenant comme mesure de proximité la mesure
+		de Dice, classer les quatre textes par ordre de similarité croissant.
+	\item En fait, les textes 1 et 3 parlent de football tandis que les textes 2 et 4 parlent de
+		tennis. On imagine que la classe \enquote{football} est ajoutée à la représentation des textes 1
+		et 3 tandis que la classe \enquote{tennis} est ajoutée à la représentation des textes 2 et 4, et
+		que l'ensemble de ces 4 exemples est soumis à un programme d'apprentissage automatique
+		NaiveBayes. Dans quelle classe ce programme va-t-il classer la requête ?
+\end{enumerate}
+
+\section{Classification par apprentissage automatique}
+On suppose disposer d'un ensemble de textes représentés pour simplifier par des vecteurs à deux
+dimensions seulement, que l'on souhaite ranger dans trois classes distinctes notées 1, 2 et 3.
+L'objectif de cet exercice est de montrer comment une technique comme celle des SVM, initialement
+prévue pour distinguer uniquement deux classes, peut s'adapter pour distinguer trois classes
+distinctes. Des exemples de données avec leur classe sont fournies dans le tableau suivant :
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\textbf{Identifiant} & \textbf{attribut 1} & \textbf{attribut 2} & \textbf{classe}\\
+		\hline
+		1 & 1 & 3 & 1\\
+		2 & 2 & 4 & 1\\
+		3 & 2 & 2 & 2\\
+		4 & 4 & 1 & 2\\
+		5 & 5 & 1 & 2\\
+		6 & 3 & 4 & 3\\
+		7 & 4 & 5 & 3\\
+		8 & 5 & 3 & 3\\
+		\hline
+	\end{tabular}
+\end{center}
+
+\begin{enumerate}
+	\item Dessiner dans un repère cartésien à deux dimensions les points représentant chacun de ces
+		textes. On fournit une grille pour cela : prendre une échelle de 4 petits carreaux pour une
+		unité et mettre un symbole ou une couleur différente pour différencier chaque classe. 
+	\item Dessiner (sans faire de calcul) à partir des données de la question 1 un arbre de décision
+		permettant de ranger correctement les données dans les trois classes. Représenter à la fois les
+		séparateurs sur le repère cartésien et le dessin de l'arbre obtenu (plusieurs solutions
+		différentes mais tout aussi correctes sont possibles).
+	\item Proposer les coordonnées de trois nouvelles données choisies de façon à ce que l'algorithme
+		des 3 plus proches voisins avec la distance euclidienne basé sur les données du tableau classe
+		chacune de ces nouvelles données dans une des trois classes : une donnée dans la classe 1, une
+		autre dans la classe 2, la troisième dans la classe 3.
+	\item Puisqu'un SVM ne permet de séparer l'espace qu'en deux sous-espaces, on va considérer chaque
+		classe indépendamment et on va construire plusieurs SVM : chacun séparera une classe
+		particulière des deux autres. Comme il y a trois classes, on va construire trois SVM :
+
+		\begin{itemize}
+			\item le premier sépare la classe 1 des classes 2 et 3 ;
+			\item le deuxième sépare la classe 2 des classes 1 et 3 ;
+			\item le troisième sépare la classe 3 des classes 1 et 2.
+		\end{itemize}
+
+		Dessiner trois séparateurs de type SVM ``crédibles'' sur la figure à partir des données du
+		tableau (c'est-à-dire sans tenir compte des données ajoutées en question 3).
+	\item On fournit les nouvelles données suivantes, dont la classe est inconnue :
+
+		\begin{center}
+			\begin{tabular}{|c|c|c|}
+				\hline
+				\textbf{Identifiant} & \textbf{attribut 1} & \textbf{attribut 2} \\
+				\hline
+				9 & 3 & 1 \\
+				10 & 1 & 4 \\
+				11 & 6 & 3 \\
+				\hline
+			\end{tabular}
+		\end{center}
+
+		Donner la réponse (classe) fournie par votre arbre de décision de la question 2 à chacune de ces
+		données.
+	\item Pour chacune de ces données, on va aussi consulter les trois SVM et on va combiner leurs
+		classifications sous la forme de "votes" ou de "points". Par exemple, pour une nouvelle donnée,
+		suivant de quel côté du séparateur elle se trouve, le premier SVM (celui qui sépare la classe 1
+		des classes 2 et 3) va soit voter (donner 1 point) pour la classe 1 soit voter pour la classe "2
+		et 3", ce qui revient à donner à la fois œ point pour la classe 2 et œ point pour la classe 3.
+		On cumule ensuite tous les points accordés par les différents SVM et on associe à la donnée la
+		classe ayant recueilli le plus de points. Pour les trois nouvelles données 9 à 11 du tableau,
+		compter les points accordés ainsi par chacun des trois SVM et en déduire dans quelle classe ces
+		données vont être rangées par la combinaison de ces trois SVM.
+	\item Sachant que parmi ces nouvelles données, 9 et 11 appartiennent en fait à la classe 2 et la
+		donnée 10 à la classe 1, donner la matrice de confusion sur ces 3 données de l'arbre de décision
+		construit en question 2. Donner la précision, le rappel et la F-mesure de la classe 2 pour cet
+		algorithme.
+	\item Donner aussi la matrice de confusion pour l'algorithme qui combine les votes des trois SVM. 
+\end{enumerate}
+
+\section{Questions diverses}
+
+\begin{enumerate}
+	\item Expliquer pourquoi, si on effectue sur un moteur de recherche généraliste fonctionnant
+		exclusivement en "sacs de mots" une requête portant sur les mots clés "père" "de" "Gérard"
+		"Depardieu", on risque d'obtenir surtout des pages traitant de Guillaume et Julie Depardieu, qui
+		sont les enfants (et non les parents) de Gérard.
+	\item On suppose réaliser une expérience d'apprentissage automatique supervisée de classification
+		(avec Weka par exemple). On dispose de 50 données annotées. 90\% des données sont utilisées en
+		apprentissage, le reste en test. Combien cela fait-il de données de test ? Quelles sont toutes
+		les valeurs possibles d'exactitude (c'est-à-dire de bonne classification, quelle que soit le
+		nombre de classes possibles) qu'on peut atteindre avec ces données de test (envisager tous les
+		cas : 1 erreur parmi les données de test, 2 erreurs, ..., autant d'erreurs que données).
+	\item Calculer la précision et le rappel de chaque classe A, B et C sur cet exemple de matrice de
+		confusion, ainsi que l'exactitude globale :
+
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|}
+				\hline
+				vraie classe $\backslash$ classé en & A & B & C \\
+				\hline
+				A & 8 & 1 & 0\\
+				\hline
+				B & 2 & 10 & 3\\
+				\hline
+				C & 0 & 2 & 9\\
+				\hline
+			\end{tabular}
+		\end{center}
+\end{enumerate}
+
+\newpage
+\noindent\underline{ANNEXE : liste des mots vides à prendre en compte
+	pour l'exercice 1}
+\begin{verbatim}
+a
+à
+amical
+après
+cet
+de
+des
+dimanche
+donné
+en
+entraîneur
+est
+faire
+fini
+font
+l'
+le
+les
+liste
+ont
+pour
+préparation
+qui
+s'
+sa
+se
+un
+\end{verbatim}
+\end{document}
